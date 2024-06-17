@@ -11,20 +11,22 @@ public class Controlador implements Serializable, iControlador {
     private iModelo modelo;
     private iVistaJuego vistaJuego;
     private iVistaEleccion vistaEleccion;
+    private Jugador jugador;
 
     @Override
     public void iniciarPartida() {
-
+        modelo.nuevaPartida();
     }
 
     @Override
     public void agregarJugador(Jugador j) {
-
+        this.jugador = j;
+        modelo.agregarJugador(j);
     }
 
     @Override
     public String puntajeActual() {
-        return "";
+        return modelo.puntosActuales();
     }
 
     @Override
@@ -54,46 +56,53 @@ public class Controlador implements Serializable, iControlador {
 
     @Override
     public String cantarTanto(int opcion, String canto) {
+        modelo.cantarEnvido(jugador.getIDJugador(), opcion);
         return "";
     }
 
     @Override
     public String cantarRabon(int opcion, String canto) {
+        modelo.cantarRabon(jugador.getIDJugador(), opcion);
         return "";
     }
 
     @Override
     public int esTurnoDe() {
-        return 0;
+        return modelo.turnoActual();
     }
 
     @Override
     public int estadoDelTanto() {
-        return 0;
+        return modelo.estadoTanto();
     }
 
     @Override
     public int estadoDelRabon() {
-        return 0;
+        return modelo.estadoRabon();
     }
 
     @Override
     public void cantoNoQuerido() {
+        // ???
+    }
 
+    @Override
+    public void setModelo(iModelo modelo) {
+        this.modelo = modelo;
     }
 
     @Override
     public void setJugador(Jugador j) {
-
+        jugador = j;
     }
 
     @Override
     public void setVistaEleccion(iVistaEleccion eleccion) {
-
+        vistaEleccion = eleccion;
     }
 
     @Override
     public void setVistaJuego(iVistaJuego juego) {
-
+        this.vistaJuego = juego;
     }
 }

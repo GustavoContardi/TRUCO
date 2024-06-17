@@ -20,7 +20,7 @@ public interface iControlador {
     int estadoDelTanto();
     int estadoDelRabon();
     void cantoNoQuerido();
-
+    void setModelo(iModelo modelo);
 
     void setJugador(Jugador j);
     void setVistaEleccion(iVistaEleccion eleccion);
