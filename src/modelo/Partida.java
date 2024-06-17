@@ -44,6 +44,7 @@ public class Partida implements Serializable, iModelo {
         j2 = null;
         numeroMano=0;
         numeroRonda=1;
+        mazo = new Mazo();
         //nuevaPartida();
     }
 
@@ -54,6 +55,7 @@ public class Partida implements Serializable, iModelo {
 
     public void nuevaPartida(){
         nuevaRonda();
+        notificarPartidaLista();
     }
 
     @Override
@@ -86,6 +88,7 @@ public class Partida implements Serializable, iModelo {
 
                 if( (numeroMano % 2) == 0) turno = j1.getIDJugador();
                 else turno = j2.getIDJugador();
+                mazo.repartirCartas(j1, j2);
             }
             else finDePartida();
         }
@@ -224,7 +227,7 @@ public class Partida implements Serializable, iModelo {
 
     @Override
     public boolean esFinDePartida() {
-        return esFinDePartida();
+        return ( (anotador.getPuntosJ1() >= 30 ) || (anotador.getPuntosJ2() >= 30) );
     }
 
     @Override
@@ -235,6 +238,8 @@ public class Partida implements Serializable, iModelo {
         else if(j2 == null){
             j2 = jugador;
         }
+
+        if( (j1.getIDJugador() != 0) && (j2.getIDJugador() != 0) ) nuevaPartida();
 
         // actualizar lista etc etc
     }
@@ -269,6 +274,10 @@ public class Partida implements Serializable, iModelo {
 
     private boolean esUltimaCarta(int id){
         return true;
+    }
+
+    private void notificarPartidaLista(){
+
     }
 
 

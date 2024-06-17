@@ -34,6 +34,14 @@ public class Anotador implements Serializable {
         puntosJ2 += puntos;
     }
 
+    public int getPuntosJ1(){
+        return puntosJ1;
+    }
+
+    public int getPuntosJ2(){
+        return puntosJ2;
+    }
+
 
     // metodos privados
 
