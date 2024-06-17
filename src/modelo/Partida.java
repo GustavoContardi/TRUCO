@@ -252,11 +252,20 @@ public class Partida implements Serializable, iModelo {
 
     @Override
     public int estadoRabon() {
-        return 0;
+        if(estadoTruco == estadoTruco.TRUCO) return 2;
+        else if(estadoTruco == estadoTruco.RE_TRUCO) return 3;
+        else if(estadoTruco == estadoTruco.VALE_CUATRO) return 4;
+
+        return 1;
     }
 
     @Override
     public int estadoTanto() {
+        if(estadoEnvido == estadoEnvido.ENVIDO) return 1;
+        else if(estadoEnvido == estadoEnvido.ENVIDO_DOBLE) return 2;
+        else if(estadoEnvido == estadoEnvido.REAL_ENVIDO) return 3;
+        else if(estadoEnvido == estadoEnvido.FALTA_ENVIDO) return 4;
+
         return 0;
     }
 
@@ -278,6 +287,39 @@ public class Partida implements Serializable, iModelo {
 
     private void notificarPartidaLista(){
 
+    }
+
+    private int calcularPuntajeEnvidoQuerido(){
+        int puntos = 0;
+        int maximoPuntos = 1;
+
+        if(anotador.getPuntosJ2() > anotador.getPuntosJ1()) maximoPuntos = 30 - anotador.getPuntosJ2();
+        else maximoPuntos = 30 - anotador.getPuntosJ1();
+
+        if(cantoFaltaEnvido){
+            if(anotador.getPuntosJ2() < 15 && anotador.getPuntosJ1() < 15) puntos = 30;
+            else puntos = maximoPuntos;
+
+            return puntos;
+        }
+
+        if(cantoEnvido){
+            puntos += 2;
+            if(cantoEnvidoDoble){
+                puntos += 2;
+                if(cantoRealEnvido){
+                    puntos += 3;
+                }
+            }
+            else if(cantoRealEnvido){
+                puntos += 3;
+            }
+        }
+        else if(cantoRealEnvido){
+            puntos += 3;
+        }
+
+        return puntos;
     }
 
 

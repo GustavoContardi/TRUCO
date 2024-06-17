@@ -4,7 +4,7 @@ import modelo.*;
 import vista.vistaConsola;
 import vista.vistaEleccion;
 import vista.vistaGrafica;
-import vista.vistaInicio;
+
 
 import java.util.ArrayList;
 
@@ -69,5 +69,6 @@ public class Main {
 */
         //vistaInicio inicio = new iVistaInicio();
 
+        vistaConsola vista = new vistaConsola();
     }
 }

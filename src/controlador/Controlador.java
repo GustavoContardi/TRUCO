@@ -8,10 +8,26 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class Controlador implements Serializable, iControlador {
+
+    //
+    // Atributos
+    //
     private iModelo modelo;
     private iVistaJuego vistaJuego;
     private iVistaEleccion vistaEleccion;
     private Jugador jugador;
+
+    //
+    // Constructor
+    //
+
+    public Controlador() {
+    }
+
+
+    //
+    // Metodos
+    //
 
     @Override
     public void iniciarPartida() {
@@ -30,8 +46,14 @@ public class Controlador implements Serializable, iControlador {
     }
 
     @Override
-    public ArrayList<Carta> obtenerCartas() {
-        return null;
+    public ArrayList<String> obtenerCartas() {
+        ArrayList<String> lista = new ArrayList<>();
+
+        for(Carta carta : jugador.getCartasObtenidas()){
+            lista.add(carta.toString());
+        }
+
+        return lista;
     }
 
     @Override
@@ -41,6 +63,7 @@ public class Controlador implements Serializable, iControlador {
 
     @Override
     public int meVoyAlMazo() {
+        modelo.meVoyAlMazo(jugador.getIDJugador());
         return 0;
     }
 

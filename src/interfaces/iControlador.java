@@ -9,7 +9,7 @@ public interface iControlador {
     void iniciarPartida();
     void agregarJugador(Jugador j);
     String puntajeActual();
-    ArrayList<Carta> obtenerCartas();
+    ArrayList<String> obtenerCartas();
     int tirarCarta(Carta carta, int idJugador);
     int meVoyAlMazo();
     void guardarPartida();
