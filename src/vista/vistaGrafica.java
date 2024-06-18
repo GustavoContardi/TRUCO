@@ -10,11 +10,11 @@ import java.awt.event.ActionListener;
 
 public class vistaGrafica implements iVistaJuego{
     private JPanel ventana;
-    private JButton ENVIDOButton;
+    private JButton btnEnvido;
     private JButton TRUCOButton;
     private JButton IRALMAZOButton;
-    private JButton NOQUIEROButton;
-    private JPanel panelCartasYo;
+    private JButton btnNoQuiero;
+    private JPanel panelCartasTiradasYo;
     private JPanel panelCartasOp;
     private JPanel CartasOP1;
     private JPanel CartasOP2;
@@ -22,7 +22,7 @@ public class vistaGrafica implements iVistaJuego{
     private JPanel CartasYo1;
     private JPanel CartasYo2;
     private JPanel CartasYo3;
-    private JButton QUIEROButton;
+    private JButton btnQuiero;
     private JButton btnCarta1;
     private JButton btnCarta2;
     private JButton btnCarta3;

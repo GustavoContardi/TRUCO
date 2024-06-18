@@ -54,7 +54,7 @@
         <properties/>
         <border type="none"/>
         <children>
-          <component id="459ba" class="javax.swing.JButton" binding="QUIEROButton" default-binding="true">
+          <component id="459ba" class="javax.swing.JButton" binding="btnQuiero">
             <constraints/>
             <properties>
               <text value="QUIERO"/>
@@ -63,7 +63,7 @@
           <hspacer id="276ea">
             <constraints/>
           </hspacer>
-          <component id="df755" class="javax.swing.JButton" binding="ENVIDOButton" default-binding="true">
+          <component id="df755" class="javax.swing.JButton" binding="btnEnvido">
             <constraints/>
             <properties>
               <text value="ENVIDO"/>
@@ -72,7 +72,7 @@
           <hspacer id="3fb2b">
             <constraints/>
           </hspacer>
-          <component id="d8da2" class="javax.swing.JButton" binding="TRUCOButton" default-binding="true">
+          <component id="d8da2" class="javax.swing.JButton" binding="btnTruco">
             <constraints/>
             <properties>
               <text value="TRUCO"/>
@@ -81,7 +81,7 @@
           <hspacer id="47bbf">
             <constraints/>
           </hspacer>
-          <component id="97f5a" class="javax.swing.JButton" binding="IRALMAZOButton" default-binding="true">
+          <component id="97f5a" class="javax.swing.JButton" binding="btnAlMazo">
             <constraints/>
             <properties>
               <text value="IR AL MAZO"/>
@@ -90,7 +90,7 @@
           <hspacer id="44be0">
             <constraints/>
           </hspacer>
-          <component id="50fc0" class="javax.swing.JButton" binding="NOQUIEROButton" default-binding="true">
+          <component id="50fc0" class="javax.swing.JButton" binding="btnNoQuiero">
             <constraints/>
             <properties>
               <text value="NO QUIERO"/>
@@ -98,7 +98,7 @@
           </component>
         </children>
       </toolbar>
-      <grid id="d31fe" binding="panelCartasYo" layout-manager="GridLayoutManager" row-count="1" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+      <grid id="d31fe" binding="panelCartasTiradasYo" layout-manager="GridLayoutManager" row-count="1" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
         <margin top="0" left="0" bottom="0" right="0"/>
         <constraints>
           <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
