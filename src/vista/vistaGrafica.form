@@ -72,7 +72,7 @@
           <hspacer id="3fb2b">
             <constraints/>
           </hspacer>
-          <component id="d8da2" class="javax.swing.JButton" binding="btnTruco">
+          <component id="d8da2" class="javax.swing.JButton" binding="TRUCOButton">
             <constraints/>
             <properties>
               <text value="TRUCO"/>
@@ -81,7 +81,7 @@
           <hspacer id="47bbf">
             <constraints/>
           </hspacer>
-          <component id="97f5a" class="javax.swing.JButton" binding="btnAlMazo">
+          <component id="97f5a" class="javax.swing.JButton" binding="IRALMAZOButton">
             <constraints/>
             <properties>
               <text value="IR AL MAZO"/>
