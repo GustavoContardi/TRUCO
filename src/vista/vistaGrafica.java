@@ -57,7 +57,7 @@ public class vistaGrafica implements iVistaJuego{
 
     @Override
     public void mostrarMensaje(String msj) {
-
+        puntajesLabel.setText(msj);
     }
 
     @Override
@@ -71,8 +71,10 @@ public class vistaGrafica implements iVistaJuego{
     }
 
     @Override
-    public void finDeLaPartida() {
+    public void finDeLaPartida(String nombreGanador) {
+        panelAvisos( "LA PARTIDA TERMINO. EL GANADOR ES: " + nombreGanador);
 
+        // demas cosas
     }
 
     @Override
@@ -87,7 +89,7 @@ public class vistaGrafica implements iVistaJuego{
 
     @Override
     public void println(String text) {
-
+        // nada aca, es para la vista consola
     }
 
     @Override
@@ -97,7 +99,7 @@ public class vistaGrafica implements iVistaJuego{
 
     @Override
     public void setControlador(iControlador controlador) {
-
+        this.controlador = controlador;
     }
 
     @Override
@@ -178,6 +180,11 @@ public class vistaGrafica implements iVistaJuego{
             }
         });
 
+
+    }
+
+    public void setBotonesCartas(){
+        int ronda = controlador.nroDeRonda();
 
     }
 

@@ -6,7 +6,7 @@ public interface iVistaJuego {
     void mostrarMensaje(String msj);
     void limpiarPantalla();
     void finDeMano();
-    void finDeLaPartida();
+    void finDeLaPartida(String nombreGanador);
     void cantaronRabon(String rabon);
     void cantaronTanto(String tanto);
     void println(String text);
@@ -15,5 +15,4 @@ public interface iVistaJuego {
     void setControlador(iControlador controlador);
     void actualizar();
     void salirDelJuego();
-
 }
