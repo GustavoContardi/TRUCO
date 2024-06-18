@@ -59,7 +59,7 @@ public class Controlador implements Serializable, iControlador {
     }
 
     @Override
-    public void tirarCarta(Carta carta, int idJugador) {
+    public void tirarCarta(int numeroDeCarta) {
         return;
     }
 
@@ -114,6 +114,51 @@ public class Controlador implements Serializable, iControlador {
     @Override
     public void setModelo(iModelo modelo) {
         this.modelo = modelo;
+    }
+
+    @Override
+    public boolean esMiTurno() {
+        return modelo.turnoActual() == jugador.getIDJugador();
+    }
+
+    @Override
+    public boolean seCantoEnvido() {
+        return false;
+    }
+
+    @Override
+    public boolean seCantoEnvidoDoble() {
+        return false;
+    }
+
+    @Override
+    public boolean seCantoRealEnvido() {
+        return false;
+    }
+
+    @Override
+    public boolean seCantoFaltaEnvido() {
+        return false;
+    }
+
+    @Override
+    public boolean seCantoTruco() {
+        return false;
+    }
+
+    @Override
+    public boolean seCantoReTruco() {
+        return false;
+    }
+
+    @Override
+    public boolean seCantoValeCuatro() {
+        return false;
+    }
+
+    @Override
+    public int nroDeRonda() {
+        return modelo.numeroDeRonda();
     }
 
     @Override

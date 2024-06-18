@@ -22,4 +22,5 @@ public interface iModelo {
     void actualizarPuntos();
     estadoTruco estadoRabon();
     estadoEnvido estadoTanto();
+    int numeroDeRonda();
 }

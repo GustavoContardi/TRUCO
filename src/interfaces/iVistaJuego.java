@@ -14,6 +14,6 @@ public interface iVistaJuego {
     //void setFlujoActual(Flujo flujoActual);
     void setControlador(iControlador controlador);
     void actualizar();
-
+    void salirDelJuego();
 
 }

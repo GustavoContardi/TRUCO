@@ -12,7 +12,7 @@ public interface iControlador {
     void agregarJugador(Jugador j);
     String puntajeActual();
     ArrayList<String> obtenerCartas();
-    void tirarCarta(Carta carta, int idJugador);
+    void tirarCarta(int numeroDeCarta);
     int meVoyAlMazo();
     void guardarPartida();
     void recuperarPartida();
@@ -23,6 +23,15 @@ public interface iControlador {
     estadoTruco estadoDelRabon();
     void cantoNoQuerido();
     void setModelo(iModelo modelo);
+    boolean esMiTurno();
+    boolean seCantoEnvido();
+    boolean seCantoEnvidoDoble();
+    boolean seCantoRealEnvido();
+    boolean seCantoFaltaEnvido();
+    boolean seCantoTruco();
+    boolean seCantoReTruco();
+    boolean seCantoValeCuatro();
+    int nroDeRonda();
 
     void setJugador(Jugador j);
     void setVistaEleccion(iVistaEleccion eleccion);

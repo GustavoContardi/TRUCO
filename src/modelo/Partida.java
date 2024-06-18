@@ -260,6 +260,11 @@ public class Partida implements Serializable, iModelo {
         return estadoDelEnvido;
     }
 
+    @Override
+    public int numeroDeRonda() {
+        return numeroRonda;
+    }
+
 
     //
     // metodos privados
