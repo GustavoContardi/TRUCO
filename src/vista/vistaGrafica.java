@@ -79,6 +79,20 @@ public class vistaGrafica implements iVistaJuego{
 
     @Override
     public void cantaronRabon(String rabon) {
+        removeBtnActionListener();
+
+        accionesJ2.setText(rabon);
+        btnQuiero.setEnabled(true);
+        btnNoQuiero.setEnabled(true);
+
+        btnQuiero.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //controlador.rabonQuerido();
+                accionesJ2.setText("");
+                setBotones();
+            }
+        });
 
     }
 
@@ -130,6 +144,9 @@ public class vistaGrafica implements iVistaJuego{
                 setBotonesEnvido();
             }
         });
+
+        
+
     }
 
     public void setBotonesEnvido(){
@@ -183,9 +200,30 @@ public class vistaGrafica implements iVistaJuego{
 
     }
 
-    public void setBotonesCartas(){
+    public void setBotonesCartas(String fotoCarta){
         int ronda = controlador.nroDeRonda();
 
+        if(ronda == 1){
+            ImageIcon imagen1 = new ImageIcon("fotocartas\\" + fotoCarta + ".jpeg");
+            JLabel label1 = new JLabel(imagen1);
+            btnCarta1.add(label1);
+            btnCarta1.revalidate();
+            btnCarta1.repaint();
+        }
+        if(ronda == 2){
+            ImageIcon imagen2 = new ImageIcon("fotocartas\\" + fotoCarta + ".jpeg");
+            JLabel label2 = new JLabel(imagen2);
+            btnCarta2.add(label2);
+            btnCarta2.revalidate();
+            btnCarta2.repaint();
+        }
+        if(ronda == 3) {
+            ImageIcon imagen3 = new ImageIcon("fotocartas\\" + fotoCarta + ".jpeg");
+            JLabel label3 = new JLabel(imagen3);
+            btnCarta3.add(label3);
+            btnCarta3.revalidate();
+            btnCarta3.repaint();
+        }
     }
 
 
