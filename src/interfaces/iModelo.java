@@ -1,5 +1,7 @@
 package interfaces;
 
+import enums.estadoTruco;
+import enums.estadoEnvido;
 import modelo.Carta;
 import modelo.Jugador;
 
@@ -18,6 +20,6 @@ public interface iModelo {
     boolean esFinDePartida();
     void agregarJugador(Jugador jugador);
     void actualizarPuntos();
-    int estadoRabon();
-    int estadoTanto();
+    estadoTruco estadoRabon();
+    estadoEnvido estadoTanto();
 }

@@ -25,8 +25,8 @@ public class Partida implements Serializable, iModelo {
     private     int                 quienCantoTruco;
     private     int                 quienCantoReTruco;
     private     int                 hizoPrimera; // ID del jugador
-    private     estadoTruco         estadoTruco;
-    private     estadoEnvido        estadoEnvido;
+    private     estadoTruco         estadoDelTruco;
+    private     estadoEnvido        estadoDelEnvido;
     private     boolean             cantoEnvido, cantoEnvidoDoble,cantoRealEnvido, cantoFaltaEnvido;
     private     int                 puntajeRondaJ1, puntajeRondaJ2, puntajeRondaEnvido;
     private     boolean             finMano;
@@ -67,8 +67,8 @@ public class Partida implements Serializable, iModelo {
         if (finMano){
             if(esFinDePartida()){
                 numeroMano          = 1;
-                estadoTruco         = estadoTruco.NADA;
-                estadoEnvido        = estadoEnvido.NADA;
+                estadoDelTruco = estadoDelTruco.NADA;
+                estadoDelEnvido = estadoDelEnvido.NADA;
                 puntajeRondaJ1      = 0;
                 puntajeRondaJ2      = 0;
                 puntajeRondaEnvido  = 0;
@@ -251,22 +251,13 @@ public class Partida implements Serializable, iModelo {
     }
 
     @Override
-    public int estadoRabon() {
-        if(estadoTruco == estadoTruco.TRUCO) return 2;
-        else if(estadoTruco == estadoTruco.RE_TRUCO) return 3;
-        else if(estadoTruco == estadoTruco.VALE_CUATRO) return 4;
-
-        return 1;
+    public estadoTruco estadoRabon() {
+        return estadoDelTruco;
     }
 
     @Override
-    public int estadoTanto() {
-        if(estadoEnvido == estadoEnvido.ENVIDO) return 1;
-        else if(estadoEnvido == estadoEnvido.ENVIDO_DOBLE) return 2;
-        else if(estadoEnvido == estadoEnvido.REAL_ENVIDO) return 3;
-        else if(estadoEnvido == estadoEnvido.FALTA_ENVIDO) return 4;
-
-        return 0;
+    public estadoEnvido estadoTanto() {
+        return estadoDelEnvido;
     }
 
 
@@ -318,6 +309,34 @@ public class Partida implements Serializable, iModelo {
         else if(cantoRealEnvido){
             puntos += 3;
         }
+
+        System.out.println("Puntos Envido Querido: " + puntos);
+        return puntos;
+    }
+
+    private int calcularEnvidoNoQuerido(){
+        int puntos = 0;
+
+        if(cantoEnvido){
+            puntos += 1;
+            if(cantoEnvidoDoble){
+                puntos += 1;
+                if(cantoRealEnvido){
+                    puntos += 2;
+                    if(cantoFaltaEnvido) puntos += 3;
+                }
+            }
+            else if (cantoRealEnvido){
+                puntos += 1;
+                if(cantoFaltaEnvido) puntos += 3;
+            }
+            else if(cantoFaltaEnvido) puntos += 1;
+        }
+        else if(cantoRealEnvido){
+            puntos += 1;
+            if(cantoFaltaEnvido) puntos += 2;
+        }
+        else puntos = 1;
 
         return puntos;
     }

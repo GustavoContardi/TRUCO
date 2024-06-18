@@ -1,5 +1,7 @@
 package interfaces;
 
+import enums.estadoEnvido;
+import enums.estadoTruco;
 import modelo.Carta;
 import modelo.Jugador;
 
@@ -10,15 +12,15 @@ public interface iControlador {
     void agregarJugador(Jugador j);
     String puntajeActual();
     ArrayList<String> obtenerCartas();
-    int tirarCarta(Carta carta, int idJugador);
+    void tirarCarta(Carta carta, int idJugador);
     int meVoyAlMazo();
     void guardarPartida();
     void recuperarPartida();
-    String cantarTanto(int opcion, String canto);
-    String cantarRabon(int opcion, String canto);
+    String cantarTanto(int opcion);
+    String cantarRabon(int opcion);
     int esTurnoDe();
-    int estadoDelTanto();
-    int estadoDelRabon();
+    estadoEnvido estadoDelTanto();
+    estadoTruco estadoDelRabon();
     void cantoNoQuerido();
     void setModelo(iModelo modelo);
 

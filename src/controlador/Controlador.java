@@ -1,5 +1,7 @@
 package controlador;
 
+import enums.estadoEnvido;
+import enums.estadoTruco;
 import interfaces.*;
 import modelo.Carta;
 import modelo.Jugador;
@@ -57,8 +59,8 @@ public class Controlador implements Serializable, iControlador {
     }
 
     @Override
-    public int tirarCarta(Carta carta, int idJugador) {
-        return 0;
+    public void tirarCarta(Carta carta, int idJugador) {
+        return;
     }
 
     @Override
@@ -78,13 +80,13 @@ public class Controlador implements Serializable, iControlador {
     }
 
     @Override
-    public String cantarTanto(int opcion, String canto) {
+    public String cantarTanto(int opcion) {
         modelo.cantarEnvido(jugador.getIDJugador(), opcion);
         return "";
     }
 
     @Override
-    public String cantarRabon(int opcion, String canto) {
+    public String cantarRabon(int opcion) {
         modelo.cantarRabon(jugador.getIDJugador(), opcion);
         return "";
     }
@@ -95,12 +97,12 @@ public class Controlador implements Serializable, iControlador {
     }
 
     @Override
-    public int estadoDelTanto() {
+    public estadoEnvido estadoDelTanto() {
         return modelo.estadoTanto();
     }
 
     @Override
-    public int estadoDelRabon() {
+    public estadoTruco estadoDelRabon() {
         return modelo.estadoRabon();
     }
 

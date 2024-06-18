@@ -25,6 +25,7 @@ public class Jugador implements Comparable<Jugador>, Serializable{
         if(listaJugadores==null) listaJugadores = new ArrayList<>();
         this.nombre = nombre;
         partidasGanadas = 0;
+        electo = false;
         IDJugador = generarID();
         guardarJugador();
     }
@@ -144,6 +145,9 @@ public class Jugador implements Comparable<Jugador>, Serializable{
         return resultado;
     }
 
+
+
+
     public static ArrayList<Jugador> getListaJugadores() {
         try {
             FileInputStream fos = new FileInputStream("jugadores.bin");
@@ -200,5 +204,11 @@ public class Jugador implements Comparable<Jugador>, Serializable{
         this.partidasGanadas = partidasGanadas;
     }
 
+    public void setElecto(boolean electo){
+        this.electo = electo;
+    }
+    public boolean getElecto(){
+        return electo;
+    }
 
 }

@@ -69,6 +69,6 @@ public class Main {
 */
         //vistaInicio inicio = new iVistaInicio();
 
-        vistaConsola vista = new vistaConsola();
+        vistaGrafica vista = new vistaGrafica();
     }
 }
