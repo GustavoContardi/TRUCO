@@ -94,11 +94,64 @@ public class vistaGrafica implements iVistaJuego{
             }
         });
 
+        btnNoQuiero.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                accionesJ2.setText("");
+                controlador.cantoNoQuerido();
+            }
+        });
+
+        switch(controlador.estadoDelRabon()){
+            case TRUCO -> {
+                TRUCOButton.setEnabled(true);
+                TRUCOButton.setText(" RE TRUCO ");
+                TRUCOButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        controlador.cantarRabon(2);
+                        accionesJ2.setText("");
+                        setBotones();
+                    }
+                });
+            }
+            case RE_TRUCO -> {
+                TRUCOButton.setEnabled(true);
+                TRUCOButton.setText(" VALE CUATRO ");
+                TRUCOButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        controlador.cantarRabon(3);
+                        accionesJ2.setText("");
+                        setBotones();
+                    }
+                });
+            }
+
+            case VALE_CUATRO -> {
+                TRUCOButton.setText("");
+                TRUCOButton.setEnabled(false);
+                // no se puede cantar más
+            }
+        }
+
+
     }
 
     @Override
     public void cantaronTanto(String tanto) {
+        removeBtnActionListener();
 
+        accionesJ2.setText(tanto);
+        btnQuiero.setEnabled(true);
+        btnNoQuiero.setEnabled(true);
+
+        btnQuiero.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
     }
 
     @Override
@@ -200,7 +253,7 @@ public class vistaGrafica implements iVistaJuego{
 
     }
 
-    public void setBotonesCartas(String fotoCarta){
+    public void setImagenesCartas(String fotoCarta){
         int ronda = controlador.nroDeRonda();
 
         if(ronda == 1){
@@ -231,7 +284,7 @@ public class vistaGrafica implements iVistaJuego{
     // metodos privados
     //
 
-    private void setBotonesCartas(JLabel labelImagen1, JLabel labelImagen2, JLabel labelImagen3){
+    private void setBotonesAccionesCartas(JLabel labelImagen1, JLabel labelImagen2, JLabel labelImagen3){
         int ronda = controlador.nroDeRonda();
 
         removeAllActionListeners(btnCarta1);

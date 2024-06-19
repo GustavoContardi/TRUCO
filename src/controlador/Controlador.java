@@ -162,6 +162,26 @@ public class Controlador implements Serializable, iControlador {
     }
 
     @Override
+    public void rabonQuerido() {
+
+    }
+
+    @Override
+    public void rabonNoQuerido() {
+
+    }
+
+    @Override
+    public void tantoQuerido() {
+
+    }
+
+    @Override
+    public void tantoNoQuerido() {
+
+    }
+
+    @Override
     public void setJugador(Jugador j) {
         jugador = j;
     }

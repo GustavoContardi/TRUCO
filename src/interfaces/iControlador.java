@@ -32,6 +32,10 @@ public interface iControlador {
     boolean seCantoReTruco();
     boolean seCantoValeCuatro();
     int nroDeRonda();
+    void rabonQuerido();
+    void rabonNoQuerido();
+    void tantoQuerido();
+    void tantoNoQuerido();
 
     void setJugador(Jugador j);
     void setVistaEleccion(iVistaEleccion eleccion);

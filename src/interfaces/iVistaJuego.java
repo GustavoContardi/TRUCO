@@ -15,4 +15,5 @@ public interface iVistaJuego {
     void setControlador(iControlador controlador);
     void actualizar();
     void salirDelJuego();
+    
 }
