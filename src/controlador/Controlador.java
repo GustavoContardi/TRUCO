@@ -123,22 +123,22 @@ public class Controlador implements Serializable, iControlador {
 
     @Override
     public boolean seCantoEnvido() {
-        return false;
+        return modelo.cantaronEnvido();
     }
 
     @Override
     public boolean seCantoEnvidoDoble() {
-        return false;
+        return modelo.cantaronEnvidoDoble();
     }
 
     @Override
     public boolean seCantoRealEnvido() {
-        return false;
+        return modelo.cantaronRealEnvido();
     }
 
     @Override
     public boolean seCantoFaltaEnvido() {
-        return false;
+        return modelo.cantaronFaltaEnvido();
     }
 
     @Override
@@ -168,7 +168,7 @@ public class Controlador implements Serializable, iControlador {
 
     @Override
     public void rabonNoQuerido() {
-
+        modelo.meVoyAlMazo(jugador.getIDJugador());
     }
 
     @Override

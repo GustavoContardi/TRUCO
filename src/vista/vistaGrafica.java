@@ -149,9 +149,97 @@ public class vistaGrafica implements iVistaJuego{
         btnQuiero.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                accionesJ2.setText("");
+                controlador.tantoQuerido();
+                setBotones();
             }
         });
+        btnNoQuiero.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                accionesJ2.setText("");
+                controlador.tantoNoQuerido();
+            }
+        });
+
+        switch (controlador.estadoDelTanto()){
+            case ENVIDO -> {
+                btnEnvido.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        controlador.cantarTanto(2);
+                        accionesJ2.setText("");
+                        setBotones();
+                    }
+                });
+                TRUCOButton.setText("REAL ENVIDO");
+                TRUCOButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        controlador.cantarTanto(3);
+                        accionesJ2.setText("");
+                        setBotones();
+                    }
+                });
+                btnAuxiliar.setText("FALTA ENVIDO");
+                btnAuxiliar.setEnabled(true);
+                btnAuxiliar.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        controlador.cantarTanto(4);
+                        accionesJ2.setText("");
+                        setBotones();
+                    }
+                });
+            }
+
+            case ENVIDO_DOBLE -> {
+                btnEnvido.setEnabled(false);
+                btnEnvido.setText(" ---- ");
+                TRUCOButton.setText("REAL ENVIDO");
+                TRUCOButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        controlador.cantarTanto(3);
+                        accionesJ2.setText("");
+                        setBotones();
+                    }
+                });
+                btnAuxiliar.setText("FALTA ENVIDO");
+                btnAuxiliar.setEnabled(true);
+                btnAuxiliar.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        controlador.cantarTanto(4);
+                        accionesJ2.setText("");
+                        setBotones();
+                    }
+                });
+            }
+            case REAL_ENVIDO -> {
+                btnEnvido.setText(" ---- ");
+                btnEnvido.setEnabled(false);
+                btnAuxiliar.setText("FALTA ENVIDO");
+                btnAuxiliar.setEnabled(true);
+                btnAuxiliar.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        controlador.cantarTanto(4);
+                        accionesJ2.setText("");
+                        setBotones();
+                    }
+                });
+            }
+
+            case FALTA_ENVIDO -> {
+                btnEnvido.setEnabled(false);
+                btnAuxiliar.setEnabled(false);
+                TRUCOButton.setEnabled(false);
+                btnEnvido.setText(" ---- ");
+                TRUCOButton.setText(" ---- ");
+                btnAuxiliar.setText(" ---- ");
+            }
+        }
     }
 
     @Override
@@ -198,7 +286,6 @@ public class vistaGrafica implements iVistaJuego{
             }
         });
 
-        
 
     }
 

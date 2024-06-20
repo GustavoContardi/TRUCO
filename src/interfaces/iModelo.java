@@ -23,4 +23,8 @@ public interface iModelo {
     estadoTruco estadoRabon();
     estadoEnvido estadoTanto();
     int numeroDeRonda();
+    boolean cantaronEnvido();
+    boolean cantaronEnvidoDoble();
+    boolean cantaronRealEnvido();
+    boolean cantaronFaltaEnvido();
 }

@@ -213,6 +213,26 @@ public class Partida implements Serializable, iModelo {
     @Override
     public void cantarRabon(int id, int opcion) {
         // levantar de archivo los cantos y poner uno aleatorio
+        String nombre = "", mensaje = "";
+        int idEnviarMensaje = 0;
+
+        if(id == j1.getIDJugador()) {
+            nombre = j1.getNombre();
+            idEnviarMensaje = j2.getIDJugador();
+        }
+        else{
+            nombre = j2.getNombre();
+            idEnviarMensaje = j1.getIDJugador();
+        }
+
+        if(opcion == 1){
+            quienCantoTruco = id;
+            enviarMensaje(idEnviarMensaje, mensaje);
+        }
+    }
+
+    public void enviarMensaje(int idDestinatario, String mensaje){
+
     }
 
     @Override
@@ -263,6 +283,26 @@ public class Partida implements Serializable, iModelo {
     @Override
     public int numeroDeRonda() {
         return numeroRonda;
+    }
+
+    @Override
+    public boolean cantaronEnvido() {
+        return cantoEnvido;
+    }
+
+    @Override
+    public boolean cantaronEnvidoDoble() {
+        return cantoRealEnvido;
+    }
+
+    @Override
+    public boolean cantaronRealEnvido() {
+        return cantoRealEnvido;
+    }
+
+    @Override
+    public boolean cantaronFaltaEnvido() {
+        return cantoFaltaEnvido;
     }
 
 
@@ -352,6 +392,12 @@ public class Partida implements Serializable, iModelo {
     //
 
 
+    public Jugador getJ1() {
+        return j1;
+    }
 
+    public Jugador getJ2() {
+        return j2;
+    }
 
 }
