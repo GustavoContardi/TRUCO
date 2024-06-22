@@ -1,16 +1,15 @@
-package ar.edu.unlu.poo.rmimvc.cliente;
+package cliente;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
-import ar.edu.unlu.poo.rmimvc.observer.IObservableRemoto;
-import ar.edu.unlu.poo.rmimvc.observer.IObservadorRemoto;
+import ar.edu.unlu.rmimvc.observer.IObservableRemoto;
 
 /**
  * Esta interface debe ser implementada por el controlador remoto. El único método que
  * posee es el necesario para decirle al controlador cual es el modelo con el que se comunicará.
  */
-public interface IControladorRemoto extends IObservadorRemoto {
+public interface IControladorRemoto extends IObservableRemoto {
 	
 	/**
 	 * El controlador debe implmentar este método y guardar el modelo remoto pasado como parámetro.

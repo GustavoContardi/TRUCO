@@ -1,4 +1,4 @@
-package ar.edu.unlu.poo.rmimvc.cliente;
+package cliente;
 
 import java.rmi.AlreadyBoundException;
 import java.rmi.NotBoundException;
@@ -9,7 +9,9 @@ import java.rmi.registry.Registry;
 
 import ar.edu.unlu.poo.rmimvc.RMIMVCException;
 import ar.edu.unlu.poo.rmimvc.ServidorRMI;
-import ar.edu.unlu.poo.rmimvc.observer.IObservableRemoto;
+import ar.edu.unlu.rmimvc.observer.IObservableRemoto;
+import ar.edu.unlu.rmimvc.observer.IObservadorRemoto;
+
 
 /**
  * Esta clase representa al cliente que se conectará con el servidor y hará disponible
@@ -61,7 +63,7 @@ public class Cliente extends ServidorRMI {
 		} catch (AlreadyBoundException e) {
 			throw new RMIMVCException("Error al registrar el controlador en el servidor RMI local.");
 		}
-		modeloRemoto.agregarObservador(controladorRemoto);
+		modeloRemoto.agregarObservador((IObservadorRemoto) controladorRemoto);
 		return controladorRemoto;
 	}
 }
