@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="vista.vistaInicio">
+  <grid id="27dc6" binding="ventana" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+    <margin top="0" left="0" bottom="0" right="0"/>
+    <constraints>
+      <xy x="20" y="20" width="500" height="405"/>
+    </constraints>
+    <properties/>
+    <border type="none"/>
+    <children>
+      <grid id="bf4b1" layout-manager="GridLayoutManager" row-count="2" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+        <margin top="0" left="0" bottom="0" right="0"/>
+        <constraints>
+          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties/>
+        <border type="none"/>
+        <children>
+          <component id="1667e" class="javax.swing.JLabel" binding="tituloLabel">
+            <constraints>
+              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <font name="Courier 10 Pitch" size="48" style="1"/>
+              <text value="TRUCONTARDI"/>
+            </properties>
+          </component>
+          <grid id="831" layout-manager="BorderLayout" hgap="0" vgap="0">
+            <constraints>
+              <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties/>
+            <border type="none"/>
+            <children>
+              <component id="18bb8" class="javax.swing.JLabel">
+                <constraints border-constraint="West"/>
+                <properties>
+                  <text value="                       "/>
+                </properties>
+              </component>
+              <component id="2adf6" class="javax.swing.JLabel">
+                <constraints border-constraint="East"/>
+                <properties>
+                  <text value="                       "/>
+                </properties>
+              </component>
+              <component id="74a23" class="javax.swing.JLabel">
+                <constraints border-constraint="South"/>
+                <properties>
+                  <text value=""/>
+                </properties>
+              </component>
+              <grid id="99c85" layout-manager="GridLayoutManager" row-count="10" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                <margin top="0" left="0" bottom="0" right="0"/>
+                <constraints border-constraint="Center"/>
+                <properties/>
+                <border type="none"/>
+                <children>
+                  <component id="4158a" class="javax.swing.JButton" binding="btnIniciarNueva">
+                    <constraints>
+                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="            "/>
+                    </properties>
+                  </component>
+                  <component id="44d54" class="javax.swing.JButton" binding="btnReanudar">
+                    <constraints>
+                      <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="INICIAR NUEVA PARTIDA"/>
+                    </properties>
+                  </component>
+                  <component id="d3d6e" class="javax.swing.JButton" binding="btnTopFive">
+                    <constraints>
+                      <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="TOP JUGADORES GANADORES"/>
+                    </properties>
+                  </component>
+                  <component id="765a9" class="javax.swing.JButton" binding="btnSalir">
+                    <constraints>
+                      <grid row="8" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="SALIR"/>
+                    </properties>
+                  </component>
+                  <vspacer id="1a039">
+                    <constraints>
+                      <grid row="9" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                  </vspacer>
+                  <component id="69fad" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="                   "/>
+                    </properties>
+                  </component>
+                  <component id="d0a04" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="               "/>
+                    </properties>
+                  </component>
+                  <component id="d0e3c" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="                  "/>
+                    </properties>
+                  </component>
+                  <component id="c8a74" class="javax.swing.JButton" binding="btnAnotador">
+                    <constraints>
+                      <grid row="6" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="ANOTADOR"/>
+                    </properties>
+                  </component>
+                  <component id="47247" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="7" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="                   "/>
+                    </properties>
+                  </component>
+                </children>
+              </grid>
+            </children>
+          </grid>
+        </children>
+      </grid>
+    </children>
+  </grid>
+</form>

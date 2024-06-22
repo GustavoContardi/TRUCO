@@ -36,6 +36,7 @@ public interface iControlador {
     void rabonNoQuerido();
     void tantoQuerido();
     void tantoNoQuerido();
+    ArrayList<Jugador> listaJugadoresMasGanadores();
 
     void setJugador(Jugador j);
     void setVistaEleccion(iVistaEleccion eleccion);

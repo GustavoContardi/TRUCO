@@ -4,6 +4,7 @@ import modelo.*;
 import vista.vistaConsola;
 import vista.vistaEleccion;
 import vista.vistaGrafica;
+import vista.vistaInicio;
 
 
 import java.io.FileNotFoundException;
@@ -70,10 +71,10 @@ public class Main {
 
         System.out.println("prueba fin: " + anotador.toString());
 
-*/
+
         //vistaInicio inicio = new iVistaInicio();
 
-        vistaGrafica vista = new vistaGrafica();
+
 
 
         ArrayList<ArrayList<String>> listas = new ArrayList<>();
@@ -155,5 +156,9 @@ public class Main {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }*/
+        //vistaGrafica vista = new vistaGrafica();
+
+        new vistaInicio();
     }
 }

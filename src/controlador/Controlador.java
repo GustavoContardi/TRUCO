@@ -182,6 +182,11 @@ public class Controlador implements Serializable, iControlador {
     }
 
     @Override
+    public ArrayList<Jugador> listaJugadoresMasGanadores() {
+        return Jugador.getListaJugadores();
+    }
+
+    @Override
     public void setJugador(Jugador j) {
         jugador = j;
     }
