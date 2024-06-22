@@ -13,7 +13,7 @@ public class vistaInicio {
     private JButton btnSalir;
     private JButton btnAnotador;
     private JFrame frame;
-    private anotadorGrafico anotadorG = new anotadorGrafico(this);
+    private anotadorGrafico anotadorG;
 
     public vistaInicio() {
         this.frame = new JFrame("TRUCONTARDI");
@@ -22,6 +22,7 @@ public class vistaInicio {
         frame.pack();
         frame.setSize(450, 500);
         frame.setVisible(true);
+        anotadorG = new anotadorGrafico(this);
 
         setBotonesInicio();
     }
@@ -48,7 +49,7 @@ public class vistaInicio {
             @Override
             public void actionPerformed(ActionEvent e) {
                 frame.setVisible(false);
-                //anotadorGrafico.inciar();
+                anotadorG.iniciar();
             }
         });
     }

@@ -23,7 +23,7 @@ public class anotadorGrafico {
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.pack();
         frame.setSize(450, 500);
-        frame.setVisible(true);
+        frame.setVisible(false);
 
         JMenuBar mnuPrincipal = new JMenuBar();
         JMenu mnuArchivo = new JMenu("Archivo");
@@ -33,7 +33,7 @@ public class anotadorGrafico {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     frame.setVisible(false);
-                    //inicio.iniciar();
+                    inicio.iniciar();
                 }
             });
         mnuArchivo.add(mnuiSalir);
