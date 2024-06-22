@@ -3,6 +3,10 @@ package vista;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.swing.UIManager;
+import javax.swing.SwingUtilities;
+import javax.swing.UnsupportedLookAndFeelException;
+
 
 public class anotadorGrafico {
     private JPanel ventana;
@@ -12,6 +16,8 @@ public class anotadorGrafico {
     private JButton btnRestarJ2;
     private JLabel puntosJ1;
     private JLabel puntosJ2;
+    private JLabel JUGADOR1Label;
+    private JLabel JUGADOR2Label;
     private JFrame frame;
 
     private Integer puntosJugador1;
@@ -80,6 +86,7 @@ public class anotadorGrafico {
                 }
             }
         });
+
     }
 
     public void iniciar(){
@@ -91,4 +98,7 @@ public class anotadorGrafico {
     }
 
 
+    private void createUIComponents() {
+        // TODO: place custom component creation code here
+    }
 }
