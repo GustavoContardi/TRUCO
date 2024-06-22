@@ -1,5 +1,7 @@
 package controlador;
 
+import ar.edu.unlu.rmimvc.cliente.IControladorRemoto;
+import ar.edu.unlu.rmimvc.observer.IObservableRemoto;
 import enums.estadoEnvido;
 import enums.estadoTruco;
 import interfaces.*;
@@ -7,9 +9,10 @@ import modelo.Carta;
 import modelo.Jugador;
 
 import java.io.Serializable;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 
-public class Controlador implements Serializable, iControlador {
+public class Controlador implements Serializable, iControlador, IControladorRemoto {
 
     //
     // Atributos
@@ -32,19 +35,24 @@ public class Controlador implements Serializable, iControlador {
     //
 
     @Override
-    public void iniciarPartida() {
+    public void iniciarPartida() throws RemoteException {
         modelo.nuevaPartida();
     }
 
     @Override
-    public void agregarJugador(Jugador j) {
+    public void agregarJugador(Jugador j) throws RemoteException {
         this.jugador = j;
         modelo.agregarJugador(j);
     }
 
     @Override
-    public String puntajeActual() {
-        return modelo.puntosActuales();
+    public String puntajeActual() throws RemoteException {
+        try{
+            return modelo.puntosActuales();
+        } catch(RemoteException e){
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override
@@ -64,7 +72,7 @@ public class Controlador implements Serializable, iControlador {
     }
 
     @Override
-    public int meVoyAlMazo() {
+    public int meVoyAlMazo() throws RemoteException {
         modelo.meVoyAlMazo(jugador.getIDJugador());
         return 0;
     }
@@ -80,35 +88,59 @@ public class Controlador implements Serializable, iControlador {
     }
 
     @Override
-    public String cantarTanto(int opcion) {
-        modelo.cantarEnvido(jugador.getIDJugador(), opcion);
+    public String cantarTanto(int opcion) throws RemoteException {
+        try{
+            modelo.cantarEnvido(jugador.getIDJugador(), opcion);
+        } catch(RemoteException e){
+            e.printStackTrace();
+        }
         return "";
     }
 
     @Override
     public String cantarRabon(int opcion) {
-        modelo.cantarRabon(jugador.getIDJugador(), opcion);
+        try{
+            modelo.cantarRabon(jugador.getIDJugador(), opcion);
+        }catch(RemoteException e){
+            e.printStackTrace();
+        }
         return "";
     }
 
     @Override
     public int esTurnoDe() {
-        return modelo.turnoActual();
+        try{
+            return modelo.turnoActual();
+        }catch(RemoteException e){
+            e.printStackTrace();
+            return -1;
+        }
     }
 
     @Override
     public estadoEnvido estadoDelTanto() {
-        return modelo.estadoTanto();
+        try{
+            return modelo.estadoTanto();
+        }catch(RemoteException e){
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override
     public estadoTruco estadoDelRabon() {
-        return modelo.estadoRabon();
+        try{
+            return modelo.estadoRabon();
+        }catch(RemoteException e){
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override
-    public void cantoNoQuerido() {
+    public void cantoNoQuerido() throws RemoteException{
         // ???
+
     }
 
     @Override
@@ -118,37 +150,72 @@ public class Controlador implements Serializable, iControlador {
 
     @Override
     public boolean esMiTurno() {
-        return modelo.turnoActual() == jugador.getIDJugador();
+        try{
+            return modelo.turnoActual() == jugador.getIDJugador();
+        }catch(RemoteException e){
+            e.printStackTrace();
+            return false;
+        }
     }
 
     @Override
     public boolean seCantoEnvido() {
-        return modelo.cantaronEnvido();
+       try{
+           return modelo.cantaronEnvido();
+       }catch(RemoteException e){
+           e.printStackTrace();
+           return false;
+       }
     }
 
     @Override
     public boolean seCantoEnvidoDoble() {
-        return modelo.cantaronEnvidoDoble();
+        try{
+            return modelo.cantaronEnvidoDoble();
+        }catch(RemoteException e){
+            e.printStackTrace();
+            return false;
+        }
     }
 
     @Override
     public boolean seCantoRealEnvido() {
-        return modelo.cantaronRealEnvido();
+        try{
+            return modelo.cantaronRealEnvido();
+        }catch(RemoteException e){
+            e.printStackTrace();
+            return false;
+        }
     }
 
     @Override
     public boolean seCantoFaltaEnvido() {
-        return modelo.cantaronFaltaEnvido();
+        try{
+            return modelo.cantaronFaltaEnvido();
+        }catch(RemoteException e){
+            e.printStackTrace();
+            return false;
+        }
     }
 
     @Override
     public boolean seCantoTruco() {
-        return false;
+        try{
+            return modelo.getQuienCantoTruco() != 0;
+        }catch(RemoteException e){
+            e.printStackTrace();
+            return false;
+        }
     }
 
     @Override
     public boolean seCantoReTruco() {
-        return false;
+        try{
+            return modelo.getQuienCantoReTruco() != 0;
+        }catch(RemoteException e){
+            e.printStackTrace();
+            return false;
+        }
     }
 
     @Override
@@ -158,7 +225,12 @@ public class Controlador implements Serializable, iControlador {
 
     @Override
     public int nroDeRonda() {
-        return modelo.numeroDeRonda();
+        try{
+            return modelo.numeroDeRonda();
+        }catch(RemoteException e){
+            e.printStackTrace();
+            return -1;
+        }
     }
 
     @Override
@@ -168,17 +240,31 @@ public class Controlador implements Serializable, iControlador {
 
     @Override
     public void rabonNoQuerido() {
-        modelo.meVoyAlMazo(jugador.getIDJugador());
+        try{
+            modelo.meVoyAlMazo(jugador.getIDJugador());
+        }catch(RemoteException e){
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void tantoQuerido() {
+        /*try{
 
+        }catch(RemoteException e){
+            e.printStackTrace();;
+        }
+        */
     }
 
     @Override
     public void tantoNoQuerido() {
+        /*try{
 
+        }catch(RemoteException e){
+            e.printStackTrace();;
+        }
+        */
     }
 
     @Override
@@ -199,5 +285,15 @@ public class Controlador implements Serializable, iControlador {
     @Override
     public void setVistaJuego(iVistaJuego juego) {
         this.vistaJuego = juego;
+    }
+
+    @Override
+    public <T extends IObservableRemoto> void setModeloRemoto(T modeloRemoto) throws RemoteException {
+        this.modelo = (iModelo) modeloRemoto;
+    }
+
+    @Override
+    public void actualizar(IObservableRemoto modelo, Object cambio) throws RemoteException {
+
     }
 }

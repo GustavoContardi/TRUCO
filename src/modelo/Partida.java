@@ -1,14 +1,17 @@
 package modelo;
 
+import ar.edu.unlu.rmimvc.observer.ObservableRemoto;
 import enums.estadoEnvido;
 import enums.estadoTruco;
+import enums.mensajesObserver;
 import interfaces.iControlador;
 import interfaces.iModelo;
 
 import java.io.Serializable;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 
-public class Partida implements Serializable, iModelo {
+public class Partida extends ObservableRemoto implements Serializable, iModelo {
     //
     // atributos
     //
@@ -32,14 +35,21 @@ public class Partida implements Serializable, iModelo {
     private     boolean             finMano;
     private     int                 nroRondasGanadasJ1, nroRondasGanadasJ2;
     private     boolean             parda;
+    private     mensajesObserver    mensajesOb;
 
     private     iControlador        controlador;
+
+    //
+    // constructor enum MensajesObserver
+    //
+
+
 
     //
     // constructor
     //
 
-    public Partida() {
+    public Partida() throws RemoteException {
         j1 = null;
         j2 = null;
         numeroMano=0;
@@ -53,13 +63,13 @@ public class Partida implements Serializable, iModelo {
     // metodos publicos
     //
 
-    public void nuevaPartida(){
+    public void nuevaPartida() throws RemoteException {
         nuevaRonda();
         notificarPartidaLista();
     }
 
     @Override
-    public void nuevaRonda() {
+    public void nuevaRonda() throws RemoteException {
         // seteo los atributos de inicio
         if(numeroMano == 0) {
             anotador = new Anotador(j2.getNombre(), j1.getNombre());
@@ -92,26 +102,27 @@ public class Partida implements Serializable, iModelo {
             }
             else finDePartida();
         }
+        notificarObservadores(this);
     }
 
     @Override
-    public void finDeLaRonda() {
+    public void finDeLaRonda() throws RemoteException{
 
     }
 
     @Override
-    public void siguienteTurno() {
+    public void siguienteTurno() throws RemoteException{
         if(turno == j1.getIDJugador()) turno = j2.getIDJugador();
         else turno = j1.getIDJugador();
     }
 
     @Override
-    public int turnoActual() {
+    public int turnoActual() throws RemoteException {
         return turno;
     }
 
     @Override
-    public Carta tirarCarta(int idJugador, int idCarta) {
+    public Carta tirarCarta(int idJugador, int idCarta) throws RemoteException{
         Carta c = null;
         if(idJugador == j1.getIDJugador() && turno == idJugador){
             c = j1.tirarCarta(idCarta);
@@ -201,17 +212,17 @@ public class Partida implements Serializable, iModelo {
     }
 
     @Override
-    public void finDePartida() {
+    public void finDePartida() throws RemoteException {
         actualizarPuntos();
     }
 
     @Override
-    public String puntosActuales() {
+    public String puntosActuales()  throws RemoteException {
         return anotador.toString();
     }
 
     @Override
-    public void cantarRabon(int id, int opcion) {
+    public void cantarRabon(int id, int opcion) throws RemoteException{
         // levantar de archivo los cantos y poner uno aleatorio
         String nombre = "", mensaje = "";
         int idEnviarMensaje = 0;
@@ -231,27 +242,27 @@ public class Partida implements Serializable, iModelo {
         }
     }
 
-    public void enviarMensaje(int idDestinatario, String mensaje){
+    public void enviarMensaje(int idDestinatario, String mensaje) throws RemoteException {
 
     }
 
     @Override
-    public void cantarEnvido(int id, int opcion) {
+    public void cantarEnvido(int id, int opcion) throws RemoteException {
         // levantar de archivo los cantos y poner uno aleatorio
     }
 
     @Override
-    public void meVoyAlMazo(int id) {
+    public void meVoyAlMazo(int id) throws RemoteException {
         finDeLaRonda();
     }
 
     @Override
-    public boolean esFinDePartida() {
+    public boolean esFinDePartida() throws RemoteException {
         return ( (anotador.getPuntosJ1() >= 30 ) || (anotador.getPuntosJ2() >= 30) );
     }
 
     @Override
-    public void agregarJugador(Jugador jugador) {
+    public void agregarJugador(Jugador jugador) throws RemoteException {
         if(j1 == null && j2 == null){
             j1 = jugador;
         }
@@ -265,43 +276,43 @@ public class Partida implements Serializable, iModelo {
     }
 
     @Override
-    public void actualizarPuntos() {
+    public void actualizarPuntos() throws RemoteException {
         anotador.sumarPuntosJ1(puntajeRondaJ1);
         anotador.sumarPuntosJ2(puntajeRondaJ2);
     }
 
     @Override
-    public estadoTruco estadoRabon() {
+    public estadoTruco estadoRabon() throws RemoteException {
         return estadoDelTruco;
     }
 
     @Override
-    public estadoEnvido estadoTanto() {
+    public estadoEnvido estadoTanto() throws RemoteException {
         return estadoDelEnvido;
     }
 
     @Override
-    public int numeroDeRonda() {
+    public int numeroDeRonda() throws RemoteException {
         return numeroRonda;
     }
 
     @Override
-    public boolean cantaronEnvido() {
+    public boolean cantaronEnvido() throws RemoteException {
         return cantoEnvido;
     }
 
     @Override
-    public boolean cantaronEnvidoDoble() {
+    public boolean cantaronEnvidoDoble() throws RemoteException {
         return cantoRealEnvido;
     }
 
     @Override
-    public boolean cantaronRealEnvido() {
+    public boolean cantaronRealEnvido() throws RemoteException {
         return cantoRealEnvido;
     }
 
     @Override
-    public boolean cantaronFaltaEnvido() {
+    public boolean cantaronFaltaEnvido() throws RemoteException {
         return cantoFaltaEnvido;
     }
 
@@ -392,12 +403,19 @@ public class Partida implements Serializable, iModelo {
     //
 
 
-    public Jugador getJ1() {
+    public Jugador getJ1() throws RemoteException {
         return j1;
     }
 
-    public Jugador getJ2() {
+    public Jugador getJ2() throws RemoteException {
         return j2;
     }
 
+    public int getQuienCantoTruco() throws RemoteException{
+        return quienCantoTruco;
+    }
+
+    public int getQuienCantoReTruco() throws RemoteException{
+        return quienCantoReTruco;
+    }
 }

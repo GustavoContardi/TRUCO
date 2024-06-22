@@ -8,6 +8,7 @@ import interfaces.iVistaJuego;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.rmi.RemoteException;
 
 public class vistaGrafica implements iVistaJuego{
     private JPanel ventana;
@@ -97,8 +98,12 @@ public class vistaGrafica implements iVistaJuego{
         btnNoQuiero.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                accionesJ2.setText("");
-                controlador.cantoNoQuerido();
+                try {
+                    accionesJ2.setText("");
+                    controlador.cantoNoQuerido();
+                } catch (RemoteException ex) {
+                    ex.printStackTrace();
+                }
             }
         });
 
@@ -167,18 +172,26 @@ public class vistaGrafica implements iVistaJuego{
                 btnEnvido.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        controlador.cantarTanto(2);
-                        accionesJ2.setText("");
-                        setBotones();
+                        try {
+                            controlador.cantarTanto(2);
+                            accionesJ2.setText("");
+                            setBotones();
+                        } catch (RemoteException ex) {
+                            ex.printStackTrace();
+                        }
                     }
                 });
                 TRUCOButton.setText("REAL ENVIDO");
                 TRUCOButton.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        controlador.cantarTanto(3);
-                        accionesJ2.setText("");
-                        setBotones();
+                        try {
+                            controlador.cantarTanto(3);
+                            accionesJ2.setText("");
+                            setBotones();
+                        } catch (RemoteException ex) {
+                            ex.printStackTrace();
+                        }
                     }
                 });
                 btnAuxiliar.setText("FALTA ENVIDO");
@@ -186,9 +199,13 @@ public class vistaGrafica implements iVistaJuego{
                 btnAuxiliar.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        controlador.cantarTanto(4);
-                        accionesJ2.setText("");
-                        setBotones();
+                        try {
+                            controlador.cantarTanto(4);
+                            accionesJ2.setText("");
+                            setBotones();
+                        } catch (RemoteException ex) {
+                            ex.printStackTrace();
+                        }
                     }
                 });
             }
@@ -200,9 +217,13 @@ public class vistaGrafica implements iVistaJuego{
                 TRUCOButton.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        controlador.cantarTanto(3);
-                        accionesJ2.setText("");
-                        setBotones();
+                        try {
+                            controlador.cantarTanto(3);
+                            accionesJ2.setText("");
+                            setBotones();
+                        } catch (RemoteException ex) {
+                            ex.printStackTrace();
+                        }
                     }
                 });
                 btnAuxiliar.setText("FALTA ENVIDO");
@@ -210,9 +231,13 @@ public class vistaGrafica implements iVistaJuego{
                 btnAuxiliar.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        controlador.cantarTanto(4);
-                        accionesJ2.setText("");
-                        setBotones();
+                        try {
+                            controlador.cantarTanto(4);
+                            accionesJ2.setText("");
+                            setBotones();
+                        } catch (RemoteException ex) {
+                            ex.printStackTrace();
+                        }
                     }
                 });
             }
@@ -224,9 +249,13 @@ public class vistaGrafica implements iVistaJuego{
                 btnAuxiliar.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        controlador.cantarTanto(4);
-                        accionesJ2.setText("");
-                        setBotones();
+                        try {
+                            controlador.cantarTanto(4);
+                            accionesJ2.setText("");
+                            setBotones();
+                        } catch (RemoteException ex) {
+                            ex.printStackTrace();
+                        }
                     }
                 });
             }
@@ -307,7 +336,11 @@ public class vistaGrafica implements iVistaJuego{
             @Override
             public void actionPerformed(ActionEvent e) {
                 if(controlador.esMiTurno()) {
-                    controlador.cantarTanto(1);
+                    try {
+                        controlador.cantarTanto(1);
+                    } catch (RemoteException ex) {
+                        ex.printStackTrace();
+                    }
                     controlador.seCantoEnvido();
                 }
             }
@@ -319,8 +352,12 @@ public class vistaGrafica implements iVistaJuego{
             @Override
             public void actionPerformed(ActionEvent e) {
                 if(controlador.esMiTurno()) {
-                    controlador.cantarTanto(3);
-                    controlador.seCantoRealEnvido();
+                    try {
+                        controlador.cantarTanto(3);
+                        controlador.seCantoRealEnvido();
+                    } catch (RemoteException ex) {
+                        ex.printStackTrace();
+                    }
                 }
             }
         });
@@ -331,8 +368,12 @@ public class vistaGrafica implements iVistaJuego{
             @Override
             public void actionPerformed(ActionEvent e) {
                 if(controlador.esMiTurno()) {
-                    controlador.cantarTanto(4);
-                    controlador.seCantoFaltaEnvido();
+                    try {
+                        controlador.cantarTanto(4);
+                        controlador.seCantoFaltaEnvido();
+                    } catch (RemoteException ex) {
+                        ex.printStackTrace();
+                    }
                 }
             }
         });
@@ -485,6 +526,11 @@ public class vistaGrafica implements iVistaJuego{
 
         frameMSJ.setVisible(true);
         frameMSJ.setLocationRelativeTo(null);
+    }
+
+    private void bloquearBotones(){
+        // bloqueo los botones cuando me cantan para que responda antes de poder tirar
+
     }
 
 }
