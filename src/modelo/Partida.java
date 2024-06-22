@@ -1,17 +1,17 @@
 package modelo;
 
 import ar.edu.unlu.rmimvc.observer.ObservableRemoto;
-import enums.estadoEnvido;
-import enums.estadoTruco;
-import enums.mensajesObserver;
-import interfaces.iControlador;
-import interfaces.iModelo;
+import enums.EstadoEnvido;
+import enums.EstadoTruco;
+import enums.MensajesObserver;
+import interfaces.IControlador;
+import interfaces.IModelo;
 
 import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 
-public class Partida extends ObservableRemoto implements Serializable, iModelo {
+public class Partida extends ObservableRemoto implements Serializable, IModelo {
     //
     // atributos
     //
@@ -28,21 +28,16 @@ public class Partida extends ObservableRemoto implements Serializable, iModelo {
     private     int                 quienCantoTruco;
     private     int                 quienCantoReTruco;
     private     int                 hizoPrimera; // ID del jugador
-    private     estadoTruco         estadoDelTruco;
-    private     estadoEnvido        estadoDelEnvido;
+    private EstadoTruco estadoDelTruco;
+    private EstadoEnvido estadoDelEnvido;
     private     boolean             cantoEnvido, cantoEnvidoDoble,cantoRealEnvido, cantoFaltaEnvido;
     private     int                 puntajeRondaJ1, puntajeRondaJ2, puntajeRondaEnvido;
     private     boolean             finMano;
     private     int                 nroRondasGanadasJ1, nroRondasGanadasJ2;
     private     boolean             parda;
-    private     mensajesObserver    mensajesOb;
+    private MensajesObserver mensajesOb;
 
-    private     iControlador        controlador;
-
-    //
-    // constructor enum MensajesObserver
-    //
-
+    private IControlador controlador;
 
 
     //
@@ -282,12 +277,12 @@ public class Partida extends ObservableRemoto implements Serializable, iModelo {
     }
 
     @Override
-    public estadoTruco estadoRabon() throws RemoteException {
+    public EstadoTruco estadoRabon() throws RemoteException {
         return estadoDelTruco;
     }
 
     @Override
-    public estadoEnvido estadoTanto() throws RemoteException {
+    public EstadoEnvido estadoTanto() throws RemoteException {
         return estadoDelEnvido;
     }
 

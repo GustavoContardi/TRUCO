@@ -1,6 +1,6 @@
 package interfaces;
 
-public interface iVistaJuego {
+public interface IVistaJuego {
     void mostrarCartas();
     void actualizarPuntaje(String puntaje);
     void mostrarMensaje(String msj);
@@ -12,7 +12,7 @@ public interface iVistaJuego {
     void println(String text);
     void mostrarMenuPrincipal();
     //void setFlujoActual(Flujo flujoActual);
-    void setControlador(iControlador controlador);
+    void setControlador(IControlador controlador);
     void actualizar();
     void salirDelJuego();
     

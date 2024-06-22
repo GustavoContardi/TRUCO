@@ -1,6 +1,6 @@
 package enums;
 
-public enum estadoEnvido {
+public enum EstadoEnvido {
     NADA,
     ENVIDO,
     ENVIDO_DOBLE,

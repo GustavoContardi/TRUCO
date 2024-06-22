@@ -2,15 +2,15 @@ package vista;
 
 import javax.swing.*;
 
-import interfaces.iControlador;
-import interfaces.iVistaJuego;
+import interfaces.IControlador;
+import interfaces.IVistaJuego;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.rmi.RemoteException;
 
-public class vistaGrafica implements iVistaJuego{
+public class vistaGrafica implements IVistaJuego {
     private JPanel ventana;
     private JButton btnEnvido;
     private JButton TRUCOButton;
@@ -33,7 +33,7 @@ public class vistaGrafica implements iVistaJuego{
     private JToolBar toolBtn;
     private JButton btnAuxiliar;
     private JFrame frame;
-    private iControlador controlador;
+    private IControlador controlador;
 
     public vistaGrafica() {
         this.frame = new JFrame("TRUCONTARDI");
@@ -282,7 +282,7 @@ public class vistaGrafica implements iVistaJuego{
     }
 
     @Override
-    public void setControlador(iControlador controlador) {
+    public void setControlador(IControlador controlador) {
         this.controlador = controlador;
     }
 

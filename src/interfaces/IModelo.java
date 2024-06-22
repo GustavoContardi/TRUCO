@@ -1,13 +1,13 @@
 package interfaces;
 
-import enums.estadoTruco;
-import enums.estadoEnvido;
+import enums.EstadoTruco;
+import enums.EstadoEnvido;
 import modelo.Carta;
 import modelo.Jugador;
 
 import java.rmi.RemoteException;
 
-public interface iModelo {
+public interface IModelo {
     void nuevaPartida() throws RemoteException;
     void nuevaRonda() throws RemoteException;
     void finDeLaRonda() throws RemoteException;
@@ -22,8 +22,8 @@ public interface iModelo {
     boolean esFinDePartida() throws RemoteException;
     void agregarJugador(Jugador jugador) throws RemoteException;
     void actualizarPuntos() throws RemoteException;
-    estadoTruco estadoRabon() throws RemoteException;
-    estadoEnvido estadoTanto() throws RemoteException;
+    EstadoTruco estadoRabon() throws RemoteException;
+    EstadoEnvido estadoTanto() throws RemoteException;
     int numeroDeRonda() throws RemoteException;
     boolean cantaronEnvido() throws RemoteException;
     boolean cantaronEnvidoDoble() throws RemoteException;

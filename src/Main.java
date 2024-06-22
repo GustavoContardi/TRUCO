@@ -1,18 +1,4 @@
-import interfaces.iModelo;
-import interfaces.iVistaInicio;
-import modelo.*;
-import vista.vistaConsola;
-import vista.vistaEleccion;
-import vista.vistaGrafica;
 import vista.vistaInicio;
-
-
-import javax.swing.*;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.util.ArrayList;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.

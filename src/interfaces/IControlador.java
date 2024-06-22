@@ -1,14 +1,13 @@
 package interfaces;
 
-import enums.estadoEnvido;
-import enums.estadoTruco;
-import modelo.Carta;
+import enums.EstadoEnvido;
+import enums.EstadoTruco;
 import modelo.Jugador;
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 
-public interface iControlador {
+public interface IControlador {
     void iniciarPartida() throws RemoteException;
     void agregarJugador(Jugador j) throws RemoteException;
     String puntajeActual() throws RemoteException;
@@ -20,10 +19,10 @@ public interface iControlador {
     String cantarTanto(int opcion) throws RemoteException;
     String cantarRabon(int opcion);
     int esTurnoDe();
-    estadoEnvido estadoDelTanto();
-    estadoTruco estadoDelRabon();
+    EstadoEnvido estadoDelTanto();
+    EstadoTruco estadoDelRabon();
     void cantoNoQuerido() throws RemoteException;
-    void setModelo(iModelo modelo);
+    void setModelo(IModelo modelo);
     boolean esMiTurno();
     boolean seCantoEnvido();
     boolean seCantoEnvidoDoble();
@@ -40,7 +39,7 @@ public interface iControlador {
     ArrayList<Jugador> listaJugadoresMasGanadores();
 
     void setJugador(Jugador j);
-    void setVistaEleccion(iVistaEleccion eleccion);
-    void setVistaJuego(iVistaJuego juego);
+    void setVistaEleccion(IVistaEleccion eleccion);
+    void setVistaJuego(IVistaJuego juego);
 
 }

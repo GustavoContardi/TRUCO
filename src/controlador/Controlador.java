@@ -2,8 +2,8 @@ package controlador;
 
 import ar.edu.unlu.rmimvc.cliente.IControladorRemoto;
 import ar.edu.unlu.rmimvc.observer.IObservableRemoto;
-import enums.estadoEnvido;
-import enums.estadoTruco;
+import enums.EstadoEnvido;
+import enums.EstadoTruco;
 import interfaces.*;
 import modelo.Carta;
 import modelo.Jugador;
@@ -12,14 +12,14 @@ import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 
-public class Controlador implements Serializable, iControlador, IControladorRemoto {
+public class Controlador implements Serializable, IControlador, IControladorRemoto {
 
     //
     // Atributos
     //
-    private iModelo modelo;
-    private iVistaJuego vistaJuego;
-    private iVistaEleccion vistaEleccion;
+    private IModelo modelo;
+    private IVistaJuego vistaJuego;
+    private IVistaEleccion vistaEleccion;
     private Jugador jugador;
 
     //
@@ -118,7 +118,7 @@ public class Controlador implements Serializable, iControlador, IControladorRemo
     }
 
     @Override
-    public estadoEnvido estadoDelTanto() {
+    public EstadoEnvido estadoDelTanto() {
         try{
             return modelo.estadoTanto();
         }catch(RemoteException e){
@@ -128,7 +128,7 @@ public class Controlador implements Serializable, iControlador, IControladorRemo
     }
 
     @Override
-    public estadoTruco estadoDelRabon() {
+    public EstadoTruco estadoDelRabon() {
         try{
             return modelo.estadoRabon();
         }catch(RemoteException e){
@@ -144,7 +144,7 @@ public class Controlador implements Serializable, iControlador, IControladorRemo
     }
 
     @Override
-    public void setModelo(iModelo modelo) {
+    public void setModelo(IModelo modelo) {
         this.modelo = modelo;
     }
 
@@ -278,18 +278,18 @@ public class Controlador implements Serializable, iControlador, IControladorRemo
     }
 
     @Override
-    public void setVistaEleccion(iVistaEleccion eleccion) {
+    public void setVistaEleccion(IVistaEleccion eleccion) {
         vistaEleccion = eleccion;
     }
 
     @Override
-    public void setVistaJuego(iVistaJuego juego) {
+    public void setVistaJuego(IVistaJuego juego) {
         this.vistaJuego = juego;
     }
 
     @Override
     public <T extends IObservableRemoto> void setModeloRemoto(T modeloRemoto) throws RemoteException {
-        this.modelo = (iModelo) modeloRemoto;
+        this.modelo = (IModelo) modeloRemoto;
     }
 
     @Override

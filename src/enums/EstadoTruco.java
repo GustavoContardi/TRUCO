@@ -1,6 +1,6 @@
 package enums;
 
-public enum estadoTruco {
+public enum EstadoTruco {
     NADA,
     TRUCO,
     RE_TRUCO,

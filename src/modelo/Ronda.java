@@ -2,8 +2,8 @@ package modelo;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import enums.estadoTruco;
-import enums.estadoEnvido;
+import enums.EstadoTruco;
+import enums.EstadoEnvido;
 
 public class Ronda implements Serializable {
     // nose si esto va a ser pero dejo por las dudas
@@ -20,8 +20,8 @@ public class Ronda implements Serializable {
     private   int                quienCantoTruco;
     private   int                quienCantoReTruco;
     private   int                hizoPrimera; // ID del jugador
-    private   estadoTruco        estadoTruco;
-    private   estadoEnvido       estadoEnvido;
+    private EstadoTruco estadoTruco;
+    private EstadoEnvido estadoEnvido;
     private   boolean            cantoEnvido, cantoEnvidoDoble,cantoRealEnvido, cantoFaltaEnvido;
     private   Anotador           anotador;
     private   int                puntajeRondaJ1, puntajeRondaJ2, puntajeRondaEnvido;
@@ -50,8 +50,8 @@ public class Ronda implements Serializable {
         // seteo los atributos de inicio
 
         numeroMano          = 1;
-        estadoTruco         = enums.estadoTruco.NADA;
-        estadoEnvido        = enums.estadoEnvido.NADA;
+        estadoTruco         = EstadoTruco.NADA;
+        estadoEnvido        = EstadoEnvido.NADA;
         puntajeRondaJ1      = 0;
         puntajeRondaJ2      = 0;
         puntajeRondaEnvido  = 0;

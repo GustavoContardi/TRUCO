@@ -1,10 +1,12 @@
 package vista;
 
+import interfaces.IVistaInicio;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class vistaInicio {
+public class vistaInicio implements IVistaInicio {
     private JPanel ventana;
     private JLabel tituloLabel;
     private JButton btnIniciarNueva;
