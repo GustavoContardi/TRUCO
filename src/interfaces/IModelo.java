@@ -1,5 +1,6 @@
 package interfaces;
 
+import ar.edu.unlu.rmimvc.observer.IObservableRemoto;
 import enums.EstadoTruco;
 import enums.EstadoEnvido;
 import modelo.Carta;
@@ -7,7 +8,7 @@ import modelo.Jugador;
 
 import java.rmi.RemoteException;
 
-public interface IModelo {
+public interface IModelo extends IObservableRemoto {
     void nuevaPartida() throws RemoteException;
     void nuevaRonda() throws RemoteException;
     void finDeLaRonda() throws RemoteException;

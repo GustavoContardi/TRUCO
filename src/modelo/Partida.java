@@ -3,7 +3,7 @@ package modelo;
 import ar.edu.unlu.rmimvc.observer.ObservableRemoto;
 import enums.EstadoEnvido;
 import enums.EstadoTruco;
-import enums.MensajesObserver;
+import enums.Eventos;
 import interfaces.IControlador;
 import interfaces.IModelo;
 
@@ -35,7 +35,7 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
     private     boolean             finMano;
     private     int                 nroRondasGanadasJ1, nroRondasGanadasJ2;
     private     boolean             parda;
-    private MensajesObserver mensajesOb;
+    private Eventos mensajesOb;
 
     private IControlador controlador;
 

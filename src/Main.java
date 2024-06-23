@@ -1,3 +1,5 @@
+import ar.edu.unlu.rmimvc.cliente.Cliente;
+import cliente.AppCliente;
 import vista.vistaInicio;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
@@ -146,6 +148,7 @@ public class Main {
     }*/
         //vistaGrafica vista = new vistaGrafica();
 
-        new vistaInicio();
+        //new vistaInicio();
+
     }
 }

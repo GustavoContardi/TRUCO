@@ -1,6 +1,6 @@
 package enums;
 
-public enum MensajesObserver {
+public enum Eventos {
     CANTO_TRUCO,
     CANTO_ENVIDO,
     MENSAJE,
