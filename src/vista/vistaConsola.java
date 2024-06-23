@@ -1,9 +1,13 @@
 package vista;
 
+import interfaces.IControlador;
+import interfaces.IVistaInicio;
+import interfaces.IVistaJuego;
+
 import javax.swing.*;
 import java.awt.*;
 
-public class vistaConsola {
+public class vistaConsola implements IVistaJuego, IVistaInicio {
     private JPanel ventana;
     private JButton btnEnter;
     private JTextField txtEntrada;
@@ -16,8 +20,82 @@ public class vistaConsola {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(500, 300);
 
-        frame.setVisible(true);
+
     }
 
 
+    @Override
+    public void mostrarCartas() {
+
+    }
+
+    @Override
+    public void actualizarPuntaje(String puntaje) {
+
+    }
+
+    @Override
+    public void mostrarMensaje(String msj) {
+
+    }
+
+    @Override
+    public void limpiarPantalla() {
+
+    }
+
+    @Override
+    public void finDeMano() {
+
+    }
+
+    @Override
+    public void finDeLaPartida(String nombreGanador) {
+
+    }
+
+    @Override
+    public void cantaronRabon(String rabon) {
+
+    }
+
+    @Override
+    public void cantaronTanto(String tanto) {
+
+    }
+
+    @Override
+    public void println(String text) {
+
+    }
+
+    @Override
+    public void mostrarMenuPrincipal() {
+
+    }
+
+    @Override
+    public void setControlador(IControlador controlador) {
+
+    }
+
+    @Override
+    public void actualizar() {
+
+    }
+
+    @Override
+    public void salirDelJuego() {
+
+    }
+
+    @Override
+    public void iniciar() {
+        frame.setVisible(true);
+    }
+
+    @Override
+    public void salir() {
+        frame.setVisible(false);
+    }
 }

@@ -1,8 +1,13 @@
 package vista;
 
-import javax.swing.*;
+import interfaces.IVistaEleccion;
+import modelo.Jugador;
+import modelo.Partida;
 
-public class vistaEleccion {
+import javax.swing.*;
+import java.util.ArrayList;
+
+public class vistaEleccion implements IVistaEleccion {
     private JPanel ventana;
     private JTabbedPane tabbedPane1;
     private JPanel JUGADORES;
@@ -20,7 +25,25 @@ public class vistaEleccion {
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.pack();
         frame.setSize(600, 450);
+    }
 
+    @Override
+    public void salir() {
+        frame.setVisible(false);
+    }
+
+    @Override
+    public void iniciar() {
         frame.setVisible(true);
+    }
+
+    @Override
+    public void actualizarListaJugadores(ArrayList<Jugador> lista) {
+
+    }
+
+    @Override
+    public void actualizarListaPartidas(ArrayList<Partida> lista) {
+
     }
 }
