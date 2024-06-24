@@ -294,6 +294,5 @@ public class Controlador implements Serializable, IControlador, IControladorRemo
 
     @Override
     public void actualizar(IObservableRemoto modelo, Object cambio) throws RemoteException {
-
     }
 }

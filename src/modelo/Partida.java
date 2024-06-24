@@ -70,7 +70,7 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
 
     public void nuevaPartida() throws RemoteException {
         nuevaRonda();
-        notificarPartidaLista();
+        //notificarPartidaLista();
     }
 
     @Override
@@ -137,6 +137,7 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
             else if(numeroRonda == 3) cartasTiradasJ1.add(c);
             ultimaCartaJ1 = c;
             siguienteTurno();
+            notificarCartaTirada(1);
         }
         else if(idJugador == j2.getIDJugador() && idJugador == turno){
             c = j2.tirarCarta(idCarta);
@@ -145,6 +146,7 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
             else if(numeroRonda == 3) cartasTiradasJ2.add(c);
             ultimaCartaJ2 = c;
             siguienteTurno();
+            notificarCartaTirada(2);
         }
 
         // notificarCartaTirada(id, c); // notifico la carta tirada y despues sigo \\
@@ -215,13 +217,13 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
 
             }
         }
-
         return null;
     }
 
     @Override
     public void finDePartida() throws RemoteException {
         actualizarPuntos();
+        notificarFinPartida();
     }
 
     @Override
@@ -408,6 +410,19 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
         notificarObservadores(e);
     }
 
+    private void notificarCartaTirada(int jugador) throws RemoteException {
+        Eventos e = NADA;
+        if(jugador == 1){
+            e = CARTA_TIRADAJ1;
+        }
+        else e = CARTA_TIRADAJ2;
+
+        notificarObservadores(e);
+    }
+
+    private void notificarFinPartida() throws RemoteException {
+        notificarObservadores(FIN_PARTIDA);
+    }
 
 
     private int calcularPuntajeEnvidoQuerido(){
