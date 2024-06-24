@@ -11,6 +11,11 @@ import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 
+import static enums.EstadoEnvido.*;
+import static enums.EstadoTruco.*;
+import static enums.Eventos.*;
+import static enums.Eventos.NADA;
+
 public class Partida extends ObservableRemoto implements Serializable, IModelo {
     //
     // atributos
@@ -19,7 +24,6 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
     private     Jugador             j1;
     private     Jugador             j2;
     private     Mazo                mazo;
-    private     Ronda               ronda;
     private     int                 idPartida;
     private     Anotador            anotador;
     private     int                 numeroMano, numeroRonda, turno;
@@ -27,15 +31,21 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
     private     ArrayList<Carta>    cartasTiradasJ2;
     private     int                 quienCantoTruco;
     private     int                 quienCantoReTruco;
+    private     int                 quienCantoEnvido;
+    private     int                 quienCantoEnvidoDoble;
+    private     int                 quienCantoRealEnvido;
+    private     int                 quienCantoFaltaEnvido;
+    private     int                 quienCantoValeCuatro;
     private     int                 hizoPrimera; // ID del jugador
-    private EstadoTruco estadoDelTruco;
-    private EstadoEnvido estadoDelEnvido;
+    private     EstadoTruco         estadoDelTruco;
+    private     EstadoEnvido        estadoDelEnvido;
     private     boolean             cantoEnvido, cantoEnvidoDoble,cantoRealEnvido, cantoFaltaEnvido;
     private     int                 puntajeRondaJ1, puntajeRondaJ2, puntajeRondaEnvido;
     private     boolean             finMano;
     private     int                 nroRondasGanadasJ1, nroRondasGanadasJ2;
     private     boolean             parda;
-    private Eventos mensajesOb;
+    private     Eventos             mensajesOb;
+    private     Carta               ultimaCartaJ1, ultimaCartaJ2;
 
     private IControlador controlador;
 
@@ -72,8 +82,8 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
         if (finMano){
             if(esFinDePartida()){
                 numeroMano          = 1;
-                estadoDelTruco = estadoDelTruco.NADA;
-                estadoDelEnvido = estadoDelEnvido.NADA;
+                estadoDelTruco      = EstadoTruco.NADA;
+                estadoDelEnvido     = EstadoEnvido.NADA;
                 puntajeRondaJ1      = 0;
                 puntajeRondaJ2      = 0;
                 puntajeRondaEnvido  = 0;
@@ -97,12 +107,13 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
             }
             else finDePartida();
         }
-        notificarObservadores(this);
+        notificarNuevaRonda();
     }
 
     @Override
     public void finDeLaRonda() throws RemoteException{
-
+        finMano = true;
+        nuevaRonda();
     }
 
     @Override
@@ -124,6 +135,7 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
             if(numeroRonda == 1) cartasTiradasJ1.add(c);
             else if(numeroRonda == 2) cartasTiradasJ1.add(c);
             else if(numeroRonda == 3) cartasTiradasJ1.add(c);
+            ultimaCartaJ1 = c;
             siguienteTurno();
         }
         else if(idJugador == j2.getIDJugador() && idJugador == turno){
@@ -131,6 +143,7 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
             if(numeroRonda == 1) cartasTiradasJ2.add(c);
             else if(numeroRonda == 2) cartasTiradasJ2.add(c);
             else if(numeroRonda == 3) cartasTiradasJ2.add(c);
+            ultimaCartaJ2 = c;
             siguienteTurno();
         }
 
@@ -219,22 +232,27 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
     @Override
     public void cantarRabon(int id, int opcion) throws RemoteException{
         // levantar de archivo los cantos y poner uno aleatorio
-        String nombre = "", mensaje = "";
-        int idEnviarMensaje = 0;
+        Eventos evento = NADA;
 
-        if(id == j1.getIDJugador()) {
-            nombre = j1.getNombre();
-            idEnviarMensaje = j2.getIDJugador();
-        }
-        else{
-            nombre = j2.getNombre();
-            idEnviarMensaje = j1.getIDJugador();
+        switch(estadoDelTruco){
+            case NADA ->{
+                quienCantoTruco = id;
+                evento = CANTO_TRUCO;
+                estadoDelTruco = TRUCO;
+            }
+            case TRUCO -> {
+                quienCantoReTruco = id;
+                evento = CANTO_RETRUCO;
+                estadoDelTruco = RE_TRUCO;
+            }
+            case RE_TRUCO -> {
+                estadoDelTruco = VALE_CUATRO;
+                quienCantoValeCuatro = id;
+                evento = CANTO_VALE_CUATRO;
+            }
         }
 
-        if(opcion == 1){
-            quienCantoTruco = id;
-            enviarMensaje(idEnviarMensaje, mensaje);
-        }
+        notificarRabon(evento);
     }
 
     public void enviarMensaje(int idDestinatario, String mensaje) throws RemoteException {
@@ -244,6 +262,34 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
     @Override
     public void cantarEnvido(int id, int opcion) throws RemoteException {
         // levantar de archivo los cantos y poner uno aleatorio
+        Eventos evento = NADA;
+
+        if (opcion == 1){
+            quienCantoEnvido = id;
+            estadoDelEnvido = ENVIDO;
+            cantoEnvido = true;
+            evento = CANTO_ENVIDO_DOBLE;
+        }
+        else if (opcion == 2){
+            quienCantoEnvidoDoble = id;
+            estadoDelEnvido = ENVIDO_DOBLE;
+            cantoEnvidoDoble = true;
+            evento = CANTO_ENVIDO;
+        }
+        else if (opcion == 3){
+            quienCantoRealEnvido = id;
+            estadoDelEnvido = REAL_ENVIDO;
+            cantoRealEnvido = true;
+            evento = CANTO_REAL_ENVIDO;
+        }
+        else if (opcion == 4){
+            quienCantoFaltaEnvido = id;
+            estadoDelEnvido = FALTA_ENVIDO;
+            cantoFaltaEnvido = true;
+            evento = CANTO_FALTA_ENVIDO;
+        }
+
+        notificarCantoTanto(evento);
     }
 
     @Override
@@ -265,15 +311,18 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
             j2 = jugador;
         }
 
-        if( (j1.getIDJugador() != 0) && (j2.getIDJugador() != 0) ) nuevaPartida();
 
         // actualizar lista etc etc
+        notificarJugadorElecto();
+
+        if( (j1.getIDJugador() != 0) && (j2.getIDJugador() != 0) ) nuevaPartida();
     }
 
     @Override
     public void actualizarPuntos() throws RemoteException {
         anotador.sumarPuntosJ1(puntajeRondaJ1);
         anotador.sumarPuntosJ2(puntajeRondaJ2);
+        notificarPuntos();
     }
 
     @Override
@@ -327,9 +376,39 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
         return true;
     }
 
-    private void notificarPartidaLista(){
-
+    private void notificarPartidaLista() throws RemoteException {
+        mensajesOb = INICIO_PARTIDA;
+        notificarObservadores(mensajesOb);
     }
+
+    private void notificarPuntos() throws RemoteException {
+        mensajesOb = PUNTAJES;
+        notificarObservadores(mensajesOb);
+    }
+
+    private void notificarJugadorElecto() throws RemoteException {
+        mensajesOb = LISTA_JUGADORES_DISPONIBLES;
+        notificarObservadores(mensajesOb);
+    }
+
+    private void notificarNuevaRonda() throws RemoteException {
+        mensajesOb = NUEVA_RONDA;
+        notificarObservadores(mensajesOb);
+    }
+
+    private void notificar() throws RemoteException {
+        notificarObservadores(mensajesOb);
+    }
+
+    private void notificarCantoTanto(Eventos e) throws RemoteException {
+        notificarObservadores(e);
+    }
+
+    private void notificarRabon(Eventos e) throws RemoteException {
+        notificarObservadores(e);
+    }
+
+
 
     private int calcularPuntajeEnvidoQuerido(){
         int puntos = 0;
@@ -412,5 +491,40 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
 
     public int getQuienCantoReTruco() throws RemoteException{
         return quienCantoReTruco;
+    }
+
+    @Override
+    public int getQuienCantoValeCuatro() throws RemoteException {
+        return quienCantoValeCuatro;
+    }
+
+    @Override
+    public int getQuienCantoEnvido() {
+        return quienCantoEnvido;
+    }
+
+    @Override
+    public int getQuienCantoEnvidoDoble() {
+        return quienCantoEnvidoDoble;
+    }
+
+    @Override
+    public int getQuienCantoRealEnvido() {
+        return quienCantoRealEnvido;
+    }
+
+    @Override
+    public int getQuienCantoFaltaEnvido() {
+        return quienCantoFaltaEnvido;
+    }
+
+    @Override
+    public Carta ultimaCartaTiradaJ1() {
+        return ultimaCartaJ1;
+    }
+
+    @Override
+    public Carta ultimaCartaTiradaJ2() {
+        return ultimaCartaJ2;
     }
 }

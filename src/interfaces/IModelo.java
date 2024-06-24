@@ -32,4 +32,12 @@ public interface IModelo extends IObservableRemoto {
     boolean cantaronFaltaEnvido() throws RemoteException;
     int getQuienCantoTruco() throws RemoteException;
     int getQuienCantoReTruco() throws RemoteException;
+    int getQuienCantoValeCuatro() throws RemoteException;
+    int getQuienCantoEnvido();
+    int getQuienCantoEnvidoDoble();
+    int getQuienCantoRealEnvido();
+    int getQuienCantoFaltaEnvido();
+    Carta ultimaCartaTiradaJ1();
+    Carta ultimaCartaTiradaJ2();
+
 }
