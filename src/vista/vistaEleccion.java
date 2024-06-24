@@ -1,5 +1,6 @@
 package vista;
 
+import interfaces.IControlador;
 import interfaces.IVistaEleccion;
 import modelo.Jugador;
 import modelo.Partida;
@@ -18,6 +19,7 @@ public class vistaEleccion implements IVistaEleccion {
     private JTextField textRegistrar;
     private JButton CREARJUGADORButton;
     private final JFrame frame;
+    private IControlador controlador;
 
     public vistaEleccion() {
         this.frame = new JFrame("TRUCONTARDI");
@@ -46,4 +48,11 @@ public class vistaEleccion implements IVistaEleccion {
     public void actualizarListaPartidas(ArrayList<Partida> lista) {
 
     }
+
+    @Override
+    public void setControlador(IControlador controlador) {
+        this.controlador = controlador;
+    }
+
+
 }
