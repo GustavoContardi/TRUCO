@@ -67,7 +67,7 @@ public class vistaEleccion implements IVistaEleccion {
         String nombre = textRegistrar.getText().trim();
 
         if(!nombre.isEmpty()){
-            controlador.agregarJugador(new Jugador(nombre));
+            controlador.agregarJugador(nombre);
 
             panelAvisos("¡JUGADOR REGISTRADO CON ÉXITO!");
         }
@@ -77,7 +77,7 @@ public class vistaEleccion implements IVistaEleccion {
         Jugador jugador = (Jugador) cbEleccion.getSelectedItem();
 
         if(jugador != null){
-            controlador.agregarJugador(jugador);
+            controlador.setJugador(jugador);
         }
     }
 

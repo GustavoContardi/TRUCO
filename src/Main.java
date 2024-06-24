@@ -150,7 +150,7 @@ public class Main {
     }*/
         //vistaGrafica vista = new vistaGrafica();
 
-        new vistaInicio();
+        //new vistaInicio();
 
         //Jugador ju = new Jugador("Alejandro Andres Lococo");
 

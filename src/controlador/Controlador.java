@@ -40,9 +40,9 @@ public class Controlador implements Serializable, IControlador, IControladorRemo
     }
 
     @Override
-    public void agregarJugador(Jugador j) throws RemoteException {
-        this.jugador = j;
-        modelo.agregarJugador(j);
+    public void agregarJugador(String jugador) throws RemoteException {
+        Jugador j = new Jugador(jugador);
+
     }
 
     @Override
@@ -273,8 +273,9 @@ public class Controlador implements Serializable, IControlador, IControladorRemo
     }
 
     @Override
-    public void setJugador(Jugador j) {
+    public void setJugador(Jugador j) throws RemoteException {
         jugador = j;
+        modelo.agregarJugador(jugador);
     }
 
     @Override

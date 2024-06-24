@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 public interface IControlador {
     void iniciarPartida() throws RemoteException;
-    void agregarJugador(Jugador j) throws RemoteException;
+    void agregarJugador(String jugador) throws RemoteException;
     String puntajeActual() throws RemoteException;
     ArrayList<String> obtenerCartas();
     void tirarCarta(int numeroDeCarta);
@@ -38,7 +38,7 @@ public interface IControlador {
     void tantoNoQuerido();
     ArrayList<Jugador> listaJugadoresMasGanadores();
 
-    void setJugador(Jugador j);
+    void setJugador(Jugador j) throws RemoteException;
     void setVistaEleccion(IVistaEleccion eleccion);
     void setVistaJuego(IVistaJuego juego);
 
