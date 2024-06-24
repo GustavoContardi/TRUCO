@@ -1,5 +1,6 @@
 import ar.edu.unlu.rmimvc.cliente.Cliente;
 import cliente.AppCliente;
+import modelo.Jugador;
 import servidor.AppServidor;
 import vista.vistaInicio;
 
@@ -150,6 +151,8 @@ public class Main {
         //vistaGrafica vista = new vistaGrafica();
 
         new vistaInicio();
+
+        //Jugador ju = new Jugador("Alejandro Andres Lococo");
 
         //AppServidor.main(null);
     }

@@ -162,7 +162,7 @@ public class Jugador implements Comparable<Jugador>, Serializable{
             throw new RuntimeException(e);
         }
 
-        //Collections.sort(listaJugadores); // los ordeno por partidas ganadas para el top 5
+        Collections.sort(listaJugadores); // los ordeno por partidas ganadas para el top 5
 
         return listaJugadores;
     }

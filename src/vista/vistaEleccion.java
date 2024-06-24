@@ -6,20 +6,26 @@ import modelo.Jugador;
 import modelo.Partida;
 
 import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 
 public class vistaEleccion implements IVistaEleccion {
     private JPanel ventana;
     private JTabbedPane tabbedPane1;
     private JPanel JUGADORES;
-    private JPanel CREARNUEVO;
-    private JList list1;
-    private JComboBox comboBox1;
-    private JButton ELEGIRButton;
+    private JPanel Eleccion;
+    private JList list;
+    private JComboBox<Jugador> cbEleccion;
+    private JButton btnElegir;
     private JTextField textRegistrar;
-    private JButton CREARJUGADORButton;
+    private JButton btnRegistrar;
     private final JFrame frame;
     private IControlador controlador;
+
+    private DefaultListModel<String> listModel;
 
     public vistaEleccion() {
         this.frame = new JFrame("TRUCONTARDI");
@@ -27,6 +33,52 @@ public class vistaEleccion implements IVistaEleccion {
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.pack();
         frame.setSize(600, 450);
+
+        listModel = new DefaultListModel<>();
+        list.setModel(listModel);
+
+        btnRegistrar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    procesarAltaJugador();
+                } catch (RemoteException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+
+        btnElegir.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    procesarEleccionJugador();
+                } catch (RemoteException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+
+    }
+
+
+
+    public void procesarAltaJugador() throws RemoteException {
+        String nombre = textRegistrar.getText().trim();
+
+        if(!nombre.isEmpty()){
+            controlador.agregarJugador(new Jugador(nombre));
+
+            panelAvisos("¡JUGADOR REGISTRADO CON ÉXITO!");
+        }
+    }
+
+    public void procesarEleccionJugador() throws RemoteException {
+        Jugador jugador = (Jugador) cbEleccion.getSelectedItem();
+
+        if(jugador != null){
+            controlador.agregarJugador(jugador);
+        }
     }
 
     @Override
@@ -42,6 +94,21 @@ public class vistaEleccion implements IVistaEleccion {
     @Override
     public void actualizarListaJugadores(ArrayList<Jugador> lista) {
 
+        if(lista != null){
+
+            listModel.clear();
+            for (Jugador jugador: lista) {
+                listModel.addElement(jugador.toString());
+            }
+
+            cbEleccion.removeAllItems();
+            for (Jugador jugador: lista) {
+                if (!jugador.getElecto()) {
+                    cbEleccion.addItem(jugador);
+                }
+            }
+
+        }
     }
 
     @Override
@@ -54,5 +121,23 @@ public class vistaEleccion implements IVistaEleccion {
         this.controlador = controlador;
     }
 
+    @Override
+    public void mostrarMenuPrincipal() {
+        actualizarListaJugadores(controlador.listaJugadoresMasGanadores());
+        iniciar();
+    }
 
+    private void panelAvisos(String text){
+        JFrame frameMSJ;
+        frameMSJ = new JFrame("TRUCONTARDI");
+        frameMSJ.setSize(400, 100);
+        JPanel panelPrincipal = (JPanel) frameMSJ.getContentPane();
+        panelPrincipal.setLayout(new BorderLayout());
+
+        JLabel etiqueta1 = new JLabel(text);
+        panelPrincipal.add(etiqueta1, BorderLayout.CENTER);
+
+        frameMSJ.setVisible(true);
+        frameMSJ.setLocationRelativeTo(null);
+    }
 }

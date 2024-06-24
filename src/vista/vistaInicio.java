@@ -122,7 +122,7 @@ public class vistaInicio implements IVistaInicio {
                 IVistaEleccion vistaEleccion = new vistaEleccion();
                 controlador.setVistaEleccion(vistaEleccion);
                 vistaEleccion.setControlador(controlador);
-                vistaEleccion.iniciar();
+                vistaEleccion.mostrarMenuPrincipal();
 
                 frame.setVisible(false);
                 IVistaJuego vistaJuego = new vistaGrafica();
@@ -137,7 +137,7 @@ public class vistaInicio implements IVistaInicio {
                 IVistaEleccion vistaEleccion = new vistaEleccion();
                 controlador.setVistaEleccion(vistaEleccion);
                 vistaEleccion.setControlador(controlador);
-                vistaEleccion.iniciar();
+                vistaEleccion.mostrarMenuPrincipal();
                 frame.setVisible(false);
                 IVistaJuego vistaJuego = new vistaConsola();
                 vistaJuego.setControlador(controlador);
