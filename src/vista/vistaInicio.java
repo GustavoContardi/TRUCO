@@ -1,5 +1,6 @@
 package vista;
 
+import cliente.ClienteTruco;
 import controlador.Controlador;
 import interfaces.IControlador;
 import interfaces.IVistaEleccion;
@@ -21,7 +22,6 @@ public class vistaInicio implements IVistaInicio {
     private JButton btnAnotador;
     private JFrame frame;
     private anotadorGrafico anotadorG;
-    private IControlador controlador;
 
     //
     //  constructor
@@ -37,8 +37,6 @@ public class vistaInicio implements IVistaInicio {
         anotadorG = new anotadorGrafico(this);
 
         setBotonesInicio();
-
-        controlador = new Controlador();
 
     }
 
@@ -119,14 +117,8 @@ public class vistaInicio implements IVistaInicio {
         btnIniciarNueva.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                IVistaEleccion vistaEleccion = new vistaEleccion();
-                controlador.setVistaEleccion(vistaEleccion);
-                vistaEleccion.setControlador(controlador);
-                vistaEleccion.mostrarMenuPrincipal();
-
                 frame.setVisible(false);
-                IVistaJuego vistaJuego = new vistaGrafica();
-                vistaJuego.setControlador(controlador);
+                new ClienteTruco(1);
             }
         });
 
@@ -134,13 +126,8 @@ public class vistaInicio implements IVistaInicio {
         btnReanudar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                IVistaEleccion vistaEleccion = new vistaEleccion();
-                controlador.setVistaEleccion(vistaEleccion);
-                vistaEleccion.setControlador(controlador);
-                vistaEleccion.mostrarMenuPrincipal();
                 frame.setVisible(false);
-                IVistaJuego vistaJuego = new vistaConsola();
-                vistaJuego.setControlador(controlador);
+                new ClienteTruco(2);
             }
         });
 

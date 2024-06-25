@@ -321,6 +321,12 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
     }
 
     @Override
+    public void altaJugador(String nombre) throws RemoteException {
+        new Jugador(nombre);
+        notificarJugadorElecto(); // es lo mismo notificar con este pq actualiza la lista en eleccion
+    }
+
+    @Override
     public void actualizarPuntos() throws RemoteException {
         anotador.sumarPuntosJ1(puntajeRondaJ1);
         anotador.sumarPuntosJ2(puntajeRondaJ2);

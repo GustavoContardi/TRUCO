@@ -41,8 +41,10 @@ public class vistaGrafica implements IVistaJuego {
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.pack();
         frame.setSize(800, 950);
-        frame.setVisible(true);
+        frame.setResizable(false);
+        frame.setLocationRelativeTo(null);
         setBotones();
+
     }
 
 
@@ -278,7 +280,7 @@ public class vistaGrafica implements IVistaJuego {
 
     @Override
     public void mostrarMenuPrincipal() {
-
+        frame.setVisible(true);
     }
 
     @Override

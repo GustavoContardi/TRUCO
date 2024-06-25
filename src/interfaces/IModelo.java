@@ -22,6 +22,7 @@ public interface IModelo extends IObservableRemoto {
     void meVoyAlMazo(int id) throws RemoteException;
     boolean esFinDePartida() throws RemoteException;
     void agregarJugador(Jugador jugador) throws RemoteException;
+    void altaJugador(String nombre) throws RemoteException;
     void actualizarPuntos() throws RemoteException;
     EstadoTruco estadoRabon() throws RemoteException;
     EstadoEnvido estadoTanto() throws RemoteException;
@@ -33,11 +34,11 @@ public interface IModelo extends IObservableRemoto {
     int getQuienCantoTruco() throws RemoteException;
     int getQuienCantoReTruco() throws RemoteException;
     int getQuienCantoValeCuatro() throws RemoteException;
-    int getQuienCantoEnvido();
-    int getQuienCantoEnvidoDoble();
-    int getQuienCantoRealEnvido();
-    int getQuienCantoFaltaEnvido();
-    Carta ultimaCartaTiradaJ1();
-    Carta ultimaCartaTiradaJ2();
+    int getQuienCantoEnvido()throws RemoteException;
+    int getQuienCantoEnvidoDoble()throws RemoteException;
+    int getQuienCantoRealEnvido()throws RemoteException;
+    int getQuienCantoFaltaEnvido()throws RemoteException;
+    Carta ultimaCartaTiradaJ1()throws RemoteException;
+    Carta ultimaCartaTiradaJ2()throws RemoteException;
 
 }

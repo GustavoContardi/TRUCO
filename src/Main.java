@@ -1,8 +1,12 @@
-import ar.edu.unlu.rmimvc.cliente.Cliente;
-import cliente.AppCliente;
-import modelo.Jugador;
-import servidor.AppServidor;
+import controlador.Controlador;
+import interfaces.IControlador;
+import interfaces.IModelo;
+import interfaces.IVistaInicio;
+import modelo.Partida;
 import vista.vistaInicio;
+
+import javax.swing.*;
+import java.rmi.RemoteException;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
@@ -150,7 +154,7 @@ public class Main {
     }*/
         //vistaGrafica vista = new vistaGrafica();
 
-        //new vistaInicio();
+        new vistaInicio();
 
         //Jugador ju = new Jugador("Alejandro Andres Lococo");
 

@@ -2,8 +2,10 @@ package controlador;
 
 import ar.edu.unlu.rmimvc.cliente.IControladorRemoto;
 import ar.edu.unlu.rmimvc.observer.IObservableRemoto;
+import ar.edu.unlu.rmimvc.observer.IObservadorRemoto;
 import enums.EstadoEnvido;
 import enums.EstadoTruco;
+import enums.Eventos;
 import interfaces.*;
 import modelo.Carta;
 import modelo.Jugador;
@@ -12,7 +14,7 @@ import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 
-public class Controlador implements Serializable, IControlador, IControladorRemoto {
+public class Controlador implements Serializable, IControlador, IControladorRemoto /*IObservadorRemoto*/ {
 
     //
     // Atributos
@@ -27,6 +29,7 @@ public class Controlador implements Serializable, IControlador, IControladorRemo
     //
 
     public Controlador() {
+
     }
 
 
@@ -41,7 +44,7 @@ public class Controlador implements Serializable, IControlador, IControladorRemo
 
     @Override
     public void agregarJugador(String jugador) throws RemoteException {
-        Jugador j = new Jugador(jugador);
+        modelo.altaJugador(jugador);
 
     }
 
@@ -295,5 +298,14 @@ public class Controlador implements Serializable, IControlador, IControladorRemo
 
     @Override
     public void actualizar(IObservableRemoto modelo, Object cambio) throws RemoteException {
+        Eventos evento = (Eventos) cambio;      // lo dejo casteado
+
+        switch (evento){
+            case LISTA_JUGADORES_DISPONIBLES -> {
+                vistaEleccion.actualizarListaJugadores(Jugador.getListaJugadores());
+                System.out.println("Avisado");
+            }
+        }
+
     }
 }
