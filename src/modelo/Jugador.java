@@ -99,7 +99,7 @@ public class Jugador implements Comparable<Jugador>, Serializable{
 
     @Override
     public String toString(){
-        return nombre + " | " + IDJugador;
+        return nombre + " | " + "ID: " + IDJugador + " | WINS: " + partidasGanadas;
     }
 
     //
@@ -117,7 +117,9 @@ public class Jugador implements Comparable<Jugador>, Serializable{
 
 
     private void guardarJugador(){
-        //listaJugadores = getListaJugadores();
+        listaJugadores = getListaJugadores(); // recupero la lista de jugadores de memoria asi lo agrego
+
+        if(listaJugadores == null) listaJugadores = new ArrayList<>();
 
         listaJugadores.add(this);
 
@@ -155,7 +157,7 @@ public class Jugador implements Comparable<Jugador>, Serializable{
             listaJugadores = (ArrayList<Jugador>) oos.readObject();
             fos.close();
         } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
+            return null;
         } catch (IOException e) {
             throw new RuntimeException(e);
         } catch (ClassNotFoundException e) {

@@ -1,5 +1,7 @@
 package interfaces;
 
+import java.rmi.RemoteException;
+
 public interface IVistaJuego {
     void mostrarCartas();
     void actualizarPuntaje(String puntaje);
@@ -7,8 +9,8 @@ public interface IVistaJuego {
     void limpiarPantalla();
     void finDeMano();
     void finDeLaPartida(String nombreGanador);
-    void cantaronRabon(String rabon);
-    void cantaronTanto(String tanto);
+    void cantaronRabon(String rabon) throws RemoteException;
+    void cantaronTanto(String tanto) throws RemoteException;
     void println(String text);
     void mostrarMenuPrincipal();
     //void setFlujoActual(Flujo flujoActual);

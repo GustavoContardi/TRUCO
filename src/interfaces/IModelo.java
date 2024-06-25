@@ -6,9 +6,11 @@ import enums.EstadoEnvido;
 import modelo.Carta;
 import modelo.Jugador;
 
+import java.io.Serializable;
 import java.rmi.RemoteException;
 
 public interface IModelo extends IObservableRemoto {
+
     void nuevaPartida() throws RemoteException;
     void nuevaRonda() throws RemoteException;
     void finDeLaRonda() throws RemoteException;

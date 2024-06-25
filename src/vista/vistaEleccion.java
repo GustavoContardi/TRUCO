@@ -109,6 +109,9 @@ public class vistaEleccion implements IVistaEleccion {
             }
 
         }
+        else{
+            listModel.addElement("¡No hay Jugadores creados aún!");
+        }
     }
 
     @Override

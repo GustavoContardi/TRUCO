@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 public class ServidorTruco {
 
-    public ServidorTruco() {
+    public ServidorTruco() throws RemoteException {
         ArrayList<String> ips = Util.getIpDisponibles();
         String ip = (String) JOptionPane.showInputDialog(
                 null,
@@ -30,9 +30,11 @@ public class ServidorTruco {
                 null,
                 8888
         );
+
+        Partida modelo = new Partida();
         Servidor servidor = new Servidor(ip, Integer.parseInt(port));
+
         try {
-            Partida modelo = new Partida();
             servidor.iniciar(modelo);
         } catch (RemoteException e) {
             // TODO Auto-generated catch block
@@ -76,4 +78,7 @@ public class ServidorTruco {
         }
     }
 
+    public static void main(String[] args) throws RemoteException {
+        new ServidorTruco();
+    }
 }

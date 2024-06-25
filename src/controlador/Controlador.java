@@ -2,7 +2,6 @@ package controlador;
 
 import ar.edu.unlu.rmimvc.cliente.IControladorRemoto;
 import ar.edu.unlu.rmimvc.observer.IObservableRemoto;
-import ar.edu.unlu.rmimvc.observer.IObservadorRemoto;
 import enums.EstadoEnvido;
 import enums.EstadoTruco;
 import enums.Eventos;
@@ -14,7 +13,7 @@ import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 
-public class Controlador implements Serializable, IControlador, IControladorRemoto /*IObservadorRemoto*/ {
+public class Controlador implements IControladorRemoto, IControlador, Serializable {
 
     //
     // Atributos
@@ -45,7 +44,6 @@ public class Controlador implements Serializable, IControlador, IControladorRemo
     @Override
     public void agregarJugador(String jugador) throws RemoteException {
         modelo.altaJugador(jugador);
-
     }
 
     @Override
@@ -291,10 +289,11 @@ public class Controlador implements Serializable, IControlador, IControladorRemo
         this.vistaJuego = juego;
     }
 
-    @Override
-    public <T extends IObservableRemoto> void setModeloRemoto(T modeloRemoto) throws RemoteException {
-        this.modelo = (IModelo) modeloRemoto;
-    }
+
+    //
+    //
+    //
+
 
     @Override
     public void actualizar(IObservableRemoto modelo, Object cambio) throws RemoteException {
@@ -303,9 +302,13 @@ public class Controlador implements Serializable, IControlador, IControladorRemo
         switch (evento){
             case LISTA_JUGADORES_DISPONIBLES -> {
                 vistaEleccion.actualizarListaJugadores(Jugador.getListaJugadores());
-                System.out.println("Avisado");
             }
         }
 
+    }
+
+    @Override
+    public <T extends IObservableRemoto> void setModeloRemoto(T t) throws RemoteException {
+        this.modelo = (IModelo) t;
     }
 }

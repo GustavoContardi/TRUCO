@@ -1,17 +1,14 @@
 package cliente;
 
-import ar.edu.unlu.rmimvc.RMIMVCException;
 import ar.edu.unlu.rmimvc.Util;
-import ar.edu.unlu.rmimvc.cliente.Cliente;
 import controlador.Controlador;
 import interfaces.IVistaEleccion;
-import interfaces.IVistaInicio;
+import ar.edu.unlu.rmimvc.cliente.Cliente;
+import ar.edu.unlu.rmimvc.RMIMVCException;
 import interfaces.IVistaJuego;
-import modelo.Partida;
 import vista.vistaConsola;
-import vista.vistaEleccion;
 import vista.vistaGrafica;
-import vista.vistaInicio;
+import vista.vistaEleccion;
 
 import javax.swing.*;
 import java.rmi.RemoteException;
@@ -19,7 +16,7 @@ import java.util.ArrayList;
 
 public class ClienteTruco {
     // opcion 1 == vista grafica |||| opcion 2 == vista consola
-    public ClienteTruco(int op) {
+    public ClienteTruco(int vista) throws RemoteException {
         ArrayList<String> ips = Util.getIpDisponibles();
         String ip = (String) JOptionPane.showInputDialog(
                 null,
@@ -53,34 +50,37 @@ public class ClienteTruco {
                 null,
                 8888
         );
+
+
         Controlador controlador = new Controlador();
         IVistaEleccion vistaEleccion = new vistaEleccion();
         vistaEleccion.setControlador(controlador);
         controlador.setVistaEleccion(vistaEleccion);
 
-        if(op == 1){
+        if(vista == 1){
             IVistaJuego juego = new vistaGrafica();
             controlador.setVistaJuego(juego);
+            juego.setControlador(controlador);
         }
         else{
             IVistaJuego juego = new vistaConsola();
             controlador.setVistaJuego(juego);
+            juego.setControlador(controlador);
         }
 
         Cliente c = new Cliente(ip, Integer.parseInt(port), ipServidor, Integer.parseInt(portServidor));
 
-        vistaEleccion.mostrarMenuPrincipal();
         try {
             c.iniciar(controlador);
-        } catch (
-                RemoteException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (
-                RMIMVCException e) {
+            vistaEleccion.mostrarMenuPrincipal();
+        } catch (RemoteException | RMIMVCException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+    }
+
+    public static void main(String[] args) throws RemoteException {
+        new ClienteTruco(0);
     }
 
 }

@@ -47,8 +47,6 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
     private     Eventos             mensajesOb;
     private     Carta               ultimaCartaJ1, ultimaCartaJ2;
 
-    private IControlador controlador;
-
 
     //
     // constructor
@@ -548,4 +546,9 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
     public Carta ultimaCartaTiradaJ2() {
         return ultimaCartaJ2;
     }
+
+
+    // observer
+
+
 }

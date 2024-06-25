@@ -19,6 +19,6 @@ public enum Eventos {
     LISTA_JUGADORES_TOTALES, // para el historial
     PUNTAJES,
     NUEVA_RONDA,
-
+    ABANDONO_PARTIDA,
 
 }

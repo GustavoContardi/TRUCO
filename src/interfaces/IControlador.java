@@ -1,9 +1,13 @@
 package interfaces;
 
+import ar.edu.unlu.rmimvc.cliente.IControladorRemoto;
+import ar.edu.unlu.rmimvc.observer.IObservableRemoto;
+import ar.edu.unlu.rmimvc.observer.IObservadorRemoto;
 import enums.EstadoEnvido;
 import enums.EstadoTruco;
 import modelo.Jugador;
 
+import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 
@@ -14,32 +18,32 @@ public interface IControlador {
     ArrayList<String> obtenerCartas();
     void tirarCarta(int numeroDeCarta);
     int meVoyAlMazo() throws RemoteException;
-    void guardarPartida();
-    void recuperarPartida();
+    void guardarPartida() throws RemoteException;
+    void recuperarPartida() throws RemoteException;
     String cantarTanto(int opcion) throws RemoteException;
-    String cantarRabon(int opcion);
-    int esTurnoDe();
-    EstadoEnvido estadoDelTanto();
-    EstadoTruco estadoDelRabon();
+    String cantarRabon(int opcion) throws RemoteException;
+    int esTurnoDe() throws RemoteException;
+    EstadoEnvido estadoDelTanto() throws RemoteException;
+    EstadoTruco estadoDelRabon()throws RemoteException ;
     void cantoNoQuerido() throws RemoteException;
     void setModelo(IModelo modelo);
-    boolean esMiTurno();
-    boolean seCantoEnvido();
-    boolean seCantoEnvidoDoble();
-    boolean seCantoRealEnvido();
-    boolean seCantoFaltaEnvido();
+    boolean esMiTurno()throws RemoteException ;
+    boolean seCantoEnvido() throws RemoteException;
+    boolean seCantoEnvidoDoble() throws RemoteException;
+    boolean seCantoRealEnvido() throws RemoteException;
+    boolean seCantoFaltaEnvido() throws RemoteException;
     boolean seCantoTruco();
     boolean seCantoReTruco();
     boolean seCantoValeCuatro();
-    int nroDeRonda();
-    void rabonQuerido();
-    void rabonNoQuerido();
-    void tantoQuerido();
-    void tantoNoQuerido();
+    int nroDeRonda() throws RemoteException;
+    void rabonQuerido() throws RemoteException;
+    void rabonNoQuerido() throws RemoteException;
+    void tantoQuerido() throws RemoteException;
+    void tantoNoQuerido() throws RemoteException ;
     ArrayList<Jugador> listaJugadoresMasGanadores();
 
     void setJugador(Jugador j) throws RemoteException;
-    void setVistaEleccion(IVistaEleccion eleccion);
-    void setVistaJuego(IVistaJuego juego);
+    void setVistaEleccion(IVistaEleccion eleccion) throws RemoteException;
+    void setVistaJuego(IVistaJuego juego) throws RemoteException;
 
 }

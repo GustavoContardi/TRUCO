@@ -10,6 +10,7 @@ import interfaces.IVistaJuego;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.rmi.RemoteException;
 
 public class vistaInicio implements IVistaInicio {
 
@@ -30,8 +31,9 @@ public class vistaInicio implements IVistaInicio {
     public vistaInicio() {
         this.frame = new JFrame("TRUCONTARDI");
         frame.setContentPane(ventana);
-        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.pack();
+        frame.setResizable(false);
+        frame.setLocationRelativeTo(null);
         frame.setSize(450, 500);
         frame.setVisible(true);
         anotadorG = new anotadorGrafico(this);
@@ -117,8 +119,12 @@ public class vistaInicio implements IVistaInicio {
         btnIniciarNueva.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                frame.setVisible(false);
-                new ClienteTruco(1);
+                try {
+                    frame.setVisible(false);
+                    new ClienteTruco(1);
+                } catch (RemoteException ex) {
+                    throw new RuntimeException(ex);
+                }
             }
         });
 
@@ -126,8 +132,12 @@ public class vistaInicio implements IVistaInicio {
         btnReanudar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                frame.setVisible(false);
-                new ClienteTruco(2);
+                try {
+                    frame.setVisible(false);
+                    new ClienteTruco(2);
+                } catch (RemoteException ex) {
+                    throw new RuntimeException(ex);
+                }
             }
         });
 
