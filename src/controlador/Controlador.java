@@ -312,7 +312,13 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
             case CANTO_VALE_CUATRO ->{
 
             }
-            case CANTO_ENVIDO ->{
+            case CANTARON_TANTO -> {
+
+            }
+            case CANTARON_TRUCO -> {
+
+            }
+            case CANTO_ENVIDO -> {
 
             }
             case CANTO_REAL_ENVIDO -> {
