@@ -1,5 +1,7 @@
 package modelo;
 
+import persistencia.Persistencia;
+
 import java.io.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -22,12 +24,11 @@ public class Jugador implements Comparable<Jugador>, Serializable{
     //
 
     public Jugador(String nombre) {
-        if(listaJugadores==null) listaJugadores = new ArrayList<>();
         this.nombre = nombre;
         partidasGanadas = 0;
         electo = false;
         IDJugador = generarID();
-        guardarJugador();
+        Persistencia.guardarJugador(this);
     }
 
     //
@@ -64,38 +65,6 @@ public class Jugador implements Comparable<Jugador>, Serializable{
         return null;
     }
 
-    public void eliminarJugador(int opcion){
-        listaJugadores = getListaJugadores();
-
-        listaJugadores.remove(opcion-1);
-
-        try {
-            FileOutputStream fos = new FileOutputStream("jugadores.bin");
-            var oos = new ObjectOutputStream(fos);
-            oos.writeObject(listaJugadores);
-            fos.close();
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-    public void removeAllJugadores(){
-        listaJugadores = getListaJugadores();
-
-        listaJugadores.clear();
-
-        try {
-            FileOutputStream fos = new FileOutputStream("jugadores.bin");
-            var oos = new ObjectOutputStream(fos);
-            oos.writeObject(listaJugadores);
-            fos.close();
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     @Override
     public String toString(){
@@ -114,40 +83,6 @@ public class Jugador implements Comparable<Jugador>, Serializable{
 
         return Math.abs(idString.hashCode());
     }
-
-
-    private void guardarJugador(){
-        listaJugadores = getListaJugadores(); // recupero la lista de jugadores de memoria asi lo agrego
-
-        if(listaJugadores == null) listaJugadores = new ArrayList<>();
-
-        listaJugadores.add(this);
-
-        try {
-            FileOutputStream fos = new FileOutputStream("jugadores.bin");
-            var oos = new ObjectOutputStream(fos);
-            oos.writeObject(listaJugadores);
-            fos.close();
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    private int recuperarUltimoID(ArrayList<Jugador> lista) {
-        int resultado = 0;
-
-        if(lista.isEmpty()) return 1;
-
-        for(Jugador j: lista){
-            if(j.getIDJugador() > resultado) resultado = j.getIDJugador();
-        }
-
-        return resultado;
-    }
-
-
 
 
     public static ArrayList<Jugador> getListaJugadores() {

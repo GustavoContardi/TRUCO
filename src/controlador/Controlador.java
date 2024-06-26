@@ -8,6 +8,7 @@ import enums.Eventos;
 import interfaces.*;
 import modelo.Carta;
 import modelo.Jugador;
+import persistencia.Persistencia;
 
 import java.io.Serializable;
 import java.rmi.RemoteException;
@@ -304,40 +305,34 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
                 vistaEleccion.actualizarListaJugadores(Jugador.getListaJugadores());
             }
             case CANTO_TRUCO -> {
-
+                if(modelo.turnoActual() != jugador.getIDJugador()) vistaJuego.cantaronRabon(Persistencia.mensajeCantoTruco(EstadoTruco.TRUCO));
             }
             case CANTO_RETRUCO -> {
-
+                if(modelo.turnoActual() != jugador.getIDJugador()) vistaJuego.cantaronRabon(Persistencia.mensajeCantoTruco(EstadoTruco.RE_TRUCO));
             }
             case CANTO_VALE_CUATRO ->{
-
-            }
-            case CANTARON_TANTO -> {
-
-            }
-            case CANTARON_TRUCO -> {
-
+                if(modelo.turnoActual() != jugador.getIDJugador()) vistaJuego.cantaronRabon(Persistencia.mensajeCantoTruco(EstadoTruco.VALE_CUATRO));
             }
             case CANTO_ENVIDO -> {
-
+                if(modelo.turnoActual() != jugador.getIDJugador()) vistaJuego.cantaronTanto(Persistencia.mensajeCantoTanto(EstadoEnvido.ENVIDO));
             }
             case CANTO_REAL_ENVIDO -> {
-
+                if(modelo.turnoActual() != jugador.getIDJugador()) vistaJuego.cantaronTanto(Persistencia.mensajeCantoTanto(EstadoEnvido.ENVIDO_DOBLE));
             }
             case CANTO_ENVIDO_DOBLE -> {
-
+                if(modelo.turnoActual() != jugador.getIDJugador()) vistaJuego.cantaronTanto(Persistencia.mensajeCantoTanto(EstadoEnvido.REAL_ENVIDO));
             }
             case CANTO_FALTA_ENVIDO -> {
-
+                if(modelo.turnoActual() != jugador.getIDJugador()) vistaJuego.cantaronTanto(Persistencia.mensajeCantoTanto(EstadoEnvido.FALTA_ENVIDO));
             }
             case NUEVA_RONDA -> {
-
+                vistaJuego.mostrarMenuPrincipal(); // ?? podria hacer un metodo pero si refresca la pantalla se actualiza
             }
             case MENSAJEJ1 -> {
-                //controlador.getUltimoMensaje();
+                // if (modelo.) vistaJuego.mostrarMensaje(modelo.getUltimoMensaje());
             }
             case MENSAJEJ2 -> {
-                //controlador.getUltimoMensaje();
+                // if () vistaJuego.mostrarMensaje(modelo.getUltimoMensaje());
             }
             case CARTA_TIRADAJ1 -> { // este aviso es que el JUGADOR 1 tiro una carta
                 if(modelo.getIdJ1() != jugador.getIDJugador()) vistaJuego.meTiraronCarta(modelo.ultimaCartaTiradaJ1().toString());
@@ -359,6 +354,7 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
             }
             case LISTA_JUGADORES_TOTALES -> {
                 // aca hay que pasarle la lista no ordenada pero cuando tenga la clase Persistencia
+                vistaEleccion.actualizarListaJugadores(Jugador.getListaJugadores());
             }
         }
 

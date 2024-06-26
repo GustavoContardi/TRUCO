@@ -1,5 +1,8 @@
 package interfaces;
 
+import enums.EstadoEnvido;
+import enums.EstadoTruco;
+
 import java.rmi.RemoteException;
 
 public interface IVistaJuego {

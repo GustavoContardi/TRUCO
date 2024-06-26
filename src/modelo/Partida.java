@@ -46,6 +46,7 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
     private     boolean             parda;
     private     Eventos             mensajesOb;
     private     Carta               ultimaCartaJ1, ultimaCartaJ2;
+    private     String              ultimoMensaje;
 
 
     //
@@ -555,6 +556,11 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
     @Override
     public int getIdJ2() {
         return j2.getIDJugador();
+    }
+
+    @Override
+    public String getUltimoMensaje() {
+        return ultimoMensaje;
     }
 
 
