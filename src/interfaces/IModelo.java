@@ -42,5 +42,6 @@ public interface IModelo extends IObservableRemoto {
     int getQuienCantoFaltaEnvido()throws RemoteException;
     Carta ultimaCartaTiradaJ1()throws RemoteException;
     Carta ultimaCartaTiradaJ2()throws RemoteException;
-
+    int getIdJ1();
+    int getIdJ2();
 }

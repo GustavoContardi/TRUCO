@@ -314,6 +314,11 @@ public class vistaGrafica implements IVistaJuego {
 
     }
 
+    @Override
+    public void meTiraronCarta(String carta) {
+
+    }
+
     public void setBotones(){
         removeBtnActionListener(); // remuevo todos los actions listeners para que no se acumulen y los vuelvo a poner
         btnEnvido.setText("    ENVIDO    ");

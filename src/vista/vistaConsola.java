@@ -91,6 +91,11 @@ public class vistaConsola implements IVistaJuego, IVistaInicio {
     }
 
     @Override
+    public void meTiraronCarta(String carta) {
+
+    }
+
+    @Override
     public void iniciar() {
         frame.setVisible(true);
     }

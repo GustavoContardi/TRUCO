@@ -17,5 +17,6 @@ public interface IVistaJuego {
     void setControlador(IControlador controlador);
     void actualizar();
     void salirDelJuego();
+    void meTiraronCarta(String carta);
     
 }

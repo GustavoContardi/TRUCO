@@ -547,6 +547,16 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
         return ultimaCartaJ2;
     }
 
+    @Override
+    public int getIdJ1() {
+        return j1.getIDJugador();
+    }
+
+    @Override
+    public int getIdJ2() {
+        return j2.getIDJugador();
+    }
+
 
     // observer
 

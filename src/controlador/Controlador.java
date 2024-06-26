@@ -296,14 +296,66 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
 
 
     @Override
-    public void actualizar(IObservableRemoto modelo, Object cambio) throws RemoteException {
+    public void actualizar(IObservableRemoto model, Object cambio) throws RemoteException {
         Eventos evento = (Eventos) cambio;      // lo dejo casteado
 
         switch (evento){
             case LISTA_JUGADORES_DISPONIBLES -> {
                 vistaEleccion.actualizarListaJugadores(Jugador.getListaJugadores());
             }
+            case CANTO_TRUCO -> {
+
+            }
+            case CANTO_RETRUCO -> {
+
+            }
+            case CANTO_VALE_CUATRO ->{
+
+            }
+            case CANTO_ENVIDO ->{
+
+            }
+            case CANTO_REAL_ENVIDO -> {
+
+            }
+            case CANTO_ENVIDO_DOBLE -> {
+
+            }
+            case CANTO_FALTA_ENVIDO -> {
+
+            }
+            case NUEVA_RONDA -> {
+
+            }
+            case MENSAJEJ1 -> {
+                //controlador.getUltimoMensaje();
+            }
+            case MENSAJEJ2 -> {
+                //controlador.getUltimoMensaje();
+            }
+            case CARTA_TIRADAJ1 -> { // este aviso es que el JUGADOR 1 tiro una carta
+                if(modelo.getIdJ1() != jugador.getIDJugador()) vistaJuego.meTiraronCarta(modelo.ultimaCartaTiradaJ1().toString());
+            }
+            case CARTA_TIRADAJ2 -> { // este aviso es que el JUGADOR 1 tiro una carta
+                if(modelo.getIdJ2() != jugador.getIDJugador()) vistaJuego.meTiraronCarta(modelo.ultimaCartaTiradaJ2().toString());
+            }
+            case FIN_PARTIDA -> vistaJuego.finDeLaPartida("");
+            case PUNTAJES -> vistaJuego.actualizarPuntaje(modelo.puntosActuales());
+            case FIN_MANO -> {
+                vistaJuego.actualizarPuntaje(modelo.puntosActuales());
+                vistaJuego.finDeMano();
+            }
+            case INICIO_PARTIDA -> {
+                vistaJuego.mostrarMenuPrincipal();
+            }
+            case ABANDONO_PARTIDA -> {
+
+            }
+            case LISTA_JUGADORES_TOTALES -> {
+                // aca hay que pasarle la lista no ordenada pero cuando tenga la clase Persistencia
+            }
         }
+
 
     }
 
