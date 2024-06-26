@@ -19,7 +19,8 @@ public class vistaConsola implements IVistaJuego, IVistaInicio {
         frame.setContentPane(ventana);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(500, 300);
-
+        frame.setResizable(false);
+        frame.setLocationRelativeTo(null);
 
     }
 

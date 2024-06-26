@@ -1,16 +1,18 @@
 package vista;
 
 import cliente.ClienteTruco;
-import controlador.Controlador;
-import interfaces.IControlador;
-import interfaces.IVistaEleccion;
 import interfaces.IVistaInicio;
-import interfaces.IVistaJuego;
+import servidor.ServidorTruco;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.rmi.RemoteException;
+import java.awt.Desktop;
+import java.net.URI;
+
 
 public class vistaInicio implements IVistaInicio {
 
@@ -18,9 +20,10 @@ public class vistaInicio implements IVistaInicio {
     private JLabel tituloLabel;
     private JButton btnIniciarNueva;
     private JButton btnReanudar;
-    private JButton btnTopFive;
-    private JButton btnSalir;
     private JButton btnAnotador;
+    private JButton btnSalir;
+    private JButton btnReglas;
+    private JLabel instrucciones;
     private JFrame frame;
     private anotadorGrafico anotadorG;
 
@@ -34,7 +37,7 @@ public class vistaInicio implements IVistaInicio {
         frame.pack();
         frame.setResizable(false);
         frame.setLocationRelativeTo(null);
-        frame.setSize(450, 500);
+        frame.setSize(500, 500);
         frame.setVisible(true);
         anotadorG = new anotadorGrafico(this);
 
@@ -48,6 +51,7 @@ public class vistaInicio implements IVistaInicio {
 
     public void setBotonesInicio(){
         eliminarTodosAcLis();
+        instrucciones.setText("¡Bienvenido al Trucontardi! Seleccione una opción para comenzar.");
 
         btnSalir.setText(" SALIR ");
         btnSalir.addActionListener(new ActionListener() {
@@ -56,12 +60,19 @@ public class vistaInicio implements IVistaInicio {
                 System.exit(0);
             }
         });
-        btnIniciarNueva.setVisible(false);
+        btnIniciarNueva.setVisible(true);
+
+        btnIniciarNueva.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                setBotonesIniciarRed();
+            }
+        });
 
         btnReanudar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                setBotonesIniciar();
+
             }
         });
 
@@ -72,10 +83,18 @@ public class vistaInicio implements IVistaInicio {
                 anotadorG.iniciar();
             }
         });
+
+        btnReglas.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                abrirURL("https://www.nhfournier.es/como-jugar/truco/");
+            }
+        });
     }
 
-    public void setBotonesIniciar(){
+    public void setBotonesIniciarJuego(){
         eliminarTodosAcLis();
+
 
         btnIniciarNueva.setVisible(true);
         btnIniciarNueva.setText("INICIAR NUEVA PARTIDA");
@@ -107,14 +126,16 @@ public class vistaInicio implements IVistaInicio {
     public void botonesElegirVista(){
         eliminarTodosAcLis();
 
+        instrucciones.setText("Seleccione la vista del juego");
         btnSalir.setText(" VOLVER ");
         btnSalir.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                setBotonesIniciar();
+                setBotonesIniciarRed();
             }
         });
 
+        btnIniciarNueva.setEnabled(true);
         btnIniciarNueva.setText(" VISTA GRAFICA ");
         btnIniciarNueva.addActionListener(new ActionListener() {
             @Override
@@ -143,6 +164,52 @@ public class vistaInicio implements IVistaInicio {
 
     }
 
+    private void setBotonesIniciarRed(){
+        eliminarTodosAcLis();
+        instrucciones.setText("Seleccione una opción");
+        btnIniciarNueva.setText("CREAR NUEVO SERVIDOR");
+        btnReanudar.setText("INGRESAR A UN SERVIDOR");
+        btnAnotador.setText("REANUDAR UNA PARTIDA");
+        btnReglas.setEnabled(false);
+        btnAnotador.setEnabled(false); // hasta que tengamos bien la serializacion, al final del desarrollo
+
+        btnIniciarNueva.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    new ServidorTruco();
+                    btnIniciarNueva.setEnabled(false);
+                    instrucciones.setText("¡Servidor Creado! Ahora puedes ingresar a él");
+                } catch (RemoteException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+        });
+
+        btnReanudar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                botonesElegirVista();
+            }
+        });
+        btnReanudar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // bla bla bla
+                // levantar las partidas y setear
+                // vistaPartidaReanudada();
+            }
+        });
+
+        btnSalir.setText("VOLVER");
+        btnSalir.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                setBotonesInicio();
+            }
+        });
+    }
+
     public void iniciar(){
         frame.setVisible(true);
     }
@@ -163,10 +230,22 @@ public class vistaInicio implements IVistaInicio {
     }
 
     private void eliminarTodosAcLis(){
-        removeAllActionListeners(btnAnotador);
+        removeAllActionListeners(btnReglas);
         removeAllActionListeners(btnSalir);
         removeAllActionListeners(btnIniciarNueva);
-        removeAllActionListeners(btnTopFive);
+        removeAllActionListeners(btnAnotador);
         removeAllActionListeners(btnReanudar);
     }
+
+    private void abrirURL(String url){
+        if (Desktop.isDesktopSupported()) {
+            try {
+                Desktop.getDesktop().browse(new URI(url));
+            } catch (IOException | URISyntaxException e) {
+                e.printStackTrace();
+                // Manejo de errores: puedes mostrar un mensaje al usuario aquí
+            }
+        }
+    }
+
 }

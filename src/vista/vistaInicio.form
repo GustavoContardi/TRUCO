@@ -72,7 +72,7 @@
                       <text value="TOP JUGADORES GANADORES"/>
                     </properties>
                   </component>
-                  <component id="d3d6e" class="javax.swing.JButton" binding="btnTopFive">
+                  <component id="d3d6e" class="javax.swing.JButton" binding="btnAnotador">
                     <constraints>
                       <grid row="6" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                     </constraints>
@@ -117,7 +117,7 @@
                       <text value="                  "/>
                     </properties>
                   </component>
-                  <component id="c8a74" class="javax.swing.JButton" binding="btnAnotador">
+                  <component id="c8a74" class="javax.swing.JButton" binding="btnReglas">
                     <constraints>
                       <grid row="8" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                     </constraints>
@@ -133,11 +133,13 @@
                       <text value="                   "/>
                     </properties>
                   </component>
-                  <component id="eb840" class="javax.swing.JLabel">
+                  <component id="eb840" class="javax.swing.JLabel" binding="instrucciones">
                     <constraints>
-                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
+                      <horizontalAlignment value="0"/>
+                      <horizontalTextPosition value="0"/>
                       <text value="            "/>
                     </properties>
                   </component>

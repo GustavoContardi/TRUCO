@@ -33,6 +33,8 @@ public class vistaEleccion implements IVistaEleccion {
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.pack();
         frame.setSize(600, 450);
+        frame.setResizable(false);
+        frame.setLocationRelativeTo(null);
 
         listModel = new DefaultListModel<>();
         list.setModel(listModel);
