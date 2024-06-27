@@ -81,6 +81,7 @@ public class vistaEleccion implements IVistaEleccion {
         if(jugador != null){
             controlador.setJugador(jugador);
         }
+        System.out.println("Enviado");
     }
 
     @Override

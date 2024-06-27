@@ -42,7 +42,7 @@ public interface IModelo extends IObservableRemoto {
     int getQuienCantoFaltaEnvido()throws RemoteException;
     Carta ultimaCartaTiradaJ1()throws RemoteException;
     Carta ultimaCartaTiradaJ2()throws RemoteException;
-    int getIdJ1();
-    int getIdJ2();
-    String getUltimoMensaje();
+    int getIdJ1()throws RemoteException;;
+    int getIdJ2()throws RemoteException;;
+    String getUltimoMensaje()throws RemoteException;;
 }

@@ -15,7 +15,6 @@ public class Jugador implements Comparable<Jugador>, Serializable{
     private  int                         IDJugador            ;
     private  ArrayList<Carta>            cartasObtenidas      ;
     private  int                         partidasGanadas      ;
-    private static ArrayList<Jugador>    listaJugadores       ;
     private  boolean                     electo               ;
     private  Envido                      envido               ;
 
@@ -68,6 +67,7 @@ public class Jugador implements Comparable<Jugador>, Serializable{
 
     @Override
     public String toString(){
+        if (electo) return nombre + " | " + "ID: " + IDJugador + " | WINS: " + partidasGanadas + " | NO DISPONIBLE (ELEGIDO)";
         return nombre + " | " + "ID: " + IDJugador + " | WINS: " + partidasGanadas;
     }
 
@@ -84,25 +84,6 @@ public class Jugador implements Comparable<Jugador>, Serializable{
         return Math.abs(idString.hashCode());
     }
 
-
-    public static ArrayList<Jugador> getListaJugadores() {
-        try {
-            FileInputStream fos = new FileInputStream("jugadores.bin");
-            var oos = new ObjectInputStream(fos);
-            listaJugadores = (ArrayList<Jugador>) oos.readObject();
-            fos.close();
-        } catch (FileNotFoundException e) {
-            return null;
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-
-        Collections.sort(listaJugadores); // los ordeno por partidas ganadas para el top 5
-
-        return listaJugadores;
-    }
 
     @Override
     public int compareTo(Jugador otroJugador) {
@@ -142,10 +123,17 @@ public class Jugador implements Comparable<Jugador>, Serializable{
     }
 
     public void setElecto(boolean electo){
-        this.electo = electo;
+        Persistencia.jugadorElecto(IDJugador);
     }
     public boolean getElecto(){
         return electo;
     }
 
+    public void jugadorFueElecto(){
+        this.electo = true;
+    }
+
+    public void jugadorFueDevuelto(){
+        this.electo = false;
+    }
 }

@@ -271,13 +271,14 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
 
     @Override
     public ArrayList<Jugador> listaJugadoresMasGanadores() {
-        return Jugador.getListaJugadores();
+        return Persistencia.listaJugadoresGuardados(true);
     }
 
     @Override
     public void setJugador(Jugador j) throws RemoteException {
         jugador = j;
         modelo.agregarJugador(jugador);
+        System.out.println("llego a controlador");
     }
 
     @Override
@@ -302,7 +303,7 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
 
         switch (evento){
             case LISTA_JUGADORES_DISPONIBLES -> {
-                vistaEleccion.actualizarListaJugadores(Jugador.getListaJugadores());
+                vistaEleccion.actualizarListaJugadores(Persistencia.listaJugadoresGuardados(false));
             }
             case CANTO_TRUCO -> {
                 if(modelo.turnoActual() != jugador.getIDJugador()) vistaJuego.cantaronRabon(Persistencia.mensajeCantoTruco(EstadoTruco.TRUCO));
@@ -354,7 +355,7 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
             }
             case LISTA_JUGADORES_TOTALES -> {
                 // aca hay que pasarle la lista no ordenada pero cuando tenga la clase Persistencia
-                vistaEleccion.actualizarListaJugadores(Jugador.getListaJugadores());
+                vistaEleccion.actualizarListaJugadores(Persistencia.listaJugadoresGuardados(false));
             }
         }
 

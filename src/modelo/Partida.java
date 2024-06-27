@@ -307,16 +307,22 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
     public void agregarJugador(Jugador jugador) throws RemoteException {
         if(j1 == null && j2 == null){
             j1 = jugador;
+            j1.setElecto(true);
+            System.out.println("seteo en j1 en partida");
         }
-        else if(j2 == null){
+        else if(j1 != null && j2 == null){
             j2 = jugador;
+            j2.setElecto(true);
+            System.out.println("seteo en j1 en partida");
         }
+
+        System.out.println(j1.toString());
 
 
         // actualizar lista etc etc
         notificarJugadorElecto();
 
-        if( (j1.getIDJugador() != 0) && (j2.getIDJugador() != 0) ) nuevaPartida();
+        if( (j1 != null) && (j2 != null) ) nuevaPartida();
     }
 
     @Override
@@ -372,7 +378,7 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
     // metodos privados
     //
 
-    private int compararCartas(Carta cj1, Carta cj2){
+    private int compararCartas(Carta cj1, Carta cj2) throws RemoteException{
         if(cj1.getPoderCarta() > cj2.getPoderCarta()) return j1.getIDJugador();
         else if(cj1.getPoderCarta() < cj2.getPoderCarta()) return j2.getIDJugador();
 
@@ -430,7 +436,7 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
     }
 
 
-    private int calcularPuntajeEnvidoQuerido(){
+    private int calcularPuntajeEnvidoQuerido() throws RemoteException{
         int puntos = 0;
         int maximoPuntos = 1;
 
@@ -464,7 +470,7 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
         return puntos;
     }
 
-    private int calcularEnvidoNoQuerido(){
+    private int calcularEnvidoNoQuerido() throws RemoteException{
         int puntos = 0;
 
         if(cantoEnvido){
@@ -519,47 +525,47 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
     }
 
     @Override
-    public int getQuienCantoEnvido() {
+    public int getQuienCantoEnvido() throws RemoteException{
         return quienCantoEnvido;
     }
 
     @Override
-    public int getQuienCantoEnvidoDoble() {
+    public int getQuienCantoEnvidoDoble() throws RemoteException{
         return quienCantoEnvidoDoble;
     }
 
     @Override
-    public int getQuienCantoRealEnvido() {
+    public int getQuienCantoRealEnvido() throws RemoteException{
         return quienCantoRealEnvido;
     }
 
     @Override
-    public int getQuienCantoFaltaEnvido() {
+    public int getQuienCantoFaltaEnvido() throws RemoteException{
         return quienCantoFaltaEnvido;
     }
 
     @Override
-    public Carta ultimaCartaTiradaJ1() {
+    public Carta ultimaCartaTiradaJ1() throws RemoteException{
         return ultimaCartaJ1;
     }
 
     @Override
-    public Carta ultimaCartaTiradaJ2() {
+    public Carta ultimaCartaTiradaJ2() throws RemoteException{
         return ultimaCartaJ2;
     }
 
     @Override
-    public int getIdJ1() {
+    public int getIdJ1() throws RemoteException{
         return j1.getIDJugador();
     }
 
     @Override
-    public int getIdJ2() {
+    public int getIdJ2() throws RemoteException{
         return j2.getIDJugador();
     }
 
     @Override
-    public String getUltimoMensaje() {
+    public String getUltimoMensaje() throws RemoteException{
         return ultimoMensaje;
     }
 

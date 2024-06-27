@@ -17,6 +17,7 @@ public class Persistencia implements Comparable<Jugador>, Serializable {
     private static ArrayList<ArrayList<String>> listaCantosGeneral;
     private static ArrayList<String> listaCantos;
     private static ArrayList<Jugador> listaJugadores;
+    private static ArrayList<Partida> listaPartidas;
     private static Jugador jugador;
     private static Partida partida;
     private static Mazo mazo;
@@ -32,24 +33,81 @@ public class Persistencia implements Comparable<Jugador>, Serializable {
         return null;
     }
 
-    public static void guardarPartida(){
+    public static void guardarPartida(Partida partida){
 
     }
 
     public static Mazo recuperarMazo(){
-        return null;
+        try {
+            FileInputStream fos = new FileInputStream("mazoDeCartas.bin");
+            var oos = new ObjectInputStream(fos);
+            mazo = (Mazo) oos.readObject();
+            fos.close();
+        } catch (FileNotFoundException e) {
+            return null;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
+        return mazo;
     }
 
     public static String mensajeCantoTruco(EstadoTruco estado){
-        return "";
+        Random random = new Random();
+
+        try {
+            FileInputStream fos = new FileInputStream("Cantos.bin");
+            var oos = new ObjectInputStream(fos);
+            listaCantosGeneral = (ArrayList<ArrayList<String>>) oos.readObject();
+            fos.close();
+        } catch (FileNotFoundException e) {
+            return null;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
+        switch (estado){
+            case TRUCO -> listaCantos = listaCantosGeneral.get(2);
+            case RE_TRUCO -> listaCantos = listaCantosGeneral.get(3);
+            case VALE_CUATRO ->  listaCantos = listaCantosGeneral.get(4);
+        }
+
+        return listaCantos.get(random.nextInt(listaCantos.size()));
     }
 
     public static String mensajeCantoTanto(EstadoEnvido estado){
-        return "";
+        Random random = new Random();
+
+
+        try {
+            FileInputStream fos = new FileInputStream("Cantos.bin");
+            var oos = new ObjectInputStream(fos);
+            listaCantosGeneral = (ArrayList<ArrayList<String>>) oos.readObject();
+            fos.close();
+        } catch (FileNotFoundException e) {
+            return null;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
+        switch (estado){
+            case ENVIDO -> listaCantos = listaCantosGeneral.get(5);
+            case ENVIDO_DOBLE -> listaCantos = listaCantosGeneral.get(5);
+            case REAL_ENVIDO ->  listaCantos = listaCantosGeneral.get(6);
+            case FALTA_ENVIDO ->  listaCantos = listaCantosGeneral.get(7);
+
+        }
+
+        return listaCantos.get(random.nextInt(listaCantos.size()));
     }
 
     public static String mensajeCantoQuiero(){
-        int numeroALeatorio = 0;
         Random random = new Random();
 
 
@@ -117,7 +175,7 @@ public class Persistencia implements Comparable<Jugador>, Serializable {
         }
     }
 
-    public void eliminarJugador(int id){
+    public static void eliminarJugador(int id){
         listaJugadores = listaJugadoresGuardados(false);
 
         for(Jugador j : listaJugadores){
@@ -135,7 +193,9 @@ public class Persistencia implements Comparable<Jugador>, Serializable {
             throw new RuntimeException(e);
         }
     }
-    public void removeAllJugadores(){
+
+
+    public static void removeAllJugadores(){
         listaJugadores = listaJugadoresGuardados(false);
 
         listaJugadores.clear();
@@ -169,6 +229,25 @@ public class Persistencia implements Comparable<Jugador>, Serializable {
         if(ordenado) Collections.sort(listaJugadores);
 
         return listaJugadores;
+    }
+
+    public static void jugadorElecto(int id){
+        for(Jugador j : listaJugadores){
+            if(j.getIDJugador() == id) j.jugadorFueElecto();
+        }
+
+        // modifico la lista y la sobreescribo con el atributo electo modificado
+
+        try {
+            FileOutputStream fos = new FileOutputStream("jugadores.bin");
+            var oos = new ObjectOutputStream(fos);
+            oos.writeObject(listaJugadores);
+            fos.close();
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
