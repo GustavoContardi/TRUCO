@@ -14,6 +14,7 @@ import java.util.Random;
 
 public class Persistencia implements Comparable<Jugador>, Serializable {
 
+    private static ArrayList<ArrayList<String>> listaCantosGeneral;
     private static ArrayList<String> listaCantos;
     private static ArrayList<Jugador> listaJugadores;
     private static Jugador jugador;
@@ -48,7 +49,6 @@ public class Persistencia implements Comparable<Jugador>, Serializable {
     }
 
     public static String mensajeCantoQuiero(){
-        String canto = "";
         int numeroALeatorio = 0;
         Random random = new Random();
 
@@ -56,7 +56,7 @@ public class Persistencia implements Comparable<Jugador>, Serializable {
         try {
             FileInputStream fos = new FileInputStream("Cantos.bin");
             var oos = new ObjectInputStream(fos);
-            listaCantos = (ArrayList<String>) oos.readObject();
+            listaCantosGeneral = (ArrayList<ArrayList<String>>) oos.readObject();
             fos.close();
         } catch (FileNotFoundException e) {
             return null;
@@ -66,13 +66,32 @@ public class Persistencia implements Comparable<Jugador>, Serializable {
             throw new RuntimeException(e);
         }
 
+        listaCantos = listaCantosGeneral.get(0);
 
-
-        return canto;
+        return listaCantos.get(random.nextInt(listaCantos.size()));
     }
 
     public static String mensajeCantoNoQuiero(){
-        return "";
+        int numeroALeatorio = 0;
+        Random random = new Random();
+
+
+        try {
+            FileInputStream fos = new FileInputStream("Cantos.bin");
+            var oos = new ObjectInputStream(fos);
+            listaCantosGeneral = (ArrayList<ArrayList<String>>) oos.readObject();
+            fos.close();
+        } catch (FileNotFoundException e) {
+            return null;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
+        listaCantos = listaCantosGeneral.get(1);
+
+        return listaCantos.get(random.nextInt(listaCantos.size()));
     }
 
     public static Jugador recuperarJugador(int id){
