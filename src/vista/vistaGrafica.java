@@ -9,6 +9,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 
 public class vistaGrafica implements IVistaJuego {
     private JPanel ventana;
@@ -49,8 +50,34 @@ public class vistaGrafica implements IVistaJuego {
 
 
     @Override
-    public void mostrarCartas() {
+    public void mostrarCartas() throws RemoteException {
+        int ronda = controlador.nroDeRonda();
+        btnCarta1.removeAll();
+        btnCarta2.removeAll();
+        btnCarta3.removeAll();
+        removeAllActionListeners(btnCarta1);
+        removeAllActionListeners(btnCarta2);
+        removeAllActionListeners(btnCarta3);
+        ArrayList<String> cartas = controlador.obtenerCartas();
 
+        if(cartas != null) {
+
+            ImageIcon imagen1 = new ImageIcon("fotocartas\\" + cartas.get(0) + ".jpeg");
+            JLabel labelImagen1 = new JLabel(imagen1);
+            btnCarta1.setIcon(imagen1);
+
+            ImageIcon imagen2 = new ImageIcon("fotocartas\\" + cartas.get(1) + ".jpeg");
+            JLabel labelImagen2 = new JLabel(imagen2);
+            btnCarta2.setIcon(imagen2);
+
+            ImageIcon imagen3 = new ImageIcon("fotocartas\\" + cartas.get(2) + ".jpeg");
+            JLabel labelImagen3 = new JLabel(imagen3);
+            btnCarta3.setIcon(imagen3);
+
+            setBotonesCartas(labelImagen1, labelImagen2, labelImagen3);
+            setBotones();
+        }
+        else accionesJ2.setText("Esperando contrincante...");
     }
 
     @Override
@@ -319,6 +346,11 @@ public class vistaGrafica implements IVistaJuego {
 
     }
 
+    @Override
+    public void tirarCarta() {
+
+    }
+
     public void setBotones(){
         removeBtnActionListener(); // remuevo todos los actions listeners para que no se acumulen y los vuelvo a poner
         btnEnvido.setText("    ENVIDO    ");
@@ -578,6 +610,104 @@ public class vistaGrafica implements IVistaJuego {
     private void bloquearBotones(){
         // bloqueo los botones cuando me cantan para que responda antes de poder tirar
 
+    }
+
+    private void setBotonesCartas(JLabel labelImagen1, JLabel labelImagen2, JLabel labelImagen3) throws RemoteException {
+        int ronda = controlador.nroDeRonda();
+
+        removeAllActionListeners(btnCarta1);
+        removeAllActionListeners(btnCarta2);
+        removeAllActionListeners(btnCarta3);
+
+        btnCarta1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    if(controlador.esMiTurno()) {
+
+                        if(ronda == 1) {
+                            CartasYo1.add(labelImagen1);
+                            CartasYo1.revalidate();
+                            CartasYo1.repaint();
+                        }
+                        else if(ronda == 2) {
+                            CartasYo2.add(labelImagen1);
+                            CartasYo2.revalidate();
+                            CartasYo2.repaint();
+                        }
+                        else if(ronda == 3) {
+                            CartasYo3.add(labelImagen1);
+                            CartasYo3.revalidate();
+                            CartasYo3.repaint();
+                        }
+                        btnCarta1.setEnabled(false);
+                        controlador.tirarCarta(1);
+                    }
+                } catch (RemoteException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+
+        btnCarta2.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    if(controlador.esMiTurno()) {
+
+                        if(ronda == 1) {
+                            CartasYo1.add(labelImagen1);
+                            CartasYo1.revalidate();
+                            CartasYo1.repaint();
+                        }
+                        else if(ronda == 2) {
+                            CartasYo2.add(labelImagen1);
+                            CartasYo2.revalidate();
+                            CartasYo2.repaint();
+                        }
+                        else if(ronda == 3) {
+                            CartasYo3.add(labelImagen1);
+                            CartasYo3.revalidate();
+                            CartasYo3.repaint();
+                        }
+                        btnCarta2.setEnabled(false);
+                        controlador.tirarCarta(2);
+                    }
+                } catch (RemoteException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+
+        btnCarta3.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    if(controlador.esMiTurno()) {
+                        if(ronda == 1) {
+                            CartasYo1.add(labelImagen1);
+                            CartasYo1.revalidate();
+                            CartasYo1.repaint();
+                        }
+                        else if(ronda == 2) {
+                            CartasYo2.add(labelImagen1);
+                            CartasYo2.revalidate();
+                            CartasYo2.repaint();
+                        }
+                        else if(ronda == 3) {
+                            CartasYo3.add(labelImagen1);
+                            CartasYo3.revalidate();
+                            CartasYo3.repaint();
+                        }
+                        btnCarta3.setEnabled(false);
+                        controlador.tirarCarta(3);
+
+                    }
+                } catch (RemoteException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
     }
 
 }

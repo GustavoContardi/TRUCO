@@ -232,8 +232,31 @@ public class Persistencia implements Comparable<Jugador>, Serializable {
     }
 
     public static void jugadorElecto(int id){
+        listaJugadores = listaJugadoresGuardados(false);
+
         for(Jugador j : listaJugadores){
             if(j.getIDJugador() == id) j.jugadorFueElecto();
+        }
+
+        // modifico la lista y la sobreescribo con el atributo electo modificado
+
+        try {
+            FileOutputStream fos = new FileOutputStream("jugadores.bin");
+            var oos = new ObjectOutputStream(fos);
+            oos.writeObject(listaJugadores);
+            fos.close();
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static void delvolverTodosJugadores(){
+        listaJugadores = listaJugadoresGuardados(false);
+
+        for(Jugador j : listaJugadores){
+            j.jugadorFueDevuelto();
         }
 
         // modifico la lista y la sobreescribo con el atributo electo modificado

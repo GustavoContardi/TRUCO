@@ -2,15 +2,17 @@ package vista;
 
 import cliente.ClienteTruco;
 import interfaces.IVistaInicio;
+import modelo.Jugador;
+import persistencia.Persistencia;
 import servidor.ServidorTruco;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.rmi.RemoteException;
-import java.awt.Desktop;
 import java.net.URI;
 
 
@@ -72,7 +74,7 @@ public class vistaInicio implements IVistaInicio {
         btnReanudar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                pantallaTopJugadores();
             }
         });
 
@@ -246,6 +248,53 @@ public class vistaInicio implements IVistaInicio {
                 // Manejo de errores: puedes mostrar un mensaje al usuario aquí
             }
         }
+    }
+
+    /*private void pantallaTopJugadores(){
+        JFrame frame2 = new JFrame("TRUCONTARDI");
+        frame2.setSize(400, 600);
+        JPanel ventana = new JPanel();
+        JList list = new JList();
+        DefaultListModel<String> listModel = new DefaultListModel<>();
+        frame2.setContentPane(ventana);
+
+        frame2.setVisible(true);
+
+        list.setModel(listModel);
+        JScrollPane scroll = new JScrollPane();
+        ventana.add(scroll);
+        ventana.add(list);
+
+        for(Jugador j : Persistencia.listaJugadoresGuardados(true)) {
+            listModel.addElement(j.toString());
+        }
+
+
+
+    }
+
+     */
+
+    private void pantallaTopJugadores(){
+        JFrame frame2 = new JFrame("TRUCONTARDI");
+        frame2.setSize(500, 600);
+        frame.setResizable(false);
+        frame2.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        JPanel ventana = new JPanel();
+        ventana.setLayout(new BorderLayout()); // Usar BorderLayout para que el JScrollPane ocupe todo el espacio
+        JList<String> list = new JList<>();
+        DefaultListModel<String> listModel = new DefaultListModel<>();
+        list.setModel(listModel);
+        JScrollPane scroll = new JScrollPane(list); // Agregar el JList al JScrollPane
+
+        frame2.setContentPane(ventana);
+        ventana.add(scroll, BorderLayout.CENTER); // Agregar el JScrollPane al centro del BorderLayout
+
+        for (Jugador j : Persistencia.listaJugadoresGuardados(true)) {
+            listModel.addElement(j.toString());
+        }
+
+        frame2.setVisible(true);
     }
 
 }

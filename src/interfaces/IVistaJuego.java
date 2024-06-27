@@ -6,7 +6,7 @@ import enums.EstadoTruco;
 import java.rmi.RemoteException;
 
 public interface IVistaJuego {
-    void mostrarCartas();
+    void mostrarCartas() throws RemoteException;
     void actualizarPuntaje(String puntaje);
     void mostrarMensaje(String msj);
     void limpiarPantalla();
@@ -21,5 +21,5 @@ public interface IVistaJuego {
     void actualizar();
     void salirDelJuego();
     void meTiraronCarta(String carta);
-    
+    void tirarCarta();
 }
