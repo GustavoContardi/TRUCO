@@ -58,21 +58,32 @@ public class vistaGrafica implements IVistaJuego {
         removeAllActionListeners(btnCarta1);
         removeAllActionListeners(btnCarta2);
         removeAllActionListeners(btnCarta3);
+
         ArrayList<String> cartas = controlador.obtenerCartas();
 
-        if(cartas != null) {
+        if(cartas != null && !cartas.isEmpty()) {
+            String carta1 = (cartas.get(0).replace(" ", "")).toLowerCase();       //
+            String carta2 = (cartas.get(1).replace(" ", "")).toLowerCase();       // necesario
+            String carta3 = (cartas.get(2).replace(" ", "")).toLowerCase();       //
 
-            ImageIcon imagen1 = new ImageIcon("fotocartas\\" + cartas.get(0) + ".jpeg");
+            System.out.println(carta1);
+            System.out.println(carta2);
+            System.out.println(carta3);
+
+            ImageIcon imagen1 = new ImageIcon("fotocartas\\" + "1deoro" + ".jpeg");
             JLabel labelImagen1 = new JLabel(imagen1);
             btnCarta1.setIcon(imagen1);
+            //setImagenesCartas(carta1);
 
-            ImageIcon imagen2 = new ImageIcon("fotocartas\\" + cartas.get(1) + ".jpeg");
+            ImageIcon imagen2 = new ImageIcon("fotocartas\\" + carta2 + ".jpeg");
             JLabel labelImagen2 = new JLabel(imagen2);
             btnCarta2.setIcon(imagen2);
+            setImagenesCartas(carta2);
 
-            ImageIcon imagen3 = new ImageIcon("fotocartas\\" + cartas.get(2) + ".jpeg");
+            ImageIcon imagen3 = new ImageIcon("fotocartas\\" + carta3 + ".jpeg");
             JLabel labelImagen3 = new JLabel(imagen3);
             btnCarta3.setIcon(imagen3);
+            setImagenesCartas(carta3);
 
             setBotonesCartas(labelImagen1, labelImagen2, labelImagen3);
             setBotones();
@@ -82,7 +93,7 @@ public class vistaGrafica implements IVistaJuego {
 
     @Override
     public void actualizarPuntaje(String puntaje) {
-
+        puntajesLabel.setText(puntaje);
     }
 
     @Override
@@ -322,9 +333,11 @@ public class vistaGrafica implements IVistaJuego {
     }
 
     @Override
-    public void mostrarMenuPrincipal() {
-        frame.setVisible(true);
+    public void mostrarMenuPrincipal() throws RemoteException {
+        iniciar();
+        mostrarCartas();
     }
+
 
     @Override
     public void setControlador(IControlador controlador) {
@@ -349,6 +362,11 @@ public class vistaGrafica implements IVistaJuego {
     @Override
     public void tirarCarta() {
 
+    }
+
+    @Override
+    public void iniciar() {
+        frame.setVisible(true);
     }
 
     public void setBotones(){
@@ -631,12 +649,12 @@ public class vistaGrafica implements IVistaJuego {
                             CartasYo1.repaint();
                         }
                         else if(ronda == 2) {
-                            CartasYo2.add(labelImagen1);
+                            CartasYo2.add(labelImagen2);
                             CartasYo2.revalidate();
                             CartasYo2.repaint();
                         }
                         else if(ronda == 3) {
-                            CartasYo3.add(labelImagen1);
+                            CartasYo3.add(labelImagen3);
                             CartasYo3.revalidate();
                             CartasYo3.repaint();
                         }

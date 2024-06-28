@@ -277,8 +277,8 @@ public class vistaInicio implements IVistaInicio {
 
     private void pantallaTopJugadores(){
         JFrame frame2 = new JFrame("TRUCONTARDI");
+        frame2.setResizable(false);
         frame2.setSize(500, 600);
-        frame.setResizable(false);
         frame2.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         JPanel ventana = new JPanel();
         ventana.setLayout(new BorderLayout()); // Usar BorderLayout para que el JScrollPane ocupe todo el espacio

@@ -7,7 +7,9 @@ import modelo.Carta;
 import modelo.Jugador;
 
 import java.io.Serializable;
+import java.lang.reflect.Array;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 
 public interface IModelo extends IObservableRemoto {
 
@@ -45,4 +47,6 @@ public interface IModelo extends IObservableRemoto {
     int getIdJ1()throws RemoteException;;
     int getIdJ2()throws RemoteException;;
     String getUltimoMensaje()throws RemoteException;;
+    ArrayList<Carta> getCartasJ1() throws RemoteException;
+    ArrayList<Carta> getCartasJ2() throws RemoteException;
 }

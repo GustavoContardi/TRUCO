@@ -15,7 +15,7 @@ public interface IControlador {
     void iniciarPartida() throws RemoteException;
     void agregarJugador(String jugador) throws RemoteException;
     String puntajeActual() throws RemoteException;
-    ArrayList<String> obtenerCartas();
+    ArrayList<String> obtenerCartas() throws RemoteException;
     void tirarCarta(int numeroDeCarta);
     int meVoyAlMazo() throws RemoteException;
     void guardarPartida() throws RemoteException;
@@ -42,7 +42,7 @@ public interface IControlador {
     void tantoNoQuerido() throws RemoteException ;
     ArrayList<Jugador> listaJugadoresMasGanadores();
 
-    void setJugador(Jugador j) throws RemoteException;
+    void setJugador(int idJugador) throws RemoteException;
     void setVistaEleccion(IVistaEleccion eleccion) throws RemoteException;
     void setVistaJuego(IVistaJuego juego) throws RemoteException;
 

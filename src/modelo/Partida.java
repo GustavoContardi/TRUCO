@@ -58,8 +58,8 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
         j2 = null;
         numeroMano=0;
         numeroRonda=1;
+        finMano = true;
         mazo = new Mazo();
-        //nuevaPartida();
     }
 
 
@@ -77,9 +77,10 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
         // seteo los atributos de inicio
         if(numeroMano == 0) {
             anotador = new Anotador(j2.getNombre(), j1.getNombre());
+            notificarPuntos();
         }
         if (finMano){
-            if(esFinDePartida()){
+            if(!esFinDePartida()){
                 numeroMano          = 1;
                 estadoDelTruco      = EstadoTruco.NADA;
                 estadoDelEnvido     = EstadoEnvido.NADA;
@@ -102,7 +103,9 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
 
                 if( (numeroMano % 2) == 0) turno = j1.getIDJugador();
                 else turno = j2.getIDJugador();
+
                 mazo.repartirCartas(j1, j2);
+
             }
             else finDePartida();
         }
@@ -308,21 +311,18 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
         if(j1 == null && j2 == null){
             j1 = jugador;
             j1.setElecto(true);
-            System.out.println("seteo en j1 en partida");
         }
         else if(j1 != null && j2 == null){
             j2 = jugador;
             j2.setElecto(true);
-            System.out.println("seteo en j1 en partida");
         }
-
-        System.out.println(j1.toString());
-
 
         // actualizar lista etc etc
         notificarJugadorElecto();
 
-        if( (j1 != null) && (j2 != null) ) nuevaPartida();
+        if( (j1 != null) && (j2 != null) ) {
+            nuevaPartida();
+        }
     }
 
     @Override
@@ -568,6 +568,16 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
     public String getUltimoMensaje() throws RemoteException{
         return ultimoMensaje;
     }
+
+    @Override
+    public ArrayList<Carta> getCartasJ1() throws RemoteException{
+        return j1.getCartasObtenidas();
+    }
+    @Override
+    public ArrayList<Carta> getCartasJ2() throws RemoteException{
+        return j2.getCartasObtenidas();
+    }
+
 
 
     // observer

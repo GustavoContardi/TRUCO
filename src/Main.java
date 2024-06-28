@@ -4,6 +4,7 @@ import interfaces.IControlador;
 import interfaces.IModelo;
 import interfaces.IVistaInicio;
 import modelo.Partida;
+import persistencia.Persistencia;
 import servidor.ServidorTruco;
 import vista.vistaInicio;
 
@@ -158,7 +159,7 @@ public class Main {
         //vistaGrafica vista = new vistaGrafica();
 
         //ServidorTruco serv = new ServidorTruco();
-
+        Persistencia.delvolverTodosJugadores();
         new vistaInicio();
         new vistaInicio();
 

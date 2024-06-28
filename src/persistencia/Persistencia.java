@@ -153,7 +153,13 @@ public class Persistencia implements Comparable<Jugador>, Serializable {
     }
 
     public static Jugador recuperarJugador(int id){
-        return jugador;
+        listaJugadores = listaJugadoresGuardados(false);
+
+        for(Jugador j : listaJugadores){
+            if(j.getIDJugador() == id) return j;
+        }
+
+        return null;
     }
 
     public static void guardarJugador(Jugador j){
