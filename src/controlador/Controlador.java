@@ -283,7 +283,6 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
     @Override
     public void setJugador(int idJugador) throws RemoteException {
         jugador = Persistencia.recuperarJugador(idJugador);
-        System.out.println(jugador.toString());
         modelo.agregarJugador(jugador);
 
         vistaJuego.mostrarMenuPrincipal();
@@ -335,7 +334,8 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
                 if(modelo.turnoActual() != jugador.getIDJugador()) vistaJuego.cantaronTanto(Persistencia.mensajeCantoTanto(EstadoEnvido.FALTA_ENVIDO));
             }
             case NUEVA_RONDA -> {
-                vistaJuego.mostrarMenuPrincipal(); // ?? podria hacer un metodo pero si refresca la pantalla se actualiza
+                System.out.println("deberia mostrar nueva ronda");
+                vistaJuego.mostrarCartas(); // ?? podria hacer un metodo pero si refresca la pantalla se actualiza
             }
             case MENSAJEJ1 -> {
                 // if (modelo.) vistaJuego.mostrarMensaje(modelo.getUltimoMensaje());

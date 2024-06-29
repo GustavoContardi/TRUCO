@@ -51,6 +51,7 @@ public class vistaGrafica implements IVistaJuego {
 
     @Override
     public void mostrarCartas() throws RemoteException {
+        String basePath = "fotocartas/";
         int ronda = controlador.nroDeRonda();
         btnCarta1.removeAll();
         btnCarta2.removeAll();
@@ -61,34 +62,30 @@ public class vistaGrafica implements IVistaJuego {
 
         ArrayList<String> cartas = controlador.obtenerCartas();
 
-        if(cartas != null && !cartas.isEmpty()) {
-            String carta1 = (cartas.get(0).replace(" ", "")).toLowerCase();       //
-            String carta2 = (cartas.get(1).replace(" ", "")).toLowerCase();       // necesario
-            String carta3 = (cartas.get(2).replace(" ", "")).toLowerCase();       //
+        if (cartas != null && !cartas.isEmpty()) {
+            String carta1 = cartas.get(0).replace(" ", "").toLowerCase();
+            String carta2 = cartas.get(1).replace(" ", "").toLowerCase();
+            String carta3 = cartas.get(2).replace(" ", "").toLowerCase();
 
-            System.out.println(carta1);
-            System.out.println(carta2);
-            System.out.println(carta3);
+            System.out.println(carta1 + " " + carta2 + " " + carta3);
 
-            ImageIcon imagen1 = new ImageIcon("fotocartas\\" + "1deoro" + ".jpeg");
-            JLabel labelImagen1 = new JLabel(imagen1);
+            ImageIcon imagen1 = new ImageIcon(basePath + carta1 + ".jpeg");
+            ImageIcon imagen2 = new ImageIcon(basePath + carta2 + ".jpeg");
+            ImageIcon imagen3 = new ImageIcon(basePath + carta3 + ".jpeg");
+
             btnCarta1.setIcon(imagen1);
-            //setImagenesCartas(carta1);
-
-            ImageIcon imagen2 = new ImageIcon("fotocartas\\" + carta2 + ".jpeg");
-            JLabel labelImagen2 = new JLabel(imagen2);
             btnCarta2.setIcon(imagen2);
-            setImagenesCartas(carta2);
-
-            ImageIcon imagen3 = new ImageIcon("fotocartas\\" + carta3 + ".jpeg");
-            JLabel labelImagen3 = new JLabel(imagen3);
             btnCarta3.setIcon(imagen3);
-            setImagenesCartas(carta3);
 
-            setBotonesCartas(labelImagen1, labelImagen2, labelImagen3);
+            setBotonesCartas(imagen1, imagen2, imagen3);
             setBotones();
         }
-        else accionesJ2.setText("Esperando contrincante...");
+        else {
+            accionesJ2.setText("Esperando contrincante...");
+        }
+
+
+
     }
 
     @Override
@@ -377,6 +374,7 @@ public class vistaGrafica implements IVistaJuego {
         btnNoQuiero.setText("    NO QUIERO    ");
         IRALMAZOButton.setText("    IR AL MAZO    ");
         btnAuxiliar.setText("");
+        accionesJ2.setText("");
         btnAuxiliar.setEnabled(false);
         btnQuiero.setEnabled(false);
         btnNoQuiero.setEnabled(false);
@@ -388,6 +386,7 @@ public class vistaGrafica implements IVistaJuego {
             }
         });
 
+        // terminar para los demas botones
 
     }
 
@@ -630,7 +629,7 @@ public class vistaGrafica implements IVistaJuego {
 
     }
 
-    private void setBotonesCartas(JLabel labelImagen1, JLabel labelImagen2, JLabel labelImagen3) throws RemoteException {
+    private void setBotonesCartas(ImageIcon imagen1, ImageIcon imagen2, ImageIcon imagen3) throws RemoteException {
         int ronda = controlador.nroDeRonda();
 
         removeAllActionListeners(btnCarta1);
@@ -641,23 +640,16 @@ public class vistaGrafica implements IVistaJuego {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    if(controlador.esMiTurno()) {
-
-                        if(ronda == 1) {
-                            CartasYo1.add(labelImagen1);
-                            CartasYo1.revalidate();
-                            CartasYo1.repaint();
+                    if (controlador.esMiTurno()) {
+                        if (ronda == 1) {
+                            CartasYo1.add(new JLabel(imagen1));
+                        } else if (ronda == 2) {
+                            CartasYo2.add(new JLabel(imagen1));
+                        } else if (ronda == 3) {
+                            CartasYo3.add(new JLabel(imagen1));
                         }
-                        else if(ronda == 2) {
-                            CartasYo2.add(labelImagen2);
-                            CartasYo2.revalidate();
-                            CartasYo2.repaint();
-                        }
-                        else if(ronda == 3) {
-                            CartasYo3.add(labelImagen3);
-                            CartasYo3.revalidate();
-                            CartasYo3.repaint();
-                        }
+                        CartasYo1.revalidate();
+                        CartasYo1.repaint();
                         btnCarta1.setEnabled(false);
                         controlador.tirarCarta(1);
                     }
@@ -671,23 +663,16 @@ public class vistaGrafica implements IVistaJuego {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    if(controlador.esMiTurno()) {
-
-                        if(ronda == 1) {
-                            CartasYo1.add(labelImagen1);
-                            CartasYo1.revalidate();
-                            CartasYo1.repaint();
+                    if (controlador.esMiTurno()) {
+                        if (ronda == 1) {
+                            CartasYo1.add(new JLabel(imagen2));
+                        } else if (ronda == 2) {
+                            CartasYo2.add(new JLabel(imagen2));
+                        } else if (ronda == 3) {
+                            CartasYo3.add(new JLabel(imagen2));
                         }
-                        else if(ronda == 2) {
-                            CartasYo2.add(labelImagen1);
-                            CartasYo2.revalidate();
-                            CartasYo2.repaint();
-                        }
-                        else if(ronda == 3) {
-                            CartasYo3.add(labelImagen1);
-                            CartasYo3.revalidate();
-                            CartasYo3.repaint();
-                        }
+                        CartasYo1.revalidate();
+                        CartasYo1.repaint();
                         btnCarta2.setEnabled(false);
                         controlador.tirarCarta(2);
                     }
@@ -701,25 +686,18 @@ public class vistaGrafica implements IVistaJuego {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    if(controlador.esMiTurno()) {
-                        if(ronda == 1) {
-                            CartasYo1.add(labelImagen1);
-                            CartasYo1.revalidate();
-                            CartasYo1.repaint();
+                    if (controlador.esMiTurno()) {
+                        if (ronda == 1) {
+                            CartasYo1.add(new JLabel(imagen3));
+                        } else if (ronda == 2) {
+                            CartasYo2.add(new JLabel(imagen3));
+                        } else if (ronda == 3) {
+                            CartasYo3.add(new JLabel(imagen3));
                         }
-                        else if(ronda == 2) {
-                            CartasYo2.add(labelImagen1);
-                            CartasYo2.revalidate();
-                            CartasYo2.repaint();
-                        }
-                        else if(ronda == 3) {
-                            CartasYo3.add(labelImagen1);
-                            CartasYo3.revalidate();
-                            CartasYo3.repaint();
-                        }
+                        CartasYo1.revalidate();
+                        CartasYo1.repaint();
                         btnCarta3.setEnabled(false);
                         controlador.tirarCarta(3);
-
                     }
                 } catch (RemoteException ex) {
                     ex.printStackTrace();
@@ -728,4 +706,7 @@ public class vistaGrafica implements IVistaJuego {
         });
     }
 
+    private void createUIComponents() {
+        // TODO: place custom component creation code here
+    }
 }

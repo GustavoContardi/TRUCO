@@ -81,7 +81,7 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
         }
         if (finMano){
             if(!esFinDePartida()){
-                numeroMano          = 1;
+                numeroMano         += 1;
                 estadoDelTruco      = EstadoTruco.NADA;
                 estadoDelEnvido     = EstadoEnvido.NADA;
                 puntajeRondaJ1      = 0;
@@ -311,14 +311,13 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
         if(j1 == null && j2 == null){
             j1 = jugador;
             j1.setElecto(true);
+            notificarJugadorElecto();
         }
         else if(j1 != null && j2 == null){
             j2 = jugador;
             j2.setElecto(true);
         }
 
-        // actualizar lista etc etc
-        notificarJugadorElecto();
 
         if( (j1 != null) && (j2 != null) ) {
             nuevaPartida();
