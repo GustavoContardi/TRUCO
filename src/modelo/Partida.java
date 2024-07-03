@@ -82,6 +82,7 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
         if (finMano){
             if(!esFinDePartida()){
                 numeroMano         += 1;
+                numeroRonda         = 1;
                 estadoDelTruco      = EstadoTruco.NADA;
                 estadoDelEnvido     = EstadoEnvido.NADA;
                 puntajeRondaJ1      = 0;
@@ -130,7 +131,7 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
     }
 
     @Override
-    public Carta tirarCarta(int idJugador, int idCarta) throws RemoteException{
+    public void tirarCarta(int idJugador, int idCarta) throws RemoteException{
         Carta c = null;
         if(idJugador == j1.getIDJugador() && turno == idJugador){
             c = j1.tirarCarta(idCarta);
@@ -151,7 +152,7 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
             notificarCartaTirada(2);
         }
 
-        // notificarCartaTirada(id, c); // notifico la carta tirada y despues sigo \\
+        //notificarCartaTirada(id, c); // notifico la carta tirada y despues sigo \\
 
         if((cartasTiradasJ1.size() == cartasTiradasJ2.size()) && !cartasTiradasJ2.isEmpty()) {
             if (!cantoEnvido) cantoEnvido = true;
@@ -219,7 +220,7 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
 
             }
         }
-        return null;
+
     }
 
     @Override

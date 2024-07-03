@@ -16,7 +16,7 @@ public interface IControlador {
     void agregarJugador(String jugador) throws RemoteException;
     String puntajeActual() throws RemoteException;
     ArrayList<String> obtenerCartas() throws RemoteException;
-    void tirarCarta(int numeroDeCarta);
+    void tirarCarta(int numeroDeCarta) throws RemoteException;
     int meVoyAlMazo() throws RemoteException;
     void guardarPartida() throws RemoteException;
     void recuperarPartida() throws RemoteException;

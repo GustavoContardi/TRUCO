@@ -36,16 +36,15 @@ public class Jugador implements Comparable<Jugador>, Serializable{
 
     // aca solo tiro una carta para la ronda
     public Carta tirarCarta(int carta){
-        Carta cartaTirada = null;
 
         for(int i=0; i<cartasObtenidas.size(); i++){
             if(cartasObtenidas.get(i).getIdCarta() == carta) {
                 cartasObtenidas.get(i).seTiroCarta();
-                cartaTirada = cartasObtenidas.get(i);
+                return cartasObtenidas.get(i);
             }
         }
 
-        return cartaTirada;
+        return null;
     }
 
     public int puntosEnvido(){

@@ -75,7 +75,12 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
     }
 
     @Override
-    public void tirarCarta(int numeroDeCarta) {
+    public void tirarCarta(int numeroDeCarta) throws RemoteException { // en realidad no es el id de la carta, porque cuando la tiro de la vista no sabe como pasarle el id pq no conoce al objeto
+        int idCarta = 0;
+        if(jugador.getIDJugador() == modelo.getIdJ1()) idCarta = modelo.getCartasJ1().get(numeroDeCarta-1).getIdCarta();
+        else idCarta = modelo.getCartasJ2().get(numeroDeCarta-1).getIdCarta();
+
+        modelo.tirarCarta(jugador.getIDJugador(), idCarta);
         return;
     }
 
@@ -334,19 +339,22 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
                 if(modelo.turnoActual() != jugador.getIDJugador()) vistaJuego.cantaronTanto(Persistencia.mensajeCantoTanto(EstadoEnvido.FALTA_ENVIDO));
             }
             case NUEVA_RONDA -> {
-                System.out.println("deberia mostrar nueva ronda");
                 vistaJuego.mostrarCartas(); // ?? podria hacer un metodo pero si refresca la pantalla se actualiza
             }
             case MENSAJEJ1 -> {
                 // if (modelo.) vistaJuego.mostrarMensaje(modelo.getUltimoMensaje());
+                vistaJuego.actualizar();
             }
             case MENSAJEJ2 -> {
                 // if () vistaJuego.mostrarMensaje(modelo.getUltimoMensaje());
+                vistaJuego.actualizar();
             }
             case CARTA_TIRADAJ1 -> { // este aviso es que el JUGADOR 1 tiro una carta
+                vistaJuego.actualizar();
                 if(modelo.getIdJ1() != jugador.getIDJugador()) vistaJuego.meTiraronCarta(modelo.ultimaCartaTiradaJ1().toString());
             }
             case CARTA_TIRADAJ2 -> { // este aviso es que el JUGADOR 1 tiro una carta
+                vistaJuego.actualizar();
                 if(modelo.getIdJ2() != jugador.getIDJugador()) vistaJuego.meTiraronCarta(modelo.ultimaCartaTiradaJ2().toString());
             }
             case FIN_PARTIDA -> vistaJuego.finDeLaPartida("");
@@ -366,7 +374,6 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
                 vistaEleccion.actualizarListaJugadores(Persistencia.listaJugadoresGuardados(false));
             }
         }
-
 
     }
 

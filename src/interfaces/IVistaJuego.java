@@ -18,9 +18,9 @@ public interface IVistaJuego {
     void mostrarMenuPrincipal() throws RemoteException;
     //void setFlujoActual(Flujo flujoActual);
     void setControlador(IControlador controlador);
-    void actualizar();
+    void actualizar() throws RemoteException;
     void salirDelJuego();
-    void meTiraronCarta(String carta);
+    void meTiraronCarta(String carta) throws RemoteException;
     void tirarCarta();
     void iniciar();
 }

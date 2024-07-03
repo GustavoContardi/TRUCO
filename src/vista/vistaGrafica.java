@@ -1,5 +1,6 @@
 package vista;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 
 import interfaces.IControlador;
@@ -8,6 +9,9 @@ import interfaces.IVistaJuego;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 
@@ -67,18 +71,16 @@ public class vistaGrafica implements IVistaJuego {
             String carta2 = cartas.get(1).replace(" ", "").toLowerCase();
             String carta3 = cartas.get(2).replace(" ", "").toLowerCase();
 
-            System.out.println(carta1 + " " + carta2 + " " + carta3);
+            String imagen1 = basePath + carta1 + ".jpeg";
+            String imagen2 = basePath + carta2 + ".jpeg";
+            String imagen3 = basePath + carta3 + ".jpeg";
 
-            ImageIcon imagen1 = new ImageIcon(basePath + carta1 + ".jpeg");
-            ImageIcon imagen2 = new ImageIcon(basePath + carta2 + ".jpeg");
-            ImageIcon imagen3 = new ImageIcon(basePath + carta3 + ".jpeg");
 
-            btnCarta1.setIcon(imagen1);
-            btnCarta2.setIcon(imagen2);
-            btnCarta3.setIcon(imagen3);
+            setButtonImage(btnCarta1, imagen1, 200, 220);
+            setButtonImage(btnCarta2, imagen2, 200, 220);
+            setButtonImage(btnCarta3, imagen3, 200, 220);
 
-            setBotonesCartas(imagen1, imagen2, imagen3);
-            setBotones();
+            actualizar();
         }
         else {
             accionesJ2.setText("Esperando contrincante...");
@@ -342,8 +344,32 @@ public class vistaGrafica implements IVistaJuego {
     }
 
     @Override
-    public void actualizar() {
+    public void actualizar() throws RemoteException {
+        String basePath = "fotocartas/";
+        int ronda = controlador.nroDeRonda();
+        btnCarta1.removeAll();
+        btnCarta2.removeAll();
+        btnCarta3.removeAll();
+        removeAllActionListeners(btnCarta1);
+        removeAllActionListeners(btnCarta2);
+        removeAllActionListeners(btnCarta3);
+        String imagen1 = "", imagen2 = "", imagen3 = "";
 
+        ArrayList<String> cartas = controlador.obtenerCartas();
+
+        if (cartas != null && !cartas.isEmpty()) {
+            String carta1 = cartas.get(0).replace(" ", "").toLowerCase();
+            String carta2 = cartas.get(1).replace(" ", "").toLowerCase();
+            String carta3 = cartas.get(2).replace(" ", "").toLowerCase();
+
+            imagen1 = basePath + carta1 + ".jpeg";
+            imagen2 = basePath + carta2 + ".jpeg";
+            imagen3 = basePath + carta3 + ".jpeg";
+
+        }
+
+        setBotonesCartas(imagen1, imagen2, imagen3);
+        setBotones();
     }
 
     @Override
@@ -352,7 +378,33 @@ public class vistaGrafica implements IVistaJuego {
     }
 
     @Override
-    public void meTiraronCarta(String carta) {
+    public void meTiraronCarta(String carta) throws RemoteException {
+
+        int ronda = controlador.nroDeRonda();
+        String basePath = "fotocartas/";
+        String carta1 = carta.replace(" ", "").toLowerCase();
+        String img = basePath + carta1 + ".jpeg";
+        ImageIcon imageIcon = createResizedImageIcon(img, 160, 170);
+
+        JLabel label = new JLabel(imageIcon);
+
+        if(ronda == 1){
+            CartasOP1.add(label);
+            CartasOP1.revalidate();
+            CartasOP1.repaint();
+        }
+        else if(ronda == 2){
+            CartasOP2.add(label);
+            CartasOP2.revalidate();
+            CartasOP2.repaint();
+        }
+        else if (ronda == 3){
+            CartasOP3.add(label);
+            CartasOP3.revalidate();
+            CartasOP3.repaint();
+        }
+
+        setBotones();
 
     }
 
@@ -465,31 +517,6 @@ public class vistaGrafica implements IVistaJuego {
 
     }
 
-    public void setImagenesCartas(String fotoCarta) throws RemoteException {
-        int ronda = controlador.nroDeRonda();
-
-        if(ronda == 1){
-            ImageIcon imagen1 = new ImageIcon("fotocartas\\" + fotoCarta + ".jpeg");
-            JLabel label1 = new JLabel(imagen1);
-            btnCarta1.add(label1);
-            btnCarta1.revalidate();
-            btnCarta1.repaint();
-        }
-        if(ronda == 2){
-            ImageIcon imagen2 = new ImageIcon("fotocartas\\" + fotoCarta + ".jpeg");
-            JLabel label2 = new JLabel(imagen2);
-            btnCarta2.add(label2);
-            btnCarta2.revalidate();
-            btnCarta2.repaint();
-        }
-        if(ronda == 3) {
-            ImageIcon imagen3 = new ImageIcon("fotocartas\\" + fotoCarta + ".jpeg");
-            JLabel label3 = new JLabel(imagen3);
-            btnCarta3.add(label3);
-            btnCarta3.revalidate();
-            btnCarta3.repaint();
-        }
-    }
 
 
     //
@@ -629,12 +656,16 @@ public class vistaGrafica implements IVistaJuego {
 
     }
 
-    private void setBotonesCartas(ImageIcon imagen1, ImageIcon imagen2, ImageIcon imagen3) throws RemoteException {
+    private void setBotonesCartas(String imagen1, String imagen2, String imagen3) throws RemoteException {
         int ronda = controlador.nroDeRonda();
 
         removeAllActionListeners(btnCarta1);
         removeAllActionListeners(btnCarta2);
         removeAllActionListeners(btnCarta3);
+
+        ImageIcon img1 = createResizedImageIcon(imagen1, 160, 170);
+        ImageIcon img2 = createResizedImageIcon(imagen2, 160, 170);
+        ImageIcon img3 = createResizedImageIcon(imagen3, 160, 170);
 
         btnCarta1.addActionListener(new ActionListener() {
             @Override
@@ -642,14 +673,19 @@ public class vistaGrafica implements IVistaJuego {
                 try {
                     if (controlador.esMiTurno()) {
                         if (ronda == 1) {
-                            CartasYo1.add(new JLabel(imagen1));
+                            CartasYo1.add(new JLabel(img1));
+                            CartasYo1.revalidate();
+                            CartasYo1.repaint();
                         } else if (ronda == 2) {
-                            CartasYo2.add(new JLabel(imagen1));
+                            CartasYo2.add(new JLabel(img1));
+                            CartasYo2.revalidate();
+                            CartasYo2.repaint();
                         } else if (ronda == 3) {
-                            CartasYo3.add(new JLabel(imagen1));
+                            CartasYo3.add(new JLabel(img1));
+                            CartasYo3.revalidate();
+                            CartasYo3.repaint();
                         }
-                        CartasYo1.revalidate();
-                        CartasYo1.repaint();
+
                         btnCarta1.setEnabled(false);
                         controlador.tirarCarta(1);
                     }
@@ -665,14 +701,18 @@ public class vistaGrafica implements IVistaJuego {
                 try {
                     if (controlador.esMiTurno()) {
                         if (ronda == 1) {
-                            CartasYo1.add(new JLabel(imagen2));
+                            CartasYo1.add(new JLabel(img2));
+                            CartasYo1.revalidate();
+                            CartasYo1.repaint();
                         } else if (ronda == 2) {
-                            CartasYo2.add(new JLabel(imagen2));
+                            CartasYo2.add(new JLabel(img2));
+                            CartasYo2.revalidate();
+                            CartasYo2.repaint();
                         } else if (ronda == 3) {
-                            CartasYo3.add(new JLabel(imagen2));
+                            CartasYo3.add(new JLabel(img2));
+                            CartasYo3.revalidate();
+                            CartasYo3.repaint();
                         }
-                        CartasYo1.revalidate();
-                        CartasYo1.repaint();
                         btnCarta2.setEnabled(false);
                         controlador.tirarCarta(2);
                     }
@@ -688,14 +728,19 @@ public class vistaGrafica implements IVistaJuego {
                 try {
                     if (controlador.esMiTurno()) {
                         if (ronda == 1) {
-                            CartasYo1.add(new JLabel(imagen3));
+                            CartasYo1.add(new JLabel(img3));
+                            CartasYo1.revalidate();
+                            CartasYo1.repaint();
                         } else if (ronda == 2) {
-                            CartasYo2.add(new JLabel(imagen3));
+                            CartasYo2.add(new JLabel(img3));
+                            CartasYo2.revalidate();
+                            CartasYo2.repaint();
                         } else if (ronda == 3) {
-                            CartasYo3.add(new JLabel(imagen3));
+                            CartasYo3.add(new JLabel(img3));
+                            CartasYo3.revalidate();
+                            CartasYo3.repaint();
                         }
-                        CartasYo1.revalidate();
-                        CartasYo1.repaint();
+
                         btnCarta3.setEnabled(false);
                         controlador.tirarCarta(3);
                     }
@@ -706,7 +751,33 @@ public class vistaGrafica implements IVistaJuego {
         });
     }
 
-    private void createUIComponents() {
-        // TODO: place custom component creation code here
+    private void setButtonImage(JButton button, String imagePath, int width, int height) {
+        try {
+            // Load the image
+            BufferedImage img = ImageIO.read(new File(imagePath));
+            // Resize the image to fit the button
+            Image resizedImage = img.getScaledInstance(width, height, Image.SCALE_SMOOTH);
+            // Set the resized image as the icon of the button
+            button.setIcon(new ImageIcon(resizedImage));
+            // Set button size
+            button.setPreferredSize(new Dimension(width, height));
+            // Optional: Remove button decorations
+            button.setContentAreaFilled(false);
+            button.setBorderPainted(false);
+            button.setFocusPainted(false);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private ImageIcon createResizedImageIcon(String path, int width, int height) {
+        try {
+            BufferedImage img = ImageIO.read(new File(path));
+            Image resizedImage = img.getScaledInstance(width, height, Image.SCALE_SMOOTH);
+            return new ImageIcon(resizedImage);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            return null;
+        }
     }
 }

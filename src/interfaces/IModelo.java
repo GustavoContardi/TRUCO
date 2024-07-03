@@ -18,7 +18,7 @@ public interface IModelo extends IObservableRemoto {
     void finDeLaRonda() throws RemoteException;
     void siguienteTurno() throws RemoteException;
     int turnoActual() throws RemoteException;
-    Carta tirarCarta(int idJJugador, int idCarta) throws RemoteException;
+    void tirarCarta(int idJugador, int idCarta) throws RemoteException;
     void finDePartida() throws RemoteException;
     String puntosActuales() throws RemoteException;
     void cantarRabon(int id, int opcion) throws RemoteException;
