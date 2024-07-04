@@ -10,7 +10,7 @@ public interface IVistaJuego {
     void actualizarPuntaje(String puntaje);
     void mostrarMensaje(String msj);
     void limpiarPantalla();
-    void finDeMano();
+    void finDeMano() throws RemoteException;
     void finDeLaPartida(String nombreGanador);
     void cantaronRabon(String rabon) throws RemoteException;
     void cantaronTanto(String tanto) throws RemoteException;

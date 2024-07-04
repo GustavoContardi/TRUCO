@@ -7,6 +7,9 @@ import enums.Eventos;
 import interfaces.IControlador;
 import interfaces.IModelo;
 
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
@@ -221,6 +224,29 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
             }
         }
 
+        if(nroRondasGanadasJ1 >= 2  && nroRondasGanadasJ1 > nroRondasGanadasJ2) finMano = true;
+        else if (nroRondasGanadasJ2 >= 2  && nroRondasGanadasJ1 < nroRondasGanadasJ2) finMano = true;
+
+        if(finMano){
+            Timer timer = new Timer(2000, new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    // Código que se ejecutará después de 3 segundos
+                    try {
+                        finDeLaRonda();
+                        notificarFinMano();
+                    } catch (RemoteException ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            });
+            timer.setRepeats(false); // Asegura que el timer solo se ejecute una vez
+            timer.start();
+        }
+
+
+        if(esFinDePartida()) finDePartida();
+
     }
 
     @Override
@@ -235,22 +261,21 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
     }
 
     @Override
-    public void cantarRabon(int id, int opcion) throws RemoteException{
-        // levantar de archivo los cantos y poner uno aleatorio
+    public void cantarRabon(int id, EstadoTruco estado) throws RemoteException{
         Eventos evento = NADA;
 
-        switch(estadoDelTruco){
-            case NADA ->{
+        switch(estado){ // el estado es el que se tiene que cantar no el actual
+            case TRUCO ->{
                 quienCantoTruco = id;
                 evento = CANTO_TRUCO;
                 estadoDelTruco = TRUCO;
             }
-            case TRUCO -> {
+            case RE_TRUCO -> {
                 quienCantoReTruco = id;
                 evento = CANTO_RETRUCO;
                 estadoDelTruco = RE_TRUCO;
             }
-            case RE_TRUCO -> {
+            case VALE_CUATRO -> {
                 estadoDelTruco = VALE_CUATRO;
                 quienCantoValeCuatro = id;
                 evento = CANTO_VALE_CUATRO;
@@ -406,6 +431,11 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
 
     private void notificarNuevaRonda() throws RemoteException {
         mensajesOb = NUEVA_RONDA;
+        notificarObservadores(mensajesOb);
+    }
+
+    private void notificarFinMano() throws RemoteException {
+        mensajesOb = FIN_MANO;
         notificarObservadores(mensajesOb);
     }
 

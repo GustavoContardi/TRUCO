@@ -20,8 +20,8 @@ public interface IControlador {
     int meVoyAlMazo() throws RemoteException;
     void guardarPartida() throws RemoteException;
     void recuperarPartida() throws RemoteException;
-    String cantarTanto(int opcion) throws RemoteException;
-    String cantarRabon(int opcion) throws RemoteException;
+    String cantarTanto(EstadoEnvido estado) throws RemoteException;
+    String cantarRabon(EstadoTruco estado) throws RemoteException;
     int esTurnoDe() throws RemoteException;
     EstadoEnvido estadoDelTanto() throws RemoteException;
     EstadoTruco estadoDelRabon()throws RemoteException ;
@@ -41,6 +41,8 @@ public interface IControlador {
     void tantoQuerido() throws RemoteException;
     void tantoNoQuerido() throws RemoteException ;
     ArrayList<Jugador> listaJugadoresMasGanadores();
+    boolean puedoCantarTruco(EstadoTruco estado) throws RemoteException;
+    boolean puedoCantarEnvido(EstadoEnvido estado);
 
     void setJugador(int idJugador) throws RemoteException;
     void setVistaEleccion(IVistaEleccion eleccion) throws RemoteException;

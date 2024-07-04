@@ -3,6 +3,7 @@ package vista;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
+import enums.EstadoEnvido;
 import interfaces.IControlador;
 import interfaces.IVistaJuego;
 
@@ -14,6 +15,9 @@ import java.io.File;
 import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+
+import static enums.EstadoEnvido.*;
+import static enums.EstadoTruco.*;
 
 public class vistaGrafica implements IVistaJuego {
     private JPanel ventana;
@@ -40,15 +44,14 @@ public class vistaGrafica implements IVistaJuego {
     private JFrame frame;
     private IControlador controlador;
 
-    public vistaGrafica() {
+    public vistaGrafica() throws RemoteException {
         this.frame = new JFrame("TRUCONTARDI");
         frame.setContentPane(ventana);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.pack();
-        frame.setSize(800, 950);
+        frame.setSize(800, 900);
         frame.setResizable(false);
         frame.setLocationRelativeTo(null);
-        setBotones();
 
     }
 
@@ -106,8 +109,38 @@ public class vistaGrafica implements IVistaJuego {
     }
 
     @Override
-    public void finDeMano() {
+    public void finDeMano() throws RemoteException {
+        panelAvisos("Fin de la mano");
 
+        CartasOP1.removeAll();
+        CartasOP1.revalidate();
+        CartasOP1.repaint();
+        CartasOP2.removeAll();
+        CartasOP2.revalidate();
+        CartasOP2.repaint();
+        CartasOP3.removeAll();
+        CartasOP3.revalidate();
+        CartasOP3.repaint();
+
+        CartasYo1.removeAll();
+        CartasYo1.revalidate();
+        CartasYo1.repaint();
+        CartasYo2.removeAll();
+        CartasYo2.revalidate();
+        CartasYo2.repaint();
+        CartasYo3.removeAll();
+        CartasYo3.revalidate();
+        CartasYo3.repaint();
+
+        btnCarta1.setIcon(null);
+        btnCarta2.setIcon(null);
+        btnCarta3.setIcon(null);
+
+        eliminarTodosAL();
+
+        btnCarta1.setEnabled(true);
+        btnCarta2.setEnabled(true);
+        btnCarta3.setEnabled(true);
     }
 
     @Override
@@ -130,7 +163,11 @@ public class vistaGrafica implements IVistaJuego {
             public void actionPerformed(ActionEvent e) {
                 //controlador.rabonQuerido();
                 accionesJ2.setText("");
-                setBotones();
+                try {
+                    setBotones();
+                } catch (RemoteException ex) {
+                    ex.printStackTrace();
+                }
             }
         });
 
@@ -154,7 +191,7 @@ public class vistaGrafica implements IVistaJuego {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         try {
-                            controlador.cantarRabon(2);
+                            controlador.cantarRabon(RE_TRUCO);
                             accionesJ2.setText("");
                             setBotones();
                         } catch (RemoteException ex) {
@@ -170,7 +207,7 @@ public class vistaGrafica implements IVistaJuego {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         try {
-                            controlador.cantarRabon(3);
+                            controlador.cantarRabon(VALE_CUATRO);
                             accionesJ2.setText("");
                             setBotones();
                         } catch (RemoteException ex) {
@@ -228,7 +265,7 @@ public class vistaGrafica implements IVistaJuego {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         try {
-                            controlador.cantarTanto(2);
+                            controlador.cantarTanto(ENVIDO_DOBLE);
                             accionesJ2.setText("");
                             setBotones();
                         } catch (RemoteException ex) {
@@ -241,7 +278,7 @@ public class vistaGrafica implements IVistaJuego {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         try {
-                            controlador.cantarTanto(3);
+                            controlador.cantarTanto(REAL_ENVIDO);
                             accionesJ2.setText("");
                             setBotones();
                         } catch (RemoteException ex) {
@@ -255,7 +292,7 @@ public class vistaGrafica implements IVistaJuego {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         try {
-                            controlador.cantarTanto(4);
+                            controlador.cantarTanto(FALTA_ENVIDO);
                             accionesJ2.setText("");
                             setBotones();
                         } catch (RemoteException ex) {
@@ -273,7 +310,7 @@ public class vistaGrafica implements IVistaJuego {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         try {
-                            controlador.cantarTanto(3);
+                            controlador.cantarTanto(REAL_ENVIDO);
                             accionesJ2.setText("");
                             setBotones();
                         } catch (RemoteException ex) {
@@ -287,7 +324,7 @@ public class vistaGrafica implements IVistaJuego {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         try {
-                            controlador.cantarTanto(4);
+                            controlador.cantarTanto(FALTA_ENVIDO);
                             accionesJ2.setText("");
                             setBotones();
                         } catch (RemoteException ex) {
@@ -305,7 +342,7 @@ public class vistaGrafica implements IVistaJuego {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         try {
-                            controlador.cantarTanto(4);
+                            controlador.cantarTanto(FALTA_ENVIDO);
                             accionesJ2.setText("");
                             setBotones();
                         } catch (RemoteException ex) {
@@ -418,10 +455,10 @@ public class vistaGrafica implements IVistaJuego {
         frame.setVisible(true);
     }
 
-    public void setBotones(){
+    public void setBotones() throws RemoteException {
         removeBtnActionListener(); // remuevo todos los actions listeners para que no se acumulen y los vuelvo a poner
         btnEnvido.setText("    ENVIDO    ");
-        TRUCOButton.setText("    TRUCO    ");
+        //TRUCOButton.setText("    TRUCO    ");
         btnQuiero.setText("    QUIERO    ");
         btnNoQuiero.setText("    NO QUIERO    ");
         IRALMAZOButton.setText("    IR AL MAZO    ");
@@ -438,6 +475,51 @@ public class vistaGrafica implements IVistaJuego {
             }
         });
 
+        TRUCOButton.setEnabled(true);
+        switch (controlador.estadoDelRabon()){
+            case NADA -> TRUCOButton.setText("  TRUCO  ");
+            case TRUCO -> TRUCOButton.setText(" RE TRUCO  ");
+            case RE_TRUCO -> TRUCOButton.setText(" VALE CUATRO ");
+            case VALE_CUATRO -> {
+                TRUCOButton.setText(" -- ");
+                TRUCOButton.setEnabled(false);
+            }
+        }
+        TRUCOButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    switch (controlador.estadoDelRabon()){
+                        case NADA -> {
+                            if(controlador.esMiTurno() && controlador.puedoCantarTruco(TRUCO)){
+                                TRUCOButton.setText("  RE TRUCO  ");
+                                TRUCOButton.setEnabled(false);
+                                controlador.cantarRabon(TRUCO);
+                            }
+                        }
+                        case TRUCO -> {
+                            if(controlador.esMiTurno() && controlador.puedoCantarTruco(RE_TRUCO)){
+
+                                TRUCOButton.setText("  VALE CUATRO  ");
+                                TRUCOButton.setEnabled(false);
+                                controlador.cantarRabon(RE_TRUCO);
+                            }
+                        }
+                        case RE_TRUCO -> {
+                            if(controlador.esMiTurno() && controlador.puedoCantarTruco(RE_TRUCO)){
+
+                                TRUCOButton.setText("  ---  ");
+                                TRUCOButton.setEnabled(false);
+                                controlador.cantarRabon(VALE_CUATRO);
+                            }
+                        }
+                    }
+                } catch (RemoteException ex) {
+                    ex.printStackTrace();
+                };
+            }
+        });
+
         // terminar para los demas botones
 
     }
@@ -450,7 +532,11 @@ public class vistaGrafica implements IVistaJuego {
         IRALMAZOButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                setBotones();
+                try {
+                    setBotones();
+                } catch (RemoteException ex) {
+                    ex.printStackTrace();
+                }
             }
         });
 
@@ -462,7 +548,7 @@ public class vistaGrafica implements IVistaJuego {
                 try {
                     if(controlador.esMiTurno()) {
                         try {
-                            controlador.cantarTanto(1);
+                            controlador.cantarTanto(ENVIDO);
                         } catch (RemoteException ex) {
                             ex.printStackTrace();
                         }
@@ -482,7 +568,7 @@ public class vistaGrafica implements IVistaJuego {
                 try {
                     if(controlador.esMiTurno()) {
                         try {
-                            controlador.cantarTanto(3);
+                            controlador.cantarTanto(REAL_ENVIDO);
                             controlador.seCantoRealEnvido();
                         } catch (RemoteException ex) {
                             ex.printStackTrace();
@@ -502,7 +588,7 @@ public class vistaGrafica implements IVistaJuego {
                 try {
                     if(controlador.esMiTurno()) {
                         try {
-                            controlador.cantarTanto(4);
+                            controlador.cantarTanto(FALTA_ENVIDO);
                             controlador.seCantoFaltaEnvido();
                         } catch (RemoteException ex) {
                             ex.printStackTrace();
@@ -663,29 +749,12 @@ public class vistaGrafica implements IVistaJuego {
         removeAllActionListeners(btnCarta2);
         removeAllActionListeners(btnCarta3);
 
-        ImageIcon img1 = createResizedImageIcon(imagen1, 160, 170);
-        ImageIcon img2 = createResizedImageIcon(imagen2, 160, 170);
-        ImageIcon img3 = createResizedImageIcon(imagen3, 160, 170);
-
         btnCarta1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
                     if (controlador.esMiTurno()) {
-                        if (ronda == 1) {
-                            CartasYo1.add(new JLabel(img1));
-                            CartasYo1.revalidate();
-                            CartasYo1.repaint();
-                        } else if (ronda == 2) {
-                            CartasYo2.add(new JLabel(img1));
-                            CartasYo2.revalidate();
-                            CartasYo2.repaint();
-                        } else if (ronda == 3) {
-                            CartasYo3.add(new JLabel(img1));
-                            CartasYo3.revalidate();
-                            CartasYo3.repaint();
-                        }
-
+                        tirarCarta(imagen1);
                         btnCarta1.setEnabled(false);
                         controlador.tirarCarta(1);
                     }
@@ -700,19 +769,7 @@ public class vistaGrafica implements IVistaJuego {
             public void actionPerformed(ActionEvent e) {
                 try {
                     if (controlador.esMiTurno()) {
-                        if (ronda == 1) {
-                            CartasYo1.add(new JLabel(img2));
-                            CartasYo1.revalidate();
-                            CartasYo1.repaint();
-                        } else if (ronda == 2) {
-                            CartasYo2.add(new JLabel(img2));
-                            CartasYo2.revalidate();
-                            CartasYo2.repaint();
-                        } else if (ronda == 3) {
-                            CartasYo3.add(new JLabel(img2));
-                            CartasYo3.revalidate();
-                            CartasYo3.repaint();
-                        }
+                        tirarCarta(imagen2);
                         btnCarta2.setEnabled(false);
                         controlador.tirarCarta(2);
                     }
@@ -727,20 +784,7 @@ public class vistaGrafica implements IVistaJuego {
             public void actionPerformed(ActionEvent e) {
                 try {
                     if (controlador.esMiTurno()) {
-                        if (ronda == 1) {
-                            CartasYo1.add(new JLabel(img3));
-                            CartasYo1.revalidate();
-                            CartasYo1.repaint();
-                        } else if (ronda == 2) {
-                            CartasYo2.add(new JLabel(img3));
-                            CartasYo2.revalidate();
-                            CartasYo2.repaint();
-                        } else if (ronda == 3) {
-                            CartasYo3.add(new JLabel(img3));
-                            CartasYo3.revalidate();
-                            CartasYo3.repaint();
-                        }
-
+                        tirarCarta(imagen3);
                         btnCarta3.setEnabled(false);
                         controlador.tirarCarta(3);
                     }
@@ -780,4 +824,45 @@ public class vistaGrafica implements IVistaJuego {
             return null;
         }
     }
+
+    public void tirarCarta(String carta) throws RemoteException {
+        // metodo privado, lo que solo hace es mostrar en el panel de mis cartas tiradas
+
+        int ronda = controlador.nroDeRonda();
+        ImageIcon imageIcon = createResizedImageIcon(carta, 160, 170);
+
+        JLabel label = new JLabel(imageIcon);
+
+        if(ronda == 1){
+            CartasYo1.add(label);
+            CartasYo1.revalidate();
+            CartasYo1.repaint();
+        }
+        else if(ronda == 2){
+            CartasYo2.add(label);
+            CartasYo2.revalidate();
+            CartasYo2.repaint();
+        }
+        else if (ronda == 3){
+            CartasYo3.add(label);
+            CartasYo3.revalidate();
+            CartasYo3.repaint();
+        }
+
+        setBotones();
+
+    }
+
+    private void eliminarTodosAL(){
+        removeAllActionListeners(btnCarta1);
+        removeAllActionListeners(btnCarta2);
+        removeAllActionListeners(btnCarta3);
+        removeAllActionListeners(btnEnvido);
+        removeAllActionListeners(btnAuxiliar);
+        removeAllActionListeners(btnNoQuiero);
+        removeAllActionListeners(btnQuiero);
+        removeAllActionListeners(TRUCOButton);
+        removeAllActionListeners(IRALMAZOButton);
+    }
+
 }

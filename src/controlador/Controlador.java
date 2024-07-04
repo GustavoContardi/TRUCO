@@ -101,9 +101,9 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
     }
 
     @Override
-    public String cantarTanto(int opcion) throws RemoteException {
+    public String cantarTanto(EstadoEnvido estado) throws RemoteException {
         try{
-            modelo.cantarEnvido(jugador.getIDJugador(), opcion);
+            modelo.cantarEnvido(jugador.getIDJugador(), 0);
         } catch(RemoteException e){
             e.printStackTrace();
         }
@@ -111,9 +111,11 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
     }
 
     @Override
-    public String cantarRabon(int opcion) {
+    public String cantarRabon(EstadoTruco estado) {
+
+
         try{
-            modelo.cantarRabon(jugador.getIDJugador(), opcion);
+            modelo.cantarRabon(jugador.getIDJugador(), estado);
         }catch(RemoteException e){
             e.printStackTrace();
         }
@@ -286,6 +288,28 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
     }
 
     @Override
+    public boolean puedoCantarTruco(EstadoTruco estado) throws RemoteException {
+        switch (estado){
+            case TRUCO -> {
+                return true;
+            }
+            case RE_TRUCO -> {
+                if(modelo.getQuienCantoTruco() != jugador.getIDJugador()) return true;
+            }
+            case VALE_CUATRO -> {
+                if(modelo.getQuienCantoReTruco() != jugador.getIDJugador()) return true;
+            }
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean puedoCantarEnvido(EstadoEnvido estado) {
+        return false;
+    }
+
+    @Override
     public void setJugador(int idJugador) throws RemoteException {
         jugador = Persistencia.recuperarJugador(idJugador);
         modelo.agregarJugador(jugador);
@@ -362,6 +386,7 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
             case FIN_MANO -> {
                 vistaJuego.actualizarPuntaje(modelo.puntosActuales());
                 vistaJuego.finDeMano();
+                vistaJuego.mostrarCartas();
             }
             case INICIO_PARTIDA -> {
                 vistaJuego.mostrarMenuPrincipal();
