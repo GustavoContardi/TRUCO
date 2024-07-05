@@ -6,8 +6,6 @@ import enums.EstadoEnvido;
 import modelo.Carta;
 import modelo.Jugador;
 
-import java.io.Serializable;
-import java.lang.reflect.Array;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 
@@ -49,4 +47,6 @@ public interface IModelo extends IObservableRemoto {
     String getUltimoMensaje()throws RemoteException;;
     ArrayList<Carta> getCartasJ1() throws RemoteException;
     ArrayList<Carta> getCartasJ2() throws RemoteException;
+    void tantoQuerido() throws RemoteException; //
+    void tantoNoQuerido(int idjugNoQuizo) throws RemoteException; // jugador que no quizo
 }

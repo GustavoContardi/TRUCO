@@ -161,9 +161,9 @@ public class vistaGrafica implements IVistaJuego {
         btnQuiero.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //controlador.rabonQuerido();
-                accionesJ2.setText("");
                 try {
+                    controlador.rabonQuerido();
+                    accionesJ2.setText("");
                     setBotones();
                 } catch (RemoteException ex) {
                     ex.printStackTrace();
@@ -176,7 +176,7 @@ public class vistaGrafica implements IVistaJuego {
             public void actionPerformed(ActionEvent e) {
                 try {
                     accionesJ2.setText("");
-                    controlador.cantoNoQuerido();
+                    controlador.rabonNoQuerido();
                 } catch (RemoteException ex) {
                     ex.printStackTrace();
                 }
@@ -458,7 +458,6 @@ public class vistaGrafica implements IVistaJuego {
     public void setBotones() throws RemoteException {
         removeBtnActionListener(); // remuevo todos los actions listeners para que no se acumulen y los vuelvo a poner
         btnEnvido.setText("    ENVIDO    ");
-        //TRUCOButton.setText("    TRUCO    ");
         btnQuiero.setText("    QUIERO    ");
         btnNoQuiero.setText("    NO QUIERO    ");
         IRALMAZOButton.setText("    IR AL MAZO    ");
@@ -549,10 +548,10 @@ public class vistaGrafica implements IVistaJuego {
                     if(controlador.esMiTurno()) {
                         try {
                             controlador.cantarTanto(ENVIDO);
+                            controlador.seCantoEnvido();
                         } catch (RemoteException ex) {
                             ex.printStackTrace();
                         }
-                        controlador.seCantoEnvido();
                     }
                 } catch (RemoteException ex) {
                     ex.printStackTrace();

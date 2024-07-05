@@ -324,6 +324,12 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
 
     @Override
     public void meVoyAlMazo(int id) throws RemoteException {
+        int puntos = 1;
+
+        if(numeroRonda == 1 && !cantaronEnvido()) puntos = 2; // por reglas si se va al mazo en la primer mano sin cantar nada son 2 puntos para el contrario
+        if(id == j1.getIDJugador()) anotador.sumarPuntosJ1(puntos);
+        else if(id == j2.getIDJugador()) anotador.sumarPuntosJ2(puntos);
+
         finDeLaRonda();
     }
 
@@ -608,6 +614,29 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
         return j2.getCartasObtenidas();
     }
 
+    @Override
+    public void tantoQuerido() throws RemoteException {
+        int puntos = calcularPuntajeEnvidoQuerido();
+
+        if(j1.puntosEnvido() > j2.puntosEnvido()) anotador.sumarPuntosJ1(puntos);
+        else if(j1.puntosEnvido() < j2.puntosEnvido()) anotador.sumarPuntosJ2(puntos);
+        else{ // si tienen el mismo tanto se decide por el que es mano (el que no repartió)
+            if( (numeroMano % 2) == 0) anotador.sumarPuntosJ1(puntos);
+            else if( (numeroMano % 2) == 1) anotador.sumarPuntosJ2(puntos);
+        }
+
+        notificarPuntos();
+    }
+
+    @Override
+    public void tantoNoQuerido(int idjugNoQuizo) throws RemoteException {
+        int puntos = calcularEnvidoNoQuerido();
+
+        if(idjugNoQuizo == j1.getIDJugador())  ;
+        else if(idjugNoQuizo == j2.getIDJugador()) anotador.sumarPuntosJ1(puntos);
+
+        notificarPuntos();
+    }
 
 
     // observer

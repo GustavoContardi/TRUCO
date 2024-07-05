@@ -263,23 +263,13 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
     }
 
     @Override
-    public void tantoQuerido() {
-        /*try{
-
-        }catch(RemoteException e){
-            e.printStackTrace();;
-        }
-        */
+    public void tantoQuerido() throws RemoteException {
+        modelo.tantoQuerido();
     }
 
     @Override
-    public void tantoNoQuerido() {
-        /*try{
-
-        }catch(RemoteException e){
-            e.printStackTrace();;
-        }
-        */
+    public void tantoNoQuerido() throws RemoteException {
+        modelo.tantoNoQuerido(jugador.getIDJugador());
     }
 
     @Override
