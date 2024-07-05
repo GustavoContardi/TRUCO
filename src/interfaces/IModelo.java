@@ -20,7 +20,7 @@ public interface IModelo extends IObservableRemoto {
     void finDePartida() throws RemoteException;
     String puntosActuales() throws RemoteException;
     void cantarRabon(int id, EstadoTruco estado) throws RemoteException;
-    void cantarEnvido(int id, int opcion) throws RemoteException;
+    void cantarEnvido(int id, EstadoEnvido estado) throws RemoteException;
     void meVoyAlMazo(int id) throws RemoteException;
     boolean esFinDePartida() throws RemoteException;
     void agregarJugador(Jugador jugador) throws RemoteException;
@@ -49,4 +49,5 @@ public interface IModelo extends IObservableRemoto {
     ArrayList<Carta> getCartasJ2() throws RemoteException;
     void tantoQuerido() throws RemoteException; //
     void tantoNoQuerido(int idjugNoQuizo) throws RemoteException; // jugador que no quizo
+    void rabonNoQuerido(int idjugNoQuizo) throws RemoteException; // jugador que no quizo
 }

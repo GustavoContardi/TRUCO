@@ -1,5 +1,7 @@
 package vista;
 
+import enums.EstadoEnvido;
+import enums.EstadoTruco;
 import interfaces.IControlador;
 import interfaces.IVistaInicio;
 import interfaces.IVistaJuego;
@@ -56,12 +58,12 @@ public class vistaConsola implements IVistaJuego, IVistaInicio {
     }
 
     @Override
-    public void cantaronRabon(String rabon) {
+    public void cantaronRabon(String rabon, EstadoTruco estado) {
 
     }
 
     @Override
-    public void cantaronTanto(String tanto) {
+    public void cantaronTanto(String tanto, EstadoEnvido estado) {
 
     }
 

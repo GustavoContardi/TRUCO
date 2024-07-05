@@ -4,6 +4,7 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 
 import enums.EstadoEnvido;
+import enums.EstadoTruco;
 import interfaces.IControlador;
 import interfaces.IVistaJuego;
 
@@ -151,12 +152,13 @@ public class vistaGrafica implements IVistaJuego {
     }
 
     @Override
-    public void cantaronRabon(String rabon) throws RemoteException {
+    public void cantaronRabon(String rabon, EstadoTruco estado) throws RemoteException {
         removeBtnActionListener();
 
         accionesJ2.setText(rabon);
         btnQuiero.setEnabled(true);
         btnNoQuiero.setEnabled(true);
+        btnEnvido.setEnabled(false);
 
         btnQuiero.addActionListener(new ActionListener() {
             @Override
@@ -183,7 +185,7 @@ public class vistaGrafica implements IVistaJuego {
             }
         });
 
-        switch(controlador.estadoDelRabon()){
+        switch(estado){
             case TRUCO -> {
                 TRUCOButton.setEnabled(true);
                 TRUCOButton.setText(" RE TRUCO ");
@@ -193,6 +195,7 @@ public class vistaGrafica implements IVistaJuego {
                         try {
                             controlador.cantarRabon(RE_TRUCO);
                             accionesJ2.setText("");
+                            TRUCOButton.setEnabled(false);
                             setBotones();
                         } catch (RemoteException ex) {
                             ex.printStackTrace();
@@ -209,6 +212,7 @@ public class vistaGrafica implements IVistaJuego {
                         try {
                             controlador.cantarRabon(VALE_CUATRO);
                             accionesJ2.setText("");
+                            TRUCOButton.setEnabled(false);
                             setBotones();
                         } catch (RemoteException ex) {
                             ex.printStackTrace();
@@ -218,8 +222,9 @@ public class vistaGrafica implements IVistaJuego {
             }
 
             case VALE_CUATRO -> {
-                TRUCOButton.setText("");
+                TRUCOButton.setText(" - - - ");
                 TRUCOButton.setEnabled(false);
+                setBotones();
                 // no se puede cantar más
             }
         }
@@ -228,7 +233,7 @@ public class vistaGrafica implements IVistaJuego {
     }
 
     @Override
-    public void cantaronTanto(String tanto) throws RemoteException {
+    public void cantaronTanto(String tanto, EstadoEnvido estado) throws RemoteException {
         removeBtnActionListener();
 
         accionesJ2.setText(tanto);

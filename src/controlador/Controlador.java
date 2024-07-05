@@ -101,25 +101,23 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
     }
 
     @Override
-    public String cantarTanto(EstadoEnvido estado) throws RemoteException {
+    public void cantarTanto(EstadoEnvido estado) throws RemoteException {
         try{
-            modelo.cantarEnvido(jugador.getIDJugador(), 0);
+            modelo.cantarEnvido(jugador.getIDJugador(), estado);
         } catch(RemoteException e){
             e.printStackTrace();
         }
-        return "";
     }
 
     @Override
-    public String cantarRabon(EstadoTruco estado) {
-
+    public void cantarRabon(EstadoTruco estado) {
 
         try{
+            if (estado == EstadoTruco.RE_TRUCO)System.out.println("Deberia llegar el re fruco al controlador");
             modelo.cantarRabon(jugador.getIDJugador(), estado);
         }catch(RemoteException e){
             e.printStackTrace();
         }
-        return "";
     }
 
     @Override
@@ -256,7 +254,7 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
     @Override
     public void rabonNoQuerido() {
         try{
-            modelo.meVoyAlMazo(jugador.getIDJugador());
+            modelo.rabonNoQuerido(jugador.getIDJugador());
         }catch(RemoteException e){
             e.printStackTrace();
         }
@@ -332,25 +330,25 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
                 vistaEleccion.actualizarListaJugadores(Persistencia.listaJugadoresGuardados(false));
             }
             case CANTO_TRUCO -> {
-                if(modelo.turnoActual() != jugador.getIDJugador()) vistaJuego.cantaronRabon(Persistencia.mensajeCantoTruco(EstadoTruco.TRUCO));
+                if(modelo.getQuienCantoTruco() != jugador.getIDJugador()) vistaJuego.cantaronRabon(Persistencia.mensajeCantoTruco(EstadoTruco.TRUCO), EstadoTruco.TRUCO);
             }
             case CANTO_RETRUCO -> {
-                if(modelo.turnoActual() != jugador.getIDJugador()) vistaJuego.cantaronRabon(Persistencia.mensajeCantoTruco(EstadoTruco.RE_TRUCO));
+                if(modelo.getQuienCantoReTruco() != jugador.getIDJugador()) vistaJuego.cantaronRabon(Persistencia.mensajeCantoTruco(EstadoTruco.RE_TRUCO), EstadoTruco.RE_TRUCO);
             }
             case CANTO_VALE_CUATRO ->{
-                if(modelo.turnoActual() != jugador.getIDJugador()) vistaJuego.cantaronRabon(Persistencia.mensajeCantoTruco(EstadoTruco.VALE_CUATRO));
+                if(modelo.getQuienCantoValeCuatro() != jugador.getIDJugador()) vistaJuego.cantaronRabon(Persistencia.mensajeCantoTruco(EstadoTruco.VALE_CUATRO), EstadoTruco.VALE_CUATRO);
             }
             case CANTO_ENVIDO -> {
-                if(modelo.turnoActual() != jugador.getIDJugador()) vistaJuego.cantaronTanto(Persistencia.mensajeCantoTanto(EstadoEnvido.ENVIDO));
+                if(modelo.getQuienCantoEnvido() != jugador.getIDJugador()) vistaJuego.cantaronTanto(Persistencia.mensajeCantoTanto(EstadoEnvido.ENVIDO), EstadoEnvido.ENVIDO);
             }
             case CANTO_REAL_ENVIDO -> {
-                if(modelo.turnoActual() != jugador.getIDJugador()) vistaJuego.cantaronTanto(Persistencia.mensajeCantoTanto(EstadoEnvido.ENVIDO_DOBLE));
+                if(modelo.getQuienCantoRealEnvido() != jugador.getIDJugador()) vistaJuego.cantaronTanto(Persistencia.mensajeCantoTanto(EstadoEnvido.ENVIDO_DOBLE), EstadoEnvido.ENVIDO_DOBLE);
             }
             case CANTO_ENVIDO_DOBLE -> {
-                if(modelo.turnoActual() != jugador.getIDJugador()) vistaJuego.cantaronTanto(Persistencia.mensajeCantoTanto(EstadoEnvido.REAL_ENVIDO));
+                if(modelo.getQuienCantoEnvidoDoble() != jugador.getIDJugador()) vistaJuego.cantaronTanto(Persistencia.mensajeCantoTanto(EstadoEnvido.REAL_ENVIDO), EstadoEnvido.REAL_ENVIDO);
             }
             case CANTO_FALTA_ENVIDO -> {
-                if(modelo.turnoActual() != jugador.getIDJugador()) vistaJuego.cantaronTanto(Persistencia.mensajeCantoTanto(EstadoEnvido.FALTA_ENVIDO));
+                if(modelo.getQuienCantoFaltaEnvido() != jugador.getIDJugador()) vistaJuego.cantaronTanto(Persistencia.mensajeCantoTanto(EstadoEnvido.FALTA_ENVIDO), EstadoEnvido.FALTA_ENVIDO);
             }
             case NUEVA_RONDA -> {
                 vistaJuego.mostrarCartas(); // ?? podria hacer un metodo pero si refresca la pantalla se actualiza

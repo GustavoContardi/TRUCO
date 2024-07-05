@@ -20,8 +20,8 @@ public interface IControlador {
     int meVoyAlMazo() throws RemoteException;
     void guardarPartida() throws RemoteException;
     void recuperarPartida() throws RemoteException;
-    String cantarTanto(EstadoEnvido estado) throws RemoteException;
-    String cantarRabon(EstadoTruco estado) throws RemoteException;
+    void cantarTanto(EstadoEnvido estado) throws RemoteException;
+    void cantarRabon(EstadoTruco estado) throws RemoteException;
     int esTurnoDe() throws RemoteException;
     EstadoEnvido estadoDelTanto() throws RemoteException;
     EstadoTruco estadoDelRabon()throws RemoteException ;

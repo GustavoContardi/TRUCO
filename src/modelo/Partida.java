@@ -35,6 +35,7 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
     private     int                 quienCantoTruco;
     private     int                 quienCantoReTruco;
     private     int                 quienCantoEnvido;
+    private     int                 puntosRabon;
     private     int                 quienCantoEnvidoDoble;
     private     int                 quienCantoRealEnvido;
     private     int                 quienCantoFaltaEnvido;
@@ -72,7 +73,6 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
 
     public void nuevaPartida() throws RemoteException {
         nuevaRonda();
-        //notificarPartidaLista();
     }
 
     @Override
@@ -93,6 +93,7 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
                 puntajeRondaEnvido  = 0;
                 quienCantoTruco     = 0;
                 quienCantoReTruco   = 0;
+                puntosRabon         = 0;
                 hizoPrimera         = 0;
                 cantoEnvido         = false;
                 cantoEnvidoDoble    = false;
@@ -120,6 +121,8 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
     public void finDeLaRonda() throws RemoteException{
         finMano = true;
 
+        if(nroRondasGanadasJ1 > nroRondasGanadasJ2) puntajeRondaJ1 += puntosRabon;
+        else if(nroRondasGanadasJ1 < nroRondasGanadasJ2) puntajeRondaJ2 += puntosRabon;
 
         Timer timer = new Timer(2000, new ActionListener() {
             @Override
@@ -127,7 +130,7 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
                 // Código que se ejecutará después de 3 segundos
                 try {
                     notificarFinMano();
-                    notificarPuntos(); // espero 2 segundos antes de notificar para que se pueda ver lo que paso antes y no sea tan rapido
+                    actualizarPuntos(); // espero 2 segundos antes de notificar para que se pueda ver lo que paso antes y no sea tan rapido
                     nuevaRonda();
                 } catch (RemoteException ex) {
                     ex.printStackTrace();
@@ -248,7 +251,6 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
             finDeLaRonda();
         }
 
-
         if(esFinDePartida()) finDePartida();
 
     }
@@ -265,24 +267,28 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
     }
 
     @Override
-    public void cantarRabon(int id, EstadoTruco estado) throws RemoteException{
+    public void cantarRabon(int idJugadorCanto, EstadoTruco estado) throws RemoteException{
         Eventos evento = NADA;
 
         switch(estado){ // el estado es el que se tiene que cantar no el actual
             case TRUCO ->{
-                quienCantoTruco = id;
+                if(!cantoEnvido) cantoEnvido = true;
+                quienCantoTruco = idJugadorCanto;
                 evento = CANTO_TRUCO;
                 estadoDelTruco = TRUCO;
+                puntosRabon = 2;
             }
             case RE_TRUCO -> {
-                quienCantoReTruco = id;
+                quienCantoReTruco = idJugadorCanto;
                 evento = CANTO_RETRUCO;
                 estadoDelTruco = RE_TRUCO;
+                puntosRabon = 3;
             }
             case VALE_CUATRO -> {
                 estadoDelTruco = VALE_CUATRO;
-                quienCantoValeCuatro = id;
+                quienCantoValeCuatro = idJugadorCanto;
                 evento = CANTO_VALE_CUATRO;
+                puntosRabon = 4;
             }
         }
 
@@ -294,45 +300,48 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
     }
 
     @Override
-    public void cantarEnvido(int id, int opcion) throws RemoteException {
+    public void cantarEnvido(int idJugadorCanto, EstadoEnvido estado) throws RemoteException {
         // levantar de archivo los cantos y poner uno aleatorio
         Eventos evento = NADA;
 
-        if (opcion == 1){
-            quienCantoEnvido = id;
-            estadoDelEnvido = ENVIDO;
-            cantoEnvido = true;
-            evento = CANTO_ENVIDO_DOBLE;
-        }
-        else if (opcion == 2){
-            quienCantoEnvidoDoble = id;
-            estadoDelEnvido = ENVIDO_DOBLE;
-            cantoEnvidoDoble = true;
-            evento = CANTO_ENVIDO;
-        }
-        else if (opcion == 3){
-            quienCantoRealEnvido = id;
-            estadoDelEnvido = REAL_ENVIDO;
-            cantoRealEnvido = true;
-            evento = CANTO_REAL_ENVIDO;
-        }
-        else if (opcion == 4){
-            quienCantoFaltaEnvido = id;
-            estadoDelEnvido = FALTA_ENVIDO;
-            cantoFaltaEnvido = true;
-            evento = CANTO_FALTA_ENVIDO;
+        switch (estado){
+            case ENVIDO -> {
+                quienCantoEnvido = idJugadorCanto;
+                estadoDelEnvido = ENVIDO;
+                cantoEnvido = true;
+                evento = CANTO_ENVIDO_DOBLE;
+            }
+            case ENVIDO_DOBLE -> {
+                quienCantoEnvidoDoble = idJugadorCanto;
+                estadoDelEnvido = ENVIDO_DOBLE;
+                cantoEnvidoDoble = true;
+                evento = CANTO_ENVIDO;
+            }
+            case REAL_ENVIDO -> {
+                quienCantoRealEnvido = idJugadorCanto;
+                estadoDelEnvido = REAL_ENVIDO;
+                cantoRealEnvido = true;
+                evento = CANTO_REAL_ENVIDO;
+            }
+            case FALTA_ENVIDO -> {
+                quienCantoFaltaEnvido = idJugadorCanto;
+                estadoDelEnvido = FALTA_ENVIDO;
+                cantoFaltaEnvido = true;
+                evento = CANTO_FALTA_ENVIDO;
+            }
         }
 
         notificarCantoTanto(evento);
     }
 
     @Override
-    public void meVoyAlMazo(int id) throws RemoteException {
-        int puntos = 1;
+    public void meVoyAlMazo(int idJugSeFue) throws RemoteException {
+        int puntos = 0;
 
-        if(numeroRonda == 1 && !cantaronEnvido()) puntos = 2; // por reglas si se va al mazo en la primer mano sin cantar nada son 2 puntos para el contrario
-        if(id == j1.getIDJugador()) anotador.sumarPuntosJ1(puntos);
-        else if(id == j2.getIDJugador()) anotador.sumarPuntosJ2(puntos);
+        if(numeroRonda == 1 && !cantaronEnvido()) puntos = 1; // por reglas si se va al mazo en la primer mano sin cantar nada son 2 puntos para el contrario
+
+        if(idJugSeFue != j1.getIDJugador()) puntajeRondaJ1 += puntos;
+        else if(idJugSeFue != j2.getIDJugador()) puntajeRondaJ2 += puntos;
 
         finDeLaRonda();
     }
@@ -454,11 +463,14 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
     }
 
     private void notificarCantoTanto(Eventos e) throws RemoteException {
-        notificarObservadores(e);
+        mensajesOb = e;
+        notificarObservadores(mensajesOb);
     }
 
     private void notificarRabon(Eventos e) throws RemoteException {
-        notificarObservadores(e);
+        mensajesOb = e;
+        System.out.println("llego al notificar");
+        notificarObservadores(mensajesOb);
     }
 
     private void notificarCartaTirada(int jugador) throws RemoteException {
@@ -642,8 +654,14 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
         notificarPuntos();
     }
 
+    @Override
+    public void rabonNoQuerido(int idjugNoQuizo) throws RemoteException {
+        puntosRabon -= 1;
+        if(idjugNoQuizo != j1.getIDJugador()) puntajeRondaJ1 = puntosRabon;
+        else if(idjugNoQuizo != j2.getIDJugador()) puntajeRondaJ2 = puntosRabon;
 
-    // observer
+        meVoyAlMazo(idjugNoQuizo);
+    }
 
 
 }

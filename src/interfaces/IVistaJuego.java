@@ -12,8 +12,8 @@ public interface IVistaJuego {
     void limpiarPantalla();
     void finDeMano() throws RemoteException;
     void finDeLaPartida(String nombreGanador);
-    void cantaronRabon(String rabon) throws RemoteException;
-    void cantaronTanto(String tanto) throws RemoteException;
+    void cantaronRabon(String rabon, EstadoTruco estado) throws RemoteException;
+    void cantaronTanto(String tanto, EstadoEnvido estado) throws RemoteException;
     void println(String text);
     void mostrarMenuPrincipal() throws RemoteException;
     //void setFlujoActual(Flujo flujoActual);
