@@ -119,7 +119,24 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
     @Override
     public void finDeLaRonda() throws RemoteException{
         finMano = true;
-        nuevaRonda();
+
+
+        Timer timer = new Timer(2000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Código que se ejecutará después de 3 segundos
+                try {
+                    notificarFinMano();
+                    notificarPuntos(); // espero 2 segundos antes de notificar para que se pueda ver lo que paso antes y no sea tan rapido
+                    nuevaRonda();
+                } catch (RemoteException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+        timer.setRepeats(false); // Asegura que el timer solo se ejecute una vez
+        timer.start();
+
     }
 
     @Override
@@ -228,20 +245,7 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
         else if (nroRondasGanadasJ2 >= 2  && nroRondasGanadasJ1 < nroRondasGanadasJ2) finMano = true;
 
         if(finMano){
-            Timer timer = new Timer(2000, new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    // Código que se ejecutará después de 3 segundos
-                    try {
-                        finDeLaRonda();
-                        notificarFinMano();
-                    } catch (RemoteException ex) {
-                        ex.printStackTrace();
-                    }
-                }
-            });
-            timer.setRepeats(false); // Asegura que el timer solo se ejecute una vez
-            timer.start();
+            finDeLaRonda();
         }
 
 

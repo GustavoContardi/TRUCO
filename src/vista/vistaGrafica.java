@@ -49,7 +49,7 @@ public class vistaGrafica implements IVistaJuego {
         frame.setContentPane(ventana);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.pack();
-        frame.setSize(800, 900);
+        frame.setSize(730, 820);
         frame.setResizable(false);
         frame.setLocationRelativeTo(null);
 
