@@ -246,8 +246,8 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
     }
 
     @Override
-    public void rabonQuerido() {
-
+    public void rabonQuerido() throws RemoteException {
+        modelo.rabonQuerido(jugador.getIDJugador());
     }
 
     @Override
@@ -261,7 +261,7 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
 
     @Override
     public void tantoQuerido() throws RemoteException {
-        modelo.tantoQuerido();
+        modelo.tantoQuerido(jugador.getIDJugador());
     }
 
     @Override
@@ -385,7 +385,17 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
                 // aca hay que pasarle la lista no ordenada pero cuando tenga la clase Persistencia
                 vistaEleccion.actualizarListaJugadores(Persistencia.listaJugadoresGuardados(false));
             }
+            case CANTO_QUERIDO -> {
+                if(modelo.getIdJugadorNoQuizoCanto() != jugador.getIDJugador()) vistaJuego.mostrarMensaje(Persistencia.mensajeCantoQuiero());       // le paso el origen entonce si coincide es porque le dije yo al contrincante
+            }                                                                                                                                           //
+            case CANTO_NO_QUERIDO -> {                                                                                                                  // le paso el destinatario entonce si coincide es porque me dijieron ami
+                    if(modelo.getIdJugadorNoQuizoCanto() == jugador.getIDJugador()) vistaJuego.mostrarMensaje(Persistencia.mensajeCantoNoQuiero());     //
+                }
+            case TANTO_QUERIDO -> {
+                vistaJuego.mostrarAviso(modelo.getResultadoTanto());
+            }
         }
+
 
     }
 

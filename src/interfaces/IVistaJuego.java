@@ -23,4 +23,5 @@ public interface IVistaJuego {
     void meTiraronCarta(String carta) throws RemoteException;
     void tirarCarta();
     void iniciar();
+    void mostrarAviso(String aviso);
 }

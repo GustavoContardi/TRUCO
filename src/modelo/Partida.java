@@ -4,7 +4,6 @@ import ar.edu.unlu.rmimvc.observer.ObservableRemoto;
 import enums.EstadoEnvido;
 import enums.EstadoTruco;
 import enums.Eventos;
-import interfaces.IControlador;
 import interfaces.IModelo;
 
 import javax.swing.*;
@@ -47,10 +46,12 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
     private     int                 puntajeRondaJ1, puntajeRondaJ2, puntajeRondaEnvido;
     private     boolean             finMano;
     private     int                 nroRondasGanadasJ1, nroRondasGanadasJ2;
+    private     int                 idJugadorNoQuizoCanto;
     private     boolean             parda;
     private     Eventos             mensajesOb;
     private     Carta               ultimaCartaJ1, ultimaCartaJ2;
     private     String              ultimoMensaje;
+    private     String              resultadoTanto;
 
 
     //
@@ -439,6 +440,13 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
         notificarObservadores(mensajesOb);
     }
 
+    private void notificarMensaje(int idDestinatario) throws RemoteException {
+        if(idDestinatario == j1.getIDJugador()) mensajesOb = MENSAJEJ1; // mensaje para j1
+        else mensajesOb = MENSAJEJ2; // mensaje para j2
+        // Y EL MENSAJE (??????????
+        notificarObservadores(mensajesOb);
+    }
+
     private void notificarPuntos() throws RemoteException {
         mensajesOb = PUNTAJES;
         notificarObservadores(mensajesOb);
@@ -460,6 +468,20 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
     }
 
     private void notificar() throws RemoteException {
+        notificarObservadores(mensajesOb);
+    }
+
+    private void notificarCantoQuerido(int idDestinatario) throws RemoteException {
+        mensajesOb = CANTO_QUERIDO;
+        idJugadorNoQuizoCanto = idDestinatario;
+
+        notificarObservadores(mensajesOb);
+    }
+
+    private void notificarCantoNoQuerido(int idDestinatario) throws RemoteException {
+        mensajesOb = CANTO_NO_QUERIDO;
+        idJugadorNoQuizoCanto = idDestinatario;
+
         notificarObservadores(mensajesOb);
     }
 
@@ -546,6 +568,8 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
         }
         else puntos = 1;
 
+        notificarCantoQuerido();
+
         return puntos;
     }
 
@@ -617,6 +641,11 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
     }
 
     @Override
+    public int getIdJugadorNoQuizoCanto() throws RemoteException {
+        return idJugadorNoQuizoCanto;
+    }
+
+    @Override
     public String getUltimoMensaje() throws RemoteException{
         return ultimoMensaje;
     }
@@ -631,16 +660,22 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
     }
 
     @Override
-    public void tantoQuerido() throws RemoteException {
+    public void tantoQuerido(int idJugador) throws RemoteException {
         int puntos = calcularPuntajeEnvidoQuerido();
 
-        if(j1.puntosEnvido() > j2.puntosEnvido()) anotador.sumarPuntosJ1(puntos);
-        else if(j1.puntosEnvido() < j2.puntosEnvido()) anotador.sumarPuntosJ2(puntos);
+        if(j1.puntosEnvido() > j2.puntosEnvido()) {
+            anotador.sumarPuntosJ1(puntos);
+            resultadoTanto = "El ganador del Envido es: " + j1.getNombre() + " con " + j1.puntosEnvido() + " puntos";
+        }
+        else if(j1.puntosEnvido() < j2.puntosEnvido()) {
+            anotador.sumarPuntosJ2(puntos);
+            resultadoTanto = "El ganador del Envido es: " + j2.getNombre() + " con " + j2.puntosEnvido() + " puntos";
+        }
         else{ // si tienen el mismo tanto se decide por el que es mano (el que no repartió)
             if( (numeroMano % 2) == 0) anotador.sumarPuntosJ1(puntos);
             else if( (numeroMano % 2) == 1) anotador.sumarPuntosJ2(puntos);
         }
-
+        notificarTantoQuerido();
         notificarPuntos();
     }
 
@@ -648,10 +683,16 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
     public void tantoNoQuerido(int idjugNoQuizo) throws RemoteException {
         int puntos = calcularEnvidoNoQuerido();
 
-        if(idjugNoQuizo == j1.getIDJugador())  ;
+        if(idjugNoQuizo == j1.getIDJugador()) anotador.sumarPuntosJ2(puntos);
         else if(idjugNoQuizo == j2.getIDJugador()) anotador.sumarPuntosJ1(puntos);
 
         notificarPuntos();
+
+    }
+
+    @Override
+    public void rabonQuerido(int idJugadorQuizo) throws RemoteException {
+        //if(idJugadorQuizo == j1.getIDJugador()) enviarMensaje(j1.getIDJugador());
     }
 
     @Override
@@ -661,6 +702,11 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
         else if(idjugNoQuizo != j2.getIDJugador()) puntajeRondaJ2 = puntosRabon;
 
         meVoyAlMazo(idjugNoQuizo);
+    }
+
+    @Override
+    public String getResultadoTanto() throws RemoteException {
+        return resultadoTanto;
     }
 
 

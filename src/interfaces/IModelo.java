@@ -42,12 +42,16 @@ public interface IModelo extends IObservableRemoto {
     int getQuienCantoFaltaEnvido()throws RemoteException;
     Carta ultimaCartaTiradaJ1()throws RemoteException;
     Carta ultimaCartaTiradaJ2()throws RemoteException;
-    int getIdJ1()throws RemoteException;;
-    int getIdJ2()throws RemoteException;;
+    int getIdJ1()throws RemoteException;
+    int getIdJ2()throws RemoteException;
+    int getIdJugadorNoQuizoCanto()throws RemoteException;
     String getUltimoMensaje()throws RemoteException;;
     ArrayList<Carta> getCartasJ1() throws RemoteException;
     ArrayList<Carta> getCartasJ2() throws RemoteException;
-    void tantoQuerido() throws RemoteException; //
+    void tantoQuerido(int idJugadorQuizo) throws RemoteException; //
     void tantoNoQuerido(int idjugNoQuizo) throws RemoteException; // jugador que no quizo
+    void rabonQuerido(int idJugadorQuizo) throws RemoteException; //
     void rabonNoQuerido(int idjugNoQuizo) throws RemoteException; // jugador que no quizo
+    String getResultadoTanto() throws RemoteException;
+
 }

@@ -108,6 +108,11 @@ public class vistaConsola implements IVistaJuego, IVistaInicio {
     }
 
     @Override
+    public void mostrarAviso(String aviso) {
+
+    }
+
+    @Override
     public void salir() {
         frame.setVisible(false);
     }

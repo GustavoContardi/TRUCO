@@ -9,8 +9,9 @@ public enum Eventos {
     CANTO_ENVIDO_DOBLE,
     CANTO_REAL_ENVIDO,
     CANTO_FALTA_ENVIDO,
-    CANTARON_TANTO,
-    CANTARON_TRUCO,
+    CANTO_QUERIDO,
+    CANTO_NO_QUERIDO,
+    TANTO_QUERIDO,
     MENSAJEJ1,
     MENSAJEJ2,
     CARTA_TIRADAJ1,
@@ -25,3 +26,4 @@ public enum Eventos {
     ABANDONO_PARTIDA,
 
 }
+

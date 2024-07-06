@@ -472,6 +472,11 @@ public class vistaGrafica implements IVistaJuego {
         frame.setVisible(true);
     }
 
+    @Override
+    public void mostrarAviso(String aviso) {
+        panelAvisos(aviso);
+    }
+
     public void setBotones() throws RemoteException {
         removeBtnActionListener(); // remuevo todos los actions listeners para que no se acumulen y los vuelvo a poner
         btnEnvido.setText("    ENVIDO    ");
@@ -569,6 +574,7 @@ public class vistaGrafica implements IVistaJuego {
     public void setBotonesEnvido(){
         btnQuiero.setEnabled(false);
         btnNoQuiero.setEnabled(false);
+        removeBtnActionListener();
 
         IRALMAZOButton.setText("   VOLVER   ");
         IRALMAZOButton.addActionListener(new ActionListener() {
