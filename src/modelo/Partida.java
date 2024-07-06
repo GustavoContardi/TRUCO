@@ -490,7 +490,13 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
         notificarObservadores(mensajesOb);
     }
 
-    private void notificarRabon(Eventos e) throws RemoteException {
+    private void notificarTantoQuerido() throws RemoteException {
+        mensajesOb = TANTO_QUERIDO;
+        notificarObservadores(mensajesOb);
+    }
+
+
+        private void notificarRabon(Eventos e) throws RemoteException {
         mensajesOb = e;
         notificarObservadores(mensajesOb);
     }
@@ -567,8 +573,6 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
             if(cantoFaltaEnvido) puntos += 2;
         }
         else puntos = 1;
-
-        notificarCantoQuerido();
 
         return puntos;
     }
@@ -692,7 +696,8 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
 
     @Override
     public void rabonQuerido(int idJugadorQuizo) throws RemoteException {
-        //if(idJugadorQuizo == j1.getIDJugador()) enviarMensaje(j1.getIDJugador());
+        if(idJugadorQuizo != j1.getIDJugador()) notificarCantoQuerido(j1.getIDJugador());
+        else notificarCantoQuerido(j2.getIDJugador());
     }
 
     @Override
@@ -700,6 +705,8 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
         puntosRabon -= 1;
         if(idjugNoQuizo != j1.getIDJugador()) puntajeRondaJ1 = puntosRabon;
         else if(idjugNoQuizo != j2.getIDJugador()) puntajeRondaJ2 = puntosRabon;
+
+        notificarCantoNoQuerido(idjugNoQuizo);
 
         meVoyAlMazo(idjugNoQuizo);
     }
