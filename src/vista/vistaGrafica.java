@@ -156,9 +156,9 @@ public class vistaGrafica implements IVistaJuego {
         removeBtnActionListener();
 
         accionesJ2.setText(rabon);
+        btnEnvido.setEnabled(false);
         btnQuiero.setEnabled(true);
         btnNoQuiero.setEnabled(true);
-        btnEnvido.setEnabled(false);
 
         btnQuiero.addActionListener(new ActionListener() {
             @Override
@@ -224,7 +224,18 @@ public class vistaGrafica implements IVistaJuego {
             case VALE_CUATRO -> {
                 TRUCOButton.setText(" - - - ");
                 TRUCOButton.setEnabled(false);
-                setBotones();
+                TRUCOButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        try {
+                            controlador.rabonQuerido();
+                            setBotones();
+                        } catch (RemoteException ex) {
+                            ex.printStackTrace();
+                        }
+                    }
+                });
+
                 // no se puede cantar más
             }
         }
@@ -264,7 +275,7 @@ public class vistaGrafica implements IVistaJuego {
             }
         });
 
-        switch (controlador.estadoDelTanto()){
+        switch (estado){
             case ENVIDO -> {
                 btnEnvido.addActionListener(new ActionListener() {
                     @Override
@@ -341,6 +352,7 @@ public class vistaGrafica implements IVistaJuego {
             case REAL_ENVIDO -> {
                 btnEnvido.setText(" ---- ");
                 btnEnvido.setEnabled(false);
+                TRUCOButton.setEnabled(false);
                 btnAuxiliar.setText("FALTA ENVIDO");
                 btnAuxiliar.setEnabled(true);
                 btnAuxiliar.addActionListener(new ActionListener() {
@@ -471,7 +483,8 @@ public class vistaGrafica implements IVistaJuego {
         btnAuxiliar.setEnabled(false);
         btnQuiero.setEnabled(false);
         btnNoQuiero.setEnabled(false);
-
+        if(controlador.seCantoEnvido()) btnEnvido.setEnabled(false);
+        else btnEnvido.setEnabled(true);
         btnEnvido.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -481,9 +494,18 @@ public class vistaGrafica implements IVistaJuego {
 
         TRUCOButton.setEnabled(true);
         switch (controlador.estadoDelRabon()){
-            case NADA -> TRUCOButton.setText("  TRUCO  ");
-            case TRUCO -> TRUCOButton.setText(" RE TRUCO  ");
-            case RE_TRUCO -> TRUCOButton.setText(" VALE CUATRO ");
+            case NADA -> {
+                TRUCOButton.setEnabled(true);
+                TRUCOButton.setText("  TRUCO  ");
+            }
+            case TRUCO -> {
+                TRUCOButton.setEnabled(true);
+                TRUCOButton.setText(" RE TRUCO  ");
+            }                                               // activo todos los botones
+            case RE_TRUCO -> {
+                TRUCOButton.setEnabled(true);
+                TRUCOButton.setText(" VALE CUATRO ");
+            }
             case VALE_CUATRO -> {
                 TRUCOButton.setText(" -- ");
                 TRUCOButton.setEnabled(false);
@@ -499,6 +521,7 @@ public class vistaGrafica implements IVistaJuego {
                                 TRUCOButton.setText("  RE TRUCO  ");
                                 TRUCOButton.setEnabled(false);
                                 controlador.cantarRabon(TRUCO);
+                                setBotones();
                             }
                         }
                         case TRUCO -> {
@@ -507,6 +530,7 @@ public class vistaGrafica implements IVistaJuego {
                                 TRUCOButton.setText("  VALE CUATRO  ");
                                 TRUCOButton.setEnabled(false);
                                 controlador.cantarRabon(RE_TRUCO);
+                                setBotones();
                             }
                         }
                         case RE_TRUCO -> {
@@ -515,12 +539,26 @@ public class vistaGrafica implements IVistaJuego {
                                 TRUCOButton.setText("  ---  ");
                                 TRUCOButton.setEnabled(false);
                                 controlador.cantarRabon(VALE_CUATRO);
+                                setBotones();
                             }
                         }
                     }
                 } catch (RemoteException ex) {
                     ex.printStackTrace();
                 };
+            }
+        });
+
+        IRALMAZOButton.setText(" IR AL MAZO ");
+        IRALMAZOButton.setEnabled(true);
+        IRALMAZOButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    controlador.meVoyAlMazo();
+                } catch (RemoteException ex) {
+                    ex.printStackTrace();
+                }
             }
         });
 
@@ -553,7 +591,8 @@ public class vistaGrafica implements IVistaJuego {
                     if(controlador.esMiTurno()) {
                         try {
                             controlador.cantarTanto(ENVIDO);
-                            controlador.seCantoEnvido();
+                            btnEnvido.setEnabled(false);
+                            setBotones();
                         } catch (RemoteException ex) {
                             ex.printStackTrace();
                         }
@@ -573,7 +612,8 @@ public class vistaGrafica implements IVistaJuego {
                     if(controlador.esMiTurno()) {
                         try {
                             controlador.cantarTanto(REAL_ENVIDO);
-                            controlador.seCantoRealEnvido();
+                            btnEnvido.setEnabled(false);
+                            setBotones();
                         } catch (RemoteException ex) {
                             ex.printStackTrace();
                         }
@@ -593,7 +633,8 @@ public class vistaGrafica implements IVistaJuego {
                     if(controlador.esMiTurno()) {
                         try {
                             controlador.cantarTanto(FALTA_ENVIDO);
-                            controlador.seCantoFaltaEnvido();
+                            btnEnvido.setEnabled(false);
+                            setBotones();
                         } catch (RemoteException ex) {
                             ex.printStackTrace();
                         }

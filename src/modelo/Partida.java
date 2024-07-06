@@ -285,9 +285,9 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
                 puntosRabon = 3;
             }
             case VALE_CUATRO -> {
-                estadoDelTruco = VALE_CUATRO;
                 quienCantoValeCuatro = idJugadorCanto;
                 evento = CANTO_VALE_CUATRO;
+                estadoDelTruco = VALE_CUATRO;
                 puntosRabon = 4;
             }
         }
@@ -339,6 +339,7 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
         int puntos = 0;
 
         if(numeroRonda == 1 && !cantaronEnvido()) puntos = 1; // por reglas si se va al mazo en la primer mano sin cantar nada son 2 puntos para el contrario
+        if(numeroRonda == 1 && estadoDelTruco == EstadoTruco.NADA) puntos += 1;
 
         if(idJugSeFue != j1.getIDJugador()) puntajeRondaJ1 += puntos;
         else if(idJugSeFue != j2.getIDJugador()) puntajeRondaJ2 += puntos;
@@ -469,7 +470,6 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
 
     private void notificarRabon(Eventos e) throws RemoteException {
         mensajesOb = e;
-        System.out.println("llego al notificar");
         notificarObservadores(mensajesOb);
     }
 

@@ -113,7 +113,6 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
     public void cantarRabon(EstadoTruco estado) {
 
         try{
-            if (estado == EstadoTruco.RE_TRUCO)System.out.println("Deberia llegar el re fruco al controlador");
             modelo.cantarRabon(jugador.getIDJugador(), estado);
         }catch(RemoteException e){
             e.printStackTrace();
@@ -341,11 +340,11 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
             case CANTO_ENVIDO -> {
                 if(modelo.getQuienCantoEnvido() != jugador.getIDJugador()) vistaJuego.cantaronTanto(Persistencia.mensajeCantoTanto(EstadoEnvido.ENVIDO), EstadoEnvido.ENVIDO);
             }
-            case CANTO_REAL_ENVIDO -> {
-                if(modelo.getQuienCantoRealEnvido() != jugador.getIDJugador()) vistaJuego.cantaronTanto(Persistencia.mensajeCantoTanto(EstadoEnvido.ENVIDO_DOBLE), EstadoEnvido.ENVIDO_DOBLE);
-            }
             case CANTO_ENVIDO_DOBLE -> {
-                if(modelo.getQuienCantoEnvidoDoble() != jugador.getIDJugador()) vistaJuego.cantaronTanto(Persistencia.mensajeCantoTanto(EstadoEnvido.REAL_ENVIDO), EstadoEnvido.REAL_ENVIDO);
+                if(modelo.getQuienCantoEnvidoDoble() != jugador.getIDJugador()) vistaJuego.cantaronTanto(Persistencia.mensajeCantoTanto(EstadoEnvido.ENVIDO_DOBLE), EstadoEnvido.ENVIDO_DOBLE);
+            }
+            case CANTO_REAL_ENVIDO -> {
+                if(modelo.getQuienCantoRealEnvido() != jugador.getIDJugador()) vistaJuego.cantaronTanto(Persistencia.mensajeCantoTanto(EstadoEnvido.REAL_ENVIDO), EstadoEnvido.REAL_ENVIDO);
             }
             case CANTO_FALTA_ENVIDO -> {
                 if(modelo.getQuienCantoFaltaEnvido() != jugador.getIDJugador()) vistaJuego.cantaronTanto(Persistencia.mensajeCantoTanto(EstadoEnvido.FALTA_ENVIDO), EstadoEnvido.FALTA_ENVIDO);
