@@ -42,6 +42,11 @@ public class Anotador implements Serializable {
         return puntosJ2;
     }
 
+    public String getGanador(){
+        if (puntosJ1 >= 30) return nombreJ1;
+        else return nombreJ2;
+    }
+
 
     // metodos privados
 

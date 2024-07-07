@@ -125,12 +125,13 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
         if(nroRondasGanadasJ1 > nroRondasGanadasJ2) puntajeRondaJ1 += puntosRabon;
         else if(nroRondasGanadasJ1 < nroRondasGanadasJ2) puntajeRondaJ2 += puntosRabon;
 
+        notificarFinMano();
+
         Timer timer = new Timer(2000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Código que se ejecutará después de 3 segundos
+                // Código que se ejecutará después de 2 segundos
                 try {
-                    notificarFinMano();
                     actualizarPuntos(); // espero 2 segundos antes de notificar para que se pueda ver lo que paso antes y no sea tan rapido
                     nuevaRonda();
                 } catch (RemoteException ex) {
@@ -258,6 +259,10 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
 
     @Override
     public void finDePartida() throws RemoteException {
+        if(anotador.getPuntosJ2() > anotador.getPuntosJ1()) j2.sumarPartidaGanada();
+        else j1.partidaGanada();
+
+
         actualizarPuntos();
         notificarFinPartida();
     }
@@ -687,6 +692,8 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
         }
         notificarTantoQuerido();
         notificarPuntos();
+
+        if(esFinDePartida()) notificarFinPartida();
     }
 
     @Override
@@ -720,6 +727,11 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
     @Override
     public String getResultadoTanto() throws RemoteException {
         return resultadoTanto;
+    }
+
+    @Override
+    public String getJugadorGanador() throws RemoteException {
+        return anotador.getGanador();
     }
 
 

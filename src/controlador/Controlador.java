@@ -373,7 +373,7 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
                 vistaJuego.actualizar();
                 if(modelo.getIdJ2() != jugador.getIDJugador()) vistaJuego.meTiraronCarta(modelo.ultimaCartaTiradaJ2().toString());
             }
-            case FIN_PARTIDA -> vistaJuego.finDeLaPartida("");
+            case FIN_PARTIDA -> vistaJuego.finDeLaPartida(modelo.getJugadorGanador());
             case PUNTAJES -> vistaJuego.actualizarPuntaje(modelo.puntosActuales());
             case FIN_MANO -> {
                 vistaJuego.actualizarPuntaje(modelo.puntosActuales());

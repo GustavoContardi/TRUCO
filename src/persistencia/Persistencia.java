@@ -181,11 +181,11 @@ public class Persistencia implements Comparable<Jugador>, Serializable {
         }
     }
 
-    public static void eliminarJugador(int id){
+    public static void eliminarJugador(int idJugador){
         listaJugadores = listaJugadoresGuardados(false);
 
         for(Jugador j : listaJugadores){
-            if(j.getIDJugador() == id) listaJugadores.remove(j);
+            if(j.getIDJugador() == idJugador) listaJugadores.remove(j);
         }
 
         try {
@@ -237,15 +237,34 @@ public class Persistencia implements Comparable<Jugador>, Serializable {
         return listaJugadores;
     }
 
-    public static void jugadorElecto(int id){
+    public static void jugadorElecto(int idJugador){
         listaJugadores = listaJugadoresGuardados(false);
 
         for(Jugador j : listaJugadores){
-            if(j.getIDJugador() == id) j.jugadorFueElecto();
+            if(j.getIDJugador() == idJugador) j.jugadorFueElecto();
         }
 
         // modifico la lista y la sobreescribo con el atributo electo modificado
+        try {
+            FileOutputStream fos = new FileOutputStream("jugadores.bin");
+            var oos = new ObjectOutputStream(fos);
+            oos.writeObject(listaJugadores);
+            fos.close();
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
+    public static void sumarPartidaGanadaJugador(int idJugador){
+        for(Jugador j : listaJugadores){
+            if(j.getIDJugador() == idJugador) j.jugadorFueElecto();
+        }
+
+        jugador.partidaGanada();
+
+        // modifico la lista y la sobreescribo con el atributo partidasGanadas modificado (1 +)
         try {
             FileOutputStream fos = new FileOutputStream("jugadores.bin");
             var oos = new ObjectOutputStream(fos);
