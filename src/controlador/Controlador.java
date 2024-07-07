@@ -297,6 +297,11 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
     }
 
     @Override
+    public String getNombreJugador() throws RemoteException {
+        return jugador.getNombre();
+    }
+
+    @Override
     public void setJugador(int idJugador) throws RemoteException {
         jugador = Persistencia.recuperarJugador(idJugador);
         modelo.agregarJugador(jugador);
@@ -392,6 +397,7 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
                     if(modelo.getIdJugadorNoQuizoCanto() == jugador.getIDJugador()) vistaJuego.mostrarMensaje(Persistencia.mensajeCantoNoQuiero());     //
                 }
             case TANTO_QUERIDO -> {
+                System.out.println(modelo.getResultadoTanto());
                 vistaJuego.mostrarAviso(modelo.getResultadoTanto());
             }
         }

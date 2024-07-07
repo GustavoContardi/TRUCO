@@ -7,13 +7,12 @@ import java.util.ArrayList;
 public class Envido implements Serializable {
     // atributos
     private         int                 puntosEnvido    ;
-    private static  ArrayList<Integer>  jerarquiaCartas ;
+    private static  ArrayList<Integer>  jerarquiaCartas  = new ArrayList<>();
 
     // constructor
     public Envido() {
-        jerarquiaCartas = new ArrayList<>();
         puntosEnvido = 0;
-        if(jerarquiaCartas.isEmpty()){
+        if (jerarquiaCartas.isEmpty()) {
             jerarquiaCartas.add(7);
             jerarquiaCartas.add(6);
             jerarquiaCartas.add(5);
@@ -32,6 +31,7 @@ public class Envido implements Serializable {
     public int calcularPuntosEnvido(Jugador j) {
         ArrayList<Carta> cartasIguales;
         ArrayList<Carta> cartasJugador = j.getCartasObtenidas();
+        puntosEnvido = 0; // para resetear cada vez que le pido los puntos
 
         cartasIguales = calcularCartasIguales(cartasJugador);
         if (cartasIguales.size() == 1) {
@@ -102,7 +102,7 @@ public class Envido implements Serializable {
         int max = 99;
 
         for(int i=0; i<lista.size(); i++){
-            if(jerarquiaCartas.indexOf(lista.get(i).getNumeroCarta()) < max && (!noElegir.equals(lista.get(i)))) {
+            if(jerarquiaCartas.indexOf(lista.get(i).getNumeroCarta()) < max && (noElegir.getIdCarta() != lista.get(i).getIdCarta())) {
                 cartaAlta = lista.get(i);
                 max = jerarquiaCartas.indexOf(lista.get(i).getNumeroCarta());
             }

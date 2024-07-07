@@ -26,6 +26,7 @@ public class Jugador implements Comparable<Jugador>, Serializable{
         this.nombre = nombre;
         partidasGanadas = 0;
         electo = false;
+        envido = new Envido();
         IDJugador = generarID();
         Persistencia.guardarJugador(this);
     }

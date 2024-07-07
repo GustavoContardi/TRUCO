@@ -55,6 +55,12 @@ public class vistaInicio implements IVistaInicio {
         eliminarTodosAcLis();
         instrucciones.setText("¡Bienvenido al Trucontardi! Seleccione una opción para comenzar.");
 
+        btnIniciarNueva.setText("INICIAR TRUCONTARDI");
+        btnReanudar.setText("TOP JUGADORES GANADORES"); // revisar para hacerlo mas corto o nose
+        btnAnotador.setText("ANOTADOR");
+        btnAnotador.setEnabled(true);
+        btnReglas.setEnabled(true);
+
         btnSalir.setText(" SALIR ");
         btnSalir.addActionListener(new ActionListener() {
             @Override
@@ -94,36 +100,6 @@ public class vistaInicio implements IVistaInicio {
         });
     }
 
-    public void setBotonesIniciarJuego(){
-        eliminarTodosAcLis();
-
-
-        btnIniciarNueva.setVisible(true);
-        btnIniciarNueva.setText("INICIAR NUEVA PARTIDA");
-        btnReanudar.setText("  INGRESAR A PARTIDA  ");
-        btnSalir.setText("   VOLVER   ");
-
-        btnIniciarNueva.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                botonesElegirVista();
-            }
-        });
-        btnReanudar.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                botonesElegirVista();
-            }
-        });
-
-        btnSalir.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                setBotonesInicio();
-            }
-        });
-
-    }
 
     public void botonesElegirVista(){
         eliminarTodosAcLis();

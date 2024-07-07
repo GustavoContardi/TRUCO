@@ -80,8 +80,8 @@ public class vistaEleccion implements IVistaEleccion {
 
         if(jugador != null){
             controlador.setJugador(jugador.getIDJugador());
+            salir();
         }
-        salir();
     }
 
     @Override

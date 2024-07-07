@@ -232,7 +232,7 @@ public class Persistencia implements Comparable<Jugador>, Serializable {
             throw new RuntimeException(e);
         }
 
-        if(ordenado) Collections.sort(listaJugadores);
+        if(ordenado && (listaJugadores != null) ) Collections.sort(listaJugadores);
 
         return listaJugadores;
     }
@@ -261,8 +261,10 @@ public class Persistencia implements Comparable<Jugador>, Serializable {
     public static void delvolverTodosJugadores(){
         listaJugadores = listaJugadoresGuardados(false);
 
-        for(Jugador j : listaJugadores){
-            j.jugadorFueDevuelto();
+        if(listaJugadores != null){
+            for(Jugador j : listaJugadores){
+                j.jugadorFueDevuelto();
+            }
         }
 
         // modifico la lista y la sobreescribo con el atributo electo modificado

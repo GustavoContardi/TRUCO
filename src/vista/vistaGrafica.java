@@ -389,6 +389,7 @@ public class vistaGrafica implements IVistaJuego {
     public void mostrarMenuPrincipal() throws RemoteException {
         iniciar();
         mostrarCartas();
+        frame.setTitle(" APP TRUCO - " + controlador.getNombreJugador());
     }
 
 
@@ -637,13 +638,9 @@ public class vistaGrafica implements IVistaJuego {
             public void actionPerformed(ActionEvent e) {
                 try {
                     if(controlador.esMiTurno()) {
-                        try {
-                            controlador.cantarTanto(FALTA_ENVIDO);
-                            btnEnvido.setEnabled(false);
-                            setBotones();
-                        } catch (RemoteException ex) {
-                            ex.printStackTrace();
-                        }
+                        controlador.cantarTanto(FALTA_ENVIDO);
+                        btnEnvido.setEnabled(false);
+                        setBotones();
                     }
                 } catch (RemoteException ex) {
                     ex.printStackTrace();

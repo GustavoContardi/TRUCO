@@ -43,6 +43,7 @@ public interface IControlador {
     ArrayList<Jugador> listaJugadoresMasGanadores();
     boolean puedoCantarTruco(EstadoTruco estado) throws RemoteException;
     boolean puedoCantarEnvido(EstadoEnvido estado);
+    String getNombreJugador() throws RemoteException;
 
     void setJugador(int idJugador) throws RemoteException;
     void setVistaEleccion(IVistaEleccion eleccion) throws RemoteException;

@@ -676,8 +676,14 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
             resultadoTanto = "El ganador del Envido es: " + j2.getNombre() + " con " + j2.puntosEnvido() + " puntos";
         }
         else{ // si tienen el mismo tanto se decide por el que es mano (el que no repartió)
-            if( (numeroMano % 2) == 0) anotador.sumarPuntosJ1(puntos);
-            else if( (numeroMano % 2) == 1) anotador.sumarPuntosJ2(puntos);
+            if( (numeroMano % 2) == 0) {
+                anotador.sumarPuntosJ1(puntos);
+                resultadoTanto = "El ganador del Envido es: " + j1.getNombre() + " con " + j1.puntosEnvido() + " puntos";
+            }
+            else if( (numeroMano % 2) == 1) {
+                anotador.sumarPuntosJ2(puntos);
+                resultadoTanto = "El ganador del Envido es: " + j2.getNombre() + " con " + j2.puntosEnvido() + " puntos";
+            }
         }
         notificarTantoQuerido();
         notificarPuntos();
