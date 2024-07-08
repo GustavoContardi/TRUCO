@@ -35,7 +35,7 @@ public class vistaInicio implements IVistaInicio {
     //
 
     public vistaInicio() {
-        this.frame = new JFrame("TRUCONTARDI");
+        this.frame = new JFrame("APP TRUCO");
         frame.setContentPane(ventana);
         frame.pack();
         frame.setResizable(false);

@@ -3,6 +3,8 @@ import controlador.Controlador;
 import interfaces.IControlador;
 import interfaces.IModelo;
 import interfaces.IVistaInicio;
+import modelo.Jugador;
+import modelo.Mazo;
 import modelo.Partida;
 import persistencia.Persistencia;
 import servidor.ServidorTruco;
@@ -98,12 +100,28 @@ public class Main {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-    }*/
+
         //vistaGrafica vista = new vistaGrafica();
 
         //ServidorTruco serv = new ServidorTruco();
-        Persistencia.delvolverTodosJugadores();
+        //Persistencia.delvolverTodosJugadores();
+
+
+        Mazo mazo = new Mazo();
+
+        Jugador jugador = new Jugador("Lito");
+        Jugador jugador2 = new Jugador("Liti");
+
+        mazo.repartirCartas(jugador, jugador2);
+
+        System.out.println(jugador.getCartasObtenidas().get(0).toString()+ " " + jugador.getCartasObtenidas().get(1).toString() + " " +jugador.getCartasObtenidas().get(2).toString());
+        System.out.println(jugador.getNombre() + " puntos de envido: " + jugador.puntosEnvido());
+        System.out.println(jugador2.getCartasObtenidas().get(0).toString()+ " " + jugador2.getCartasObtenidas().get(1).toString()+ " " +jugador2.getCartasObtenidas().get(2).toString());
+        System.out.println(jugador2.getNombre() + " puntos de envido: " + jugador2.puntosEnvido());
+    }*/
+
         new vistaInicio();
         new vistaInicio();
+
     }
 }

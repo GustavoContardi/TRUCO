@@ -1,13 +1,17 @@
 package vista;
 
+import controlador.Controlador;
 import enums.EstadoEnvido;
 import enums.EstadoTruco;
 import interfaces.IControlador;
 import interfaces.IVistaInicio;
 import interfaces.IVistaJuego;
+import vista.flujos.Flujo;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class vistaConsola implements IVistaJuego, IVistaInicio {
     private JPanel ventana;
@@ -15,15 +19,30 @@ public class vistaConsola implements IVistaJuego, IVistaInicio {
     private JTextField txtEntrada;
     private JTextArea txtVista;
     private final JFrame frame;
+    private Flujo flujoActual;
+    private IControlador controlador;
 
     public vistaConsola() {
         frame = new JFrame("TRUCONTARDI");
         frame.setContentPane(ventana);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(500, 300);
+        frame.setSize(500, 350);
         frame.setResizable(false);
         frame.setLocationRelativeTo(null);
 
+        btnEnter.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                procesarEntrada(txtEntrada.getText());
+                txtEntrada.setText("");
+            }
+        });
+
+    }
+
+    public void setFlujoActual(Flujo flujoActual) {
+        this.flujoActual = flujoActual;
+        flujoActual.mostrarSiguienteTexto();
     }
 
 
@@ -49,12 +68,20 @@ public class vistaConsola implements IVistaJuego, IVistaInicio {
 
     @Override
     public void finDeMano() {
-
+        println("--------------------------");
+        println("-     FIN DE LA MANO     -");
+        println("--------------------------");
     }
 
     @Override
     public void finDeLaPartida(String nombreGanador) {
-
+        limpiarPantalla();
+        println("\n--------------------------------------------------------------------");
+        println("        FIN DE LA PARTIDA");
+        println("MUCHAS GRACIAS POR USAR LA APLICACION");
+        println("--------------------------------------------------------------------");
+        println("     ¡¡ GANADOR: " + nombreGanador + " !!");
+        println("--------------------------------------------------------------------");
     }
 
     @Override
@@ -69,7 +96,7 @@ public class vistaConsola implements IVistaJuego, IVistaInicio {
 
     @Override
     public void println(String text) {
-
+        txtVista.append(text + "\n");
     }
 
     @Override
@@ -79,7 +106,7 @@ public class vistaConsola implements IVistaJuego, IVistaInicio {
 
     @Override
     public void setControlador(IControlador controlador) {
-
+        this.controlador = controlador;
     }
 
     @Override
@@ -89,7 +116,7 @@ public class vistaConsola implements IVistaJuego, IVistaInicio {
 
     @Override
     public void salirDelJuego() {
-
+        frame.dispose();
     }
 
     @Override
@@ -109,11 +136,28 @@ public class vistaConsola implements IVistaJuego, IVistaInicio {
 
     @Override
     public void mostrarAviso(String aviso) {
-
+        println("-----------------------");
+        println("AVISO: " + aviso);
+        println("-----------------------");
     }
 
     @Override
     public void salir() {
         frame.setVisible(false);
     }
+
+
+    //
+    // metodos privados
+    //
+
+    private void procesarEntrada(String input) {
+        input = input.trim();
+        if (input.isEmpty()) {
+            return;
+        }
+        flujoActual = flujoActual.procesarEntrada(input);
+        flujoActual.mostrarSiguienteTexto();
+    }
+
 }
