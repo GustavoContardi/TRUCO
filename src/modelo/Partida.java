@@ -66,6 +66,7 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
         numeroRonda=1;
         finMano = true;
         mazo = new Mazo();
+        anotador = new Anotador("", "");
     }
 
 
@@ -110,6 +111,9 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
 
                 if( (numeroMano % 2) == 0) turno = j1.getIDJugador();
                 else turno = j2.getIDJugador();
+
+                j1.devolverCartas();
+                j2.devolverCartas();
 
                 mazo.repartirCartas(j1, j2);
 
@@ -747,6 +751,12 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
     @Override
     public String getJugadorGanador() throws RemoteException {
         return anotador.getGanador();
+    }
+
+    @Override
+    public String getNombreRival(int idJugador) throws RemoteException {
+        if(j1.getIDJugador() != idJugador) return j1.getNombre();
+        else return j2.getNombre();
     }
 
 

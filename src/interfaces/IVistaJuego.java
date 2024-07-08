@@ -7,11 +7,11 @@ import java.rmi.RemoteException;
 
 public interface IVistaJuego {
     void mostrarCartas() throws RemoteException;
-    void actualizarPuntaje(String puntaje);
+    void actualizarPuntaje(String puntaje) throws RemoteException;
     void mostrarMensaje(String msj);
     void limpiarPantalla();
     void finDeMano() throws RemoteException;
-    void finDeLaPartida(String nombreGanador);
+    void finDeLaPartida(String nombreGanador) throws RemoteException;
     void cantaronRabon(String rabon, EstadoTruco estado) throws RemoteException;
     void cantaronTanto(String tanto, EstadoEnvido estado) throws RemoteException;
     void println(String text);
@@ -21,7 +21,7 @@ public interface IVistaJuego {
     void actualizar() throws RemoteException;
     void salirDelJuego();
     void meTiraronCarta(String carta) throws RemoteException;
-    void tirarCarta();
+    void tirarCarta(int posCarta) throws RemoteException;
     void iniciar();
     void mostrarAviso(String aviso);
 }

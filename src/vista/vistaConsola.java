@@ -1,19 +1,20 @@
 package vista;
 
-import controlador.Controlador;
 import enums.EstadoEnvido;
 import enums.EstadoTruco;
 import interfaces.IControlador;
 import interfaces.IVistaInicio;
 import interfaces.IVistaJuego;
-import vista.flujos.Flujo;
+import vista.flujos.*;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.rmi.RemoteException;
+import java.util.ArrayList;
 
 public class vistaConsola implements IVistaJuego, IVistaInicio {
+
     private JPanel ventana;
     private JButton btnEnter;
     private JTextField txtEntrada;
@@ -22,8 +23,13 @@ public class vistaConsola implements IVistaJuego, IVistaInicio {
     private Flujo flujoActual;
     private IControlador controlador;
 
+
+    //
+    // constructor
+    //
+
     public vistaConsola() {
-        frame = new JFrame("TRUCONTARDI");
+        frame = new JFrame("APP TRUCO");
         frame.setContentPane(ventana);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(500, 350);
@@ -33,65 +39,81 @@ public class vistaConsola implements IVistaJuego, IVistaInicio {
         btnEnter.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                procesarEntrada(txtEntrada.getText());
+                try {
+                    procesarEntrada(txtEntrada.getText());
+                } catch (RemoteException ex) {
+                    ex.printStackTrace();
+                }
                 txtEntrada.setText("");
             }
         });
 
     }
 
-    public void setFlujoActual(Flujo flujoActual) {
+    //
+    // metodos publicos
+    //
+
+    public void setFlujoActual(Flujo flujoActual) throws RemoteException {
         this.flujoActual = flujoActual;
         flujoActual.mostrarSiguienteTexto();
     }
 
 
     @Override
-    public void mostrarCartas() {
-
+    public void mostrarCartas() throws RemoteException {
+        flujoActual = new FlujoMostrarCartas(this, controlador);
+        flujoActual.mostrarSiguienteTexto();
     }
 
     @Override
-    public void actualizarPuntaje(String puntaje) {
-
+    public void actualizarPuntaje(String puntaje) throws RemoteException {
+        mostrarCartas(); // ese metodo tiene el puntaje incluido
     }
 
     @Override
     public void mostrarMensaje(String msj) {
-
+        println("\n" + msj + "\n");
     }
 
     @Override
     public void limpiarPantalla() {
-
+        txtVista.setText("");
     }
 
     @Override
     public void finDeMano() {
-        println("--------------------------");
+        println("-----------------------------");
         println("-     FIN DE LA MANO     -");
-        println("--------------------------");
+        println("-----------------------------");
     }
 
     @Override
-    public void finDeLaPartida(String nombreGanador) {
-        limpiarPantalla();
-        println("\n--------------------------------------------------------------------");
-        println("        FIN DE LA PARTIDA");
-        println("MUCHAS GRACIAS POR USAR LA APLICACION");
-        println("--------------------------------------------------------------------");
+    public void finDeLaPartida(String nombreGanador) throws RemoteException {
+
+        println("\n---------------------------------------------------------------");
+        println("                   FIN DE LA PARTIDA                        ");
+        println("         MUCHAS GRACIAS POR USAR LA APLICACION              ");
+        println("---------------------------------------------------------------");
         println("     ¡¡ GANADOR: " + nombreGanador + " !!");
-        println("--------------------------------------------------------------------");
+        println("---------------------------------------------------------------");
+
+        flujoActual = new FlujoFinPartida(this, controlador);
+        flujoActual.mostrarSiguienteTexto();
     }
 
     @Override
-    public void cantaronRabon(String rabon, EstadoTruco estado) {
-
+    public void cantaronRabon(String rabon, EstadoTruco estado) throws RemoteException {
+        println(rabon);
+        flujoActual = new FlujoTruco(this, controlador);
+        flujoActual.mostrarSiguienteTexto();
     }
 
     @Override
-    public void cantaronTanto(String tanto, EstadoEnvido estado) {
-
+    public void cantaronTanto(String tanto, EstadoEnvido estado) throws RemoteException {
+        println(controlador.getNombreRival() + " tiró: " + tanto);
+        flujoActual = new FlujoEnvido(this, controlador);
+        flujoActual.mostrarSiguienteTexto();
     }
 
     @Override
@@ -100,8 +122,9 @@ public class vistaConsola implements IVistaJuego, IVistaInicio {
     }
 
     @Override
-    public void mostrarMenuPrincipal() {
-
+    public void mostrarMenuPrincipal() throws RemoteException {
+        iniciar();
+        mostrarCartas();
     }
 
     @Override
@@ -111,22 +134,24 @@ public class vistaConsola implements IVistaJuego, IVistaInicio {
 
     @Override
     public void actualizar() {
-
+        println("");
     }
 
     @Override
     public void salirDelJuego() {
+        new vistaInicio();
         frame.dispose();
     }
 
     @Override
-    public void meTiraronCarta(String carta) {
-
+    public void meTiraronCarta(String carta) throws RemoteException {
+        println(controlador.getNombreRival() + " tiró: " + carta);
+        mostrarCartas();
     }
 
     @Override
-    public void tirarCarta() {
-
+    public void tirarCarta(int posCarta) throws RemoteException {
+        controlador.tirarCarta(posCarta);
     }
 
     @Override
@@ -136,9 +161,9 @@ public class vistaConsola implements IVistaJuego, IVistaInicio {
 
     @Override
     public void mostrarAviso(String aviso) {
-        println("-----------------------");
-        println("AVISO: " + aviso);
-        println("-----------------------");
+        println("-----------------------------------------");
+        println("- AVISO: " + aviso);
+        println("-----------------------------------------");
     }
 
     @Override
@@ -146,12 +171,45 @@ public class vistaConsola implements IVistaJuego, IVistaInicio {
         frame.setVisible(false);
     }
 
+    public void mostrarOpciones() throws RemoteException {
+        // muestra los botones disponibles actuales
+
+        if( (controlador.nroDeRonda() == 1)){
+            if(!controlador.seCantoEnvido()) println("1- Envido | 2- Truco | 3- Tirar Carta | 4- Ir al mazo");
+            else println("2- Truco | 3- Tirar Carta | 4- Ir al mazo");
+        }
+        else{
+            switch (controlador.estadoDelRabon()){
+                case NADA -> println("2- Truco | 3- Tirar Carta | 4- Ir al mazo");
+                case TRUCO -> println("2- Re Truco | 3- Tirar Carta | 4- Ir al mazo");
+                case RE_TRUCO ->  println("2- Vale Cuatro | 3- Tirar Carta | 4- Ir al mazo");
+                case VALE_CUATRO -> println("3- Tirar Carta | 4- Ir al mazo");
+            }
+        }
+
+
+    }
+
+    public void mostrarOpcionesTruco(){
+
+    }
+    public void mostrarOpcionesEnvido(){
+
+    }
+
+    public void mostrarCartasDisponibles() throws RemoteException {
+        ArrayList<String> cartas = controlador.obtenerCartas();
+
+        for(int i=0; i<cartas.size(); i++){
+            println(i+1 + "- " + cartas.get(i));
+        }
+    }
 
     //
     // metodos privados
     //
 
-    private void procesarEntrada(String input) {
+    private void procesarEntrada(String input) throws RemoteException {
         input = input.trim();
         if (input.isEmpty()) {
             return;

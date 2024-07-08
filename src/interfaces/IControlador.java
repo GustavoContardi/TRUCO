@@ -1,13 +1,9 @@
 package interfaces;
 
-import ar.edu.unlu.rmimvc.cliente.IControladorRemoto;
-import ar.edu.unlu.rmimvc.observer.IObservableRemoto;
-import ar.edu.unlu.rmimvc.observer.IObservadorRemoto;
 import enums.EstadoEnvido;
 import enums.EstadoTruco;
 import modelo.Jugador;
 
-import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 
@@ -17,7 +13,7 @@ public interface IControlador {
     String puntajeActual() throws RemoteException;
     ArrayList<String> obtenerCartas() throws RemoteException;
     void tirarCarta(int numeroDeCarta) throws RemoteException;
-    int meVoyAlMazo() throws RemoteException;
+    void meVoyAlMazo() throws RemoteException;
     void guardarPartida() throws RemoteException;
     void recuperarPartida() throws RemoteException;
     void cantarTanto(EstadoEnvido estado) throws RemoteException;
@@ -45,6 +41,7 @@ public interface IControlador {
     boolean puedoCantarEnvido(EstadoEnvido estado);
     String getNombreJugador() throws RemoteException;
     void volverAlMenuPrincipal() throws RemoteException;
+    String getNombreRival()throws RemoteException;
 
     void setJugador(int idJugador) throws RemoteException;
     void setVistaEleccion(IVistaEleccion eleccion) throws RemoteException;

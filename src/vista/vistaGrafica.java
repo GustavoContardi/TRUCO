@@ -535,7 +535,7 @@ public class vistaGrafica implements IVistaJuego {
     }
 
     @Override
-    public void tirarCarta() {
+    public void tirarCarta(int posCarta) {
 
     }
 

@@ -104,7 +104,7 @@ public class Main {
         //vistaGrafica vista = new vistaGrafica();
 
         //ServidorTruco serv = new ServidorTruco();
-        //Persistencia.delvolverTodosJugadores();
+        //
 
 
         Mazo mazo = new Mazo();
@@ -119,7 +119,7 @@ public class Main {
         System.out.println(jugador2.getCartasObtenidas().get(0).toString()+ " " + jugador2.getCartasObtenidas().get(1).toString()+ " " +jugador2.getCartasObtenidas().get(2).toString());
         System.out.println(jugador2.getNombre() + " puntos de envido: " + jugador2.puntosEnvido());
     }*/
-
+        Persistencia.delvolverTodosJugadores();
         new vistaInicio();
         new vistaInicio();
 

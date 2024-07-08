@@ -1,18 +1,22 @@
 package vista.flujos;
 
 import controlador.Controlador;
+import interfaces.IControlador;
+import vista.vistaConsola;
 import vista.vistaGrafica;
 
-public abstract class Flujo {
-    protected final vistaGrafica vista;
-    protected final Controlador controlador;
+import java.rmi.RemoteException;
 
-    public Flujo(vistaGrafica vista, Controlador controlador) {
+public abstract class Flujo {
+    protected final vistaConsola vista;
+    protected final IControlador controlador;
+
+    public Flujo(vistaConsola vista, IControlador controlador) {
         this.vista = vista;
         this.controlador = controlador;
     }
 
-    public abstract Flujo procesarEntrada(String string);
+    public abstract Flujo procesarEntrada(String string) throws RemoteException;
 
-    public abstract void mostrarSiguienteTexto();
+    public abstract void mostrarSiguienteTexto() throws RemoteException;
 }

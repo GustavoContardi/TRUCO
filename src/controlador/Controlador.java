@@ -59,15 +59,20 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
 
     @Override
     public ArrayList<String> obtenerCartas() throws RemoteException {
-        ArrayList<String> lista = new ArrayList<>();
+        ArrayList<String> lista =  null;
         ArrayList<Carta> cartasJugador = new ArrayList<>();
 
         if (jugador.getIDJugador() == modelo.getIdJ1()) cartasJugador = modelo.getCartasJ1();
         else cartasJugador = modelo.getCartasJ2();
 
-        if(cartasJugador != null){
+        if(cartasJugador != null && !cartasJugador.isEmpty()){
+            lista = new ArrayList<>();
             for(Carta carta : cartasJugador){
-                lista.add(carta.toString());
+                if (!carta.isFueTirada())
+                    lista.add(carta.toString()); // le agrego solo las cartas disponibles a tirar
+                else
+                    lista.add(" "); // esto para no verificar que la posicion es vacia en la vista y que me tire una excepcion null
+
             }
         }
 
@@ -77,17 +82,20 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
     @Override
     public void tirarCarta(int numeroDeCarta) throws RemoteException { // en realidad no es el id de la carta, porque cuando la tiro de la vista no sabe como pasarle el id pq no conoce al objeto
         int idCarta = 0;
-        if(jugador.getIDJugador() == modelo.getIdJ1()) idCarta = modelo.getCartasJ1().get(numeroDeCarta-1).getIdCarta();
-        else idCarta = modelo.getCartasJ2().get(numeroDeCarta-1).getIdCarta();
 
-        modelo.tirarCarta(jugador.getIDJugador(), idCarta);
-        return;
+        if(quedanCartasJugador()){
+
+            if(jugador.getIDJugador() == modelo.getIdJ1()) idCarta = modelo.getCartasJ1().get(numeroDeCarta-1).getIdCarta();
+            else idCarta = modelo.getCartasJ2().get(numeroDeCarta-1).getIdCarta();
+
+            modelo.tirarCarta(jugador.getIDJugador(), idCarta);
+
+        }
     }
 
     @Override
-    public int meVoyAlMazo() throws RemoteException {
+    public void meVoyAlMazo() throws RemoteException {
         modelo.meVoyAlMazo(jugador.getIDJugador());
-        return 0;
     }
 
     @Override
@@ -277,15 +285,20 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
     @Override
     public boolean puedoCantarTruco(EstadoTruco estado) throws RemoteException {
         switch (estado){
-            case TRUCO -> {
+            case NADA -> {
                 return true;
             }
-            case RE_TRUCO -> {
+            case TRUCO -> {
                 if(modelo.getQuienCantoTruco() != jugador.getIDJugador()) return true;
             }
-            case VALE_CUATRO -> {
+            case RE_TRUCO -> {
                 if(modelo.getQuienCantoReTruco() != jugador.getIDJugador()) return true;
             }
+            case VALE_CUATRO -> {
+                return false;
+            }
+
+            // como le paso el estado actual del truco en la partida, si mi estado es TRUCO solo puedo cantar RE TRUCO si mi oponente fue quien canto el TRUCO
         }
 
         return false;
@@ -304,6 +317,11 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
     @Override
     public void volverAlMenuPrincipal() throws RemoteException {
         new vistaInicio();
+    }
+
+    @Override
+    public String getNombreRival() throws RemoteException {
+        return modelo.getNombreRival(jugador.getIDJugador());
     }
 
     @Override
@@ -413,4 +431,29 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
     public <T extends IObservableRemoto> void setModeloRemoto(T t) throws RemoteException {
         this.modelo = (IModelo) t;
     }
+
+
+    //
+    // metodos privados
+    //
+
+    private boolean quedanCartasJugador() throws RemoteException { // en este metodo verifico si el jugador tiene cartas para tirar, para no tener errores futuros
+        ArrayList<Carta> cartas;
+        int contador = 0;
+
+        if(jugador.getIDJugador() != modelo.getIdJ1()) cartas = modelo.getCartasJ1();
+        else cartas = modelo.getCartasJ2();
+
+        for(Carta c : cartas){
+            if(!c.isFueTirada()) contador += 1;
+        }
+
+        if(contador >= 1) return true;
+        else return false;
+    }
 }
+
+
+
+
+
