@@ -14,6 +14,10 @@ public class Mazo implements Serializable {
     public Mazo() {
         // levanto el mazo del archivo
         recuperarMazo();
+
+
+
+
     }
 
 

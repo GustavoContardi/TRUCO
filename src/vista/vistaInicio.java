@@ -1,6 +1,7 @@
 package vista;
 
 import cliente.ClienteTruco;
+import controlador.Controlador;
 import interfaces.IVistaInicio;
 import modelo.Jugador;
 import persistencia.Persistencia;
@@ -119,8 +120,8 @@ public class vistaInicio implements IVistaInicio {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    frame.setVisible(false);
                     new ClienteTruco(1);
+                    frame.dispose();
                 } catch (RemoteException ex) {
                     throw new RuntimeException(ex);
                 }
@@ -132,8 +133,8 @@ public class vistaInicio implements IVistaInicio {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    frame.setVisible(false);
                     new ClienteTruco(2);
+                    frame.dispose();
                 } catch (RemoteException ex) {
                     throw new RuntimeException(ex);
                 }

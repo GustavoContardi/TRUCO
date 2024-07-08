@@ -5,6 +5,7 @@ import enums.EstadoEnvido;
 import enums.EstadoTruco;
 import enums.Eventos;
 import interfaces.IModelo;
+import persistencia.Persistencia;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -125,13 +126,12 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
         if(nroRondasGanadasJ1 > nroRondasGanadasJ2) puntajeRondaJ1 += puntosRabon;
         else if(nroRondasGanadasJ1 < nroRondasGanadasJ2) puntajeRondaJ2 += puntosRabon;
 
-        notificarFinMano();
-
         Timer timer = new Timer(2000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Código que se ejecutará después de 2 segundos
+                // Código que se ejecutará después de 3 segundos
                 try {
+                    notificarFinMano();
                     actualizarPuntos(); // espero 2 segundos antes de notificar para que se pueda ver lo que paso antes y no sea tan rapido
                     nuevaRonda();
                 } catch (RemoteException ex) {
@@ -253,18 +253,33 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
             finDeLaRonda();
         }
 
-        if(esFinDePartida()) finDePartida();
+        //if(esFinDePartida()) finDePartida();
 
     }
 
     @Override
     public void finDePartida() throws RemoteException {
         if(anotador.getPuntosJ2() > anotador.getPuntosJ1()) j2.sumarPartidaGanada();
-        else j1.partidaGanada();
+        else j1.sumarPartidaGanada();
 
-
+        Persistencia.delvolverJugadores(j1.getIDJugador(), j2.getIDJugador());
         actualizarPuntos();
-        notificarFinPartida();
+
+        Timer timer = new Timer(2000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Código que se ejecutará después de 2 segundos
+                try {
+                    // espero 2 segundos antes de notificar para que se pueda ver lo que paso antes y no sea tan rapido
+                    notificarFinPartida();
+                } catch (RemoteException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+        timer.setRepeats(false); // Asegura que el timer solo se ejecute una vez
+        timer.start();
+
     }
 
     @Override
@@ -693,7 +708,7 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
         notificarTantoQuerido();
         notificarPuntos();
 
-        if(esFinDePartida()) notificarFinPartida();
+        if(esFinDePartida()) finDePartida();
     }
 
     @Override

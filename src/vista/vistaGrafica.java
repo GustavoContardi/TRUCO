@@ -48,12 +48,10 @@ public class vistaGrafica implements IVistaJuego {
     public vistaGrafica() throws RemoteException {
         this.frame = new JFrame("TRUCONTARDI");
         frame.setContentPane(ventana);
-        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.pack();
         frame.setSize(730, 820);
         frame.setResizable(false);
         frame.setLocationRelativeTo(null);
-
     }
 
 
@@ -148,7 +146,77 @@ public class vistaGrafica implements IVistaJuego {
     public void finDeLaPartida(String nombreGanador) {
         panelAvisos( "LA PARTIDA TERMINO. EL GANADOR ES: " + nombreGanador);
 
-        // demas cosas
+        removeBtnActionListener();
+        eliminarTodosAL();
+
+        CartasOP1.removeAll();
+        CartasOP1.revalidate();
+        CartasOP1.repaint();
+        CartasOP2.removeAll();
+        CartasOP2.revalidate();
+        CartasOP2.repaint();
+        CartasOP3.removeAll();
+        CartasOP3.revalidate();
+        CartasOP3.repaint();
+
+        CartasYo1.removeAll();
+        CartasYo1.revalidate();
+        CartasYo1.repaint();
+        CartasYo2.removeAll();
+        CartasYo2.revalidate();
+        CartasYo2.repaint();
+        CartasYo3.removeAll();
+        CartasYo3.revalidate();
+        CartasYo3.repaint();
+
+        btnCarta1.setIcon(null);
+        btnCarta2.setIcon(null);
+        btnCarta3.setIcon(null);
+
+        accionesJ2.setText("Presione cualquier boton para volver al menu..");
+        btnEnvido.setEnabled(true);
+        btnAuxiliar.setEnabled(true);
+        TRUCOButton.setEnabled(true);
+        btnEnvido.setText("  VOLVER  ");
+        TRUCOButton.setText("  AL  ");
+        btnAuxiliar.setText("  INICIO  ");
+
+        btnEnvido.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    controlador.volverAlMenuPrincipal();
+                    frame.dispose();
+                } catch (RemoteException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+
+        TRUCOButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    controlador.volverAlMenuPrincipal();
+                    frame.dispose();
+                } catch (RemoteException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+
+        btnAuxiliar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    controlador.volverAlMenuPrincipal();
+                    frame.dispose();
+                } catch (RemoteException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+
     }
 
     @Override
@@ -256,8 +324,8 @@ public class vistaGrafica implements IVistaJuego {
             public void actionPerformed(ActionEvent e) {
                 accionesJ2.setText("");
                 try {
-                    controlador.tantoQuerido();
                     setBotones();
+                    controlador.tantoQuerido();
                 } catch (RemoteException ex) {
                     ex.printStackTrace();
                 }
@@ -268,6 +336,7 @@ public class vistaGrafica implements IVistaJuego {
             public void actionPerformed(ActionEvent e) {
                 accionesJ2.setText("");
                 try {
+                    setBotones();
                     controlador.tantoNoQuerido();
                 } catch (RemoteException ex) {
                     ex.printStackTrace();
@@ -277,6 +346,8 @@ public class vistaGrafica implements IVistaJuego {
 
         switch (estado){
             case ENVIDO -> {
+                btnEnvido.setEnabled(true);
+                btnEnvido.setText(" ENVIDO ");
                 btnEnvido.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
@@ -494,7 +565,11 @@ public class vistaGrafica implements IVistaJuego {
         btnEnvido.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                setBotonesEnvido();
+                try {
+                    if(!controlador.seCantoEnvido()) setBotonesEnvido();
+                } catch (RemoteException ex) {
+                    ex.printStackTrace();
+                }
             }
         });
 

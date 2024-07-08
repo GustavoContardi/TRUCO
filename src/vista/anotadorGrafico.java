@@ -38,7 +38,7 @@ public class anotadorGrafico {
         mnuiSalir.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    frame.setVisible(false);
+                    frame.dispose();
                     inicio.iniciar();
                 }
             });

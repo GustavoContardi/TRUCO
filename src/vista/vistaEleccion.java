@@ -70,7 +70,7 @@ public class vistaEleccion implements IVistaEleccion {
 
         if(!nombre.isEmpty()){
             controlador.agregarJugador(nombre);
-
+            textRegistrar.setText("");
             panelAvisos("¡JUGADOR REGISTRADO CON ÉXITO!");
         }
     }
@@ -80,7 +80,7 @@ public class vistaEleccion implements IVistaEleccion {
 
         if(jugador != null){
             controlador.setJugador(jugador.getIDJugador());
-            salir();
+            frame.dispose();
         }
     }
 

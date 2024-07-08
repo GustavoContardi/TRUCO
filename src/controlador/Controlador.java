@@ -9,6 +9,7 @@ import interfaces.*;
 import modelo.Carta;
 import modelo.Jugador;
 import persistencia.Persistencia;
+import vista.vistaInicio;
 
 import java.io.Serializable;
 import java.rmi.RemoteException;
@@ -29,7 +30,6 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
     //
 
     public Controlador() {
-
     }
 
 
@@ -302,6 +302,11 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
     }
 
     @Override
+    public void volverAlMenuPrincipal() throws RemoteException {
+        new vistaInicio();
+    }
+
+    @Override
     public void setJugador(int idJugador) throws RemoteException {
         jugador = Persistencia.recuperarJugador(idJugador);
         modelo.agregarJugador(jugador);
@@ -378,7 +383,6 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
             case FIN_MANO -> {
                 vistaJuego.actualizarPuntaje(modelo.puntosActuales());
                 vistaJuego.finDeMano();
-                vistaJuego.mostrarCartas();
             }
             case INICIO_PARTIDA -> {
                 vistaJuego.mostrarMenuPrincipal();

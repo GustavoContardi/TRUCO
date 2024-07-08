@@ -57,7 +57,7 @@ public class Jugador implements Comparable<Jugador>, Serializable{
     }
 
     public void devolverCartas(){
-        cartasObtenidas.clear();
+        if(cartasObtenidas != null) cartasObtenidas.clear();
     }
     public void sumarPartidaGanada(){
         Persistencia.sumarPartidaGanadaJugador(IDJugador);
@@ -133,7 +133,7 @@ public class Jugador implements Comparable<Jugador>, Serializable{
     }
 
     public void partidaGanada(){
-        partidasGanadas++;
+        partidasGanadas += 1;
     }
 
     public void jugadorFueDevuelto(){

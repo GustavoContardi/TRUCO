@@ -38,7 +38,7 @@ public class Envido implements Serializable {
             puntosEnvido = cartasIguales.get(0).getNumeroCarta();
         }
         else {
-            if (cartasIguales.get(0).getNumeroCarta() >= 10 && cartasIguales.get(1).getNumeroCarta() >= 10) {
+            if ((cartasIguales.get(0).getNumeroCarta() >= 10) && (cartasIguales.get(1).getNumeroCarta() >= 10)) {
                 puntosEnvido = 20;
             } else if (cartasIguales.get(0).getNumeroCarta() >= 10 || cartasIguales.get(1).getNumeroCarta() >= 10) {
                 puntosEnvido = 20 + masAlta(cartasIguales).getNumeroCarta();
@@ -46,7 +46,6 @@ public class Envido implements Serializable {
                 puntosEnvido = cartasIguales.get(0).getNumeroCarta() + cartasIguales.get(1).getNumeroCarta() + 20;
             }
         }
-
         return puntosEnvido;
     }
 
@@ -57,7 +56,14 @@ public class Envido implements Serializable {
     private ArrayList<Carta> calcularCartasIguales(ArrayList<Carta> lista){
         ArrayList<Carta> iguales = new ArrayList<>();
 
-        if(lista.get(0).getPaloCarta().equals(lista.get(1).getPaloCarta())){
+        if(lista.get(0).getPaloCarta().equals(lista.get(1).getPaloCarta()) && lista.get(0).getPaloCarta().equals(lista.get(2).getPaloCarta())){
+            // si las tres son iguales entonces tengo que elegir las dos mas altas
+            Carta c1 = masAlta(lista);
+            Carta c2 = masAlta(lista, c1);
+            iguales.add(c1);
+            iguales.add(c2);
+        }
+        else if(lista.get(0).getPaloCarta().equals(lista.get(1).getPaloCarta())){
             iguales.add(lista.get(0));
             iguales.add(lista.get(1));
         }
@@ -69,17 +75,11 @@ public class Envido implements Serializable {
             iguales.add(lista.get(0));
             iguales.add(lista.get(2));
         }
-        else if(lista.get(0).getPaloCarta().equals(lista.get(2).getPaloCarta()) && lista.get(3).getPaloCarta().equals(lista.get(2).getPaloCarta())){
-            // si las tres son iguales entonces tengo que elegir las dos mas altas
-            Carta c1 = masAlta(lista);
-            Carta c2 = masAlta(lista, c1);
-            iguales.add(c1);
-            iguales.add(c2);
-        }
         else{ // basicamente si no tiene cartas iguales le retorno la mas alta
             iguales.add(masAlta(lista));
         }
-        return iguales; // por ahora
+
+        return iguales;
     }
 
     private Carta masAlta(ArrayList<Carta> lista){
@@ -88,8 +88,8 @@ public class Envido implements Serializable {
 
         for(int i=0; i<lista.size(); i++){
             if(jerarquiaCartas.indexOf(lista.get(i).getNumeroCarta()) < max) {
-                cartaAlta = lista.get(i);
                 max = jerarquiaCartas.indexOf(lista.get(i).getNumeroCarta());
+                cartaAlta = lista.get(i);
             }
         }
 
@@ -102,16 +102,14 @@ public class Envido implements Serializable {
         int max = 99;
 
         for(int i=0; i<lista.size(); i++){
-            if(jerarquiaCartas.indexOf(lista.get(i).getNumeroCarta()) < max && (noElegir.getIdCarta() != lista.get(i).getIdCarta())) {
-                cartaAlta = lista.get(i);
+            if( (jerarquiaCartas.indexOf(lista.get(i).getNumeroCarta()) < max) && (noElegir.getIdCarta() != lista.get(i).getIdCarta()) ) {
                 max = jerarquiaCartas.indexOf(lista.get(i).getNumeroCarta());
+                cartaAlta = lista.get(i);
             }
         }
 
         return cartaAlta;
     }
-
-    // SET Y GET
 
 
 }

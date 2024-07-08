@@ -259,10 +259,8 @@ public class Persistencia implements Comparable<Jugador>, Serializable {
 
     public static void sumarPartidaGanadaJugador(int idJugador){
         for(Jugador j : listaJugadores){
-            if(j.getIDJugador() == idJugador) j.jugadorFueElecto();
+            if(j.getIDJugador() == idJugador) j.partidaGanada();
         }
-
-        jugador.partidaGanada();
 
         // modifico la lista y la sobreescribo con el atributo partidasGanadas modificado (1 +)
         try {
@@ -283,6 +281,29 @@ public class Persistencia implements Comparable<Jugador>, Serializable {
         if(listaJugadores != null){
             for(Jugador j : listaJugadores){
                 j.jugadorFueDevuelto();
+            }
+        }
+
+        // modifico la lista y la sobreescribo con el atributo electo modificado
+
+        try {
+            FileOutputStream fos = new FileOutputStream("jugadores.bin");
+            var oos = new ObjectOutputStream(fos);
+            oos.writeObject(listaJugadores);
+            fos.close();
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static void delvolverJugadores(int idJ1, int idJ2){ // este metodo devuelve los jugadores que estaban en una partida y finalizó
+        listaJugadores = listaJugadoresGuardados(false);
+
+        if(listaJugadores != null){
+            for(Jugador j : listaJugadores){
+                if (j.getIDJugador() == idJ1 || j.getIDJugador() == idJ2) j.jugadorFueDevuelto();
             }
         }
 
