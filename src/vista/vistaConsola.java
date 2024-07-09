@@ -32,7 +32,7 @@ public class vistaConsola implements IVistaJuego, IVistaInicio {
         frame = new JFrame("APP TRUCO");
         frame.setContentPane(ventana);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(500, 350);
+        frame.setSize(600, 450);
         frame.setResizable(false);
         frame.setLocationRelativeTo(null);
 
@@ -73,7 +73,7 @@ public class vistaConsola implements IVistaJuego, IVistaInicio {
 
     @Override
     public void mostrarMensaje(String msj) {
-        println("\n" + msj + "\n");
+        println("\n" + msj);
     }
 
     @Override
@@ -145,7 +145,9 @@ public class vistaConsola implements IVistaJuego, IVistaInicio {
 
     @Override
     public void meTiraronCarta(String carta) throws RemoteException {
+        println("\n------------------------------------");
         println(controlador.getNombreRival() + " tiró: " + carta);
+        println("------------------------------------");
         mostrarCartas();
     }
 

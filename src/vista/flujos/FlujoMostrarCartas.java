@@ -50,8 +50,7 @@ public class FlujoMostrarCartas extends Flujo{
     @Override
     public void mostrarSiguienteTexto() throws RemoteException {
         if(controlador.obtenerCartas() != null){
-            vista.println("\n-----------------\n");
-            vista.println("Cartas de: " + controlador.getNombreJugador().toUpperCase());
+            vista.println("\nCARTAS DE: " + controlador.getNombreJugador().toUpperCase());
             vista.println(controlador.puntajeActual());
             vista.println("");
             vista.mostrarCartasDisponibles();

@@ -334,13 +334,13 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
                 quienCantoEnvido = idJugadorCanto;
                 estadoDelEnvido = ENVIDO;
                 cantoEnvido = true;
-                evento = CANTO_ENVIDO_DOBLE;
+                evento = CANTO_ENVIDO;
             }
             case ENVIDO_DOBLE -> {
                 quienCantoEnvidoDoble = idJugadorCanto;
                 estadoDelEnvido = ENVIDO_DOBLE;
                 cantoEnvidoDoble = true;
-                evento = CANTO_ENVIDO;
+                evento = CANTO_ENVIDO_DOBLE;
             }
             case REAL_ENVIDO -> {
                 quienCantoRealEnvido = idJugadorCanto;

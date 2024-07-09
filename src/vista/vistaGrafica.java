@@ -674,13 +674,9 @@ public class vistaGrafica implements IVistaJuego {
             public void actionPerformed(ActionEvent e) {
                 try {
                     if(controlador.esMiTurno()) {
-                        try {
-                            controlador.cantarTanto(ENVIDO);
-                            btnEnvido.setEnabled(false);
-                            setBotones();
-                        } catch (RemoteException ex) {
-                            ex.printStackTrace();
-                        }
+                        controlador.cantarTanto(ENVIDO);
+                        btnEnvido.setEnabled(false);
+                        setBotones();
                     }
                 } catch (RemoteException ex) {
                     ex.printStackTrace();
@@ -695,13 +691,9 @@ public class vistaGrafica implements IVistaJuego {
             public void actionPerformed(ActionEvent e) {
                 try {
                     if(controlador.esMiTurno()) {
-                        try {
-                            controlador.cantarTanto(REAL_ENVIDO);
-                            btnEnvido.setEnabled(false);
-                            setBotones();
-                        } catch (RemoteException ex) {
-                            ex.printStackTrace();
-                        }
+                        controlador.cantarTanto(REAL_ENVIDO);
+                        btnEnvido.setEnabled(false);
+                        setBotones();
                     }
                 } catch (RemoteException ex) {
                     ex.printStackTrace();

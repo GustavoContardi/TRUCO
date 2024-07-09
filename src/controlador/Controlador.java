@@ -68,10 +68,8 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
         if(cartasJugador != null && !cartasJugador.isEmpty()){
             lista = new ArrayList<>();
             for(Carta carta : cartasJugador){
-                if (!carta.isFueTirada())
-                    lista.add(carta.toString()); // le agrego solo las cartas disponibles a tirar
-                else
-                    lista.add(" "); // esto para no verificar que la posicion es vacia en la vista y que me tire una excepcion null
+                if (!carta.isFueTirada()) lista.add(carta.toString()); // le agrego solo las cartas disponibles a tirar
+                else lista.add(" "); // esto para no verificar que la posicion es vacia en la vista y que me tire una excepcion null
 
             }
         }
