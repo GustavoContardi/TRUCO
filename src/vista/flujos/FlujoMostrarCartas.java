@@ -6,6 +6,7 @@ import interfaces.IControlador;
 import vista.vistaConsola;
 import vista.vistaGrafica;
 
+import javax.swing.*;
 import java.rmi.RemoteException;
 
 public class FlujoMostrarCartas extends Flujo{
@@ -50,6 +51,9 @@ public class FlujoMostrarCartas extends Flujo{
     @Override
     public void mostrarSiguienteTexto() throws RemoteException {
         if(controlador.obtenerCartas() != null){
+            vista.println("");
+            vista.mostrarMesa();
+            vista.println("");
             vista.println("\nCARTAS DE: " + controlador.getNombreJugador().toUpperCase());
             vista.println(controlador.puntajeActual());
             vista.println("");

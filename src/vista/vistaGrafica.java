@@ -219,6 +219,7 @@ public class vistaGrafica implements IVistaJuego {
                 }
             }
         });
+        IRALMAZOButton.setEnabled(false);
 
     }
 

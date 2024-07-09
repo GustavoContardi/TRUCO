@@ -323,6 +323,34 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
     }
 
     @Override
+    public ArrayList<String> getCartasTiradasYo() throws RemoteException {
+        ArrayList<String> lista = new ArrayList<>();
+        ArrayList<Carta> cartas = new ArrayList<>();
+
+        if(jugador.getIDJugador() == modelo.getIdJ1()) cartas = modelo.getCartasTiradasJ1();
+        else cartas = modelo.getCartasTiradasJ2();
+
+        for(Carta carta : cartas){
+            lista.add(carta.toString());
+        }
+        return lista;
+    }
+
+    @Override
+    public ArrayList<String> getCartasTiradasRival() throws RemoteException {
+        ArrayList<String> lista = new ArrayList<>();
+        ArrayList<Carta> cartas = new ArrayList<>();
+
+        if(jugador.getIDJugador() != modelo.getIdJ1()) cartas = modelo.getCartasTiradasJ1();
+        else cartas = modelo.getCartasTiradasJ2();
+
+        for(Carta carta : cartas){
+            lista.add(carta.toString());
+        }
+        return lista;
+    }
+
+    @Override
     public void setJugador(int idJugador) throws RemoteException {
         jugador = Persistencia.recuperarJugador(idJugador);
         modelo.agregarJugador(jugador);

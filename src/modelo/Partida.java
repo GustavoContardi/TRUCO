@@ -759,5 +759,15 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
         else return j2.getNombre();
     }
 
+    @Override
+    public ArrayList<Carta> getCartasTiradasJ1() throws RemoteException {
+        return cartasTiradasJ1;
+    }
+
+    @Override
+    public ArrayList<Carta> getCartasTiradasJ2() throws RemoteException {
+        return cartasTiradasJ2;
+    }
+
 
 }

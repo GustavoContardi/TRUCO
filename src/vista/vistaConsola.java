@@ -91,12 +91,12 @@ public class vistaConsola implements IVistaJuego, IVistaInicio {
     @Override
     public void finDeLaPartida(String nombreGanador) throws RemoteException {
 
-        println("-----------------------------------------------------------------------");
+        println("-------------------------------------------------------------------------");
         println("                   FIN DE LA PARTIDA                        ");
-        println("         MUCHAS GRACIAS POR USAR LA APLICACION              ");
-        println("-----------------------------------------------------------------------");
-        println("     ¡¡ GANADOR: " + nombreGanador + " !!");
-        println("-----------------------------------------------------------------------");
+        println("            MUCHAS GRACIAS POR USAR LA APLICACION              ");
+        println("-------------------------------------------------------------------------");
+        println("            ¡¡ GANADOR: " + nombreGanador + " !!");
+        println("-------------------------------------------------------------------------");
 
         flujoActual = new FlujoFinPartida(this, controlador);
         flujoActual.mostrarSiguienteTexto();
@@ -145,9 +145,9 @@ public class vistaConsola implements IVistaJuego, IVistaInicio {
 
     @Override
     public void meTiraronCarta(String carta) throws RemoteException {
-        println("\n------------------------------------");
+        println("\n------------------------------------------");
         println(controlador.getNombreRival() + " tiró: " + carta);
-        println("------------------------------------");
+        println("------------------------------------------");
         mostrarCartas();
     }
 
@@ -163,9 +163,9 @@ public class vistaConsola implements IVistaJuego, IVistaInicio {
 
     @Override
     public void mostrarAviso(String aviso) {
-        println("-------------------------------------------------------------------");
-        println("- AVISO: " + aviso);
-        println("-------------------------------------------------------------------");
+        println("-----------------------------------------------------------------------");
+        println(aviso);
+        println("-----------------------------------------------------------------------");
     }
 
     @Override
@@ -192,12 +192,20 @@ public class vistaConsola implements IVistaJuego, IVistaInicio {
 
     }
 
-    public void mostrarOpcionesTruco(){
+    public void mostrarMesa() throws RemoteException {
+        ArrayList<String> cartasj1 = controlador.getCartasTiradasYo();
+        ArrayList<String> cartasj2 = controlador.getCartasTiradasRival();
+
+        println("--------------- MESA ---------------");
+        println(controlador.getNombreJugador() + " | " + controlador.getNombreRival());
+        switch (controlador.nroDeRonda()){
+            case 1 -> {
+
+            }
+        }
 
     }
-    public void mostrarOpcionesEnvido(){
 
-    }
 
     public void mostrarCartasDisponibles() throws RemoteException {
         ArrayList<String> cartas = controlador.obtenerCartas();

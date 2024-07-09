@@ -42,6 +42,8 @@ public interface IControlador {
     String getNombreJugador() throws RemoteException;
     void volverAlMenuPrincipal() throws RemoteException;
     String getNombreRival()throws RemoteException;
+    ArrayList<String> getCartasTiradasYo() throws RemoteException;
+    ArrayList<String> getCartasTiradasRival() throws RemoteException;
 
     void setJugador(int idJugador) throws RemoteException;
     void setVistaEleccion(IVistaEleccion eleccion) throws RemoteException;
