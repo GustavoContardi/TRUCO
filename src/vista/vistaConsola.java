@@ -83,20 +83,20 @@ public class vistaConsola implements IVistaJuego, IVistaInicio {
 
     @Override
     public void finDeMano() {
-        println("-----------------------------");
+        println("-------------------------------");
         println("-     FIN DE LA MANO     -");
-        println("-----------------------------");
+        println("-------------------------------");
     }
 
     @Override
     public void finDeLaPartida(String nombreGanador) throws RemoteException {
 
-        println("\n---------------------------------------------------------------");
+        println("-----------------------------------------------------------------------");
         println("                   FIN DE LA PARTIDA                        ");
         println("         MUCHAS GRACIAS POR USAR LA APLICACION              ");
-        println("---------------------------------------------------------------");
+        println("-----------------------------------------------------------------------");
         println("     ¡¡ GANADOR: " + nombreGanador + " !!");
-        println("---------------------------------------------------------------");
+        println("-----------------------------------------------------------------------");
 
         flujoActual = new FlujoFinPartida(this, controlador);
         flujoActual.mostrarSiguienteTexto();
@@ -105,14 +105,14 @@ public class vistaConsola implements IVistaJuego, IVistaInicio {
     @Override
     public void cantaronRabon(String rabon, EstadoTruco estado) throws RemoteException {
         println(rabon);
-        flujoActual = new FlujoTruco(this, controlador);
+        flujoActual = new FlujoEleccionTruco(this, controlador, estado);
         flujoActual.mostrarSiguienteTexto();
     }
 
     @Override
     public void cantaronTanto(String tanto, EstadoEnvido estado) throws RemoteException {
         println(controlador.getNombreRival() + " tiró: " + tanto);
-        flujoActual = new FlujoEnvido(this, controlador);
+        flujoActual = new FlujoEleccionEnvido(this, controlador, estado);
         flujoActual.mostrarSiguienteTexto();
     }
 
@@ -161,9 +161,9 @@ public class vistaConsola implements IVistaJuego, IVistaInicio {
 
     @Override
     public void mostrarAviso(String aviso) {
-        println("-----------------------------------------");
+        println("-------------------------------------------------------------------");
         println("- AVISO: " + aviso);
-        println("-----------------------------------------");
+        println("-------------------------------------------------------------------");
     }
 
     @Override

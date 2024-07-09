@@ -59,6 +59,8 @@ public class vistaGrafica implements IVistaJuego {
     public void mostrarCartas() throws RemoteException {
         String basePath = "fotocartas/";
         int ronda = controlador.nroDeRonda();
+        String carta1="", carta2="", carta3="";
+
         btnCarta1.removeAll();
         btnCarta2.removeAll();
         btnCarta3.removeAll();
@@ -66,12 +68,13 @@ public class vistaGrafica implements IVistaJuego {
         removeAllActionListeners(btnCarta2);
         removeAllActionListeners(btnCarta3);
 
+
         ArrayList<String> cartas = controlador.obtenerCartas();
 
-        if (cartas != null && !cartas.isEmpty()) {
-            String carta1 = cartas.get(0).replace(" ", "").toLowerCase();
-            String carta2 = cartas.get(1).replace(" ", "").toLowerCase();
-            String carta3 = cartas.get(2).replace(" ", "").toLowerCase();
+        if (cartas != null) {
+            if(cartas.get(0) != null) carta1 = cartas.get(0).replace(" ", "").toLowerCase();
+            if(cartas.get(1) != null) carta2 = cartas.get(1).replace(" ", "").toLowerCase();
+            if(cartas.get(2) != null) carta3 = cartas.get(2).replace(" ", "").toLowerCase();
 
             String imagen1 = basePath + carta1 + ".jpeg";
             String imagen2 = basePath + carta2 + ".jpeg";

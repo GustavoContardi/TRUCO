@@ -13,6 +13,19 @@ public class FlujoTirarCarta extends  Flujo{
 
     @Override
     public Flujo procesarEntrada(String string) throws RemoteException {
+        Integer nroCarta;
+        try{
+            nroCarta = Integer.parseInt(string);
+        }catch (NumberFormatException e) {
+            vista.println("Ingrese un número válido.\n");
+            return this;
+        }
+
+        if(nroCarta > controlador.obtenerCartas().size() || 1 > nroCarta) {
+            vista.println("Ingrese un número dentro del rango.\n");
+            return this;
+        }
+        else controlador.tirarCarta(nroCarta);
 
         return new FlujoMostrarCartas(vista, controlador);
     }

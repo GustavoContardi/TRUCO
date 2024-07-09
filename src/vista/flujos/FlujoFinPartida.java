@@ -17,7 +17,7 @@ public class FlujoFinPartida extends Flujo{
 
         vista.salirDelJuego();
 
-        return new FlujoMostrarCartas(vista, controlador); // que retorne cualquier cosa si total va a cerrar la ventana con dispose()
+        return this; // que retorne cualquier cosa si total va a cerrar la ventana con dispose()
     }
 
     @Override
