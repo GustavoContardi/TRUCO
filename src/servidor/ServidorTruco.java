@@ -48,7 +48,7 @@ public class ServidorTruco {
     // *_*
     // si se ejecuta este es porque se va a reanudar una partida seleccionada
 
-    public ServidorTruco(IModelo modelo) {
+    public ServidorTruco(Partida modelo) {
         ArrayList<String> ips = Util.getIpDisponibles();
         String ip = (String) JOptionPane.showInputDialog(
                 null,

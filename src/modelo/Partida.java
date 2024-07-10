@@ -781,5 +781,10 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
         return idPartida;
     }
 
+    @Override
+    public Partida getObjeto() throws RemoteException {
+        return this;
+    }
+
 
 }

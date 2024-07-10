@@ -5,6 +5,7 @@ import enums.EstadoTruco;
 import enums.EstadoEnvido;
 import modelo.Carta;
 import modelo.Jugador;
+import modelo.Partida;
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;
@@ -58,4 +59,5 @@ public interface IModelo extends IObservableRemoto {
     ArrayList<Carta> getCartasTiradasJ1() throws RemoteException;
     ArrayList<Carta> getCartasTiradasJ2() throws RemoteException;
     int getIdPartida() throws RemoteException;
+    Partida getObjeto() throws RemoteException;
 }

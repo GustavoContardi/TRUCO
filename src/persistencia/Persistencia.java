@@ -16,6 +16,7 @@ public class Persistencia{
 
 
 
-    public Persistencia() {
+    public Persistencia(ArrayList<Integer> lista2) {
+
     }
 }

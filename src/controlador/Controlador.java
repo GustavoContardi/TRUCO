@@ -11,6 +11,7 @@ import modelo.Jugador;
 import persistencia.Persistencia;
 import persistencia.PersistenciaCantos;
 import persistencia.PersistenciaJugador;
+import persistencia.PersistenciaPartida;
 import vista.vistaInicio;
 
 import java.io.Serializable;
@@ -99,8 +100,8 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
     }
 
     @Override
-    public void guardarPartida() {
-
+    public void guardarPartida() throws RemoteException {
+        PersistenciaPartida.guardarPartida(modelo.getObjeto());
     }
 
     @Override

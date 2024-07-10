@@ -1,5 +1,6 @@
 package persistencia;
 
+import interfaces.IModelo;
 import modelo.Jugador;
 import modelo.Partida;
 
