@@ -11,6 +11,8 @@ import interfaces.IVistaJuego;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -52,6 +54,17 @@ public class vistaGrafica implements IVistaJuego {
         frame.setSize(730, 820);
         frame.setResizable(false);
         frame.setLocationRelativeTo(null);
+
+        // captura del evento que el jugador cierra la ventana y guardo la partida
+        frame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                int response = JOptionPane.showConfirmDialog(frame, "¿Estás seguro de que quieres cerrar la ventana? La partida sera guardada", "Confirmar Cierre", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                if (response == JOptionPane.YES_OPTION) {
+                    frame.dispose();  // Cierra la ventana
+                }
+            }
+        });
     }
 
 

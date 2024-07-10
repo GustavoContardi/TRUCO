@@ -5,6 +5,7 @@ import controlador.Controlador;
 import interfaces.IVistaInicio;
 import modelo.Jugador;
 import persistencia.Persistencia;
+import persistencia.PersistenciaJugador;
 import servidor.ServidorTruco;
 
 import javax.swing.*;
@@ -267,7 +268,7 @@ public class vistaInicio implements IVistaInicio {
         frame2.setContentPane(ventana);
         ventana.add(scroll, BorderLayout.CENTER); // Agregar el JScrollPane al centro del BorderLayout
 
-        for (Jugador j : Persistencia.listaJugadoresGuardados(true)) {
+        for (Jugador j : PersistenciaJugador.listaJugadoresGuardados(true)) {
             listModel.addElement(j.toString());
         }
 

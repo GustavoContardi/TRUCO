@@ -10,6 +10,8 @@ import vista.flujos.*;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 
@@ -28,7 +30,7 @@ public class vistaConsola implements IVistaJuego, IVistaInicio {
     // constructor
     //
 
-    public vistaConsola() {
+    public vistaConsola() throws RemoteException {
         frame = new JFrame("APP TRUCO");
         frame.setContentPane(ventana);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -45,6 +47,21 @@ public class vistaConsola implements IVistaJuego, IVistaInicio {
                     ex.printStackTrace();
                 }
                 txtEntrada.setText("");
+            }
+        });
+
+        frame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                int response = JOptionPane.showConfirmDialog(frame, "¿Estás seguro de que quieres cerrar la ventana? La partida sera guardada", "Confirmar Cierre", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                if (response == JOptionPane.YES_OPTION) {
+                    try {
+                        controlador.guardarPartida(); // guardo la partida y el controlador notifica al contrincante
+                        frame.dispose();  // Cierra la ventana
+                    } catch (RemoteException ex) {
+                        ex.printStackTrace();
+                    }
+                }
             }
         });
 
@@ -104,14 +121,14 @@ public class vistaConsola implements IVistaJuego, IVistaInicio {
 
     @Override
     public void cantaronRabon(String rabon, EstadoTruco estado) throws RemoteException {
-        println(rabon);
+        println(controlador.getNombreRival() + ": " + rabon);
         flujoActual = new FlujoEleccionTruco(this, controlador, estado);
         flujoActual.mostrarSiguienteTexto();
     }
 
     @Override
     public void cantaronTanto(String tanto, EstadoEnvido estado) throws RemoteException {
-        println(controlador.getNombreRival() + " tiró: " + tanto);
+        println(controlador.getNombreRival() + ": " + tanto);
         flujoActual = new FlujoEleccionEnvido(this, controlador, estado);
         flujoActual.mostrarSiguienteTexto();
     }
@@ -193,14 +210,34 @@ public class vistaConsola implements IVistaJuego, IVistaInicio {
     }
 
     public void mostrarMesa() throws RemoteException {
-        ArrayList<String> cartasj1 = controlador.getCartasTiradasYo();
-        ArrayList<String> cartasj2 = controlador.getCartasTiradasRival();
+        ArrayList<String> cartasYo = controlador.getCartasTiradasYo();
+        ArrayList<String> cartasRival = controlador.getCartasTiradasRival();
 
-        println("--------------- MESA ---------------");
-        println(controlador.getNombreJugador() + " | " + controlador.getNombreRival());
+        println("----------------- MESA -----------------");
+        println("|  " + controlador.getNombreJugador() + "        |        " + controlador.getNombreRival() + "  |");
         switch (controlador.nroDeRonda()){
             case 1 -> {
+                if(cartasYo.isEmpty() && cartasRival.isEmpty()) println("|                   |                   |");
+                else if(cartasYo.size() > 0 && cartasRival.isEmpty()) println("| " + cartasYo.get(0) + " |               |");
+                else if(cartasRival.size() > 0 && cartasYo.isEmpty()) println("|               " + " | " + cartasRival.get(0));
+                else  println("| " + cartasYo.get(0) + " | " + cartasRival.get(0) + " | ");
+            }
+            case 2 -> {
+                println("| " + cartasYo.get(0) + " | " + cartasRival.get(0) + " | ");
 
+                if(cartasYo.size() <= 1 && cartasRival.size() <= 1) println("|                   |                   |");
+                else if(cartasYo.size() > 1 && cartasRival.size() <= 1) println("| " + cartasYo.get(1) + " |               ");
+                else if(cartasYo.size() < 1 && cartasRival.size() > 1) println("|               " + " | " + cartasRival.get(1));
+                else  println("| " + cartasYo.get(1) + " | " + cartasRival.get(1) + " | ");
+            }
+            case 3 -> {
+                println("| " + cartasYo.get(0) + " | " + cartasRival.get(0) + " | ");
+                println("| " + cartasYo.get(1) + " | " + cartasRival.get(1) + " | ");
+
+                if(cartasYo.size() < 2 && cartasRival.size() < 2) println("|                   |                   |");
+                else if(cartasYo.size() > 2 && cartasRival.size() < 2) println("| " + cartasYo.get(2) + " |               ");
+                else if(cartasYo.size() < 2 && cartasRival.size() > 2) println("|               " + " | " + cartasRival.get(2));
+                else  println("| " + cartasYo.get(2) + " | " + cartasRival.get(2) + " | ");
             }
         }
 

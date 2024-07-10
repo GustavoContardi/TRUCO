@@ -1,6 +1,7 @@
 package modelo;
 
 import persistencia.Persistencia;
+import persistencia.PersistenciaJugador;
 
 import java.io.*;
 import java.time.LocalDateTime;
@@ -28,7 +29,7 @@ public class Jugador implements Comparable<Jugador>, Serializable{
         electo = false;
         envido = new Envido();
         IDJugador = generarID();
-        Persistencia.guardarJugador(this);
+        PersistenciaJugador.guardarJugador(this);
     }
 
     //
@@ -60,7 +61,7 @@ public class Jugador implements Comparable<Jugador>, Serializable{
         if(cartasObtenidas != null) cartasObtenidas.clear();
     }
     public void sumarPartidaGanada(){
-        Persistencia.sumarPartidaGanadaJugador(IDJugador);
+        PersistenciaJugador.sumarPartidaGanadaJugador(IDJugador);
     }
 
 
@@ -122,7 +123,7 @@ public class Jugador implements Comparable<Jugador>, Serializable{
     }
 
     public void setElecto(boolean electo){
-        Persistencia.jugadorElecto(IDJugador);
+        PersistenciaJugador.jugadorElecto(IDJugador);
     }
     public boolean getElecto(){
         return electo;

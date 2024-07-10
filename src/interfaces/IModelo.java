@@ -57,4 +57,5 @@ public interface IModelo extends IObservableRemoto {
     String getNombreRival(int idJugador) throws RemoteException; // le paso el jugador mio, necesito el contrario
     ArrayList<Carta> getCartasTiradasJ1() throws RemoteException;
     ArrayList<Carta> getCartasTiradasJ2() throws RemoteException;
+    int getIdPartida() throws RemoteException;
 }

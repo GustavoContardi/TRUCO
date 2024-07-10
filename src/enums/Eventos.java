@@ -24,6 +24,6 @@ public enum Eventos {
     PUNTAJES,
     NUEVA_RONDA,
     ABANDONO_PARTIDA,
-
+    RESTABLECER_PARTIDA,
 }
 

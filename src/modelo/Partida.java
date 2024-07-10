@@ -6,6 +6,7 @@ import enums.EstadoTruco;
 import enums.Eventos;
 import interfaces.IModelo;
 import persistencia.Persistencia;
+import persistencia.PersistenciaJugador;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -60,13 +61,13 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
     //
 
     public Partida() throws RemoteException {
-        j1 = null;
-        j2 = null;
-        numeroMano=0;
-        numeroRonda=1;
-        finMano = true;
-        mazo = new Mazo();
-        anotador = new Anotador("", "");
+        j1              = null;
+        j2              = null;
+        numeroMano      = -1;
+        numeroRonda     =  1;
+        finMano         = true;
+        mazo            = new Mazo();
+        anotador        = new Anotador("", "");
     }
 
 
@@ -257,8 +258,6 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
             finDeLaRonda();
         }
 
-        //if(esFinDePartida()) finDePartida();
-
     }
 
     @Override
@@ -266,7 +265,7 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
         if(anotador.getPuntosJ2() > anotador.getPuntosJ1()) j2.sumarPartidaGanada();
         else j1.sumarPartidaGanada();
 
-        Persistencia.delvolverJugadores(j1.getIDJugador(), j2.getIDJugador());
+        PersistenciaJugador.delvolverJugadores(j1.getIDJugador(), j2.getIDJugador());
         actualizarPuntos();
 
         Timer timer = new Timer(2000, new ActionListener() {
@@ -601,6 +600,14 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
         return puntos;
     }
 
+    private int generarIdPartida(){
+        int id = -1;
+
+        //algoritmo de generamiento de id
+
+        return id;
+    }
+
 
     //
     // sets y gets
@@ -767,6 +774,11 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
     @Override
     public ArrayList<Carta> getCartasTiradasJ2() throws RemoteException {
         return cartasTiradasJ2;
+    }
+
+    @Override
+    public int getIdPartida() throws RemoteException {
+        return idPartida;
     }
 
 

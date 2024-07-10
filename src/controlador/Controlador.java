@@ -9,6 +9,8 @@ import interfaces.*;
 import modelo.Carta;
 import modelo.Jugador;
 import persistencia.Persistencia;
+import persistencia.PersistenciaCantos;
+import persistencia.PersistenciaJugador;
 import vista.vistaInicio;
 
 import java.io.Serializable;
@@ -277,7 +279,7 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
 
     @Override
     public ArrayList<Jugador> listaJugadoresMasGanadores() {
-        return Persistencia.listaJugadoresGuardados(true);
+        return PersistenciaJugador.listaJugadoresGuardados(true);
     }
 
     @Override
@@ -327,7 +329,7 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
         ArrayList<String> lista = new ArrayList<>();
         ArrayList<Carta> cartas = new ArrayList<>();
 
-        if(jugador.getIDJugador() == modelo.getIdJ1()) cartas = modelo.getCartasTiradasJ1();
+        if(jugador.getIDJugador() == modelo.getIdJ1()) cartas = modelo.getCartasTiradasJ1(); // si es igual es porque es mi jugador
         else cartas = modelo.getCartasTiradasJ2();
 
         for(Carta carta : cartas){
@@ -341,7 +343,7 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
         ArrayList<String> lista = new ArrayList<>();
         ArrayList<Carta> cartas = new ArrayList<>();
 
-        if(jugador.getIDJugador() != modelo.getIdJ1()) cartas = modelo.getCartasTiradasJ1();
+        if(jugador.getIDJugador() != modelo.getIdJ1()) cartas = modelo.getCartasTiradasJ1();  // si es distinto es porque es el rival
         else cartas = modelo.getCartasTiradasJ2();
 
         for(Carta carta : cartas){
@@ -352,7 +354,7 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
 
     @Override
     public void setJugador(int idJugador) throws RemoteException {
-        jugador = Persistencia.recuperarJugador(idJugador);
+        jugador = PersistenciaJugador.recuperarJugador(idJugador);
         modelo.agregarJugador(jugador);
 
         vistaJuego.mostrarMenuPrincipal();
@@ -380,38 +382,37 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
 
         switch (evento){
             case LISTA_JUGADORES_DISPONIBLES -> {
-                vistaEleccion.actualizarListaJugadores(Persistencia.listaJugadoresGuardados(false));
+                vistaEleccion.actualizarListaJugadores(PersistenciaJugador.listaJugadoresGuardados(false));
             }
             case CANTO_TRUCO -> {
-                if(modelo.getQuienCantoTruco() != jugador.getIDJugador()) vistaJuego.cantaronRabon(Persistencia.mensajeCantoTruco(EstadoTruco.TRUCO), EstadoTruco.TRUCO);
+                if(modelo.getQuienCantoTruco() != jugador.getIDJugador()) vistaJuego.cantaronRabon(PersistenciaCantos.mensajeCantoTruco(EstadoTruco.TRUCO), EstadoTruco.TRUCO);
             }
             case CANTO_RETRUCO -> {
-                if(modelo.getQuienCantoReTruco() != jugador.getIDJugador()) vistaJuego.cantaronRabon(Persistencia.mensajeCantoTruco(EstadoTruco.RE_TRUCO), EstadoTruco.RE_TRUCO);
+                if(modelo.getQuienCantoReTruco() != jugador.getIDJugador()) vistaJuego.cantaronRabon(PersistenciaCantos.mensajeCantoTruco(EstadoTruco.RE_TRUCO), EstadoTruco.RE_TRUCO);
             }
             case CANTO_VALE_CUATRO ->{
-                if(modelo.getQuienCantoValeCuatro() != jugador.getIDJugador()) vistaJuego.cantaronRabon(Persistencia.mensajeCantoTruco(EstadoTruco.VALE_CUATRO), EstadoTruco.VALE_CUATRO);
+                if(modelo.getQuienCantoValeCuatro() != jugador.getIDJugador()) vistaJuego.cantaronRabon(PersistenciaCantos.mensajeCantoTruco(EstadoTruco.VALE_CUATRO), EstadoTruco.VALE_CUATRO);
             }
             case CANTO_ENVIDO -> {
-                if(modelo.getQuienCantoEnvido() != jugador.getIDJugador()) vistaJuego.cantaronTanto(Persistencia.mensajeCantoTanto(EstadoEnvido.ENVIDO), EstadoEnvido.ENVIDO);
+                if(modelo.getQuienCantoEnvido() != jugador.getIDJugador()) vistaJuego.cantaronTanto(PersistenciaCantos.mensajeCantoTanto(EstadoEnvido.ENVIDO), EstadoEnvido.ENVIDO);
             }
             case CANTO_ENVIDO_DOBLE -> {
-                if(modelo.getQuienCantoEnvidoDoble() != jugador.getIDJugador()) vistaJuego.cantaronTanto(Persistencia.mensajeCantoTanto(EstadoEnvido.ENVIDO_DOBLE), EstadoEnvido.ENVIDO_DOBLE);
+                if(modelo.getQuienCantoEnvidoDoble() != jugador.getIDJugador()) vistaJuego.cantaronTanto(PersistenciaCantos.mensajeCantoTanto(EstadoEnvido.ENVIDO_DOBLE), EstadoEnvido.ENVIDO_DOBLE);
             }
             case CANTO_REAL_ENVIDO -> {
-                if(modelo.getQuienCantoRealEnvido() != jugador.getIDJugador()) vistaJuego.cantaronTanto(Persistencia.mensajeCantoTanto(EstadoEnvido.REAL_ENVIDO), EstadoEnvido.REAL_ENVIDO);
+                if(modelo.getQuienCantoRealEnvido() != jugador.getIDJugador()) vistaJuego.cantaronTanto(PersistenciaCantos.mensajeCantoTanto(EstadoEnvido.REAL_ENVIDO), EstadoEnvido.REAL_ENVIDO);
             }
             case CANTO_FALTA_ENVIDO -> {
-                if(modelo.getQuienCantoFaltaEnvido() != jugador.getIDJugador()) vistaJuego.cantaronTanto(Persistencia.mensajeCantoTanto(EstadoEnvido.FALTA_ENVIDO), EstadoEnvido.FALTA_ENVIDO);
+                if(modelo.getQuienCantoFaltaEnvido() != jugador.getIDJugador()) vistaJuego.cantaronTanto(PersistenciaCantos.mensajeCantoTanto(EstadoEnvido.FALTA_ENVIDO), EstadoEnvido.FALTA_ENVIDO);
             }
             case NUEVA_RONDA -> {
-                vistaJuego.mostrarCartas(); // ?? podria hacer un metodo pero si refresca la pantalla se actualiza
+                vistaJuego.mostrarCartas();
             }
             case MENSAJEJ1 -> {
-                // if (modelo.) vistaJuego.mostrarMensaje(modelo.getUltimoMensaje());
                 vistaJuego.actualizar();
             }
             case MENSAJEJ2 -> {
-                // if () vistaJuego.mostrarMensaje(modelo.getUltimoMensaje());
+                // si
                 vistaJuego.actualizar();
             }
             case CARTA_TIRADAJ1 -> { // este aviso es que el JUGADOR 1 tiro una carta
@@ -436,13 +437,13 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
             }
             case LISTA_JUGADORES_TOTALES -> {
                 // aca hay que pasarle la lista no ordenada pero cuando tenga la clase Persistencia
-                vistaEleccion.actualizarListaJugadores(Persistencia.listaJugadoresGuardados(false));
+                vistaEleccion.actualizarListaJugadores(PersistenciaJugador.listaJugadoresGuardados(false));
             }
             case CANTO_QUERIDO -> {
-                if(modelo.getIdJugadorNoQuizoCanto() != jugador.getIDJugador()) vistaJuego.mostrarMensaje(Persistencia.mensajeCantoQuiero());       // le paso el origen entonce si coincide es porque le dije yo al contrincante
+                if(modelo.getIdJugadorNoQuizoCanto() != jugador.getIDJugador()) vistaJuego.mostrarMensaje(PersistenciaCantos.mensajeCantoQuiero());       // le paso el origen entonce si coincide es porque le dije yo al contrincante
             }                                                                                                                                           //
             case CANTO_NO_QUERIDO -> {                                                                                                                  // le paso el destinatario entonce si coincide es porque me dijieron ami
-                    if(modelo.getIdJugadorNoQuizoCanto() == jugador.getIDJugador()) vistaJuego.mostrarMensaje(Persistencia.mensajeCantoNoQuiero());     //
+                    if(modelo.getIdJugadorNoQuizoCanto() == jugador.getIDJugador()) vistaJuego.mostrarMensaje(PersistenciaCantos.mensajeCantoNoQuiero());     //
                 }
             case TANTO_QUERIDO -> {
                 System.out.println(modelo.getResultadoTanto());

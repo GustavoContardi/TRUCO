@@ -7,6 +7,7 @@ import modelo.Jugador;
 import modelo.Mazo;
 import modelo.Partida;
 import persistencia.Persistencia;
+import persistencia.PersistenciaJugador;
 import servidor.ServidorTruco;
 import vista.vistaInicio;
 
@@ -119,7 +120,7 @@ public class Main {
         System.out.println(jugador2.getCartasObtenidas().get(0).toString()+ " " + jugador2.getCartasObtenidas().get(1).toString()+ " " +jugador2.getCartasObtenidas().get(2).toString());
         System.out.println(jugador2.getNombre() + " puntos de envido: " + jugador2.puntosEnvido());
     }*/
-        Persistencia.delvolverTodosJugadores();
+        PersistenciaJugador.delvolverTodosJugadores();
         new vistaInicio();
         new vistaInicio();
 
