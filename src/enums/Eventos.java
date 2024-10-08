@@ -1,5 +1,8 @@
 package enums;
 
+// este enumerado se usa para pasar por parametro al metodo 'notificarObservadores()' para saber que mensaje enviar
+// y para saber desde el controlador que hay que actualizar
+
 public enum Eventos {
     NADA,
     CANTO_TRUCO,

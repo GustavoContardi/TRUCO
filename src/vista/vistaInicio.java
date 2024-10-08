@@ -1,10 +1,9 @@
 package vista;
 
 import cliente.ClienteTruco;
-import controlador.Controlador;
+import enums.OpcionesInicio;
 import interfaces.IVistaInicio;
 import modelo.Jugador;
-import persistencia.Persistencia;
 import persistencia.PersistenciaJugador;
 import servidor.ServidorTruco;
 
@@ -16,6 +15,8 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.rmi.RemoteException;
 import java.net.URI;
+
+import static enums.OpcionesInicio.*;
 
 
 public class vistaInicio implements IVistaInicio {
@@ -121,7 +122,7 @@ public class vistaInicio implements IVistaInicio {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    new ClienteTruco(1);
+                    new ClienteTruco(VISTA_GRAFICA_NO_REANUDAR);
                     frame.dispose();
                 } catch (RemoteException ex) {
                     throw new RuntimeException(ex);
@@ -134,7 +135,7 @@ public class vistaInicio implements IVistaInicio {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    new ClienteTruco(2);
+                    new ClienteTruco(VISTA_CONSOLA_NO_REANUDAR);
                     frame.dispose();
                 } catch (RemoteException ex) {
                     throw new RuntimeException(ex);
@@ -158,7 +159,7 @@ public class vistaInicio implements IVistaInicio {
             public void actionPerformed(ActionEvent e) {
                 try {
                     new ServidorTruco();
-                    btnIniciarNueva.setEnabled(false);
+                    //btnIniciarNueva.setEnabled(false);
                     instrucciones.setText("¡Servidor Creado! Ahora puedes ingresar a él");
                 } catch (RemoteException ex) {
                     throw new RuntimeException(ex);
@@ -172,12 +173,10 @@ public class vistaInicio implements IVistaInicio {
                 botonesElegirVista();
             }
         });
-        btnReanudar.addActionListener(new ActionListener() {
+        btnAnotador.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // bla bla bla
-                // levantar las partidas y setear
-                // vistaPartidaReanudada();
+                setBotonesRecuperarPartida();
             }
         });
 
@@ -228,31 +227,6 @@ public class vistaInicio implements IVistaInicio {
         }
     }
 
-    /*private void pantallaTopJugadores(){
-        JFrame frame2 = new JFrame("TRUCONTARDI");
-        frame2.setSize(400, 600);
-        JPanel ventana = new JPanel();
-        JList list = new JList();
-        DefaultListModel<String> listModel = new DefaultListModel<>();
-        frame2.setContentPane(ventana);
-
-        frame2.setVisible(true);
-
-        list.setModel(listModel);
-        JScrollPane scroll = new JScrollPane();
-        ventana.add(scroll);
-        ventana.add(list);
-
-        for(Jugador j : Persistencia.listaJugadoresGuardados(true)) {
-            listModel.addElement(j.toString());
-        }
-
-
-
-    }
-
-     */
-
     private void pantallaTopJugadores(){
         JFrame frame2 = new JFrame("TRUCONTARDI");
         frame2.setResizable(false);
@@ -273,6 +247,48 @@ public class vistaInicio implements IVistaInicio {
         }
 
         frame2.setVisible(true);
+    }
+
+    private void setBotonesRecuperarPartida(){
+        eliminarTodosAcLis();
+        instrucciones.setText("Seleccione una opción");
+        btnIniciarNueva.setText("CREAR NUEVO SERVIDOR");
+        btnReanudar.setText("INGRESAR A UN SERVIDOR");
+        btnAnotador.setText("REANUDAR UNA PARTIDA");
+        btnReglas.setEnabled(false);
+        btnAnotador.setEnabled(false); // hasta que tengamos bien la serializacion, al final del desarrollo
+
+        btnIniciarNueva.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                vistaEleccion eleccion = new vistaEleccion();
+                //eleccion.iniciarRecuperacionPartida();
+                btnIniciarNueva.setEnabled(false);
+                instrucciones.setText("¡Servidor Creado! Ahora puedes ingresar a él");
+
+            }
+        });
+
+        btnReanudar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                setVistaRecuperarPartida();
+            }
+        });
+
+        btnAnotador.setEnabled(false);
+
+        btnSalir.setText("VOLVER");
+        btnSalir.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                setBotonesIniciarRed();
+            }
+        });
+    }
+
+    private void setVistaRecuperarPartida(){
+
     }
 
 }

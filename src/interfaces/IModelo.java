@@ -60,4 +60,8 @@ public interface IModelo extends IObservableRemoto {
     ArrayList<Carta> getCartasTiradasJ2() throws RemoteException;
     int getIdPartida() throws RemoteException;
     Partida getObjeto() throws RemoteException;
+    ArrayList<Jugador> jugadoresDeLaPartida() throws RemoteException;
+    void reanudarPartida() throws RemoteException;
+    boolean getPartidaRecuperada() throws RemoteException;
+    boolean setPartidaRecuperada() throws RemoteException;
 }

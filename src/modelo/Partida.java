@@ -13,7 +13,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.Serializable;
 import java.rmi.RemoteException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Random;
 
 import static enums.EstadoEnvido.*;
 import static enums.EstadoTruco.*;
@@ -50,6 +53,7 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
     private     int                 nroRondasGanadasJ1, nroRondasGanadasJ2;
     private     int                 idJugadorNoQuizoCanto;
     private     boolean             parda;
+    private     boolean             partidaRecuperada;
     private     Eventos             mensajesOb;
     private     Carta               ultimaCartaJ1, ultimaCartaJ2;
     private     String              ultimoMensaje;
@@ -76,6 +80,7 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
     //
 
     public void nuevaPartida() throws RemoteException {
+        idPartida = generarIdPartida();
         nuevaRonda();
     }
 
@@ -394,6 +399,8 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
         }
     }
 
+
+
     @Override
     public void altaJugador(String nombre) throws RemoteException {
         new Jugador(nombre);
@@ -442,6 +449,11 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
         return cantoFaltaEnvido;
     }
 
+    @Override
+    public String toString(){
+        return "ID: " + idPartida + " | Jugadores: " + j1.getNombre() + " y " + j2.getNombre();
+    }
+
 
     //
     // metodos privados
@@ -452,10 +464,6 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
         else if(cj1.getPoderCarta() < cj2.getPoderCarta()) return j2.getIDJugador();
 
         return -1; // caso de que sean el mismo poder es PARDA
-    }
-
-    private boolean esUltimaCarta(int id){
-        return true;
     }
 
     private void notificarPartidaLista() throws RemoteException {
@@ -505,6 +513,11 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
         mensajesOb = CANTO_NO_QUERIDO;
         idJugadorNoQuizoCanto = idDestinatario;
 
+        notificarObservadores(mensajesOb);
+    }
+
+    private void notificarPartidaReanudada() throws RemoteException {
+        mensajesOb = RESTABLECER_PARTIDA;
         notificarObservadores(mensajesOb);
     }
 
@@ -601,11 +614,18 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
     }
 
     private int generarIdPartida(){
-        int id = -1;
+        Random random = new Random();
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+        String formattedDate = now.format(formatter);
 
-        //algoritmo de generamiento de id
+        String nombre = " ";
+        if(j1 != null) nombre = j1.getNombre();
 
-        return id;
+        String idString = nombre.substring(0, Math.min(3, nombre.length())).toUpperCase() + formattedDate;
+
+        return Math.abs(idString.hashCode() / random.nextInt(10));
+
     }
 
 
@@ -784,6 +804,34 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
     @Override
     public Partida getObjeto() throws RemoteException {
         return this;
+    }
+
+    @Override
+    public ArrayList<Jugador> jugadoresDeLaPartida() throws RemoteException {
+        ArrayList<Jugador> jugadores = new ArrayList<>(); // por si no hay jugadores que la devuelva vacia para evitar null pointer except
+
+        if(j1 != null && j2 != null){
+            jugadores.add(j1);
+            jugadores.add(j2);
+        }
+        return jugadores;
+    }
+
+    @Override
+    public void reanudarPartida() throws RemoteException {
+        // toda la logica para reanudar la partida
+
+        notificarPartidaReanudada();
+    }
+
+    @Override
+    public boolean getPartidaRecuperada() throws RemoteException {
+        return false;
+    }
+
+    @Override
+    public boolean setPartidaRecuperada() throws RemoteException {
+        return false;
     }
 
 

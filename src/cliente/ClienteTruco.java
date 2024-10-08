@@ -2,6 +2,7 @@ package cliente;
 
 import ar.edu.unlu.rmimvc.Util;
 import controlador.Controlador;
+import enums.OpcionesInicio;
 import interfaces.IVistaEleccion;
 import ar.edu.unlu.rmimvc.cliente.Cliente;
 import ar.edu.unlu.rmimvc.RMIMVCException;
@@ -14,9 +15,11 @@ import javax.swing.*;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 
+import static enums.OpcionesInicio.VISTA_CONSOLA_NO_REANUDAR;
+
 public class ClienteTruco {
     // opcion 1 == vista grafica |||| opcion 2 == vista consola
-    public ClienteTruco(int vista) throws RemoteException {
+    public ClienteTruco(OpcionesInicio inicio) throws RemoteException {
         ArrayList<String> ips = Util.getIpDisponibles();
         String ip = (String) JOptionPane.showInputDialog(
                 null,
@@ -57,16 +60,33 @@ public class ClienteTruco {
         vistaEleccion.setControlador(controlador);
         controlador.setVistaEleccion(vistaEleccion);
 
-        if(vista == 1){
-            IVistaJuego juego = new vistaGrafica();
-            controlador.setVistaJuego(juego);
-            juego.setControlador(controlador);
+        switch (inicio){
+            case VISTA_CONSOLA_NO_REANUDAR -> {
+                IVistaJuego juego = new vistaConsola();
+                controlador.setVistaJuego(juego);
+                juego.setControlador(controlador);
+            }
+            case VISTA_GRAFICA_NO_REANUDAR -> {
+                IVistaJuego juego = new vistaGrafica();
+                controlador.setVistaJuego(juego);
+                juego.setControlador(controlador);
+            }
+            case VISTA_CONSOLA_REANUDAR -> {
+                IVistaJuego juego = new vistaConsola();
+                controlador.setVistaJuego(juego);
+                juego.setControlador(controlador);
+                controlador.setReanudarPartida(true);
+                // hay que hacer algo aca para reanudar
+            }
+            case VISTA_GRAFICA_REANUDAR -> {
+                IVistaJuego juego = new vistaGrafica();
+                controlador.setVistaJuego(juego);
+                juego.setControlador(controlador);
+                controlador.setReanudarPartida(true);
+                // hay que hacer algo aca para reanudar
+            }
         }
-        else{
-            IVistaJuego juego = new vistaConsola();
-            controlador.setVistaJuego(juego);
-            juego.setControlador(controlador);
-        }
+
 
         Cliente c = new Cliente(ip, Integer.parseInt(port), ipServidor, Integer.parseInt(portServidor));
 
@@ -80,7 +100,7 @@ public class ClienteTruco {
     }
 
     public static void main(String[] args) throws RemoteException {
-        new ClienteTruco(0);
+        new ClienteTruco(VISTA_CONSOLA_NO_REANUDAR);
     }
 
 }

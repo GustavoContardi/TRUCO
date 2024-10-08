@@ -3,6 +3,7 @@ package interfaces;
 import enums.EstadoEnvido;
 import enums.EstadoTruco;
 import modelo.Jugador;
+import modelo.Partida;
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;
@@ -44,6 +45,12 @@ public interface IControlador {
     String getNombreRival()throws RemoteException;
     ArrayList<String> getCartasTiradasYo() throws RemoteException;
     ArrayList<String> getCartasTiradasRival() throws RemoteException;
+    ArrayList<Partida> getListaPartidasPendientes() throws RemoteException;
+    ArrayList<Jugador> getJugadoresRecuperados() throws RemoteException;
+    void restablecerPartida() throws RemoteException;
+    boolean getReanudarPartida() throws RemoteException;
+    void setReanudarPartida(boolean reanudarPartida) throws RemoteException;
+
 
     void setJugador(int idJugador) throws RemoteException;
     void setVistaEleccion(IVistaEleccion eleccion) throws RemoteException;

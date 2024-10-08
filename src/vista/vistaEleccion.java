@@ -4,6 +4,7 @@ import interfaces.IControlador;
 import interfaces.IVistaEleccion;
 import modelo.Jugador;
 import modelo.Partida;
+import servidor.ServidorTruco;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,7 +19,7 @@ public class vistaEleccion implements IVistaEleccion {
     private JPanel JUGADORES;
     private JPanel Eleccion;
     private JList list;
-    private JComboBox<Jugador> cbEleccion;
+    private JComboBox cbEleccion;
     private JButton btnElegir;
     private JTextField textRegistrar;
     private JButton btnRegistrar;
@@ -39,6 +40,15 @@ public class vistaEleccion implements IVistaEleccion {
         listModel = new DefaultListModel<>();
         list.setModel(listModel);
 
+
+
+    }
+
+    public void iniciarRecuperacionPartida() throws RemoteException {// este metodo es para recuperar una partida y elegir uno de los dos jugadores asociados a ella
+        procesarEleccionPartida();
+    }
+
+    public void iniciarNuevaPartida(){ // este metodo es para una nueva partida donde aparecen todos los jugadores
         btnRegistrar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -60,10 +70,7 @@ public class vistaEleccion implements IVistaEleccion {
                 }
             }
         });
-
     }
-
-
 
     public void procesarAltaJugador() throws RemoteException {
         String nombre = textRegistrar.getText().trim();
@@ -118,8 +125,45 @@ public class vistaEleccion implements IVistaEleccion {
     }
 
     @Override
-    public void actualizarListaPartidas(ArrayList<Partida> lista) {
+    public void actualizarListaJugadoresUsados(ArrayList<Jugador> lista) {
+        if(lista != null){
 
+            listModel.clear();
+            for (Jugador jugador: lista) {
+                listModel.addElement(jugador.toString());
+            }
+
+            cbEleccion.removeAllItems();
+            for (Jugador jugador: lista) {
+                if (!jugador.getElecto()) {
+                    cbEleccion.addItem(jugador);
+                }
+            }
+
+        }
+        else{
+            listModel.addElement("¡No hay Jugadores creados aún!");
+        }
+    }
+
+    @Override
+    public void actualizarListaPartidas(ArrayList<Partida> lista) {
+        if(lista != null){
+
+            listModel.clear();
+            for (Partida partida: lista) {
+                listModel.addElement(partida.toString());
+            }
+
+            cbEleccion.removeAllItems();
+            for (Partida partida: lista) {
+                cbEleccion.addItem(partida);
+            }
+
+        }
+        else{
+            listModel.addElement("¡No hay Jugadores creados aún!");
+        }
     }
 
     @Override
@@ -145,5 +189,60 @@ public class vistaEleccion implements IVistaEleccion {
 
         frameMSJ.setVisible(true);
         frameMSJ.setLocationRelativeTo(null);
+    }
+
+
+    //
+    // metodos privados
+    //
+
+    private void procesarEleccionPartida() throws RemoteException {
+        btnRegistrar.setEnabled(false); // para que no pueda crear jugadores
+        removeAllActionListeners(btnElegir);
+
+        actualizarListaPartidas(controlador.getListaPartidasPendientes());
+
+        btnElegir.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Partida partida = (Partida) cbEleccion.getSelectedItem();
+
+                if(partida != null){
+                    new ServidorTruco(partida);
+                    try {
+                        eleccionJugadoresRecuperados();
+                    } catch (RemoteException ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            }
+        });
+
+    }
+
+    private void eleccionJugadoresRecuperados() throws RemoteException {
+        btnRegistrar.setEnabled(false); // para que no pueda crear jugadores
+        removeAllActionListeners(btnElegir);
+
+        actualizarListaJugadores(controlador.getJugadoresRecuperados());
+
+        btnElegir.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    procesarEleccionJugador();
+                } catch (RemoteException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+    }
+
+
+    private void removeAllActionListeners(AbstractButton button) {
+        ActionListener[] listeners = button.getActionListeners();
+        for (ActionListener listener : listeners) {
+            button.removeActionListener(listener);
+        }
     }
 }

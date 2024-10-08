@@ -8,10 +8,8 @@ import enums.Eventos;
 import interfaces.*;
 import modelo.Carta;
 import modelo.Jugador;
-import persistencia.Persistencia;
-import persistencia.PersistenciaCantos;
-import persistencia.PersistenciaJugador;
-import persistencia.PersistenciaPartida;
+import modelo.Partida;
+import persistencia.*;
 import vista.vistaInicio;
 
 import java.io.Serializable;
@@ -23,16 +21,18 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
     //
     // Atributos
     //
-    private IModelo modelo;
-    private IVistaJuego vistaJuego;
-    private IVistaEleccion vistaEleccion;
-    private Jugador jugador;
+    private   IModelo          modelo;
+    private   IVistaJuego      vistaJuego;
+    private   IVistaEleccion   vistaEleccion;
+    private   Jugador          jugador;
+    private   boolean          reanudarPartida;
 
     //
     // Constructor
     //
 
     public Controlador() {
+        reanudarPartida = false;
     }
 
 
@@ -354,9 +354,36 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
     }
 
     @Override
+    public ArrayList<Partida> getListaPartidasPendientes() throws RemoteException {
+        return null;
+    }
+
+    @Override
+    public ArrayList<Jugador> getJugadoresRecuperados() throws RemoteException {
+        return null;
+    }
+
+    @Override
+    public void restablecerPartida() throws RemoteException {
+        // por que esto?
+    }
+
+    @Override
+    public boolean getReanudarPartida() throws RemoteException {
+        return reanudarPartida;
+    }
+
+    @Override
+    public void setReanudarPartida(boolean reanudarPartida) throws RemoteException {
+        this.reanudarPartida = reanudarPartida;
+    }
+
+    @Override
     public void setJugador(int idJugador) throws RemoteException {
         jugador = PersistenciaJugador.recuperarJugador(idJugador);
-        modelo.agregarJugador(jugador);
+        if(!reanudarPartida){
+            modelo.agregarJugador(jugador);
+        }
 
         vistaJuego.mostrarMenuPrincipal();
     }
@@ -370,6 +397,8 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
     public void setVistaJuego(IVistaJuego juego) {
         this.vistaJuego = juego;
     }
+
+
 
 
     //
