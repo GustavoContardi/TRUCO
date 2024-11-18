@@ -26,10 +26,10 @@ public class anotadorGrafico {
     public anotadorGrafico(vistaInicio inicio) {
         this.frame = new JFrame("TRUCONTARDI");
         frame.setContentPane(ventana);
-        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.pack();
+        frame.setResizable(false);
+        frame.setLocationRelativeTo(null);
         frame.setSize(450, 500);
-        frame.setVisible(false);
 
         JMenuBar mnuPrincipal = new JMenuBar();
         JMenu mnuArchivo = new JMenu("Archivo");
