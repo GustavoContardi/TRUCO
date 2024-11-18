@@ -106,20 +106,12 @@ public class Jugador implements Comparable<Jugador>, Serializable{
         return IDJugador;
     }
 
-    public void setIDJugador(int IDJugador) {
-        this.IDJugador = IDJugador;
-    }
-
     public ArrayList<Carta> getCartasObtenidas() {
         return cartasObtenidas;
     }
 
     public int getPartidasGanadas() {
         return partidasGanadas;
-    }
-
-    public void setPartidasGanadas(int partidasGanadas) {
-        this.partidasGanadas = partidasGanadas;
     }
 
     public void setElecto(boolean electo){

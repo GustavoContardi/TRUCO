@@ -714,6 +714,10 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
         return j2.getCartasObtenidas();
     }
 
+    // .................................................................................................................
+    // -- ACTUALIZAR ESTO Y ORDENAR --
+    // .................................................................................................................
+
     @Override
     public void tantoQuerido(int idJugador) throws RemoteException {
         int puntos = calcularPuntajeEnvidoQuerido();

@@ -84,7 +84,4 @@ public class Mazo implements Serializable {
         return mazoCartas;
     }
 
-    public void setMazoCartas(ArrayList<Carta> mazoCartas) {
-        this.mazoCartas = mazoCartas;
-    } // ???
 }

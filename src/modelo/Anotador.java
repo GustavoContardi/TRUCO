@@ -34,6 +34,13 @@ public class Anotador implements Serializable {
         puntosJ2 += puntos;
     }
 
+
+
+    // metodos privados
+
+
+    // GETS y SETS
+
     public int getPuntosJ1(){
         return puntosJ1;
     }
@@ -46,13 +53,6 @@ public class Anotador implements Serializable {
         if (puntosJ1 >= 30) return nombreJ1;
         else return nombreJ2;
     }
-
-
-    // metodos privados
-
-
-    // GETS y SETS
-
 
     public void setNombreJ1(String nombreJ1) {
         this.nombreJ1 = nombreJ1;
