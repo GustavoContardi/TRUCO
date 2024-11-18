@@ -59,6 +59,7 @@ public class PersistenciaJugador implements Comparable<Jugador>{
         }
 
         if(ordenado && (listaJugadores != null) ) Collections.sort(listaJugadores);
+        if(listaJugadores == null) listaJugadores = new ArrayList<>();
 
         return listaJugadores;
     }

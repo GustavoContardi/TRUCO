@@ -31,12 +31,20 @@ public class vistaConsola implements IVistaJuego, IVistaInicio {
     //
 
     public vistaConsola() throws RemoteException {
-        frame = new JFrame("APP TRUCO");
+        /*frame = new JFrame("APP TRUCO");
         frame.setContentPane(ventana);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(600, 450);
         frame.setResizable(false);
         frame.setLocationRelativeTo(null);
+         */
+
+        this.frame = new JFrame("APP TRUCO");
+        frame.setContentPane(ventana);
+        frame.pack();
+        frame.setResizable(false);
+        frame.setLocationRelativeTo(null);
+        frame.setSize(600, 450);
 
         btnEnter.addActionListener(new ActionListener() {
             @Override

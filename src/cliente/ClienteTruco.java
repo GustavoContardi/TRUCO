@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import static enums.OpcionesInicio.VISTA_CONSOLA_NO_REANUDAR;
 
 public class ClienteTruco {
-    // opcion 1 == vista grafica |||| opcion 2 == vista consola
+    // opcion 1 == vista grafica  -||||-  opcion 2 == vista consola
     public ClienteTruco(OpcionesInicio inicio) throws RemoteException {
         ArrayList<String> ips = Util.getIpDisponibles();
         String ip = (String) JOptionPane.showInputDialog(

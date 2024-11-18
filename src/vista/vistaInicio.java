@@ -243,7 +243,7 @@ public class vistaInicio implements IVistaInicio {
         ventana.add(scroll, BorderLayout.CENTER); // Agregar el JScrollPane al centro del BorderLayout
 
         for (Jugador j : PersistenciaJugador.listaJugadoresGuardados(true)) {
-            listModel.addElement(j.toString());
+            if(j != null) listModel.addElement(j.toString());
         }
 
         frame2.setVisible(true);

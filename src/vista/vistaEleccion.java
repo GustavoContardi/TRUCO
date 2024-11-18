@@ -21,6 +21,11 @@ public class vistaEleccion implements IVistaEleccion {
     private JList list;
     private JComboBox cbEleccion;
     private JButton btnElegir;
+    private JPanel ABMJugador;
+    private JPanel panelBtnABM;
+    private JButton btnCrearJugador;
+    private JButton btnActualizarJugador;
+    private JButton btnEliminarJugador;
     private JTextField textRegistrar;
     private JButton btnRegistrar;
     private final JFrame frame;
