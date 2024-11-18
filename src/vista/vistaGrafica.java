@@ -55,6 +55,7 @@ public class vistaGrafica implements IVistaJuego {
         frame.setLocationRelativeTo(null);
         frame.setSize(730, 820);
 
+
         // captura del evento que el jugador cierra la ventana y guardo la partida
         frame.addWindowListener(new WindowAdapter() {
             @Override
