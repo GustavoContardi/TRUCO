@@ -5,7 +5,9 @@ import interfaces.IControlador;
 import vista.vistaConsola;
 import vista.vistaGrafica;
 
-public class FlujoFinPartida extends Flujo{
+import java.io.Serializable;
+
+public class FlujoFinPartida extends Flujo implements Serializable {
 
 
     public FlujoFinPartida(vistaConsola vista, IControlador controlador) {

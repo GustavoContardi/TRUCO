@@ -1,26 +1,9 @@
-import ar.edu.unlu.rmimvc.servidor.Servidor;
-import controlador.Controlador;
-import interfaces.IControlador;
-import interfaces.IModelo;
-import interfaces.IVistaInicio;
-import modelo.Jugador;
-import modelo.Mazo;
-import modelo.Partida;
-import persistencia.Persistencia;
 import persistencia.PersistenciaJugador;
-import servidor.ServidorTruco;
 import vista.vistaInicio;
 
-import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.rmi.RemoteException;
-import java.util.ArrayList;
-
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
-    public static void main(String[] args) throws RemoteException {
+
+    public static void main(String[] args)  {
        /*
         ArrayList<ArrayList<String>> listas = new ArrayList<>();
 
@@ -124,5 +107,8 @@ public class Main {
         new vistaInicio();
         new vistaInicio();
 
+        //ventanaActualizarJugador();
     }
+
+
 }

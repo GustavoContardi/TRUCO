@@ -12,12 +12,13 @@ import vista.vistaGrafica;
 import vista.vistaEleccion;
 
 import javax.swing.*;
+import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 
 import static enums.OpcionesInicio.VISTA_CONSOLA_NO_REANUDAR;
 
-public class ClienteTruco {
+public class ClienteTruco implements Serializable {
     // opcion 1 == vista grafica  -||||-  opcion 2 == vista consola
     public ClienteTruco(OpcionesInicio inicio) throws RemoteException {
         ArrayList<String> ips = Util.getIpDisponibles();
@@ -55,12 +56,13 @@ public class ClienteTruco {
         );
 
 
+
         Controlador controlador = new Controlador();
         IVistaEleccion vistaEleccion = new vistaEleccion();
         vistaEleccion.setControlador(controlador);
         controlador.setVistaEleccion(vistaEleccion);
 
-        switch (inicio){
+        switch (inicio) {
             case VISTA_CONSOLA_NO_REANUDAR -> {
                 IVistaJuego juego = new vistaConsola();
                 controlador.setVistaJuego(juego);
@@ -87,12 +89,11 @@ public class ClienteTruco {
             }
         }
 
-
         Cliente c = new Cliente(ip, Integer.parseInt(port), ipServidor, Integer.parseInt(portServidor));
 
         try {
-            c.iniciar(controlador);
             vistaEleccion.mostrarMenuPrincipal();
+            c.iniciar(controlador);
         } catch (RemoteException | RMIMVCException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -100,7 +101,7 @@ public class ClienteTruco {
     }
 
     public static void main(String[] args) throws RemoteException {
-        new ClienteTruco(VISTA_CONSOLA_NO_REANUDAR);
+        //new ClienteTruco(VISTA_CONSOLA_NO_REANUDAR);
     }
-
 }
+

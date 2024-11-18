@@ -7,10 +7,11 @@ import interfaces.IModelo;
 import modelo.Partida;
 
 import javax.swing.*;
+import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 
-public class ServidorTruco {
+public class ServidorTruco implements Serializable {
 
     public ServidorTruco() throws RemoteException {
         ArrayList<String> ips = Util.getIpDisponibles();

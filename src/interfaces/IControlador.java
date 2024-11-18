@@ -50,6 +50,8 @@ public interface IControlador {
     void restablecerPartida() throws RemoteException;
     boolean getReanudarPartida() throws RemoteException;
     void setReanudarPartida(boolean reanudarPartida) throws RemoteException;
+    void actualizarJugador(int idJugador, String nombreNuevo);
+    void eliminarJugador(int idJugador);
 
 
     void setJugador(int idJugador) throws RemoteException;

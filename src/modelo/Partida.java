@@ -24,6 +24,7 @@ import static enums.Eventos.*;
 import static enums.Eventos.NADA;
 
 public class Partida extends ObservableRemoto implements Serializable, IModelo {
+
     //
     // atributos
     //
@@ -403,7 +404,7 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
 
     @Override
     public void altaJugador(String nombre) throws RemoteException {
-        new Jugador(nombre);
+        if(nombre != null) new Jugador(nombre);
         notificarJugadorElecto(); // es lo mismo notificar con este pq actualiza la lista en eleccion
     }
 
@@ -838,6 +839,11 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
     @Override
     public boolean setPartidaRecuperada() throws RemoteException {
         return false;
+    }
+
+    @Override
+    public void actualizarListaJugadores() throws RemoteException {
+        notificarJugadorElecto();
     }
 
 

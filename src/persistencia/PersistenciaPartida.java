@@ -9,7 +9,7 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class PersistenciaPartida {
+public class PersistenciaPartida implements Serializable{
     private static Partida              partida;
     private static ArrayList<Partida>   listaPartidas;
 

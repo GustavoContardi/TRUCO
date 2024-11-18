@@ -30,10 +30,11 @@ public class vistaEleccion implements IVistaEleccion {
     private JButton btnRegistrar;
     private final JFrame frame;
     private IControlador controlador;
+    private String nombreJugador;
 
     private DefaultListModel<String> listModel;
 
-    public vistaEleccion() {
+    public vistaEleccion() throws RemoteException {
         this.frame = new JFrame("TRUCONTARDI");
         frame.setContentPane(ventana);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -45,8 +46,9 @@ public class vistaEleccion implements IVistaEleccion {
         listModel = new DefaultListModel<>();
         list.setModel(listModel);
 
-
-
+        procesarAltaJugador();
+        procesarActualizarJugador();
+        procesarEliminarJugador();
     }
 
     public void iniciarRecuperacionPartida() throws RemoteException {// este metodo es para recuperar una partida y elegir uno de los dos jugadores asociados a ella
@@ -78,13 +80,33 @@ public class vistaEleccion implements IVistaEleccion {
     }
 
     public void procesarAltaJugador() throws RemoteException {
-        String nombre = textRegistrar.getText().trim();
+        nombreJugador = ""; // reseteo la variable cada vez que se va a dar de alta un jugador
 
-        if(!nombre.isEmpty()){
-            controlador.agregarJugador(nombre);
-            textRegistrar.setText("");
-            panelAvisos("¡JUGADOR REGISTRADO CON ÉXITO!");
-        }
+        btnCrearJugador.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //ventanaCrearJugador();
+                nombreJugador = JOptionPane.showInputDialog(frame, "Por favor, ingresa el nombre:", "TRUCONTARDI - CREAR JUGADOR", JOptionPane.QUESTION_MESSAGE);
+                if(!(nombreJugador.trim().isEmpty())){
+                    try {
+                        controlador.agregarJugador(nombreJugador);
+                        panelAvisos("¡JUGADOR REGISTRADO CON ÉXITO!");
+                    } catch (RemoteException ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            }
+        });
+
+    }
+
+    public void procesarActualizarJugador() throws RemoteException {
+        btnActualizarJugador.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ventanaActualizarJugador();
+            }
+        });
     }
 
     public void procesarEleccionJugador() throws RemoteException {
@@ -94,6 +116,15 @@ public class vistaEleccion implements IVistaEleccion {
             controlador.setJugador(jugador.getIDJugador());
             frame.dispose();
         }
+    }
+
+    public void procesarEliminarJugador(){
+        btnEliminarJugador.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ventanaEliminarJugador();
+            }
+        });
     }
 
     @Override
@@ -109,7 +140,9 @@ public class vistaEleccion implements IVistaEleccion {
     @Override
     public void actualizarListaJugadores(ArrayList<Jugador> lista) {
 
-        if(lista != null){
+        if(lista.isEmpty()) listModel.addElement("¡No hay Jugadores creados aún!");
+
+        else{
 
             listModel.clear();
             for (Jugador jugador: lista) {
@@ -123,9 +156,6 @@ public class vistaEleccion implements IVistaEleccion {
                 }
             }
 
-        }
-        else{
-            listModel.addElement("¡No hay Jugadores creados aún!");
         }
     }
 
@@ -250,4 +280,112 @@ public class vistaEleccion implements IVistaEleccion {
             button.removeActionListener(listener);
         }
     }
+
+    private void ventanaActualizarJugador(){
+        JFrame frame2 = new JFrame("TRUCONTARDI - ACTUALIZAR JUGADOR");
+        frame2.setSize(425, 300);
+        frame2.setLayout(new BorderLayout());
+        JComboBox<Jugador> comboBox = new JComboBox<>();
+
+        ArrayList<Jugador> lista = controlador.listaJugadoresMasGanadores();
+        for(Jugador j : lista){
+            comboBox.addItem(j);
+        }
+
+        JButton btnSeleccionar = new JButton("SELECCIONAR");
+        JPanel panelCentro = new JPanel();
+        JPanel panelCentro2 = new JPanel();
+        panelCentro2.setLayout(new GridBagLayout());
+        panelCentro.setLayout(new BorderLayout());
+        panelCentro.add(comboBox, BorderLayout.NORTH);
+        panelCentro.add(panelCentro2, BorderLayout.CENTER);
+        panelCentro2.add(btnSeleccionar);
+
+        // Agregar el panel al centro del marco
+        frame2.add(panelCentro, BorderLayout.CENTER);
+
+        // Centrar la ventana en la pantalla
+        frame2.setLocationRelativeTo(null);
+
+        // Hacer la ventana visible
+        frame2.setVisible(true);
+
+        btnSeleccionar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Jugador jugador = (Jugador) comboBox.getSelectedItem();
+
+                if(jugador != null){
+                    nombreJugador = JOptionPane.showInputDialog(frame, "Por favor, ingresa el nombre:", "TRUCONTARDI - ACTUALIZAR JUGADOR", JOptionPane.QUESTION_MESSAGE);
+                    controlador.actualizarJugador(jugador.getIDJugador(), nombreJugador);
+                    frame2.dispose();
+                }
+            }
+        });
+
+    }
+
+
+    private void ventanaEliminarJugador() {
+        JFrame frame2 = new JFrame("TRUCONTARDI - ELIMINAR JUGADOR");
+        frame2.setSize(425, 300);
+        frame2.setLayout(new BorderLayout());
+        JComboBox<Jugador> comboBox = new JComboBox<>();
+
+        // Agregar jugadores al comboBox
+        ArrayList<Jugador> lista = controlador.listaJugadoresMasGanadores();
+        for (Jugador j : lista) {
+            comboBox.addItem(j);
+        }
+
+        // Crear el botón
+        JButton btnSeleccionar = new JButton("SELECCIONAR");
+        JPanel panelCentro = new JPanel();
+        JPanel panelCentro2 = new JPanel();
+        panelCentro2.setLayout(new GridBagLayout());
+        panelCentro.setLayout(new BorderLayout());
+        panelCentro.add(comboBox, BorderLayout.NORTH);
+        panelCentro.add(panelCentro2, BorderLayout.CENTER);
+        panelCentro2.add(btnSeleccionar);
+
+        // Agregar el panel al centro del marco
+        frame2.add(panelCentro, BorderLayout.CENTER);
+
+        // Centrar la ventana en la pantalla
+        frame2.setLocationRelativeTo(null);
+
+        // Hacer visible el marco
+        frame2.setVisible(true);
+
+        // Agregar ActionListener al botón
+        btnSeleccionar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Obtener el jugador seleccionado
+                Jugador jugador = (Jugador) comboBox.getSelectedItem();
+                if (jugador != null) {
+                    // Mostrar cuadro de confirmación
+                    int respuesta = JOptionPane.showConfirmDialog(
+                            frame2,
+                            "¿Seguro que quieres eliminar a " + jugador.getNombre() + "?",
+                            "Confirmación",
+                            JOptionPane.YES_NO_OPTION,
+                            JOptionPane.WARNING_MESSAGE
+                    );
+
+                    // Acciones según la respuesta
+                    if (respuesta == JOptionPane.YES_OPTION) {
+                        controlador.eliminarJugador(jugador.getIDJugador());
+                        JOptionPane.showMessageDialog(frame2, "Jugador eliminado exitosamente.");
+                    } else {
+                        JOptionPane.showMessageDialog(frame2, "Eliminación cancelada.");
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(frame2, "Por favor, selecciona un jugador.", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+    }
+
+
 }

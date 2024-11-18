@@ -16,13 +16,14 @@ import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 
 import static enums.EstadoEnvido.*;
 import static enums.EstadoTruco.*;
 
-public class vistaGrafica implements IVistaJuego {
+public class vistaGrafica implements IVistaJuego, Serializable {
     private JPanel ventana;
     private JButton btnEnvido;
     private JButton TRUCOButton;
@@ -54,6 +55,7 @@ public class vistaGrafica implements IVistaJuego {
         frame.setResizable(false);
         frame.setLocationRelativeTo(null);
         frame.setSize(730, 820);
+
 
         // captura del evento que el jugador cierra la ventana y guardo la partida
         frame.addWindowListener(new WindowAdapter() {

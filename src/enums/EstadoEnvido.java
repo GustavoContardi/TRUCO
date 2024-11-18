@@ -1,6 +1,8 @@
 package enums;
 
-public enum EstadoEnvido {
+import java.io.Serializable;
+
+public enum EstadoEnvido implements Serializable {
     NADA,
     ENVIDO,
     ENVIDO_DOBLE,

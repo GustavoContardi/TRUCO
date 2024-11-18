@@ -12,6 +12,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.io.Serializable;
 import java.net.URISyntaxException;
 import java.rmi.RemoteException;
 import java.net.URI;
@@ -19,7 +20,7 @@ import java.net.URI;
 import static enums.OpcionesInicio.*;
 
 
-public class vistaInicio implements IVistaInicio {
+public class vistaInicio implements IVistaInicio, Serializable {
 
     private JPanel ventana;
     private JLabel tituloLabel;
@@ -47,7 +48,6 @@ public class vistaInicio implements IVistaInicio {
         anotadorG = new anotadorGrafico(this);
 
         setBotonesInicio();
-
     }
 
     //
@@ -159,7 +159,7 @@ public class vistaInicio implements IVistaInicio {
             public void actionPerformed(ActionEvent e) {
                 try {
                     new ServidorTruco();
-                    //btnIniciarNueva.setEnabled(false);
+                    btnIniciarNueva.setEnabled(false);
                     instrucciones.setText("¡Servidor Creado! Ahora puedes ingresar a él");
                 } catch (RemoteException ex) {
                     throw new RuntimeException(ex);
@@ -190,6 +190,7 @@ public class vistaInicio implements IVistaInicio {
     }
 
     public void iniciar(){
+
         frame.setVisible(true);
     }
 
@@ -222,7 +223,6 @@ public class vistaInicio implements IVistaInicio {
                 Desktop.getDesktop().browse(new URI(url));
             } catch (IOException | URISyntaxException e) {
                 e.printStackTrace();
-                // Manejo de errores: puedes mostrar un mensaje al usuario aquí
             }
         }
     }
@@ -261,7 +261,11 @@ public class vistaInicio implements IVistaInicio {
         btnIniciarNueva.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                vistaEleccion eleccion = new vistaEleccion();
+                try {
+                    vistaEleccion eleccion = new vistaEleccion();
+                } catch (RemoteException ex) {
+                    ex.printStackTrace();
+                }
                 //eleccion.iniciarRecuperacionPartida();
                 btnIniciarNueva.setEnabled(false);
                 instrucciones.setText("¡Servidor Creado! Ahora puedes ingresar a él");

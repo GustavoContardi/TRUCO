@@ -5,9 +5,10 @@ import interfaces.IControlador;
 import vista.vistaConsola;
 import vista.vistaGrafica;
 
+import java.io.Serializable;
 import java.rmi.RemoteException;
 
-public abstract class Flujo {
+public abstract class Flujo implements Serializable {
     protected final vistaConsola vista;
     protected final IControlador controlador;
 

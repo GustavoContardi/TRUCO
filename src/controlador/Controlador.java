@@ -379,6 +379,26 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
     }
 
     @Override
+    public void actualizarJugador(int idJugador, String nuevoNombre) {
+        try {
+            PersistenciaJugador.actualizarNombre(idJugador, nuevoNombre);
+            modelo.actualizarListaJugadores();
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void eliminarJugador(int idJugador) {
+        try {
+            PersistenciaJugador.eliminarJugador(idJugador);
+            modelo.actualizarListaJugadores();
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
     public void setJugador(int idJugador) throws RemoteException {
         jugador = PersistenciaJugador.recuperarJugador(idJugador);
         if(!reanudarPartida){
@@ -485,8 +505,8 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
     }
 
     @Override
-    public <T extends IObservableRemoto> void setModeloRemoto(T t) throws RemoteException {
-        this.modelo = (IModelo) t;
+    public <T extends IObservableRemoto> void setModeloRemoto(T modeloRemoto) {
+        this.modelo = (IModelo) modeloRemoto; // es necesario castear el modelo remoto
     }
 
 

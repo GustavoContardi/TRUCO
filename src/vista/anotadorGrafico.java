@@ -1,14 +1,17 @@
 package vista;
 
+import interfaces.IVistaInicio;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.Serializable;
 import javax.swing.UIManager;
 import javax.swing.SwingUtilities;
 import javax.swing.UnsupportedLookAndFeelException;
 
 
-public class anotadorGrafico {
+public class anotadorGrafico implements Serializable {
     private JPanel ventana;
     private JButton btnSumarJ1;
     private JButton btnRestarJ1;
@@ -19,29 +22,34 @@ public class anotadorGrafico {
     private JLabel JUGADOR1Label;
     private JLabel JUGADOR2Label;
     private JFrame frame;
+    private IVistaInicio inicio;
 
     private Integer puntosJugador1;
     private Integer puntosJugador2;
 
-    public anotadorGrafico(vistaInicio inicio) {
+    public anotadorGrafico(IVistaInicio inicio) {
         this.frame = new JFrame("TRUCONTARDI");
         frame.setContentPane(ventana);
         frame.pack();
         frame.setResizable(false);
         frame.setLocationRelativeTo(null);
-        frame.setSize(450, 500);
+        frame.setSize(470, 500);
 
+        this.inicio = inicio;
+    }
+
+    public void iniciar(){
         JMenuBar mnuPrincipal = new JMenuBar();
         JMenu mnuArchivo = new JMenu("Archivo");
         mnuPrincipal.add(mnuArchivo);
         JMenuItem mnuiSalir = new JMenuItem("Salir");
         mnuiSalir.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    frame.dispose();
-                    inicio.iniciar();
-                }
-            });
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                frame.dispose();
+                inicio.iniciar();
+            }
+        });
         mnuArchivo.add(mnuiSalir);
         frame.setJMenuBar(mnuPrincipal);
 
@@ -86,15 +94,12 @@ public class anotadorGrafico {
                 }
             }
         });
-
-    }
-
-    public void iniciar(){
         frame.setVisible(true);
     }
 
     public void salir(){
-        frame.setVisible(false);
+        //frame.setVisible(false);
+        frame.dispose();
     }
 
 

@@ -7,9 +7,10 @@ import vista.vistaConsola;
 import vista.vistaGrafica;
 
 import javax.swing.*;
+import java.io.Serializable;
 import java.rmi.RemoteException;
 
-public class FlujoMostrarCartas extends Flujo{
+public class FlujoMostrarCartas extends Flujo implements Serializable {
 
     public FlujoMostrarCartas(vistaConsola vista, IControlador controlador) {
         super(vista, controlador);

@@ -4,11 +4,12 @@ import enums.EstadoTruco;
 import interfaces.IControlador;
 import vista.vistaConsola;
 
+import java.io.Serializable;
 import java.rmi.RemoteException;
 
 import static enums.EstadoTruco.*;
 
-public class FlujoEleccionTruco extends Flujo{
+public class FlujoEleccionTruco extends Flujo implements Serializable {
     private EstadoTruco estadoTruco;
     public FlujoEleccionTruco(vistaConsola vista, IControlador controlador, EstadoTruco estadoTruco) {
         super(vista, controlador);

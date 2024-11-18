@@ -3,14 +3,11 @@ package persistencia;
 import enums.EstadoEnvido;
 import enums.EstadoTruco;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.ObjectInputStream;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class PersistenciaCantos {
+public class PersistenciaCantos implements Serializable {
     private static ArrayList<String> listaCantos;
     private static ArrayList<ArrayList<String>> listaCantosGeneral;
 

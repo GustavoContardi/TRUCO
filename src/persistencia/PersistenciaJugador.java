@@ -6,7 +6,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class PersistenciaJugador implements Comparable<Jugador>{
+public class PersistenciaJugador implements Comparable<Jugador>, Serializable{
     private static Jugador jugador;
     private static ArrayList<Jugador> listaJugadores;
 
@@ -67,9 +67,33 @@ public class PersistenciaJugador implements Comparable<Jugador>{
     public static void eliminarJugador(int idJugador){
         listaJugadores = listaJugadoresGuardados(false);
 
-        for(Jugador j : listaJugadores){
-            if(j.getIDJugador() == idJugador) listaJugadores.remove(j);
+        if(listaJugadores != null) listaJugadores.removeIf(j -> j.getIDJugador() == idJugador);
+
+        try {
+            FileOutputStream fos = new FileOutputStream("jugadores.bin");
+            var oos = new ObjectOutputStream(fos);
+            oos.writeObject(listaJugadores);
+            fos.close();
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
+    }
+
+    public static void actualizarNombre(int idJugador, String nuevoNombre){
+        Jugador jugEliminado = null;
+
+        for(Jugador j : listaJugadores){
+            if(j.getIDJugador() == idJugador) {
+                jugEliminado = j;
+                eliminarJugador(idJugador);
+            }
+        }
+
+        listaJugadores = listaJugadoresGuardados(false);
+        jugEliminado.setNombre(nuevoNombre);
+        listaJugadores.add(jugEliminado);
 
         try {
             FileOutputStream fos = new FileOutputStream("jugadores.bin");

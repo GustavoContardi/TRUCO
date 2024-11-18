@@ -2,12 +2,9 @@ package persistencia;
 
 import modelo.Mazo;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.ObjectInputStream;
+import java.io.*;
 
-public class PersistenciaMazo {
+public class PersistenciaMazo implements Serializable {
     private static Mazo mazo;
 
     public PersistenciaMazo() {

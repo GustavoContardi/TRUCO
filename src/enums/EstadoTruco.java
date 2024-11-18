@@ -1,6 +1,8 @@
 package enums;
 
-public enum EstadoTruco {
+import java.io.Serializable;
+
+public enum EstadoTruco implements Serializable {
     NADA,
     TRUCO,
     RE_TRUCO,

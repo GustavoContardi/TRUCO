@@ -12,9 +12,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Random;
 
-public class Persistencia{
-
-
+public class Persistencia implements Serializable{
 
     public Persistencia(ArrayList<Integer> lista2) {
 
