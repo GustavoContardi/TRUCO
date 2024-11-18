@@ -743,9 +743,7 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
         notificarTantoQuerido();
         notificarPuntos();
 
-        if(esFinDePartida()) {
-            finDePartida();
-        }
+        if(esFinDePartida()) finDePartida();
     }
 
     @Override
