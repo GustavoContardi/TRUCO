@@ -31,13 +31,15 @@ public class inicio extends JFrame{
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setTitle("Menú principal - Truco");
 
-        instrucciones.setText("¡Bienvenido al Trucontardi!");
+        instrucciones.setText("¡Bienvenido al Trucontardi! Seleccione una opción");
 
         // EVENTOS
 
         btnCrearNuevo.addActionListener(e -> {
             try {
                 new ServidorTruco();
+                btnCrearNuevo.setEnabled(false); // desactivo para que cree solo 1 servidor
+                instrucciones.setText("¡Servido creado con éxito! Ahora puede ingresar a él");
             } catch (RemoteException ex) {
                 throw new RuntimeException(ex);
             }

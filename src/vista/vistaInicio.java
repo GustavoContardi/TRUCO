@@ -17,56 +17,57 @@ import java.net.URI;
 
 
 public class vistaInicio extends JFrame implements IVistaInicio {
-//
-//    private JPanel ventana;
-//    private JLabel tituloLabel;
-//    private JButton btnIniciarNueva;
-//    private JButton btnReanudar;
-//    private JButton btnAnotador;
-//    private JButton btnSalir;
-//    private JButton btnReglas;
-//    private JLabel instrucciones;
-//    private JButton btnTop;
-//    private anotadorGrafico anotadorG;
-//
-//    //
-//    //  constructor
-//    //
-//
-//    public vistaInicio() {
-//        setSize(500, 500);
-//        setContentPane(ventana);
-//        setVisible(true);
-//        setResizable(false);
-//        setLocationRelativeTo(null);
-//        setDefaultCloseOperation(EXIT_ON_CLOSE);
-//        setTitle("TRUCONTARDI - MENU PRINCIPAL");
-//        anotadorG = new anotadorGrafico(this);
-//
-//
-//        // Eventos
-//
-//        btnIniciarNueva.addActionListener(e -> {
-//            try {
-//                new ServidorTruco();
-//            } catch (RemoteException ex) {
-//                throw new RuntimeException(ex);
-//            }
-//        });
-//
-//        btnReanudar.addActionListener(e -> {
-//            try {
-//                new ClienteTruco();
-//            } catch (RemoteException ex) {
-//                ex.printStackTrace();
-//            }
-//        });
-//    }
-//    //
-//    //  metodos publicos
-//    //
-//
-//
+
+    private JPanel ventana;
+    private JLabel tituloLabel;
+    private JButton btnIniciarNueva;
+    private JButton btnReanudar;
+    private JButton btnAnotador;
+    private JButton btnSalir;
+    private JButton btnReglas;
+    private JLabel instrucciones;
+    private JButton btnTop;
+    private anotadorGrafico anotadorG;
+
+    //
+    //  constructor
+    //
+
+    public vistaInicio() {
+        setSize(500, 500);
+        setContentPane(ventana);
+        setVisible(true);
+        setResizable(false);
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setTitle("TRUCONTARDI - MENU PRINCIPAL");
+        anotadorG = new anotadorGrafico(this);
+
+
+        // Eventos
+
+        btnIniciarNueva.addActionListener(e -> {
+            try {
+                new ServidorTruco();
+            } catch (RemoteException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+
+        btnReanudar.addActionListener(e -> {
+            try {
+                new ClienteTruco();
+                dispose();
+            } catch (RemoteException ex) {
+                ex.printStackTrace();
+            }
+        });
+    }
+    //
+    //  metodos publicos
+    //
+
+
     public void iniciar(){
         setVisible(true);
     }
