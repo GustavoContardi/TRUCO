@@ -97,10 +97,6 @@ public class anotadorGrafico implements Serializable {
         frame.setVisible(true);
     }
 
-    public void salir(){
-        //frame.setVisible(false);
-        frame.dispose();
-    }
 
 
     private void createUIComponents() {

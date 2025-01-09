@@ -16,11 +16,13 @@ import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 
-import static enums.OpcionesInicio.VISTA_CONSOLA_NO_REANUDAR;
 
-public class ClienteTruco implements Serializable {
+public class ClienteTruco {
     // opcion 1 == vista grafica  -||||-  opcion 2 == vista consola
-    public ClienteTruco(OpcionesInicio inicio) throws RemoteException {
+    public ClienteTruco() throws RemoteException {
+        ArrayList<String> opciones = new ArrayList<>();
+        opciones.add("Interfáz gráfica");
+        opciones.add("Consola");
         ArrayList<String> ips = Util.getIpDisponibles();
         String ip = (String) JOptionPane.showInputDialog(
                 null,
@@ -54,46 +56,31 @@ public class ClienteTruco implements Serializable {
                 null,
                 8888
         );
+        String interfaz = (String) JOptionPane.showInputDialog(
+                null,
+                "Seleccione como quiere visualizar el juego", "Interfaz gráfica",
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                opciones.toArray(),
+                null
+        );
 
 
 
         Controlador controlador = new Controlador();
         IVistaEleccion vistaEleccion = new vistaEleccion();
-        vistaEleccion.setControlador(controlador);
         controlador.setVistaEleccion(vistaEleccion);
+        vistaEleccion.setControlador(controlador);
 
-        switch (inicio) {
-            case VISTA_CONSOLA_NO_REANUDAR -> {
-                IVistaJuego juego = new vistaConsola();
-                controlador.setVistaJuego(juego);
-                juego.setControlador(controlador);
-            }
-            case VISTA_GRAFICA_NO_REANUDAR -> {
-                IVistaJuego juego = new vistaGrafica();
-                controlador.setVistaJuego(juego);
-                juego.setControlador(controlador);
-            }
-            case VISTA_CONSOLA_REANUDAR -> {
-                IVistaJuego juego = new vistaConsola();
-                controlador.setVistaJuego(juego);
-                juego.setControlador(controlador);
-                controlador.setReanudarPartida(true);
-                // hay que hacer algo aca para reanudar
-            }
-            case VISTA_GRAFICA_REANUDAR -> {
-                IVistaJuego juego = new vistaGrafica();
-                controlador.setVistaJuego(juego);
-                juego.setControlador(controlador);
-                controlador.setReanudarPartida(true);
-                // hay que hacer algo aca para reanudar
-            }
-        }
+        if(interfaz.equals("Consola")) controlador.setVistaJuego(new vistaConsola());
+        else controlador.setVistaJuego(new vistaGrafica());
+
 
         Cliente c = new Cliente(ip, Integer.parseInt(port), ipServidor, Integer.parseInt(portServidor));
 
         try {
-            vistaEleccion.mostrarMenuPrincipal();
             c.iniciar(controlador);
+            vistaEleccion.mostrarMenuPrincipal();
         } catch (RemoteException | RMIMVCException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -101,7 +88,7 @@ public class ClienteTruco implements Serializable {
     }
 
     public static void main(String[] args) throws RemoteException {
-        //new ClienteTruco(VISTA_CONSOLA_NO_REANUDAR);
+        //new ClienteTruco(OpcionesInicio.VISTA_GRAFICA_NO_REANUDAR);
     }
 }
 

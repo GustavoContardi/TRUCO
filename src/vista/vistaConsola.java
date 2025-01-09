@@ -43,7 +43,7 @@ public class vistaConsola implements IVistaJuego, IVistaInicio, Serializable {
         this.frame = new JFrame("APP TRUCO");
         frame.setContentPane(ventana);
         frame.pack();
-        frame.setResizable(false);
+        frame.setResizable(false);                      // QUE PASA ACA
         frame.setLocationRelativeTo(null);
         frame.setSize(600, 450);
 
@@ -164,8 +164,8 @@ public class vistaConsola implements IVistaJuego, IVistaInicio, Serializable {
     }
 
     @Override
-    public void salirDelJuego() {
-        new vistaInicio();
+    public void salirDelJuego(){
+        //new vistaInicio();
         frame.dispose();
     }
 

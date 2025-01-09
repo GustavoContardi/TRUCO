@@ -1,9 +1,13 @@
-import persistencia.PersistenciaJugador;
+import cliente.ClienteTruco;
+import servidor.ServidorTruco;
+import vista.inicio;
 import vista.vistaInicio;
+
+import java.rmi.RemoteException;
 
 public class Main {
 
-    public static void main(String[] args)  {
+    public static void main(String[] args) throws RemoteException {
        /*
         ArrayList<ArrayList<String>> listas = new ArrayList<>();
 
@@ -103,11 +107,10 @@ public class Main {
         System.out.println(jugador2.getCartasObtenidas().get(0).toString()+ " " + jugador2.getCartasObtenidas().get(1).toString()+ " " +jugador2.getCartasObtenidas().get(2).toString());
         System.out.println(jugador2.getNombre() + " puntos de envido: " + jugador2.puntosEnvido());
     }*/
-        PersistenciaJugador.delvolverTodosJugadores();
-        new vistaInicio();
-        new vistaInicio();
+        //PersistenciaJugador.delvolverTodosJugadores();
 
-        //ventanaActualizarJugador();
+
+        new inicio();
     }
 
 

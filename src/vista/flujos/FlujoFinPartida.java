@@ -6,6 +6,7 @@ import vista.vistaConsola;
 import vista.vistaGrafica;
 
 import java.io.Serializable;
+import java.rmi.RemoteException;
 
 public class FlujoFinPartida extends Flujo implements Serializable {
 
@@ -15,7 +16,7 @@ public class FlujoFinPartida extends Flujo implements Serializable {
     }
 
     @Override
-    public Flujo procesarEntrada(String string) {
+    public Flujo procesarEntrada(String string) throws RemoteException {
 
         vista.salirDelJuego();
 
