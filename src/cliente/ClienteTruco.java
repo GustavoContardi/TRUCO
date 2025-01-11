@@ -66,15 +66,22 @@ public class ClienteTruco {
         );
 
 
-
+        IVistaJuego vista;
         Controlador controlador = new Controlador();
         IVistaEleccion vistaEleccion = new vistaEleccion();
         controlador.setVistaEleccion(vistaEleccion);
         vistaEleccion.setControlador(controlador);
 
-        if(interfaz.equals("Consola")) controlador.setVistaJuego(new vistaConsola());
-        else controlador.setVistaJuego(new vistaGrafica());
+        if(interfaz.equals("Consola")) {
+            vista = new vistaConsola();
+            controlador.setVistaJuego(vista);
+        }
+        else {
+            vista = new vistaGrafica();
+            controlador.setVistaJuego(vista);
+        }
 
+        vista.setControlador(controlador);
 
         Cliente c = new Cliente(ip, Integer.parseInt(port), ipServidor, Integer.parseInt(portServidor));
 

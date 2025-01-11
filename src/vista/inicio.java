@@ -48,6 +48,7 @@ public class inicio extends JFrame{
         btnIngresar.addActionListener(e -> {
             try {
                 new ClienteTruco();
+                setVisible(false);
             } catch (RemoteException ex) {
                 ex.printStackTrace();
             }

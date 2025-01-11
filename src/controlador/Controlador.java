@@ -10,6 +10,7 @@ import modelo.Carta;
 import modelo.Jugador;
 import modelo.Partida;
 import persistencia.*;
+import vista.inicio;
 import vista.vistaInicio;
 
 import java.io.Serializable;
@@ -84,14 +85,10 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
     public void tirarCarta(int numeroDeCarta) throws RemoteException { // en realidad no es el id de la carta, porque cuando la tiro de la vista no sabe como pasarle el id pq no conoce al objeto
         int idCarta = 0;
 
-        if(quedanCartasJugador()){
+        if(jugador.getIDJugador() == modelo.getIdJ1()) idCarta = modelo.getCartasJ1().get(numeroDeCarta-1).getIdCarta();
+        else idCarta = modelo.getCartasJ2().get(numeroDeCarta-1).getIdCarta();
 
-            if(jugador.getIDJugador() == modelo.getIdJ1()) idCarta = modelo.getCartasJ1().get(numeroDeCarta-1).getIdCarta();
-            else idCarta = modelo.getCartasJ2().get(numeroDeCarta-1).getIdCarta();
-
-            modelo.tirarCarta(jugador.getIDJugador(), idCarta);
-
-        }
+        modelo.tirarCarta(jugador.getIDJugador(), idCarta);
     }
 
     @Override
@@ -317,7 +314,7 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
 
     @Override
     public void volverAlMenuPrincipal() throws RemoteException {
-        new vistaInicio();
+        new inicio();
     }
 
     @Override

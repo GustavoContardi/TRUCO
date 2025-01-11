@@ -95,7 +95,6 @@ public class vistaGrafica implements IVistaJuego, Serializable {
             String imagen2 = basePath + carta2 + ".jpeg";
             String imagen3 = basePath + carta3 + ".jpeg";
 
-
             setButtonImage(btnCarta1, imagen1, 200, 220);
             setButtonImage(btnCarta2, imagen2, 200, 220);
             setButtonImage(btnCarta3, imagen3, 200, 220);
@@ -105,9 +104,6 @@ public class vistaGrafica implements IVistaJuego, Serializable {
         else {
             accionesJ2.setText("Esperando contrincante...");
         }
-
-
-
     }
 
     @Override
@@ -478,8 +474,10 @@ public class vistaGrafica implements IVistaJuego, Serializable {
     @Override
     public void mostrarMenuPrincipal() throws RemoteException {
         iniciar();
-        mostrarCartas();
-        frame.setTitle(" APP TRUCO - " + controlador.getNombreJugador());
+        if(controlador != null) {
+            mostrarCartas();
+            frame.setTitle(" APP TRUCO - " + controlador.getNombreJugador());
+        }
     }
 
 
@@ -579,8 +577,10 @@ public class vistaGrafica implements IVistaJuego, Serializable {
         btnAuxiliar.setEnabled(false);
         btnQuiero.setEnabled(false);
         btnNoQuiero.setEnabled(false);
-        if(controlador.seCantoEnvido()) btnEnvido.setEnabled(false);
+
+        if(controlador.seCantoEnvido() || controlador.nroDeRonda() > 1) btnEnvido.setEnabled(false);
         else btnEnvido.setEnabled(true);
+
         btnEnvido.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -743,103 +743,6 @@ public class vistaGrafica implements IVistaJuego, Serializable {
     // metodos privados
     //
 
-    private void setBotonesAccionesCartas(JLabel labelImagen1, JLabel labelImagen2, JLabel labelImagen3) throws RemoteException {
-        int ronda = controlador.nroDeRonda();
-
-        removeAllActionListeners(btnCarta1);
-        removeAllActionListeners(btnCarta2);
-        removeAllActionListeners(btnCarta3);
-
-        btnCarta1.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    if(controlador.esMiTurno()) {
-
-                        if(ronda == 1) {
-                            CartasYo1.add(labelImagen1);
-                            CartasYo1.revalidate();
-                            CartasYo1.repaint();
-                        }
-                        else if(ronda == 2) {
-                            CartasYo2.add(labelImagen1);
-                            CartasYo2.revalidate();
-                            CartasYo2.repaint();
-                        }
-                        else if(ronda == 3) {
-                            CartasYo3.add(labelImagen1);
-                            CartasYo3.revalidate();
-                            CartasYo3.repaint();
-                        }
-                        btnCarta1.setEnabled(false);
-                        controlador.tirarCarta(1);
-                    }
-                } catch (RemoteException ex) {
-                    ex.printStackTrace();
-                }
-            }
-        });
-
-        btnCarta2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    if(controlador.esMiTurno()) {
-
-                        if(ronda == 1) {
-                            CartasYo1.add(labelImagen1);
-                            CartasYo1.revalidate();
-                            CartasYo1.repaint();
-                        }
-                        else if(ronda == 2) {
-                            CartasYo2.add(labelImagen1);
-                            CartasYo2.revalidate();
-                            CartasYo2.repaint();
-                        }
-                        else if(ronda == 3) {
-                            CartasYo3.add(labelImagen1);
-                            CartasYo3.revalidate();
-                            CartasYo3.repaint();
-                        }
-                        btnCarta2.setEnabled(false);
-                        controlador.tirarCarta(2);
-                    }
-                } catch (RemoteException ex) {
-                    ex.printStackTrace();
-                }
-            }
-        });
-
-        btnCarta3.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    if(controlador.esMiTurno()) {
-                        if(ronda == 1) {
-                            CartasYo1.add(labelImagen1);
-                            CartasYo1.revalidate();
-                            CartasYo1.repaint();
-                        }
-                        else if(ronda == 2) {
-                            CartasYo2.add(labelImagen1);
-                            CartasYo2.revalidate();
-                            CartasYo2.repaint();
-                        }
-                        else if(ronda == 3) {
-                            CartasYo3.add(labelImagen1);
-                            CartasYo3.revalidate();
-                            CartasYo3.repaint();
-                        }
-                        btnCarta3.setEnabled(false);
-                        controlador.tirarCarta(3);
-
-                    }
-                } catch (RemoteException ex) {
-                    ex.printStackTrace();
-                }
-            }
-        });
-    }
 
     private void removeAllActionListeners(AbstractButton button) {
         ActionListener[] listeners = button.getActionListeners();
@@ -859,7 +762,7 @@ public class vistaGrafica implements IVistaJuego, Serializable {
 
     private void panelAvisos(String text){
         JFrame frameMSJ;
-        frameMSJ = new JFrame("TRUCONTARDI");
+        frameMSJ = new JFrame("APP TRUCO - AVISO");
         frameMSJ.setSize(400, 100);
         JPanel panelPrincipal = (JPanel) frameMSJ.getContentPane();
         panelPrincipal.setLayout(new BorderLayout());
@@ -873,6 +776,10 @@ public class vistaGrafica implements IVistaJuego, Serializable {
 
     private void bloquearBotones(){
         // bloqueo los botones cuando me cantan para que responda antes de poder tirar
+
+        removeAllActionListeners(btnCarta1);
+        removeAllActionListeners(btnCarta2);
+        removeAllActionListeners(btnCarta3);
 
     }
 
@@ -888,7 +795,7 @@ public class vistaGrafica implements IVistaJuego, Serializable {
             public void actionPerformed(ActionEvent e) {
                 try {
                     if (controlador.esMiTurno()) {
-                        tirarCarta(imagen1);
+                        mostrarCartaTiradaYO(imagen1);
                         btnCarta1.setEnabled(false);
                         controlador.tirarCarta(1);
                     }
@@ -903,7 +810,7 @@ public class vistaGrafica implements IVistaJuego, Serializable {
             public void actionPerformed(ActionEvent e) {
                 try {
                     if (controlador.esMiTurno()) {
-                        tirarCarta(imagen2);
+                        mostrarCartaTiradaYO(imagen2);
                         btnCarta2.setEnabled(false);
                         controlador.tirarCarta(2);
                     }
@@ -918,7 +825,7 @@ public class vistaGrafica implements IVistaJuego, Serializable {
             public void actionPerformed(ActionEvent e) {
                 try {
                     if (controlador.esMiTurno()) {
-                        tirarCarta(imagen3);
+                        mostrarCartaTiradaYO(imagen3);
                         btnCarta3.setEnabled(false);
                         controlador.tirarCarta(3);
                     }
@@ -959,7 +866,7 @@ public class vistaGrafica implements IVistaJuego, Serializable {
         }
     }
 
-    public void tirarCarta(String carta) throws RemoteException {
+    private void mostrarCartaTiradaYO(String carta) throws RemoteException {
         // metodo privado, lo que solo hace es mostrar en el panel de mis cartas tiradas
 
         int ronda = controlador.nroDeRonda();

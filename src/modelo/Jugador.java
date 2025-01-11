@@ -58,7 +58,12 @@ public class Jugador implements Comparable<Jugador>, Serializable{
     }
 
     public void devolverCartas(){
-        if(cartasObtenidas != null) cartasObtenidas.clear();
+        if(cartasObtenidas != null) {
+            for(Carta carta : cartasObtenidas){ // seteo el tirado de las cartas en falso para que se puedan volver a tirar
+                carta.setFueTirada(false);
+            }
+            cartasObtenidas.clear();
+        }
     }
     public void sumarPartidaGanada(){
         PersistenciaJugador.sumarPartidaGanadaJugador(IDJugador);

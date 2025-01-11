@@ -260,6 +260,7 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
         if(nroRondasGanadasJ1 >= 2  && nroRondasGanadasJ1 > nroRondasGanadasJ2) finMano = true;
         else if (nroRondasGanadasJ2 >= 2  && nroRondasGanadasJ1 < nroRondasGanadasJ2) finMano = true;
 
+
         if(finMano){
             finDeLaRonda();
         }
