@@ -19,7 +19,7 @@ public class FlujoMostrarCartas extends Flujo implements Serializable {
     @Override
     public Flujo procesarEntrada(String string) throws RemoteException {
 
-        if(!controlador.esMiTurno()) vista.println("\nEspere a su turno...\n");
+        if(!controlador.esMiTurno()) vista.println("\n----------------------- ESPERE A SU TURNO ----------------------------\n");
         else{
             switch (string){
                 case "1" -> {
@@ -56,17 +56,15 @@ public class FlujoMostrarCartas extends Flujo implements Serializable {
             vista.mostrarMesa();
             vista.println("");
             vista.println("\nCARTAS DE: " + controlador.getNombreJugador().toUpperCase());
-            vista.println(controlador.puntajeActual());
             vista.println("");
             vista.mostrarCartasDisponibles();
             vista.println("");
             vista.mostrarOpciones();
         }
         else{
-            vista.println("-------------------------------------------------");
-            vista.println("-  BIENVENIDO AL TRUCONTARDI  -");
-            vista.println("-------------------------------------------------");
-            vista.println("\nEsperando al contrincante...\n");
+            vista.println("-----------------------------------------------------------------------");
+            vista.println("----------------- ESPERANDO AL RIVAL ----------------------");
+            vista.println("-----------------------------------------------------------------------\n");
         }
     }
 }

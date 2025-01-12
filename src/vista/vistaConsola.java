@@ -32,14 +32,6 @@ public class vistaConsola implements IVistaJuego, IVistaInicio, Serializable {
     //
 
     public vistaConsola() throws RemoteException {
-        /*frame = new JFrame("APP TRUCO");
-        frame.setContentPane(ventana);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(600, 450);
-        frame.setResizable(false);
-        frame.setLocationRelativeTo(null);
-         */
-
         this.frame = new JFrame("APP TRUCO");
         frame.setContentPane(ventana);
         frame.pack();
@@ -85,16 +77,14 @@ public class vistaConsola implements IVistaJuego, IVistaInicio, Serializable {
         flujoActual.mostrarSiguienteTexto();
     }
 
-
     @Override
     public void mostrarCartas() throws RemoteException {
-        flujoActual = new FlujoMostrarCartas(this, controlador);
-        flujoActual.mostrarSiguienteTexto();
+        setFlujoActual(new FlujoMostrarCartas(this, controlador));
     }
 
     @Override
     public void actualizarPuntaje(String puntaje) throws RemoteException {
-        mostrarCartas(); // ese metodo tiene el puntaje incluido
+        setFlujoActual(new FlujoMostrarCartas(this, controlador)); // ese metodo tiene el puntaje incluido
     }
 
     @Override
@@ -149,8 +139,9 @@ public class vistaConsola implements IVistaJuego, IVistaInicio, Serializable {
 
     @Override
     public void mostrarMenuPrincipal() throws RemoteException {
+        limpiarPantalla();
         iniciar();
-        mostrarCartas();
+        setFlujoActual(new FlujoMostrarCartas(this, controlador));
     }
 
     @Override
@@ -171,15 +162,13 @@ public class vistaConsola implements IVistaJuego, IVistaInicio, Serializable {
 
     @Override
     public void meTiraronCarta(String carta) throws RemoteException {
-        println("\n------------------------------------------");
-        println(controlador.getNombreRival() + " tiró: " + carta);
-        println("------------------------------------------");
-        mostrarCartas();
+        setFlujoActual(new FlujoMostrarCartas(this, controlador));
     }
 
     @Override
     public void tirarCarta(int posCarta) throws RemoteException {
         controlador.tirarCarta(posCarta);
+        setFlujoActual(new FlujoMostrarCartas(this, controlador));
     }
 
     @Override
@@ -219,37 +208,43 @@ public class vistaConsola implements IVistaJuego, IVistaInicio, Serializable {
     }
 
     public void mostrarMesa() throws RemoteException {
-        ArrayList<String> cartasYo = controlador.getCartasTiradasYo();
-        ArrayList<String> cartasRival = controlador.getCartasTiradasRival();
 
-        println("----------------- MESA -----------------");
-        println("|  " + controlador.getNombreJugador() + "        |        " + controlador.getNombreRival() + "  |");
-        switch (controlador.nroDeRonda()){
-            case 1 -> {
-                if(cartasYo.isEmpty() && cartasRival.isEmpty()) println("|                   |                   |");
-                else if(cartasYo.size() > 0 && cartasRival.isEmpty()) println("| " + cartasYo.get(0) + " |               |");
-                else if(cartasRival.size() > 0 && cartasYo.isEmpty()) println("|               " + " | " + cartasRival.get(0));
-                else  println("| " + cartasYo.get(0) + " | " + cartasRival.get(0) + " | ");
-            }
-            case 2 -> {
-                println("| " + cartasYo.get(0) + " | " + cartasRival.get(0) + " | ");
+        if(controlador != null){
 
-                if(cartasYo.size() <= 1 && cartasRival.size() <= 1) println("|                   |                   |");
-                else if(cartasYo.size() > 1 && cartasRival.size() <= 1) println("| " + cartasYo.get(1) + " |               ");
-                else if(cartasYo.size() < 1 && cartasRival.size() > 1) println("|               " + " | " + cartasRival.get(1));
-                else  println("| " + cartasYo.get(1) + " | " + cartasRival.get(1) + " | ");
-            }
-            case 3 -> {
-                println("| " + cartasYo.get(0) + " | " + cartasRival.get(0) + " | ");
-                println("| " + cartasYo.get(1) + " | " + cartasRival.get(1) + " | ");
+            ArrayList<String> cartasYo = controlador.getCartasTiradasYo();
+            ArrayList<String> cartasRival = controlador.getCartasTiradasRival();
 
-                if(cartasYo.size() < 2 && cartasRival.size() < 2) println("|                   |                   |");
-                else if(cartasYo.size() > 2 && cartasRival.size() < 2) println("| " + cartasYo.get(2) + " |               ");
-                else if(cartasYo.size() < 2 && cartasRival.size() > 2) println("|               " + " | " + cartasRival.get(2));
-                else  println("| " + cartasYo.get(2) + " | " + cartasRival.get(2) + " | ");
+            println(controlador.puntajeActual());
+            println("\n----------------- MESA -----------------");
+            println("|  " + controlador.getNombreJugador() + "        |        " + controlador.getNombreRival() + "  |");
+            switch (controlador.nroDeRonda()){
+                case 1 -> {
+                    if(cartasYo.isEmpty() && cartasRival.isEmpty()) println("|                   |                   |");
+                    else if(cartasYo.size() > 0 && cartasRival.isEmpty()) println("| " + cartasYo.get(0) + " |               |");
+                    else if(cartasRival.size() > 0 && cartasYo.isEmpty()) println("|               " + " | " + cartasRival.get(0));
+                    else  println("| " + cartasYo.get(0) + " | " + cartasRival.get(0) + " | ");
+                }
+                case 2 -> {
+                    println("| " + cartasYo.get(0) + " | " + cartasRival.get(0) + " | ");
+
+                    if(cartasYo.size() <= 1 && cartasRival.size() <= 1) println("|                   |                   |");
+                    else if(cartasYo.size() > 1 && cartasRival.size() <= 1) println("| " + cartasYo.get(1) + " |               ");
+                    else if(cartasYo.size() < 1 && cartasRival.size() > 1) println("|               " + " | " + cartasRival.get(1));
+                    else  println("| " + cartasYo.get(1) + " | " + cartasRival.get(1) + " | ");
+                }
+                case 3 -> {
+                    println("| " + cartasYo.get(0) + " | " + cartasRival.get(0) + " | ");
+                    println("| " + cartasYo.get(1) + " | " + cartasRival.get(1) + " | ");
+
+                    if(cartasYo.size() < 2 && cartasRival.size() < 2) println("|                   |                   |");
+                    else if(cartasYo.size() > 2 && cartasRival.size() < 2) println("| " + cartasYo.get(2) + " |               ");
+                    else if(cartasYo.size() < 2 && cartasRival.size() > 2) println("|               " + " | " + cartasRival.get(2));
+                    else  println("| " + cartasYo.get(2) + " | " + cartasRival.get(2) + " | ");
+                }
             }
+
+
         }
-
     }
 
 

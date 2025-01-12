@@ -72,7 +72,6 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
         numeroRonda     =  1;
         finMano         = true;
         mazo            = new Mazo();
-        anotador        = new Anotador("", "");
     }
 
 
@@ -88,7 +87,7 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
     @Override
     public void nuevaRonda() throws RemoteException {
         // seteo los atributos de inicio
-        if(numeroMano == 0) {
+        if(numeroMano == -1) {
             anotador = new Anotador(j2.getNombre(), j1.getNombre());
             notificarPuntos();
         }
@@ -144,7 +143,7 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
                 // Código que se ejecutará después de 3 segundos
                 try {
                     notificarFinMano();
-                    actualizarPuntos(); // espero 2 segundos antes de notificar para que se pueda ver lo que paso antes y no sea tan rapido
+                    // espero 2 segundos antes de notificar para que se pueda ver lo que paso antes y no sea tan rapido
                     nuevaRonda();
                 } catch (RemoteException ex) {
                     ex.printStackTrace();
@@ -370,11 +369,16 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
     public void meVoyAlMazo(int idJugSeFue) throws RemoteException {
         int puntos = 0;
 
-        if(numeroRonda == 1 && !cantaronEnvido()) puntos = 1; // por reglas si se va al mazo en la primer mano sin cantar nada son 2 puntos para el contrario
-        if(numeroRonda == 1 && estadoDelTruco == EstadoTruco.NADA) puntos += 1;
+        if(numeroRonda == 1 && !cantaronEnvido() && estadoDelTruco == EstadoTruco.NADA) puntos = 1; // por reglas si se va al mazo en la primer mano sin cantar nada son 2 puntos para el contrario
 
-        if(idJugSeFue != j1.getIDJugador()) puntajeRondaJ1 += puntos;
-        else if(idJugSeFue != j2.getIDJugador()) puntajeRondaJ2 += puntos;
+        if(idJugSeFue != j1.getIDJugador()) {
+            puntajeRondaJ1 += puntos;
+            nroRondasGanadasJ1 += 1;
+        }
+        else if(idJugSeFue != j2.getIDJugador()) {
+            puntajeRondaJ2 += puntos;
+            nroRondasGanadasJ1 += 1;
+        }
 
         finDeLaRonda();
     }

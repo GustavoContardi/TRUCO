@@ -53,12 +53,7 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
 
     @Override
     public String puntajeActual() throws RemoteException {
-        try{
-            return modelo.puntosActuales();
-        } catch(RemoteException e){
-            e.printStackTrace();
-            return null;
-        }
+        return modelo.puntosActuales();
     }
 
     @Override
@@ -98,7 +93,7 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
 
     @Override
     public void guardarPartida() throws RemoteException {
-        PersistenciaPartida.guardarPartida(modelo.getObjeto());
+        //PersistenciaPartida.guardarPartida(modelo.getObjeto());
     }
 
     @Override
