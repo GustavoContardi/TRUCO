@@ -92,6 +92,7 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
             anotador = new Anotador(j2.getNombre(), j1.getNombre());
             notificarPuntos();
         }
+        actualizarPuntos();
         if (finMano){
             if(!esFinDePartida()){
                 numeroMano         += 1;
@@ -103,7 +104,7 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
                 puntajeRondaEnvido  = 0;
                 quienCantoTruco     = 0;
                 quienCantoReTruco   = 0;
-                puntosRabon         = 0;
+                puntosRabon         = 1;
                 hizoPrimera         = 0;
                 cantoEnvido         = false;
                 cantoEnvidoDoble    = false;
