@@ -37,8 +37,6 @@ public class vistaEleccion implements IVistaEleccion {
     public vistaEleccion() throws RemoteException {
         this.frame = new JFrame("TRUCONTARDI");
         frame.setContentPane(ventana);
-        //frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        //frame.pack();
         frame.setSize(600, 450);
         frame.setResizable(false);
         frame.setLocationRelativeTo(null);
@@ -49,27 +47,11 @@ public class vistaEleccion implements IVistaEleccion {
         procesarAltaJugador();
         procesarActualizarJugador();
         procesarEliminarJugador();
-        iniciarNuevaPartida();
-    }
-
-    public void iniciarRecuperacionPartida() throws RemoteException {// este metodo es para recuperar una partida y elegir uno de los dos jugadores asociados a ella
-        procesarEleccionPartida();
+        procesarEleccionJugador();
+        //iniciarNuevaPartida();
     }
 
     public void iniciarNuevaPartida(){ // este metodo es para una nueva partida donde aparecen todos los jugadores
-        /*btnRegistrar.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    procesarAltaJugador();
-                } catch (RemoteException ex) {
-                    ex.printStackTrace();
-                }
-            }
-        });
-
-         */
-
         btnElegir.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -113,12 +95,21 @@ public class vistaEleccion implements IVistaEleccion {
     }
 
     public void procesarEleccionJugador() throws RemoteException {
-        Jugador jugador = (Jugador) cbEleccion.getSelectedItem();
+        btnElegir.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    Jugador jugador = (Jugador) cbEleccion.getSelectedItem();
 
-        if(jugador != null){
-            controlador.setJugador(jugador.getIDJugador());
-            frame.dispose();
-        }
+                    if(jugador != null){
+                        controlador.setJugador(jugador.getIDJugador());
+                        frame.dispose();
+                    }
+                } catch (RemoteException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
     }
 
     public void procesarEliminarJugador(){
@@ -215,6 +206,34 @@ public class vistaEleccion implements IVistaEleccion {
         iniciar();
     }
 
+    // pantalla para reanudar
+    @Override
+    public void reanudarPartida(ArrayList<Jugador> lista) {
+        frame.setVisible(true);
+        btnActualizarJugador.setEnabled(false);
+        btnEliminarJugador.setEnabled(false);   // desabilito los botones porque no los necesito cuando reanudo
+        btnCrearJugador.setEnabled(false);
+
+        if(lista.isEmpty()) listModel.addElement("¡Ya se eligieron todos los jugadores y la partida esta en curso! Tal vez se equivocó de partida ;)");
+
+        else{
+
+            listModel.clear();
+            for (Jugador jugador: lista) {
+                listModel.addElement(jugador.toString());
+            }
+
+            cbEleccion.removeAllItems();
+            for (Jugador jugador: lista) {
+                if (!jugador.getElecto()) {
+                    cbEleccion.addItem(jugador);
+                }
+            }
+
+        }
+
+    }
+
     private void panelAvisos(String text){
         JFrame frameMSJ;
         frameMSJ = new JFrame("TRUCONTARDI");
@@ -233,6 +252,8 @@ public class vistaEleccion implements IVistaEleccion {
     //
     // metodos privados
     //
+
+
 
     private void procesarEleccionPartida() throws RemoteException {
         btnRegistrar.setEnabled(false); // para que no pueda crear jugadores

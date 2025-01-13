@@ -65,4 +65,5 @@ public interface IModelo extends IObservableRemoto {
     boolean getPartidaRecuperada() throws RemoteException;
     boolean setPartidaRecuperada() throws RemoteException;
     void actualizarListaJugadores() throws RemoteException;
+    ArrayList<Jugador> getJugadores() throws RemoteException;
 }

@@ -13,4 +13,5 @@ public interface IVistaEleccion {
     void actualizarListaPartidas(ArrayList<Partida> lista);
     void setControlador(IControlador controlador);
     void mostrarMenuPrincipal();
+    void reanudarPartida(ArrayList<Jugador> lista);
 }

@@ -1,22 +1,11 @@
 package vista;
 
-import cliente.ClienteTruco;
 import interfaces.IVistaInicio;
-import modelo.Jugador;
-import persistencia.PersistenciaJugador;
-import servidor.ServidorTruco;
 
 import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.rmi.RemoteException;
-import java.net.URI;
 
 
-public class vistaInicio extends JFrame implements IVistaInicio {
+public class NOTvistaInicio extends JFrame implements IVistaInicio {
 
     private JPanel ventana;
     private JLabel tituloLabel;
@@ -33,7 +22,7 @@ public class vistaInicio extends JFrame implements IVistaInicio {
     //  constructor
     //
 
-    public vistaInicio() {
+    public NOTvistaInicio() {
         setSize(500, 500);
         setContentPane(ventana);
         setVisible(true);
@@ -46,22 +35,6 @@ public class vistaInicio extends JFrame implements IVistaInicio {
 
         // Eventos
 
-        btnIniciarNueva.addActionListener(e -> {
-            try {
-                new ServidorTruco();
-            } catch (RemoteException ex) {
-                throw new RuntimeException(ex);
-            }
-        });
-
-        btnReanudar.addActionListener(e -> {
-            try {
-                new ClienteTruco();
-                dispose();
-            } catch (RemoteException ex) {
-                ex.printStackTrace();
-            }
-        });
     }
     //
     //  metodos publicos

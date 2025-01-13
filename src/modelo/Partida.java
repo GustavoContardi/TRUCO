@@ -7,6 +7,7 @@ import enums.Eventos;
 import interfaces.IModelo;
 import persistencia.Persistencia;
 import persistencia.PersistenciaJugador;
+import persistencia.PersistenciaPartida;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -91,6 +92,7 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
             anotador = new Anotador(j2.getNombre(), j1.getNombre());
             notificarPuntos();
         }
+        PersistenciaPartida.guardarPartida(this);
         actualizarPuntos();
         if (finMano){
             if(!esFinDePartida()){
@@ -458,7 +460,7 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
 
     @Override
     public String toString(){
-        return "ID: " + idPartida + " | Jugadores: " + j1.getNombre() + " y " + j2.getNombre();
+        return "ID: " + idPartida + " | " + anotador.toString();
     }
 
 
@@ -631,7 +633,7 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
 
         String idString = nombre.substring(0, Math.min(3, nombre.length())).toUpperCase() + formattedDate;
 
-        return Math.abs(idString.hashCode() / random.nextInt(10));
+        return Math.abs(idString.hashCode() / random.nextInt(15));
 
     }
 
@@ -850,6 +852,16 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
     @Override
     public void actualizarListaJugadores() throws RemoteException {
         notificarJugadorElecto();
+    }
+
+    @Override
+    public ArrayList<Jugador> getJugadores() throws RemoteException{
+        ArrayList<Jugador> lista = new ArrayList<>();
+        if(j1 != null && j2 != null){
+            lista.add(j1);
+            lista.add(j2);
+        }
+        return lista;
     }
 
 

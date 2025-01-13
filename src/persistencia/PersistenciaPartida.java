@@ -18,8 +18,14 @@ public class PersistenciaPartida implements Serializable{
 
     // metodos publicos staticos
 
-    public static void guardarPartida(Partida partida){
+    public static void guardarPartida(Partida partida) throws RemoteException {
         listaPartidas = listaPartidasGuardadas();
+
+        if(listaPartidas == null || listaPartidas.isEmpty()) listaPartidas = new ArrayList<>();
+
+        for(Partida p : listaPartidas){
+            if(p.getIdPartida() == partida.getIdPartida()) listaPartidas.remove(p);
+        }
 
         listaPartidas.add(partida);
 
@@ -82,7 +88,10 @@ public class PersistenciaPartida implements Serializable{
             throw new RuntimeException(e);
         }
 
-        if(listaPartidas == null) listaPartidas = new ArrayList<>(); // si es null le incicializo la lista aca para que no de errores despues
+        if(listaPartidas == null) {
+            listaPartidas = new ArrayList<>(); // si es null le incicializo la lista aca para que no de errores despues
+            System.out.println("no arreglamos el null aca?");
+        }
 
         return listaPartidas;
     }

@@ -11,7 +11,6 @@ import modelo.Jugador;
 import modelo.Partida;
 import persistencia.*;
 import vista.inicio;
-import vista.vistaInicio;
 
 import java.io.Serializable;
 import java.rmi.RemoteException;
@@ -352,7 +351,7 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
 
     @Override
     public ArrayList<Jugador> getJugadoresRecuperados() throws RemoteException {
-        return null;
+        return modelo.getJugadores();
     }
 
     @Override

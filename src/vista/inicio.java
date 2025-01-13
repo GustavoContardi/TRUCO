@@ -2,7 +2,9 @@ package vista;
 
 import cliente.ClienteTruco;
 import modelo.Jugador;
+import modelo.Partida;
 import persistencia.PersistenciaJugador;
+import persistencia.PersistenciaPartida;
 import servidor.ServidorTruco;
 
 import javax.swing.*;
@@ -11,6 +13,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 
 public class inicio extends JFrame{
     private JPanel panel1;
@@ -21,6 +24,7 @@ public class inicio extends JFrame{
     private JButton btnIngresar;
     private JLabel titulo;
     private JLabel instrucciones;
+    private JButton btnReanudar;
 
     public inicio() {
         setSize(500, 450);
@@ -47,7 +51,7 @@ public class inicio extends JFrame{
 
         btnIngresar.addActionListener(e -> {
             try {
-                new ClienteTruco();
+                new ClienteTruco(false);
                 setVisible(false);
             } catch (RemoteException ex) {
                 ex.printStackTrace();
@@ -60,6 +64,49 @@ public class inicio extends JFrame{
 
         btnTop.addActionListener(e -> {
             pantallaTopJugadores();
+        });
+
+        btnReanudar.addActionListener(e -> {
+            // reanuda una partida pendiente de terminar
+
+            ArrayList<Partida> partidas = PersistenciaPartida.listaPartidasGuardadas();
+
+            if(partidas == null || partidas.isEmpty()) {
+                JFrame frameMSJ;
+                frameMSJ = new JFrame("TRUCONTARDI");
+                frameMSJ.setSize(400, 100);
+                JPanel panelPrincipal = (JPanel) frameMSJ.getContentPane();
+                panelPrincipal.setLayout(new BorderLayout());
+
+                JLabel etiqueta1 = new JLabel("NO TIENES PARTIDAS PENDIENTES, ¡PARA JUGAR CREA UNA!");
+                panelPrincipal.add(etiqueta1, BorderLayout.CENTER);
+
+                frameMSJ.setVisible(true);
+                frameMSJ.setLocationRelativeTo(null);
+            }
+            else{
+                Partida partida = (Partida) JOptionPane.showInputDialog(
+                        null,
+                        "Seleccione la partida que quiera reanudar", "PARTIDAS PENDIENTES",
+                        JOptionPane.QUESTION_MESSAGE,
+                        null,
+                        partidas.toArray(),
+                        null
+                );
+
+                try {
+                    new ServidorTruco(partida);
+                    new ClienteTruco(true);
+                    new vistaEleccion();
+                    dispose();
+                } catch (RemoteException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+
+        btnReglas.addActionListener(e -> {
+            abrirURL("https://instagram.com/litocontardi"); // encontrar la pagina
         });
 
     }

@@ -18,8 +18,8 @@ import java.util.ArrayList;
 
 
 public class ClienteTruco {
-    // opcion 1 == vista grafica  -||||-  opcion 2 == vista consola
-    public ClienteTruco() throws RemoteException {
+    // reanuda = true -> es que va a reanudar una partida por terminar
+    public ClienteTruco(boolean reanuda) throws RemoteException {
         ArrayList<String> opciones = new ArrayList<>();
         opciones.add("Interfáz gráfica");
         opciones.add("Consola");
@@ -87,7 +87,8 @@ public class ClienteTruco {
 
         try {
             c.iniciar(controlador);
-            vistaEleccion.mostrarMenuPrincipal();
+            if(reanuda) vistaEleccion.reanudarPartida(controlador.getJugadoresRecuperados());
+            else vistaEleccion.mostrarMenuPrincipal();
         } catch (RemoteException | RMIMVCException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
