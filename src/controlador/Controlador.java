@@ -400,6 +400,11 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
     }
 
     @Override
+    public void setJugadorReanudar(int idJugador) throws RemoteException {
+
+    }
+
+    @Override
     public void setVistaEleccion(IVistaEleccion eleccion) {
         vistaEleccion = eleccion;
     }

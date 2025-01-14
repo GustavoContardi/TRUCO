@@ -1,5 +1,7 @@
 package vista;
 
+import ar.edu.unlu.rmimvc.Util;
+import ar.edu.unlu.rmimvc.servidor.Servidor;
 import cliente.ClienteTruco;
 import modelo.Jugador;
 import modelo.Partida;
@@ -10,6 +12,8 @@ import servidor.ServidorTruco;
 import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
+import java.net.BindException;
+import java.net.ServerSocket;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.rmi.RemoteException;
@@ -69,40 +73,8 @@ public class inicio extends JFrame{
         btnReanudar.addActionListener(e -> {
             // reanuda una partida pendiente de terminar
 
-            ArrayList<Partida> partidas = PersistenciaPartida.listaPartidasGuardadas();
+            pantallaReanudarPartida();
 
-            if(partidas == null || partidas.isEmpty()) {
-                JFrame frameMSJ;
-                frameMSJ = new JFrame("TRUCONTARDI");
-                frameMSJ.setSize(400, 100);
-                JPanel panelPrincipal = (JPanel) frameMSJ.getContentPane();
-                panelPrincipal.setLayout(new BorderLayout());
-
-                JLabel etiqueta1 = new JLabel("NO TIENES PARTIDAS PENDIENTES, ¡PARA JUGAR CREA UNA!");
-                panelPrincipal.add(etiqueta1, BorderLayout.CENTER);
-
-                frameMSJ.setVisible(true);
-                frameMSJ.setLocationRelativeTo(null);
-            }
-            else{
-                Partida partida = (Partida) JOptionPane.showInputDialog(
-                        null,
-                        "Seleccione la partida que quiera reanudar", "PARTIDAS PENDIENTES",
-                        JOptionPane.QUESTION_MESSAGE,
-                        null,
-                        partidas.toArray(),
-                        null
-                );
-
-                try {
-                    new ServidorTruco(partida);
-                    new ClienteTruco(true);
-                    new vistaEleccion();
-                    dispose();
-                } catch (RemoteException ex) {
-                    ex.printStackTrace();
-                }
-            }
         });
 
         btnReglas.addActionListener(e -> {
@@ -154,5 +126,84 @@ public class inicio extends JFrame{
         }
 
         frame2.setVisible(true);
+    }
+
+    private void pantallaReanudarPartida(){
+        // Crear el marco de la ventana
+        JFrame frame = new JFrame("APP TRUCO - REANUDAR PARTIDA");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(450, 170);
+        frame.setResizable(false);
+        frame.setLocationRelativeTo(null); // Centrar la ventana
+
+        // Crear el panel principal
+        JPanel panel = new JPanel();
+        panel.setLayout(new BorderLayout());
+
+        // Etiqueta de instrucciones
+        JLabel label = new JLabel("INGRESE UNA OPCION PARA REANUDAR LA PARTIDA", JLabel.CENTER);
+        label.setFont(new Font("Arial", Font.BOLD, 13));
+        panel.add(label, BorderLayout.CENTER);
+
+        // Espaciador entre la etiqueta y los botones
+        //panel.add(Box.createVerticalStrut(20), BorderLayout.CENTER);
+
+        // Panel para botones
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 10));
+
+        JButton btnCrearServer = new JButton("CREAR UN SERVIDOR");
+        JButton btnIngresarServer = new JButton("INGRESAR A UN SERVIDOR");
+
+        // le seteo los action listener antes de añadirlos al panel
+        btnIngresarServer.addActionListener(e -> {
+            try {
+                new ClienteTruco(true);
+                dispose();
+                frame.dispose();
+            } catch (RemoteException ex) {
+                ex.printStackTrace();
+            }
+        });
+
+        btnCrearServer.addActionListener(e -> {
+            ArrayList<Partida> partidas = PersistenciaPartida.listaPartidasGuardadas();
+
+            if(partidas == null || partidas.isEmpty()) {
+                JFrame frameMSJ;
+                frameMSJ = new JFrame("TRUCONTARDI");
+                frameMSJ.setSize(400, 100);
+                JPanel panelPrincipal = (JPanel) frameMSJ.getContentPane();
+                panelPrincipal.setLayout(new BorderLayout());
+
+                JLabel etiqueta1 = new JLabel("NO TIENES PARTIDAS PENDIENTES, ¡PARA JUGAR CREA UNA!");
+                panelPrincipal.add(etiqueta1, BorderLayout.CENTER);
+
+                frameMSJ.setVisible(true);
+                frameMSJ.setLocationRelativeTo(null);
+            }
+            else{
+                Partida partida = (Partida) JOptionPane.showInputDialog(
+                        null,
+                        "Seleccione la partida que quiera reanudar", "PARTIDAS PENDIENTES",
+                        JOptionPane.QUESTION_MESSAGE,
+                        null,
+                        partidas.toArray(),
+                        null
+                );
+
+
+                new ServidorTruco(partida);
+
+            }
+        });
+
+        buttonPanel.add(btnCrearServer);
+        buttonPanel.add(btnIngresarServer);
+
+
+        panel.add(buttonPanel, BorderLayout.SOUTH);
+        frame.add(panel);
+        frame.setVisible(true);
     }
 }

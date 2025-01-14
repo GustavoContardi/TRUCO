@@ -55,6 +55,7 @@ public interface IControlador {
 
 
     void setJugador(int idJugador) throws RemoteException;
+    void setJugadorReanudar(int idJugador) throws RemoteException;
     void setVistaEleccion(IVistaEleccion eleccion) throws RemoteException;
     void setVistaJuego(IVistaJuego juego) throws RemoteException;
 

@@ -1,4 +1,3 @@
-import persistencia.PersistenciaJugador;
 import vista.inicio;
 
 import java.rmi.RemoteException;
@@ -109,7 +108,9 @@ public class Main {
 
 
         new inicio();
-        new inicio();
+//        new inicio();
+
+
     }
 
 
