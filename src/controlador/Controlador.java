@@ -390,6 +390,16 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
     }
 
     @Override
+    public ArrayList<Carta> getCartasTiradasJ1() throws RemoteException{
+        return modelo.getCartasTiradasJ1();
+    }
+
+    @Override
+    public ArrayList<Carta> getCartasTiradasJ2() throws RemoteException{
+        return modelo.getCartasTiradasJ2();
+    }
+
+    @Override
     public void setJugador(int idJugador) throws RemoteException {
         jugador = PersistenciaJugador.recuperarJugador(idJugador);
         if(!reanudarPartida){
@@ -401,7 +411,7 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
 
     @Override
     public void setJugadorReanudar(int idJugador) throws RemoteException {
-
+        modelo.reanudarPartida();
     }
 
     @Override
@@ -495,6 +505,11 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
                 System.out.println(modelo.getResultadoTanto());
                 vistaJuego.mostrarAviso(modelo.getResultadoTanto());
             }
+            case RESTABLECER_PARTIDA -> {
+                vistaJuego.mostrarAviso("La partida ha sido restablecida. No va a poder jugar hasta que se una su rival.");
+                vistaJuego.reanudarPartida();
+            }
+
         }
 
 

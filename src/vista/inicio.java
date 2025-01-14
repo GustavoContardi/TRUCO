@@ -46,7 +46,7 @@ public class inicio extends JFrame{
         btnCrearNuevo.addActionListener(e -> {
             try {
                 new ServidorTruco();
-                btnCrearNuevo.setEnabled(false); // desactivo para que cree solo 1 servidor
+                //btnCrearNuevo.setEnabled(false); // desactivo para que cree solo 1 servidor
                 instrucciones.setText("¡Servido creado con éxito! Ahora puede ingresar a él");
             } catch (RemoteException ex) {
                 throw new RuntimeException(ex);
@@ -56,7 +56,7 @@ public class inicio extends JFrame{
         btnIngresar.addActionListener(e -> {
             try {
                 new ClienteTruco(false);
-                setVisible(false);
+                dispose();
             } catch (RemoteException ex) {
                 ex.printStackTrace();
             }
@@ -72,9 +72,7 @@ public class inicio extends JFrame{
 
         btnReanudar.addActionListener(e -> {
             // reanuda una partida pendiente de terminar
-
             pantallaReanudarPartida();
-
         });
 
         btnReglas.addActionListener(e -> {

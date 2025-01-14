@@ -16,7 +16,6 @@ public interface IVistaJuego {
     void cantaronTanto(String tanto, EstadoEnvido estado) throws RemoteException;
     void println(String text);
     void mostrarMenuPrincipal() throws RemoteException;
-    //void setFlujoActual(Flujo flujoActual);
     void setControlador(IControlador controlador);
     void actualizar() throws RemoteException;
     void salirDelJuego();
@@ -24,4 +23,5 @@ public interface IVistaJuego {
     void tirarCarta(int posCarta) throws RemoteException;
     void iniciar();
     void mostrarAviso(String aviso);
+    void reanudarPartida() throws RemoteException;
 }

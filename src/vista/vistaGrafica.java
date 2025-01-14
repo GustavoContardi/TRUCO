@@ -566,6 +566,13 @@ public class vistaGrafica implements IVistaJuego, Serializable {
         panelAvisos(aviso);
     }
 
+    @Override
+    public void reanudarPartida() throws RemoteException {
+        mostrarCartas();
+        mostrarCartasTiradas();
+        actualizarPuntaje(controlador.puntajeActual());
+    }
+
     public void setBotones() throws RemoteException {
         removeBtnActionListener(); // remuevo todos los actions listeners para que no se acumulen y los vuelvo a poner
         btnEnvido.setText("    ENVIDO    ");
@@ -864,6 +871,12 @@ public class vistaGrafica implements IVistaJuego, Serializable {
             ex.printStackTrace();
             return null;
         }
+    }
+
+    private void mostrarCartasTiradas(){
+        // aca tengo que mostrar las cartas que se tiraron cuando reanudo la partida (si es que se tiraron)
+
+
     }
 
     private void mostrarCartaTiradaYO(String carta) throws RemoteException {

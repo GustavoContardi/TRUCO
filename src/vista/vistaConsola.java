@@ -184,6 +184,11 @@ public class vistaConsola implements IVistaJuego, IVistaInicio, Serializable {
     }
 
     @Override
+    public void reanudarPartida() throws RemoteException {
+
+    }
+
+    @Override
     public void salir() {
         frame.setVisible(false);
     }

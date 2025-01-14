@@ -2,6 +2,7 @@ package interfaces;
 
 import enums.EstadoEnvido;
 import enums.EstadoTruco;
+import modelo.Carta;
 import modelo.Jugador;
 import modelo.Partida;
 
@@ -52,7 +53,8 @@ public interface IControlador {
     void setReanudarPartida(boolean reanudarPartida) throws RemoteException;
     void actualizarJugador(int idJugador, String nombreNuevo);
     void eliminarJugador(int idJugador);
-
+    ArrayList<Carta> getCartasTiradasJ1() throws RemoteException;
+    ArrayList<Carta> getCartasTiradasJ2() throws RemoteException;
 
     void setJugador(int idJugador) throws RemoteException;
     void setJugadorReanudar(int idJugador) throws RemoteException;
