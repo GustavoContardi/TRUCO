@@ -111,7 +111,7 @@ public class ServidorTruco {
 
                 // Intentar abrir el puerto para verificar su disponibilidad
                 try (ServerSocket serverSocket = new ServerSocket(port)) {
-                    JOptionPane.showMessageDialog(null, "Puerto " + port + " está disponible. ¡Servidor iniciado!");
+                    //JOptionPane.showMessageDialog(null, "Puerto " + port + " está disponible. ¡Servidor iniciado!");
                     break;
                 }
 

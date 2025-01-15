@@ -76,6 +76,21 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
     }
 
     @Override
+    public ArrayList<String> obtenerTodasLasCartas() throws RemoteException {
+        ArrayList<Carta> cartasJugador = new ArrayList<>();
+        ArrayList<String> cartasStr = new ArrayList<>();
+
+        if (jugador.getIDJugador() == modelo.getIdJ1()) cartasJugador = modelo.getCartasJ1();
+        else cartasJugador = modelo.getCartasJ2();
+
+        for(Carta c : cartasJugador){
+            cartasStr.add(c.fotoCarta());
+        }
+
+        return cartasStr;
+    }
+
+    @Override
     public void tirarCarta(int numeroDeCarta) throws RemoteException { // en realidad no es el id de la carta, porque cuando la tiro de la vista no sabe como pasarle el id pq no conoce al objeto
         int idCarta = 0;
 
@@ -321,8 +336,8 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
         ArrayList<String> lista = new ArrayList<>();
         ArrayList<Carta> cartas = new ArrayList<>();
 
-        if(jugador.getIDJugador() == modelo.getIdJ1()) cartas = modelo.getCartasTiradasJ1(); // si es igual es porque es mi jugador
-        else cartas = modelo.getCartasTiradasJ2();
+        if(jugador.getIDJugador() == modelo.getIdJ1()) cartas = modelo.getCartasTiradasJ1();    // si es igual es porque es mi jugador
+        else cartas = modelo.getCartasTiradasJ2();                                              // sino es el j2 el mio
 
         for(Carta carta : cartas){
             lista.add(carta.toString());
@@ -335,8 +350,8 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
         ArrayList<String> lista = new ArrayList<>();
         ArrayList<Carta> cartas = new ArrayList<>();
 
-        if(jugador.getIDJugador() != modelo.getIdJ1()) cartas = modelo.getCartasTiradasJ1();  // si es distinto es porque es el rival
-        else cartas = modelo.getCartasTiradasJ2();
+        if(jugador.getIDJugador() != modelo.getIdJ1()) cartas = modelo.getCartasTiradasJ1();    // si es distinto es porque es el rival
+        else cartas = modelo.getCartasTiradasJ2();                                              // sino es el j2 el rival
 
         for(Carta carta : cartas){
             lista.add(carta.toString());
@@ -389,15 +404,6 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
         }
     }
 
-    @Override
-    public ArrayList<Carta> getCartasTiradasJ1() throws RemoteException{
-        return modelo.getCartasTiradasJ1();
-    }
-
-    @Override
-    public ArrayList<Carta> getCartasTiradasJ2() throws RemoteException{
-        return modelo.getCartasTiradasJ2();
-    }
 
     @Override
     public void setJugador(int idJugador) throws RemoteException {
@@ -411,7 +417,8 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
 
     @Override
     public void setJugadorReanudar(int idJugador) throws RemoteException {
-        modelo.reanudarPartida();
+        jugador = PersistenciaJugador.recuperarJugador(idJugador);
+        modelo.reanudoPartida(idJugador);
     }
 
     @Override
@@ -506,8 +513,10 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
                 vistaJuego.mostrarAviso(modelo.getResultadoTanto());
             }
             case RESTABLECER_PARTIDA -> {
-                vistaJuego.mostrarAviso("La partida ha sido restablecida. No va a poder jugar hasta que se una su rival.");
                 vistaJuego.reanudarPartida();
+            }
+            case RESTABLECIO_UN_JUGADOR -> {
+                vistaJuego.mostrarEsperaRival();
             }
 
         }

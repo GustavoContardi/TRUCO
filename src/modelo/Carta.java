@@ -22,6 +22,7 @@ public class Carta implements Serializable {
     }
 
     // metodos
+
     @Override
     public String toString(){
         return numeroCarta + " de " + paloCarta;

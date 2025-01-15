@@ -84,7 +84,7 @@ public class vistaGrafica implements IVistaJuego, Serializable {
         removeAllActionListeners(btnCarta3);
 
 
-        ArrayList<String> cartas = controlador.obtenerCartas();
+        ArrayList<String> cartas = controlador.obtenerTodasLasCartas();
 
         if (cartas != null) {
             if(cartas.get(0) != null) carta1 = cartas.get(0).replace(" ", "").toLowerCase();
@@ -475,9 +475,9 @@ public class vistaGrafica implements IVistaJuego, Serializable {
     public void mostrarMenuPrincipal() throws RemoteException {
         iniciar();
         if(controlador != null) {
-            mostrarCartas();
             frame.setTitle(" APP TRUCO - " + controlador.getNombreJugador());
         }
+        mostrarCartas();
     }
 
 
@@ -571,6 +571,12 @@ public class vistaGrafica implements IVistaJuego, Serializable {
         mostrarCartas();
         mostrarCartasTiradas();
         actualizarPuntaje(controlador.puntajeActual());
+    }
+
+    @Override
+    public void mostrarEsperaRival() throws RemoteException {
+        iniciar();
+        accionesJ2.setText("SE HA REANUDADO LA PARTIDA CORRECTAMENTE. NO PODRÁ JUGAR HASTA QUE SU RIVAL INICIE SESION");
     }
 
     public void setBotones() throws RemoteException {
@@ -873,10 +879,60 @@ public class vistaGrafica implements IVistaJuego, Serializable {
         }
     }
 
-    private void mostrarCartasTiradas(){
+    private void mostrarCartasTiradas() throws RemoteException {
         // aca tengo que mostrar las cartas que se tiraron cuando reanudo la partida (si es que se tiraron)
 
+        String basePath                 = "fotocartas/";
+        String cartaAux                 = " ";
+        ArrayList<String> cartasYo      = controlador.getCartasTiradasYo();
+        ArrayList<String> cartasRival   = controlador.getCartasTiradasRival();
 
+        // primero seteo las cartas que "mi" jugador tiró
+        for(int i=0; i<cartasYo.size(); i++){
+            cartaAux = basePath + cartasYo.get(i).replace(" ", "").toLowerCase() + ".jpeg"; // basicamente lo hago fotocarta para que pueda crear la imagen
+            ImageIcon imageIcon = createResizedImageIcon(cartaAux, 160, 170);
+
+            JLabel label = new JLabel(imageIcon);
+
+            if(i == 0){ // si se guardó primera es porque se tiro primera = ronda 1
+                CartasYo1.add(label);
+                CartasYo1.revalidate();
+                CartasYo1.repaint();
+            }
+            else if(i == 1){ // ronda 2
+                CartasYo2.add(label);
+                CartasYo2.revalidate();
+                CartasYo2.repaint();
+            }
+            else if (i == 2){ // ronda 3
+                CartasYo3.add(label);
+                CartasYo3.revalidate();
+                CartasYo3.repaint();
+            }
+        }
+
+        //lo mismo que en el anterior while pero con las del "oponente"
+        for(int i=0; i<cartasRival.size(); i++){
+            cartaAux = cartasYo.get(i).replace(" ", "").toLowerCase();
+            ImageIcon imageIcon = createResizedImageIcon(cartaAux, 160, 170);
+            JLabel label = new JLabel(imageIcon);
+
+            if(i == 0){
+                CartasOP1.add(label);
+                CartasOP1.revalidate();
+                CartasOP1.repaint();
+            }
+            else if(i == 1){
+                CartasOP2.add(label);
+                CartasOP2.revalidate();
+                CartasOP2.repaint();
+            }
+            else if (i == 2){
+                CartasOP3.add(label);
+                CartasOP3.revalidate();
+                CartasOP3.repaint();
+            }
+        }
     }
 
     private void mostrarCartaTiradaYO(String carta) throws RemoteException {

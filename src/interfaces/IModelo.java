@@ -61,7 +61,7 @@ public interface IModelo extends IObservableRemoto {
     int getIdPartida() throws RemoteException;
     Partida getObjeto() throws RemoteException;
     ArrayList<Jugador> jugadoresDeLaPartida() throws RemoteException;
-    void reanudarPartida() throws RemoteException;
+    void reanudoPartida(int idReanudo) throws RemoteException;
     boolean getPartidaRecuperada() throws RemoteException;
     boolean setPartidaRecuperada() throws RemoteException;
     void actualizarListaJugadores() throws RemoteException;

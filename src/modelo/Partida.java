@@ -36,8 +36,8 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
     private     int                 idPartida;
     private     Anotador            anotador;
     private     int                 numeroMano, numeroRonda, turno;
-    private     ArrayList<Carta>    cartasTiradasJ1;
-    private     ArrayList<Carta>    cartasTiradasJ2;
+    private     ArrayList<Carta>    cartasTiradasJ1, cartasTiradasJ2;
+    private     ArrayList<Carta>    cartasJ1, cartasJ2;
     private     int                 quienCantoTruco;
     private     int                 quienCantoReTruco;
     private     int                 quienCantoEnvido;
@@ -60,6 +60,7 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
     private     Carta               ultimaCartaJ1, ultimaCartaJ2;
     private     String              ultimoMensaje;
     private     String              resultadoTanto;
+    private     boolean             reanudoJ1, reanudoJ2;
 
 
     //
@@ -73,6 +74,7 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
         numeroRonda     =  1;
         finMano         = true;
         mazo            = new Mazo();
+        idPartida       = generarIdPartida();
     }
 
 
@@ -81,7 +83,6 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
     //
 
     public void nuevaPartida() throws RemoteException {
-        idPartida = generarIdPartida();
         nuevaRonda();
     }
 
@@ -117,6 +118,8 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
                 nroRondasGanadasJ1  = 0;
                 nroRondasGanadasJ2  = 0;
                 parda               = false;
+                cartasJ1            = new ArrayList<>();
+                cartasJ2            = new ArrayList<>();
 
                 if( (numeroMano % 2) == 0) turno = j1.getIDJugador();
                 else turno = j2.getIDJugador();
@@ -125,7 +128,7 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
                 j2.devolverCartas();
 
                 mazo.repartirCartas(j1, j2);
-
+                replicarCartasJugadores();
             }
             else finDePartida();
         }
@@ -190,7 +193,6 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
             notificarCartaTirada(2);
         }
 
-        //notificarCartaTirada(id, c); // notifico la carta tirada y despues sigo \\
 
         if((cartasTiradasJ1.size() == cartasTiradasJ2.size()) && !cartasTiradasJ2.isEmpty()) {
             if (!cantoEnvido) cantoEnvido = true;
@@ -262,6 +264,7 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
         if(nroRondasGanadasJ1 >= 2  && nroRondasGanadasJ1 > nroRondasGanadasJ2) finMano = true;
         else if (nroRondasGanadasJ2 >= 2  && nroRondasGanadasJ1 < nroRondasGanadasJ2) finMano = true;
 
+        PersistenciaPartida.guardarPartida(this);
 
         if(finMano){
             finDeLaRonda();
@@ -276,11 +279,11 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
 
         PersistenciaJugador.delvolverJugadores(j1.getIDJugador(), j2.getIDJugador());
         actualizarPuntos();
+        PersistenciaPartida.eliminarPartida(this.idPartida); // elimino la partida para que no quede y se pueda reanudar
 
         Timer timer = new Timer(2000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Código que se ejecutará después de 2 segundos
                 try {
                     // espero 2 segundos antes de notificar para que se pueda ver lo que paso antes y no sea tan rapido
                     notificarFinPartida();
@@ -289,7 +292,7 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
                 }
             }
         });
-        timer.setRepeats(false); // Asegura que el timer solo se ejecute una vez
+        timer.setRepeats(false); // para que el timer se ejecute una vez
         timer.start();
 
     }
@@ -328,9 +331,6 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
         notificarRabon(evento);
     }
 
-    public void enviarMensaje(int idDestinatario, String mensaje) throws RemoteException {
-
-    }
 
     @Override
     public void cantarEnvido(int idJugadorCanto, EstadoEnvido estado) throws RemoteException {
@@ -407,7 +407,6 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
             nuevaPartida();
         }
     }
-
 
 
     @Override
@@ -488,6 +487,7 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
     }
 
     private void notificarPuntos() throws RemoteException {
+        PersistenciaPartida.guardarPartida(this);
         mensajesOb = PUNTAJES;
         notificarObservadores(mensajesOb);
     }
@@ -527,6 +527,11 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
 
     private void notificarPartidaReanudada() throws RemoteException {
         mensajesOb = RESTABLECER_PARTIDA;
+        notificarObservadores(mensajesOb);
+    }
+
+    private void notificarJugadorReanudo() throws RemoteException {
+        mensajesOb = RESTABLECIO_UN_JUGADOR;
         notificarObservadores(mensajesOb);
     }
 
@@ -633,8 +638,18 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
 
         String idString = nombre.substring(0, Math.min(3, nombre.length())).toUpperCase() + formattedDate;
 
-        return Math.abs(idString.hashCode() / random.nextInt(15));
+        return Math.abs(idString.hashCode() / random.nextInt(1, 18));
 
+    }
+
+    private void replicarCartasJugadores(){
+        cartasJ1.add(j1.getCartasObtenidas().get(0));
+        cartasJ1.add(j1.getCartasObtenidas().get(1));
+        cartasJ1.add(j1.getCartasObtenidas().get(2));
+
+        cartasJ2.add(j2.getCartasObtenidas().get(0));
+        cartasJ2.add(j2.getCartasObtenidas().get(1));
+        cartasJ2.add(j2.getCartasObtenidas().get(2));
     }
 
 
@@ -716,11 +731,13 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
 
     @Override
     public ArrayList<Carta> getCartasJ1() throws RemoteException{
-        return j1.getCartasObtenidas();
+        if(cartasJ1 == null) System.out.println("efectivamente son null j1");
+        return cartasJ1;
     }
     @Override
     public ArrayList<Carta> getCartasJ2() throws RemoteException{
-        return j2.getCartasObtenidas();
+        if(cartasJ2 == null) System.out.println("efectivamente son null j2");
+        return cartasJ2;
     }
 
     // .................................................................................................................
@@ -772,6 +789,7 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
     public void rabonQuerido(int idJugadorQuizo) throws RemoteException {
         if(idJugadorQuizo != j1.getIDJugador()) notificarCantoQuerido(j1.getIDJugador());
         else notificarCantoQuerido(j2.getIDJugador());
+        PersistenciaPartida.guardarPartida(this); // guardo la partida aca porque actualiza el estado del rabon
     }
 
     @Override
@@ -823,7 +841,7 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
 
     @Override
     public ArrayList<Jugador> jugadoresDeLaPartida() throws RemoteException {
-        ArrayList<Jugador> jugadores = new ArrayList<>(); // por si no hay jugadores que la devuelva vacia para evitar null pointer except
+        ArrayList<Jugador> jugadores = new ArrayList<>(); // por si no hay jugadores que la devuelva vacia para evitar excepcion
 
         if(j1 != null && j2 != null){
             jugadores.add(j1);
@@ -833,10 +851,14 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
     }
 
     @Override
-    public void reanudarPartida() throws RemoteException {
-        // toda la logica para reanudar la partida
+    public void reanudoPartida(int idJugador) throws RemoteException {
 
-        notificarPartidaReanudada();
+        if(idJugador == j1.getIDJugador()) reanudoJ1 = true;
+        else if(idJugador == j2.getIDJugador()) reanudoJ2 = true;
+
+        notificarJugadorReanudo(); // para que se ejecute siempre, total si se se unieron los dos se va a notificar abajo y no interfiere
+
+        if(reanudoJ1 && reanudoJ2) notificarPartidaReanudada();
     }
 
     @Override

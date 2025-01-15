@@ -30,5 +30,6 @@ public enum Eventos implements Serializable {
     NUEVA_RONDA,
     ABANDONO_PARTIDA,
     RESTABLECER_PARTIDA,
+    RESTABLECIO_UN_JUGADOR,
 }
 

@@ -21,11 +21,15 @@ public class PersistenciaPartida implements Serializable{
     public static void guardarPartida(Partida partida) throws RemoteException {
         listaPartidas = listaPartidasGuardadas();
 
-        if(listaPartidas == null || listaPartidas.isEmpty()) listaPartidas = new ArrayList<>();
+        if(listaPartidas == null) listaPartidas = new ArrayList<>();
 
-        for(Partida p : listaPartidas){
-            if(p.getIdPartida() == partida.getIdPartida()) listaPartidas.remove(p);
-        }
+        listaPartidas.removeIf(p -> {
+            try {
+                return p.getIdPartida() == partida.getIdPartida();
+            } catch (RemoteException e) {                               // elimina la partida
+                throw new RuntimeException(e);
+            }
+        });
 
         listaPartidas.add(partida);
 
@@ -45,9 +49,15 @@ public class PersistenciaPartida implements Serializable{
     public static void eliminarPartida(int idPartida) throws RemoteException {
         listaPartidas = listaPartidasGuardadas();
 
-        for(Partida partida : listaPartidas){
-            if(partida.getIdPartida() == idPartida) listaPartidas.remove(partida);
-        }
+        if(listaPartidas == null) return;
+
+        listaPartidas.removeIf(p -> {
+            try {
+                return p.getIdPartida() == partida.getIdPartida();
+            } catch (RemoteException e) {                               // elimina la partida
+                throw new RuntimeException(e);
+            }
+        });
 
         // modifique la lista y la guardo de nuevo, sobreescribo el archivo;
 

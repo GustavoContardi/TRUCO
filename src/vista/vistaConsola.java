@@ -178,14 +178,25 @@ public class vistaConsola implements IVistaJuego, IVistaInicio, Serializable {
 
     @Override
     public void mostrarAviso(String aviso) {
-        println("-----------------------------------------------------------------------");
+        println("---------------------------------------------------------------------------");
         println(aviso);
-        println("-----------------------------------------------------------------------");
+        println("---------------------------------------------------------------------------");
     }
 
     @Override
     public void reanudarPartida() throws RemoteException {
+        // solo tengo que mostrar la mesa porque tiene todo
 
+        limpiarPantalla(); // limpio para que no quede nada arriba de lo que viene abajo
+        setFlujoActual(new FlujoMostrarCartas(this, controlador));
+    }
+
+    @Override
+    public void mostrarEsperaRival() throws RemoteException {
+        iniciar();
+        println("--------------------------------------------------------------------------------------------------------------------------------------");
+        println(" SE HA REANUDADO LA PARTIDA CORRECTAMENTE. NO PODRÁ JUGAR HASTA QUE SU RIVAL INICIE SESION");
+        println("--------------------------------------------------------------------------------------------------------------------------------------");
     }
 
     @Override

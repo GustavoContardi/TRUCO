@@ -76,7 +76,7 @@ public class inicio extends JFrame{
         });
 
         btnReglas.addActionListener(e -> {
-            abrirURL("https://instagram.com/litocontardi"); // encontrar la pagina
+            abrirURL("https://trucogame.com/pages/reglamento-de-truco-argentino"); // abre un navegador con las reglas del truco argentino
         });
 
     }
@@ -94,6 +94,7 @@ public class inicio extends JFrame{
     //  metodos privados
     //
 
+    // abre una pestaña del navegador con la url que se le pase
     private void abrirURL(String url){
         if (Desktop.isDesktopSupported()) {
             try {
@@ -129,7 +130,6 @@ public class inicio extends JFrame{
     private void pantallaReanudarPartida(){
         // Crear el marco de la ventana
         JFrame frame = new JFrame("APP TRUCO - REANUDAR PARTIDA");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(450, 170);
         frame.setResizable(false);
         frame.setLocationRelativeTo(null); // Centrar la ventana
@@ -189,11 +189,9 @@ public class inicio extends JFrame{
                         partidas.toArray(),
                         null
                 );
-
-
                 new ServidorTruco(partida);
-
             }
+            btnCrearServer.setEnabled(false);
         });
 
         buttonPanel.add(btnCrearServer);
