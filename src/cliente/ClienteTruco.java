@@ -47,7 +47,8 @@ public class ClienteTruco {
 
         if (ip == null) {
             JOptionPane.showMessageDialog(null, "Operación cancelada.");
-            new inicio(); // arreglar para que no aparezca la pantalla de carga si cancela
+            inicio ini = new inicio();
+            ini.iniciar(); // inicia sin pantalla de carga asi da la sensacion que solo volvio para atrás
             return;
         }
 
@@ -66,7 +67,8 @@ public class ClienteTruco {
 
                 if (portStr == null) {
                     JOptionPane.showMessageDialog(null, "Operación cancelada.");
-                    new inicio();// arreglar para que no aparezca la pantalla de carga si cancela
+                    inicio ini = new inicio();
+                    ini.iniciar(); // inicia sin pantalla de carga asi da la sensacion que solo volvio para atrás
                     return;
                 }
 
@@ -102,6 +104,8 @@ public class ClienteTruco {
 
         if (ipServidor == null) {
             JOptionPane.showMessageDialog(null, "Operación cancelada.");
+            inicio ini = new inicio();
+            ini.iniciar(); // inicia sin pantalla de carga asi da la sensacion que solo volvio para atrás
             return;
         }
 
@@ -120,7 +124,8 @@ public class ClienteTruco {
 
                 if (portStr == null) {
                     JOptionPane.showMessageDialog(null, "Operación cancelada.");
-                    new inicio();// arreglar para que no aparezca la pantalla de carga si cancela
+                    inicio ini = new inicio();
+                    ini.iniciar(); // inicia sin pantalla de carga asi da la sensacion que solo volvio para atrás
                     return;
                 }
 
@@ -156,6 +161,8 @@ public class ClienteTruco {
 
         if (interfaz == null) {
             JOptionPane.showMessageDialog(null, "Operación cancelada.");
+            inicio ini = new inicio();
+            ini.iniciar(); // inicia sin pantalla de carga asi da la sensacion que solo volvio para atrás
             return;
         }
 

@@ -109,7 +109,8 @@ public class Main {
         PersistenciaJugador.delvolverTodosJugadores();
 
 
-        new inicio();
+        inicio init = new inicio();
+        init.iniciarConPantallaCarga();
 //        new inicio();
 
     }

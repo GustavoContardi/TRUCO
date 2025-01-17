@@ -59,14 +59,20 @@ public class inicio extends JFrame{
             abrirURL("https://trucogame.com/pages/reglamento-de-truco-argentino"); // abre un navegador con las reglas del truco argentino
         });
 
-        PantallaCarga pantallaCarga = new PantallaCarga();
-        pantallaCarga.mostrarPantalla();
-        setVisible(true);
+//        PantallaCarga pantallaCarga = new PantallaCarga();
+//        pantallaCarga.mostrarPantalla();
+//        setVisible(true);
 
     }
 
 
     public void iniciar(){
+        setVisible(true);
+    }
+
+    public void iniciarConPantallaCarga(){
+        PantallaCarga pantallaCarga = new PantallaCarga();
+        pantallaCarga.mostrarPantalla();
         setVisible(true);
     }
 
