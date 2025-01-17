@@ -50,7 +50,7 @@ public class ServidorTruco {
 
                 // Intentar abrir el puerto para verificar su disponibilidad
                 try (ServerSocket serverSocket = new ServerSocket(port)) {
-                    //JOptionPane.showMessageDialog(null, "Puerto " + port + " está disponible. ¡Servidor iniciado!");
+                    JOptionPane.showMessageDialog(null, "¡Servidor iniciado!");
                     break;
                 }
                 } catch (BindException ex) {
@@ -124,6 +124,7 @@ public class ServidorTruco {
             }
         }
 
+        if(ip == null) return;
         Servidor servidor = new Servidor(ip, port);
 
         try {
@@ -138,7 +139,7 @@ public class ServidorTruco {
     }
 
     public static void main(String[] args) throws RemoteException {
-        new ServidorTruco();
+        //new ServidorTruco();
     }
 
 

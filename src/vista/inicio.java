@@ -1,7 +1,5 @@
 package vista;
 
-import ar.edu.unlu.rmimvc.Util;
-import ar.edu.unlu.rmimvc.servidor.Servidor;
 import cliente.ClienteTruco;
 import modelo.Jugador;
 import modelo.Partida;
@@ -12,8 +10,6 @@ import servidor.ServidorTruco;
 import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
-import java.net.BindException;
-import java.net.ServerSocket;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.rmi.RemoteException;
@@ -33,7 +29,6 @@ public class inicio extends JFrame{
     public inicio() {
         setSize(500, 450);
         setContentPane(panel1);
-        setVisible(true);
         setResizable(false);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -44,22 +39,7 @@ public class inicio extends JFrame{
         // EVENTOS
 
         btnCrearNuevo.addActionListener(e -> {
-            try {
-                new ServidorTruco();
-                //btnCrearNuevo.setEnabled(false); // desactivo para que cree solo 1 servidor
-                instrucciones.setText("¡Servido creado con éxito! Ahora puede ingresar a él");
-            } catch (RemoteException ex) {
-                throw new RuntimeException(ex);
-            }
-        });
-
-        btnIngresar.addActionListener(e -> {
-            try {
-                new ClienteTruco(false);
-                dispose();
-            } catch (RemoteException ex) {
-                ex.printStackTrace();
-            }
+            pantallaJugar(false);
         });
 
         btnSalir.addActionListener(e -> {
@@ -72,12 +52,16 @@ public class inicio extends JFrame{
 
         btnReanudar.addActionListener(e -> {
             // reanuda una partida pendiente de terminar
-            pantallaReanudarPartida();
+            pantallaJugar(true);
         });
 
         btnReglas.addActionListener(e -> {
             abrirURL("https://trucogame.com/pages/reglamento-de-truco-argentino"); // abre un navegador con las reglas del truco argentino
         });
+
+        PantallaCarga pantallaCarga = new PantallaCarga();
+        pantallaCarga.mostrarPantalla();
+        setVisible(true);
 
     }
 
@@ -127,7 +111,7 @@ public class inicio extends JFrame{
         frame2.setVisible(true);
     }
 
-    private void pantallaReanudarPartida(){
+    private void pantallaJugar(boolean reanuda){
         // Crear el marco de la ventana
         JFrame frame = new JFrame("APP TRUCO - REANUDAR PARTIDA");
         frame.setSize(450, 170);
@@ -150,11 +134,15 @@ public class inicio extends JFrame{
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 10));
 
-        JButton btnCrearServer = new JButton("CREAR UN SERVIDOR");
-        JButton btnIngresarServer = new JButton("INGRESAR A UN SERVIDOR");
+        JButton btnCrearServer = new JButton();
+        JButton btnIngresarServer = new JButton();
 
-        // le seteo los action listener antes de añadirlos al panel
-        btnIngresarServer.addActionListener(e -> {
+        if(reanuda){
+
+            btnCrearServer.setText("CREAR UN SERVIDOR");
+            btnIngresarServer.setText("INGRESAR A UN SERVIDOR");
+            // le seteo los action listener antes de añadirlos al panel
+            btnIngresarServer.addActionListener(e -> {
             try {
                 new ClienteTruco(true);
                 dispose();
@@ -162,37 +150,61 @@ public class inicio extends JFrame{
             } catch (RemoteException ex) {
                 ex.printStackTrace();
             }
-        });
+            });
 
-        btnCrearServer.addActionListener(e -> {
-            ArrayList<Partida> partidas = PersistenciaPartida.listaPartidasGuardadas();
+            btnCrearServer.addActionListener(e -> {
+                ArrayList<Partida> partidas = PersistenciaPartida.listaPartidasGuardadas();
 
-            if(partidas == null || partidas.isEmpty()) {
-                JFrame frameMSJ;
-                frameMSJ = new JFrame("TRUCONTARDI");
-                frameMSJ.setSize(400, 100);
-                JPanel panelPrincipal = (JPanel) frameMSJ.getContentPane();
-                panelPrincipal.setLayout(new BorderLayout());
+                if(partidas == null || partidas.isEmpty()) {
+                    JFrame frameMSJ;
+                    frameMSJ = new JFrame("TRUCONTARDI");
+                    frameMSJ.setSize(400, 100);
+                    JPanel panelPrincipal = (JPanel) frameMSJ.getContentPane();
+                    panelPrincipal.setLayout(new BorderLayout());
 
-                JLabel etiqueta1 = new JLabel("NO TIENES PARTIDAS PENDIENTES, ¡PARA JUGAR CREA UNA!");
-                panelPrincipal.add(etiqueta1, BorderLayout.CENTER);
+                    JLabel etiqueta1 = new JLabel("NO TIENES PARTIDAS PENDIENTES, ¡PARA JUGAR CREA UNA!");
+                    panelPrincipal.add(etiqueta1, BorderLayout.CENTER);
 
-                frameMSJ.setVisible(true);
-                frameMSJ.setLocationRelativeTo(null);
-            }
-            else{
-                Partida partida = (Partida) JOptionPane.showInputDialog(
-                        null,
-                        "Seleccione la partida que quiera reanudar", "PARTIDAS PENDIENTES",
-                        JOptionPane.QUESTION_MESSAGE,
-                        null,
-                        partidas.toArray(),
-                        null
-                );
-                new ServidorTruco(partida);
-            }
-            btnCrearServer.setEnabled(false);
-        });
+                    frameMSJ.setVisible(true);
+                    frameMSJ.setLocationRelativeTo(null);
+                }
+                else{
+                    Partida partida = (Partida) JOptionPane.showInputDialog(
+                            null,
+                            "Seleccione la partida que quiera reanudar", "PARTIDAS PENDIENTES",
+                            JOptionPane.QUESTION_MESSAGE,
+                            null,
+                            partidas.toArray(),
+                            null
+                    );
+                    new ServidorTruco(partida);
+                }
+                    btnCrearServer.setEnabled(false);
+            });
+
+        }
+        else {
+            btnCrearServer.setText("CREAR UN JUEGO");
+            btnIngresarServer.setText("INGRESAR A UN JUEGO");
+            btnCrearServer.addActionListener(e -> {
+                try {
+                    new ServidorTruco();
+                    //instrucciones.setText("¡Servido creado con éxito! Ahora puede ingresar a él");
+                } catch (RemoteException ex) {
+                    throw new RuntimeException(ex);
+                }
+            });
+
+            btnIngresarServer.addActionListener(e -> {
+                try {
+                    new ClienteTruco(false);
+                    dispose();
+                    frame.dispose();
+                } catch (RemoteException ex) {
+                    ex.printStackTrace();
+                }
+            });
+        }
 
         buttonPanel.add(btnCrearServer);
         buttonPanel.add(btnIngresarServer);
