@@ -21,6 +21,7 @@ public class Anotador implements Serializable {
 
     // metodos publicos
 
+    // devuelve como se ven los puntos en pantalla (in game)
     @Override
     public String toString(){
         return "PUNTOS:  " + nombreJ1 + " : " + puntosJ1 + " || " + nombreJ2 + " : " + puntosJ2;

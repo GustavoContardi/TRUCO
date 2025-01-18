@@ -49,6 +49,7 @@ public class Jugador implements Comparable<Jugador>, Serializable{
         return null;
     }
 
+    // rettorna cuantos puntos tiene para el envido llamando el metodo de la instancia 'Envido' creada en el constructor
     public int puntosEnvido(){
         return envido.calcularPuntosEnvido(this);
     }
@@ -57,6 +58,7 @@ public class Jugador implements Comparable<Jugador>, Serializable{
         cartasObtenidas = lista;
     }
 
+    // devuelvo las cartas, limpio la lista que las contiene y a las cartas les pongo 'false' en el 'fueTirada' para que se puedan volver a repartir
     public void devolverCartas(){
         if(cartasObtenidas != null) {
             for(Carta carta : cartasObtenidas){ // seteo el tirado de las cartas en falso para que se puedan volver a tirar
@@ -65,11 +67,14 @@ public class Jugador implements Comparable<Jugador>, Serializable{
             cartasObtenidas.clear();
         }
     }
+
+    // suma partida ganada y lo guardo en disco
     public void sumarPartidaGanada(){
         PersistenciaJugador.sumarPartidaGanadaJugador(IDJugador);
     }
 
 
+    // muestra los atributos del jugador, mas que nada para el 'TOP MAS GANADORES' y para mostrarlo cuando lo eligen en una partida
     @Override
     public String toString(){
         if (electo) return nombre + " | " + "ID: " + IDJugador + " | WINS: " + partidasGanadas + " | NO DISPONIBLE (ELEGIDO)";
@@ -80,6 +85,7 @@ public class Jugador implements Comparable<Jugador>, Serializable{
     // metodos privados
     //
 
+    // genera el ID intentando que sea lo mas unico posible
     private int generarID(){
         LocalDateTime now = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
@@ -89,7 +95,7 @@ public class Jugador implements Comparable<Jugador>, Serializable{
         return Math.abs(idString.hashCode());
     }
 
-
+    // este metodo compara con otro jugador para que se lo pueda ordenar en la lista, para el top
     @Override
     public int compareTo(Jugador otroJugador) {
         return Integer.compare(otroJugador.partidasGanadas, this.partidasGanadas);

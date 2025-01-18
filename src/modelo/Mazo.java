@@ -7,7 +7,7 @@ import java.util.Random;
 
 public class Mazo implements Serializable {
     // atributos
-    private ArrayList<Carta> mazoCartas = new ArrayList<>();
+    private ArrayList<Carta> mazoCartas = new ArrayList<>(); // mazo que contiene las 40 cartas
 
     // constructor
 
@@ -20,6 +20,7 @@ public class Mazo implements Serializable {
 
     // metodos publicos
 
+    // le asigna las cartas a los jugadores pasados por parametros
     public void repartirCartas(Jugador j1, Jugador j2){
         ArrayList<Carta> cartasJ1 = new ArrayList<>();
         ArrayList<Carta> cartasJ2 = new ArrayList<>();
@@ -59,10 +60,12 @@ public class Mazo implements Serializable {
 
     // metodos privados
 
+    // mezcla las cartas dentro del ArrayList
     private void mezclarCartas(){
         Collections.shuffle(mazoCartas);
     }
 
+    // levanto la lista del archivo
     private void recuperarMazo() {
         try {
             FileInputStream fos = new FileInputStream("mazoDeCartas.bin");

@@ -12,7 +12,7 @@ public class Envido implements Serializable {
     // constructor
     public Envido() {
         puntosEnvido = 0;
-        if (jerarquiaCartas.isEmpty()) {
+        if (jerarquiaCartas.isEmpty()) { // creo el arraylist con las jerarquias de las cartas para el envido, uso el patron singgletton para que haya uno solo
             jerarquiaCartas.add(7);
             jerarquiaCartas.add(6);
             jerarquiaCartas.add(5);
@@ -28,6 +28,7 @@ public class Envido implements Serializable {
 
     // metodos publicos
 
+    // calcula los puntos del envido segun que cartas iguales tiene el jugador
     public int calcularPuntosEnvido(Jugador j) {
         ArrayList<Carta> cartasIguales;
         ArrayList<Carta> cartasJugador = j.getCartasObtenidas();
@@ -53,6 +54,7 @@ public class Envido implements Serializable {
     // metodos privados
     //
 
+    // este metodo devuelve un ArrayList con las cartas que tienen el mismo palo
     private ArrayList<Carta> calcularCartasIguales(ArrayList<Carta> lista){
         ArrayList<Carta> iguales = new ArrayList<>();
 
@@ -82,6 +84,7 @@ public class Envido implements Serializable {
         return iguales;
     }
 
+    // devuelve la carta mas alta en la jerarquia
     private Carta masAlta(ArrayList<Carta> lista){
         Carta cartaAlta = null;
         int max = 99;
