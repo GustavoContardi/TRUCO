@@ -82,6 +82,7 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
     // metodos publicos
     //
 
+    // metodo que se ejecuta 1 vez, cuando se inicia la partida. Llama a iniciar la ronda
     public void nuevaPartida() throws RemoteException {
         nuevaRonda();
     }
@@ -93,8 +94,10 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
             anotador = new Anotador(j2.getNombre(), j1.getNombre());
             notificarPuntos();
         }
+
         PersistenciaPartida.guardarPartida(this);
         actualizarPuntos();
+
         if (finMano){
             if(!esFinDePartida()){
                 numeroMano         += 1;
@@ -135,6 +138,7 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
         notificarNuevaRonda();
     }
 
+    // se llama a este metodo cuando finalizo la ronda
     @Override
     public void finDeLaRonda() throws RemoteException{
         finMano = true;
@@ -162,8 +166,8 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
 
     @Override
     public void siguienteTurno() throws RemoteException{
-        if(turno == j1.getIDJugador()) turno = j2.getIDJugador();
-        else turno = j1.getIDJugador();
+        if(turno == j1.getIDJugador())  turno = j2.getIDJugador();
+        else                            turno = j1.getIDJugador();
     }
 
     @Override
@@ -171,6 +175,7 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
         return turno;
     }
 
+    // este metodo recibe el jugador que tiro la carta y que carta tiro, con los IDs alcanza para identificar ambas.
     @Override
     public void tirarCarta(int idJugador, int idCarta) throws RemoteException{
         Carta c = null;
@@ -272,6 +277,7 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
 
     }
 
+    // se llama a este metodo cuando finalizo la partida.
     @Override
     public void finDePartida() throws RemoteException {
         if(anotador.getPuntosJ2() > anotador.getPuntosJ1()) j2.sumarPartidaGanada();
@@ -297,11 +303,13 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
 
     }
 
+    // devuelve el puntaje actual de la partida
     @Override
     public String puntosActuales()  throws RemoteException {
         return anotador.toString();
     }
 
+    // metodo que activa el controlador cuando algun jugador quiere cantar el rabon (truco, retruco, vale cuatro), actualizo los atributos segun que canto y notifico
     @Override
     public void cantarRabon(int idJugadorCanto, EstadoTruco estado) throws RemoteException{
         Eventos evento = NADA;
@@ -321,7 +329,7 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
                 puntosRabon = 3;
             }
             case VALE_CUATRO -> {
-                quienCantoValeCuatro = idJugadorCanto;
+                quienCantoValeCuatro = idJugadorCanto; // tengo que identificar quien canto que cosa porque no podes cantar dos veces seguidas (por regla)
                 evento = CANTO_VALE_CUATRO;
                 estadoDelTruco = VALE_CUATRO;
                 puntosRabon = 4;
@@ -331,7 +339,7 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
         notificarRabon(evento);
     }
 
-
+    // metodo que activa el controlador cuando algún jugador quiere cantar el TANTO (envido, envido2, real envido, falta envido), actualizo los atributos segun que cantó y notifico
     @Override
     public void cantarEnvido(int idJugadorCanto, EstadoEnvido estado) throws RemoteException {
         // levantar de archivo los cantos y poner uno aleatorio
@@ -367,6 +375,7 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
         notificarCantoTanto(evento);
     }
 
+    // cuando un jugador se va al mazo termina la ronda como este, el controlador llama a este metodo y automaticamente termina la ronda
     @Override
     public void meVoyAlMazo(int idJugSeFue) throws RemoteException {
         int puntos = 0;
@@ -385,11 +394,13 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
         finDeLaRonda();
     }
 
+    // pregunto si es fin de partida
     @Override
     public boolean esFinDePartida() throws RemoteException {
         return ( (anotador.getPuntosJ1() >= 30 ) || (anotador.getPuntosJ2() >= 30) );
     }
 
+    // este metodo lo llama el controlador desde la 'vista elección' cuando se estan uniendo los jugadores a la partida por primera vez
     @Override
     public void agregarJugador(Jugador jugador) throws RemoteException {
         if(j1 == null && j2 == null){
@@ -415,11 +426,100 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
         notificarJugadorElecto(); // es lo mismo notificar con este pq actualiza la lista en eleccion
     }
 
+    // se cantó el tanto y dijieron que si (quiero), entonces notifico quién ganó
+    @Override
+    public void tantoQuerido(int idJugador) throws RemoteException {
+        int puntos = calcularPuntajeEnvidoQuerido();
+
+        if(j1.puntosEnvido() > j2.puntosEnvido()) {
+            anotador.sumarPuntosJ1(puntos);
+            resultadoTanto = "El ganador del Envido es: " + j1.getNombre() + " con " + j1.puntosEnvido() + " puntos";
+        }
+        else if(j1.puntosEnvido() < j2.puntosEnvido()) {
+            anotador.sumarPuntosJ2(puntos);
+            resultadoTanto = "El ganador del Envido es: " + j2.getNombre() + " con " + j2.puntosEnvido() + " puntos";
+        }
+        else { // si tienen el mismo tanto se decide por el que es mano (el que no repartió)
+            if( (numeroMano % 2) == 0) {
+                anotador.sumarPuntosJ1(puntos);
+                resultadoTanto = "El ganador del Envido es: " + j1.getNombre() + " con " + j1.puntosEnvido() + " puntos";
+            }
+            else if( (numeroMano % 2) == 1) {
+                anotador.sumarPuntosJ2(puntos);
+                resultadoTanto = "El ganador del Envido es: " + j2.getNombre() + " con " + j2.puntosEnvido() + " puntos";
+            }
+        }
+        notificarTantoQuerido();
+        notificarPuntos();
+
+        if(esFinDePartida()) { // si con los puntos sumados alguno alcanzo los 30 puntos,
+            finDePartida();
+        }
+    }
+
+    @Override
+    public void tantoNoQuerido(int idjugNoQuizo) throws RemoteException {
+        int puntos = calcularEnvidoNoQuerido();
+
+        if(idjugNoQuizo == j1.getIDJugador()) anotador.sumarPuntosJ2(puntos);
+        else if(idjugNoQuizo == j2.getIDJugador()) anotador.sumarPuntosJ1(puntos);
+
+        notificarPuntos();
+
+    }
+
+    @Override
+    public void rabonQuerido(int idJugadorQuizo) throws RemoteException {
+        if(idJugadorQuizo != j1.getIDJugador()) notificarCantoQuerido(j1.getIDJugador());
+        else notificarCantoQuerido(j2.getIDJugador());
+        PersistenciaPartida.guardarPartida(this); // guardo la partida aca porque actualiza el estado del rabon
+    }
+
+    @Override
+    public void rabonNoQuerido(int idjugNoQuizo) throws RemoteException {
+        puntosRabon -= 1;
+        if(idjugNoQuizo != j1.getIDJugador()) puntajeRondaJ1 = puntosRabon;
+        else if(idjugNoQuizo != j2.getIDJugador()) puntajeRondaJ2 = puntosRabon;
+
+        notificarCantoNoQuerido(idjugNoQuizo);
+
+        meVoyAlMazo(idjugNoQuizo);
+    }
+
+
+    @Override
+    public ArrayList<Jugador> jugadoresDeLaPartida() throws RemoteException {
+        ArrayList<Jugador> jugadores = new ArrayList<>(); // por si no hay jugadores que la devuelva vacia para evitar excepcion
+
+        if(j1 != null && j2 != null){
+            jugadores.add(j1);
+            jugadores.add(j2);
+        }
+        return jugadores;
+    }
+
+    // cuando quieren reanudar la partida, recien cuando se unan los dos notifico que puedan empezar, sino inician y les salta la advertencia
+    @Override
+    public void reanudoPartida(int idJugador) throws RemoteException {
+
+        if(idJugador == j1.getIDJugador()) reanudoJ1 = true;
+        else if(idJugador == j2.getIDJugador()) reanudoJ2 = true;
+
+        notificarJugadorReanudo(); // para que se ejecute siempre, total si se se unieron los dos se va a notificar abajo y no interfiere
+
+        if(reanudoJ1 && reanudoJ2) notificarPartidaReanudada();
+    }
+
     @Override
     public void actualizarPuntos() throws RemoteException {
         anotador.sumarPuntosJ1(puntajeRondaJ1);
         anotador.sumarPuntosJ2(puntajeRondaJ2);
         notificarPuntos();
+    }
+
+    @Override
+    public void actualizarListaJugadores() throws RemoteException {
+        notificarJugadorElecto();
     }
 
     @Override
@@ -460,196 +560,6 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
     @Override
     public String toString(){
         return "ID: " + idPartida + " | " + anotador.toString();
-    }
-
-
-    //
-    // metodos privados
-    //
-
-    private int compararCartas(Carta cj1, Carta cj2) throws RemoteException{
-        if(cj1.getPoderCarta() > cj2.getPoderCarta()) return j1.getIDJugador();
-        else if(cj1.getPoderCarta() < cj2.getPoderCarta()) return j2.getIDJugador();
-
-        return -1; // caso de que sean el mismo poder es PARDA
-    }
-
-    private void notificarPartidaLista() throws RemoteException {
-        mensajesOb = INICIO_PARTIDA;
-        notificarObservadores(mensajesOb);
-    }
-
-    private void notificarMensaje(int idDestinatario) throws RemoteException {
-        if(idDestinatario == j1.getIDJugador()) mensajesOb = MENSAJEJ1; // mensaje para j1
-        else mensajesOb = MENSAJEJ2; // mensaje para j2
-        // Y EL MENSAJE (??????????
-        notificarObservadores(mensajesOb);
-    }
-
-    private void notificarPuntos() throws RemoteException {
-        PersistenciaPartida.guardarPartida(this);
-        mensajesOb = PUNTAJES;
-        notificarObservadores(mensajesOb);
-    }
-
-    private void notificarJugadorElecto() throws RemoteException {
-        mensajesOb = LISTA_JUGADORES_DISPONIBLES;
-        notificarObservadores(mensajesOb);
-    }
-
-    private void notificarNuevaRonda() throws RemoteException {
-        mensajesOb = NUEVA_RONDA;
-        notificarObservadores(mensajesOb);
-    }
-
-    private void notificarFinMano() throws RemoteException {
-        mensajesOb = FIN_MANO;
-        notificarObservadores(mensajesOb);
-    }
-
-    private void notificar() throws RemoteException {
-        notificarObservadores(mensajesOb);
-    }
-
-    private void notificarCantoQuerido(int idDestinatario) throws RemoteException {
-        mensajesOb = CANTO_QUERIDO;
-        idJugadorNoQuizoCanto = idDestinatario;
-
-        notificarObservadores(mensajesOb);
-    }
-
-    private void notificarCantoNoQuerido(int idDestinatario) throws RemoteException {
-        mensajesOb = CANTO_NO_QUERIDO;
-        idJugadorNoQuizoCanto = idDestinatario;
-
-        notificarObservadores(mensajesOb);
-    }
-
-    private void notificarPartidaReanudada() throws RemoteException {
-        mensajesOb = RESTABLECER_PARTIDA;
-        notificarObservadores(mensajesOb);
-    }
-
-    private void notificarJugadorReanudo() throws RemoteException {
-        mensajesOb = RESTABLECIO_UN_JUGADOR;
-        notificarObservadores(mensajesOb);
-    }
-
-    private void notificarCantoTanto(Eventos e) throws RemoteException {
-        mensajesOb = e;
-        notificarObservadores(mensajesOb);
-    }
-
-    private void notificarTantoQuerido() throws RemoteException {
-        mensajesOb = TANTO_QUERIDO;
-        notificarObservadores(mensajesOb);
-    }
-
-
-        private void notificarRabon(Eventos e) throws RemoteException {
-        mensajesOb = e;
-        notificarObservadores(mensajesOb);
-    }
-
-    private void notificarCartaTirada(int jugador) throws RemoteException {
-        Eventos e = NADA;
-        if(jugador == 1){
-            e = CARTA_TIRADAJ1;
-        }
-        else e = CARTA_TIRADAJ2;
-
-        notificarObservadores(e);
-    }
-
-    private void notificarFinPartida() throws RemoteException {
-        notificarObservadores(FIN_PARTIDA);
-    }
-
-
-    private int calcularPuntajeEnvidoQuerido() throws RemoteException{
-        int puntos = 0;
-        int maximoPuntos = 1;
-
-        if(anotador.getPuntosJ2() > anotador.getPuntosJ1()) maximoPuntos = 30 - anotador.getPuntosJ2();
-        else maximoPuntos = 30 - anotador.getPuntosJ1();
-
-        if(cantoFaltaEnvido){
-            if(anotador.getPuntosJ2() < 15 && anotador.getPuntosJ1() < 15) puntos = 30;
-            else puntos = maximoPuntos;
-
-            return puntos;
-        }
-
-        if(cantoEnvido){
-            puntos += 2;
-            if(cantoEnvidoDoble){
-                puntos += 2;
-                if(cantoRealEnvido){
-                    puntos += 3;
-                }
-            }
-            else if(cantoRealEnvido){
-                puntos += 3;
-            }
-        }
-        else if(cantoRealEnvido){
-            puntos += 3;
-        }
-
-        System.out.println("Puntos Envido Querido: " + puntos);
-        return puntos;
-    }
-
-    private int calcularEnvidoNoQuerido() throws RemoteException{
-        int puntos = 0;
-
-        if(cantoEnvido){
-            puntos += 1;
-            if(cantoEnvidoDoble){
-                puntos += 1;
-                if(cantoRealEnvido){
-                    puntos += 2;
-                    if(cantoFaltaEnvido) puntos += 3;
-                }
-            }
-            else if (cantoRealEnvido){
-                puntos += 1;
-                if(cantoFaltaEnvido) puntos += 3;
-            }
-            else if(cantoFaltaEnvido) puntos += 1;
-        }
-        else if(cantoRealEnvido){
-            puntos += 1;
-            if(cantoFaltaEnvido) puntos += 2;
-        }
-        else puntos = 1;
-
-        return puntos;
-    }
-
-    private int generarIdPartida(){
-        Random random = new Random();
-        LocalDateTime now = LocalDateTime.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
-        String formattedDate = now.format(formatter);
-
-        String nombre = " ";
-        if(j1 != null) nombre = j1.getNombre();
-
-        String idString = nombre.substring(0, Math.min(3, nombre.length())).toUpperCase() + formattedDate;
-
-        return Math.abs(idString.hashCode() / random.nextInt(1, 18));
-
-    }
-
-    private void replicarCartasJugadores(){
-        cartasJ1.add(j1.getCartasObtenidas().get(0));
-        cartasJ1.add(j1.getCartasObtenidas().get(1));
-        cartasJ1.add(j1.getCartasObtenidas().get(2));
-
-        cartasJ2.add(j2.getCartasObtenidas().get(0));
-        cartasJ2.add(j2.getCartasObtenidas().get(1));
-        cartasJ2.add(j2.getCartasObtenidas().get(2));
     }
 
 
@@ -740,67 +650,24 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
         return cartasJ2;
     }
 
-    // .................................................................................................................
-    // -- ACTUALIZAR ESTO Y ORDENAR --
-    // .................................................................................................................
-
     @Override
-    public void tantoQuerido(int idJugador) throws RemoteException {
-        int puntos = calcularPuntajeEnvidoQuerido();
-
-        if(j1.puntosEnvido() > j2.puntosEnvido()) {
-            anotador.sumarPuntosJ1(puntos);
-            resultadoTanto = "El ganador del Envido es: " + j1.getNombre() + " con " + j1.puntosEnvido() + " puntos";
-        }
-        else if(j1.puntosEnvido() < j2.puntosEnvido()) {
-            anotador.sumarPuntosJ2(puntos);
-            resultadoTanto = "El ganador del Envido es: " + j2.getNombre() + " con " + j2.puntosEnvido() + " puntos";
-        }
-        else{ // si tienen el mismo tanto se decide por el que es mano (el que no repartió)
-            if( (numeroMano % 2) == 0) {
-                anotador.sumarPuntosJ1(puntos);
-                resultadoTanto = "El ganador del Envido es: " + j1.getNombre() + " con " + j1.puntosEnvido() + " puntos";
-            }
-            else if( (numeroMano % 2) == 1) {
-                anotador.sumarPuntosJ2(puntos);
-                resultadoTanto = "El ganador del Envido es: " + j2.getNombre() + " con " + j2.puntosEnvido() + " puntos";
-            }
-        }
-        notificarTantoQuerido();
-        notificarPuntos();
-
-        if(esFinDePartida()) {
-            finDePartida();
-        }
+    public boolean getPartidaRecuperada() throws RemoteException {
+        return false;
     }
 
     @Override
-    public void tantoNoQuerido(int idjugNoQuizo) throws RemoteException {
-        int puntos = calcularEnvidoNoQuerido();
-
-        if(idjugNoQuizo == j1.getIDJugador()) anotador.sumarPuntosJ2(puntos);
-        else if(idjugNoQuizo == j2.getIDJugador()) anotador.sumarPuntosJ1(puntos);
-
-        notificarPuntos();
-
+    public boolean setPartidaRecuperada() throws RemoteException {
+        return false;
     }
 
     @Override
-    public void rabonQuerido(int idJugadorQuizo) throws RemoteException {
-        if(idJugadorQuizo != j1.getIDJugador()) notificarCantoQuerido(j1.getIDJugador());
-        else notificarCantoQuerido(j2.getIDJugador());
-        PersistenciaPartida.guardarPartida(this); // guardo la partida aca porque actualiza el estado del rabon
-    }
-
-    @Override
-    public void rabonNoQuerido(int idjugNoQuizo) throws RemoteException {
-        puntosRabon -= 1;
-        if(idjugNoQuizo != j1.getIDJugador()) puntajeRondaJ1 = puntosRabon;
-        else if(idjugNoQuizo != j2.getIDJugador()) puntajeRondaJ2 = puntosRabon;
-
-        notificarCantoNoQuerido(idjugNoQuizo);
-
-        meVoyAlMazo(idjugNoQuizo);
+    public ArrayList<Jugador> getJugadores() throws RemoteException{
+        ArrayList<Jugador> lista = new ArrayList<>();
+        if(j1 != null && j2 != null){
+            lista.add(j1);
+            lista.add(j2);
+        }
+        return lista;
     }
 
     @Override
@@ -839,52 +706,180 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
         return this;
     }
 
-    @Override
-    public ArrayList<Jugador> jugadoresDeLaPartida() throws RemoteException {
-        ArrayList<Jugador> jugadores = new ArrayList<>(); // por si no hay jugadores que la devuelva vacia para evitar excepcion
+    //
+    // metodos privados
+    //
 
-        if(j1 != null && j2 != null){
-            jugadores.add(j1);
-            jugadores.add(j2);
+    // le paso dos cartas y las compara, devuelve el ID del jugador que tiene la carta mas alta, si son de igual poder devuelve -1 que indica que es PARDA
+    private int compararCartas(Carta cj1, Carta cj2) throws RemoteException{
+        if(cj1.getPoderCarta() > cj2.getPoderCarta()) return j1.getIDJugador();
+        else if(cj1.getPoderCarta() < cj2.getPoderCarta()) return j2.getIDJugador();
+
+        return -1; // caso de que sean el mismo poder es PARDA
+    }
+
+    private void notificarPuntos() throws RemoteException {
+        PersistenciaPartida.guardarPartida(this);
+        mensajesOb = PUNTAJES;
+        notificarObservadores(mensajesOb);
+    }
+
+    private void notificarJugadorElecto() throws RemoteException {
+        mensajesOb = LISTA_JUGADORES_DISPONIBLES;
+        notificarObservadores(mensajesOb);
+    }
+
+    private void notificarNuevaRonda() throws RemoteException {
+        mensajesOb = NUEVA_RONDA;
+        notificarObservadores(mensajesOb);
+    }
+
+    private void notificarFinMano() throws RemoteException {
+        mensajesOb = FIN_MANO;
+        notificarObservadores(mensajesOb);
+    }
+
+    private void notificarCantoQuerido(int idDestinatario) throws RemoteException {
+        mensajesOb = CANTO_QUERIDO;
+        idJugadorNoQuizoCanto = idDestinatario;
+
+        notificarObservadores(mensajesOb);
+    }
+
+    private void notificarCantoNoQuerido(int idDestinatario) throws RemoteException {
+        mensajesOb = CANTO_NO_QUERIDO;
+        idJugadorNoQuizoCanto = idDestinatario;
+
+        notificarObservadores(mensajesOb);
+    }
+
+    private void notificarPartidaReanudada() throws RemoteException {
+        mensajesOb = RESTABLECER_PARTIDA;
+        notificarObservadores(mensajesOb);
+    }
+
+    private void notificarJugadorReanudo() throws RemoteException {
+        mensajesOb = RESTABLECIO_UN_JUGADOR;
+        notificarObservadores(mensajesOb);
+    }
+
+    private void notificarCantoTanto(Eventos e) throws RemoteException {
+        mensajesOb = e;
+        notificarObservadores(mensajesOb);
+    }
+
+    private void notificarTantoQuerido() throws RemoteException {
+        mensajesOb = TANTO_QUERIDO;
+        notificarObservadores(mensajesOb);
+    }
+
+
+    private void notificarRabon(Eventos e) throws RemoteException {
+        mensajesOb = e;
+        notificarObservadores(mensajesOb);
+    }
+
+    private void notificarCartaTirada(int jugador) throws RemoteException {
+        Eventos e = NADA;
+        if(jugador == 1){
+            e = CARTA_TIRADAJ1;
         }
-        return jugadores;
+        else e = CARTA_TIRADAJ2;
+
+        notificarObservadores(e);
     }
 
-    @Override
-    public void reanudoPartida(int idJugador) throws RemoteException {
-
-        if(idJugador == j1.getIDJugador()) reanudoJ1 = true;
-        else if(idJugador == j2.getIDJugador()) reanudoJ2 = true;
-
-        notificarJugadorReanudo(); // para que se ejecute siempre, total si se se unieron los dos se va a notificar abajo y no interfiere
-
-        if(reanudoJ1 && reanudoJ2) notificarPartidaReanudada();
+    private void notificarFinPartida() throws RemoteException {
+        notificarObservadores(FIN_PARTIDA);
     }
 
-    @Override
-    public boolean getPartidaRecuperada() throws RemoteException {
-        return false;
-    }
+    // me calcula cuantos puntos gana el que ganó el envido según que se cantó
+    private int calcularPuntajeEnvidoQuerido() throws RemoteException{
+        int puntos = 0;
+        int maximoPuntos = 1;
 
-    @Override
-    public boolean setPartidaRecuperada() throws RemoteException {
-        return false;
-    }
+        if(anotador.getPuntosJ2() > anotador.getPuntosJ1()) maximoPuntos = 30 - anotador.getPuntosJ2();
+        else maximoPuntos = 30 - anotador.getPuntosJ1();
 
-    @Override
-    public void actualizarListaJugadores() throws RemoteException {
-        notificarJugadorElecto();
-    }
+        if(cantoFaltaEnvido){
+            if(anotador.getPuntosJ2() < 15 && anotador.getPuntosJ1() < 15) puntos = 30;
+            else puntos = maximoPuntos;
 
-    @Override
-    public ArrayList<Jugador> getJugadores() throws RemoteException{
-        ArrayList<Jugador> lista = new ArrayList<>();
-        if(j1 != null && j2 != null){
-            lista.add(j1);
-            lista.add(j2);
+            return puntos;
         }
-        return lista;
+
+        if(cantoEnvido){
+            puntos += 2;
+            if(cantoEnvidoDoble){
+                puntos += 2;
+                if(cantoRealEnvido){
+                    puntos += 3;
+                }
+            }
+            else if(cantoRealEnvido){
+                puntos += 3;
+            }
+        }
+        else if(cantoRealEnvido){
+            puntos += 3;
+        }
+
+        System.out.println("Puntos Envido Querido: " + puntos);
+        return puntos;
     }
 
+    // Se canto el envido y se dijo que no, calcula cuantos puntos son para el que canto (contrario al que dijo que no)
+    private int calcularEnvidoNoQuerido() throws RemoteException{
+        int puntos = 0;
+
+        if(cantoEnvido){
+            puntos += 1;
+            if(cantoEnvidoDoble){
+                puntos += 1;
+                if(cantoRealEnvido){
+                    puntos += 2;
+                    if(cantoFaltaEnvido) puntos += 3;
+                }
+            }
+            else if (cantoRealEnvido){
+                puntos += 1;
+                if(cantoFaltaEnvido) puntos += 3;
+            }
+            else if(cantoFaltaEnvido) puntos += 1;
+        }
+        else if(cantoRealEnvido){
+            puntos += 1;
+            if(cantoFaltaEnvido) puntos += 2;
+        }
+        else puntos = 1;
+
+        return puntos;
+    }
+
+    // Genera el ID de la partida trantando que sea lo mas unico posible
+    private int generarIdPartida(){
+        Random random = new Random();
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+        String formattedDate = now.format(formatter);
+
+        String nombre = " ";
+        if(j1 != null) nombre = j1.getNombre();
+
+        String idString = nombre.substring(0, Math.min(3, nombre.length())).toUpperCase() + formattedDate;
+
+        return Math.abs(idString.hashCode() / random.nextInt(1, 18));
+
+    }
+
+    private void replicarCartasJugadores(){
+        cartasJ1.add(j1.getCartasObtenidas().get(0));
+        cartasJ1.add(j1.getCartasObtenidas().get(1));
+        cartasJ1.add(j1.getCartasObtenidas().get(2));
+
+        cartasJ2.add(j2.getCartasObtenidas().get(0));
+        cartasJ2.add(j2.getCartasObtenidas().get(1));
+        cartasJ2.add(j2.getCartasObtenidas().get(2));
+    }
 
 }
