@@ -1,6 +1,7 @@
 package interfaces;
 
 import enums.EstadoEnvido;
+import enums.EstadoFlor;
 import enums.EstadoTruco;
 import modelo.Jugador;
 import modelo.Partida;
@@ -53,6 +54,13 @@ public interface IControlador {
     void setReanudarPartida(boolean reanudarPartida) throws RemoteException;
     void actualizarJugador(int idJugador, String nombreNuevo);
     void eliminarJugador(int idJugador);
+    boolean tengoFlor() throws RemoteException;
+    void cantarFlor() throws RemoteException;
+    void cantarContraFlor() throws RemoteException;
+    void cantarContraFlorAlResto() throws RemoteException;
+    void noQuieroFlor(EstadoFlor estado) throws RemoteException;
+    void florQuerida(EstadoFlor estado) throws RemoteException;
+    boolean seJuegaConFlor() throws RemoteException;
 
     void setJugador(int idJugador) throws RemoteException;
     void setJugadorReanudar(int idJugador) throws RemoteException;

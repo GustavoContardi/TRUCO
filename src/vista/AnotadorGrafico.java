@@ -6,12 +6,9 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.Serializable;
-import javax.swing.UIManager;
-import javax.swing.SwingUtilities;
-import javax.swing.UnsupportedLookAndFeelException;
 
 
-public class anotadorGrafico implements Serializable {
+public class AnotadorGrafico implements Serializable {
     private JPanel ventana;
     private JButton btnSumarJ1;
     private JButton btnRestarJ1;
@@ -22,12 +19,12 @@ public class anotadorGrafico implements Serializable {
     private JLabel JUGADOR1Label;
     private JLabel JUGADOR2Label;
     private JFrame frame;
-    private IVistaInicio inicio;
+    private VistaInicio inicio;
 
     private Integer puntosJugador1;
     private Integer puntosJugador2;
 
-    public anotadorGrafico(IVistaInicio inicio) {
+    public AnotadorGrafico(VistaInicio inicio) {
         this.frame = new JFrame("TRUCONTARDI");
         frame.setContentPane(ventana);
         frame.pack();

@@ -1,13 +1,17 @@
 import persistencia.PersistenciaJugador;
-import vista.PantallaCarga;
-import vista.inicio;
+import vista.VistaInicio;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 
 public class Main {
 
     public static void main(String[] args) throws RemoteException {
-       /*
+/*
         ArrayList<ArrayList<String>> listas = new ArrayList<>();
 
         ArrayList<String> listaQuiero = new ArrayList<>();
@@ -18,6 +22,9 @@ public class Main {
         ArrayList<String> listaEnvido = new ArrayList<>();
         ArrayList<String> listaRealEnvido = new ArrayList<>();
         ArrayList<String> listaFaltalEnvido = new ArrayList<>();
+        ArrayList<String> listaFlor = new ArrayList<>();
+        ArrayList<String> listaContraFlor = new ArrayList<>();
+        ArrayList<String> listaContraFlorAlResto = new ArrayList<>();
 
         listaQuiero.add("A ver, QUIERO!");
         listaQuiero.add("¡QUIERO!");
@@ -67,6 +74,24 @@ public class Main {
         listaFaltalEnvido.add("Si te digo FALTA ENVIDO te me vas al mazo...");
         listaFaltalEnvido.add("Una vez una paloma ofreció darme su nido, y yo creyendo una broma no le eché la Falta envido.");
 
+        listaFlor.add("¡Flor!");
+        listaFlor.add("¡Tengo la Flor más linda del jardín!");
+        listaFlor.add("¡Flor de las flores, que te caes de la silla!!");
+        listaFlor.add("¿Te canto una canción? ¡No! ¡Te canto la Flor!");
+        listaFlor.add("¡Tengo la Flor! ¡Y no es de Arjona, eh!");
+
+        listaContraFlor.add("¡Contra Flor!");
+        listaContraFlor.add("Mi Flor es mas linda que la tuya, ¡CONTRA FLOR!");
+        listaContraFlor.add("No te asustes, pero ¡CONTRA FLOR!");
+        listaContraFlor.add("¿Te canto una canción? ¡No! ¡Te canto la Contra Flor!");
+        listaContraFlor.add("6 puntos fáciles... Contra Flor");
+
+        listaContraFlorAlResto.add("¡Contra Flor al Resto!");
+        listaContraFlorAlResto.add("Mi Flor es mas linda que la tuya, ¡CONTRA FLOR AL RESTO!");
+        listaContraFlorAlResto.add("Necesito los puntos, CONTRA FLOR AL RESTO");
+        listaContraFlorAlResto.add("¿Te canto una canción de Arjona? ¡No! ¡Te canto Contra Flor al Resto!");
+        listaContraFlorAlResto.add("Y bueno... ¡Contra Flor al Resto y cada uno pa' su casa!");
+
         listas.add(listaQuiero);
         listas.add(listaNoQuiero);
         listas.add(listaTruco);
@@ -75,7 +100,9 @@ public class Main {
         listas.add(listaEnvido);
         listas.add(listaRealEnvido);
         listas.add(listaFaltalEnvido);
-
+        listas.add(listaFlor);
+        listas.add(listaContraFlor);
+        listas.add(listaContraFlorAlResto);
 
         try {
             FileOutputStream fos = new FileOutputStream("Cantos.bin");
@@ -88,12 +115,13 @@ public class Main {
             throw new RuntimeException(e);
         }
 
+*/
         //vistaGrafica vista = new vistaGrafica();
 
         //ServidorTruco serv = new ServidorTruco();
         //
 
-
+/*
         Mazo mazo = new Mazo();
 
         Jugador jugador = new Jugador("Lito");
@@ -104,16 +132,10 @@ public class Main {
         System.out.println(jugador.getCartasObtenidas().get(0).toString()+ " " + jugador.getCartasObtenidas().get(1).toString() + " " +jugador.getCartasObtenidas().get(2).toString());
         System.out.println(jugador.getNombre() + " puntos de envido: " + jugador.puntosEnvido());
         System.out.println(jugador2.getCartasObtenidas().get(0).toString()+ " " + jugador2.getCartasObtenidas().get(1).toString()+ " " +jugador2.getCartasObtenidas().get(2).toString());
-        System.out.println(jugador2.getNombre() + " puntos de envido: " + jugador2.puntosEnvido());
-    }*/
-        PersistenciaJugador.delvolverTodosJugadores();
-
-
-        inicio init = new inicio();
-        init.iniciarConPantallaCarga();
-//        new inicio();
-
+        System.out.println(jugador2.getNombre() + " puntos de envido: " + jugador2.puntosEnvido());*/
     }
+
+        //PersistenciaJugador.delvolverTodosJugadores();
 
 
 }

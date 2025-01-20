@@ -2,9 +2,8 @@ package vista.flujos;
 
 import enums.EstadoEnvido;
 import interfaces.IControlador;
-import vista.vistaConsola;
+import vista.VistaConsola;
 
-import javax.swing.*;
 import java.io.Serializable;
 import java.rmi.RemoteException;
 
@@ -13,7 +12,7 @@ import static enums.EstadoEnvido.*;
 public class FlujoEleccionEnvido extends Flujo implements Serializable {
     EstadoEnvido estadoEnvido;
 
-    public FlujoEleccionEnvido(vistaConsola vista, IControlador controlador, EstadoEnvido estado) {
+    public FlujoEleccionEnvido(VistaConsola vista, IControlador controlador, EstadoEnvido estado) {
         super(vista, controlador);
         estadoEnvido = estado;
     }

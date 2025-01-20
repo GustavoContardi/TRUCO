@@ -1,6 +1,7 @@
 package vista;
 
 import cliente.ClienteTruco;
+import modelo.Anotador;
 import modelo.Jugador;
 import modelo.Partida;
 import persistencia.PersistenciaJugador;
@@ -9,62 +10,53 @@ import servidor.ServidorTruco;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 
-public class inicio extends JFrame{
+public class VistaInicio extends JFrame {
     private JPanel panel1;
     private JButton btnCrearNuevo;
     private JButton btnSalir;
     private JButton btnReglas;
     private JButton btnTop;
-    private JButton btnIngresar;
+    private JButton btnAnotador;
     private JLabel titulo;
     private JLabel instrucciones;
     private JButton btnReanudar;
 
-    public inicio() {
+    public VistaInicio() {
         setSize(500, 450);
         setContentPane(panel1);
         setResizable(false);
         setLocationRelativeTo(null);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
         setTitle("Menú principal - Truco");
 
         instrucciones.setText("¡Bienvenido al Trucontardi! Seleccione una opción");
 
         // EVENTOS
+        btnCrearNuevo.addActionListener(e -> pantallaJugar(false));
 
-        btnCrearNuevo.addActionListener(e -> {
-            pantallaJugar(false);
+        btnSalir.addActionListener(e -> System.exit(0));
+
+        btnTop.addActionListener(e -> pantallaTopJugadores());
+
+        btnReanudar.addActionListener(e -> pantallaJugar(true)); // Reanudar partida
+
+        btnReglas.addActionListener(e -> abrirURL("https://trucogame.com/pages/reglamento-de-truco-argentino"));
+
+        btnAnotador.addActionListener(e -> {
+            AnotadorGrafico anotador = new AnotadorGrafico(this);
+            anotador.iniciar();
+            setVisible(false);
         });
 
-        btnSalir.addActionListener(e -> {
-            System.exit(0);
-        });
-
-        btnTop.addActionListener(e -> {
-            pantallaTopJugadores();
-        });
-
-        btnReanudar.addActionListener(e -> {
-            // reanuda una partida pendiente de terminar
-            pantallaJugar(true);
-        });
-
-        btnReglas.addActionListener(e -> {
-            abrirURL("https://trucogame.com/pages/reglamento-de-truco-argentino"); // abre un navegador con las reglas del truco argentino
-        });
-
-//        PantallaCarga pantallaCarga = new PantallaCarga();
-//        pantallaCarga.mostrarPantalla();
-//        setVisible(true);
 
     }
-
 
     public void iniciar(){
         setVisible(true);

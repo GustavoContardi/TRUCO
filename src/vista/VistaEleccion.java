@@ -4,7 +4,6 @@ import interfaces.IControlador;
 import interfaces.IVistaEleccion;
 import modelo.Jugador;
 import modelo.Partida;
-import servidor.ServidorTruco;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,7 +12,7 @@ import java.awt.event.ActionListener;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 
-public class vistaEleccion implements IVistaEleccion {
+public class VistaEleccion implements IVistaEleccion {
     private JPanel ventana;
     private JTabbedPane tabbedPane1;
     private JPanel JUGADORES;
@@ -34,7 +33,7 @@ public class vistaEleccion implements IVistaEleccion {
 
     private DefaultListModel<String> listModel;
 
-    public vistaEleccion() throws RemoteException {
+    public VistaEleccion() throws RemoteException {
         this.frame = new JFrame("TRUCONTARDI");
         frame.setContentPane(ventana);
         frame.setSize(600, 450);

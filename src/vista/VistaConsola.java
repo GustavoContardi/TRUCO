@@ -1,6 +1,7 @@
 package vista;
 
 import enums.EstadoEnvido;
+import enums.EstadoFlor;
 import enums.EstadoTruco;
 import interfaces.IControlador;
 import interfaces.IVistaInicio;
@@ -16,7 +17,9 @@ import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 
-public class vistaConsola implements IVistaJuego, IVistaInicio, Serializable {
+import static javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE;
+
+public class VistaConsola implements IVistaJuego, IVistaInicio, Serializable {
 
     private JPanel ventana;
     private JButton btnEnter;
@@ -31,13 +34,37 @@ public class vistaConsola implements IVistaJuego, IVistaInicio, Serializable {
     // constructor
     //
 
-    public vistaConsola() throws RemoteException {
-        this.frame = new JFrame("APP TRUCO");
+    public VistaConsola() throws RemoteException {
+        this.frame = new JFrame("APP TRUCO - MODO CONSOLA");
         frame.setContentPane(ventana);
         frame.pack();
-        frame.setResizable(false);                      // QUE PASA ACA
+        frame.setResizable(false);
         frame.setLocationRelativeTo(null);
         frame.setSize(600, 450);
+        frame.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+
+        // Control de cierre de ventana
+        frame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                // Mostrar el cuadro de confirmación
+                int response = JOptionPane.showConfirmDialog(
+                        frame,
+                        "¿Estás seguro de que quieres cerrar la ventana? La partida será guardada.",
+                        "Confirmar Cierre",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.QUESTION_MESSAGE
+                );
+
+                if (response == JOptionPane.YES_OPTION) {
+                    // Cierra la ventana si el usuario confirma
+                    frame.dispose();
+                } else {
+                    // Evita cualquier acción adicional si selecciona "No"
+                    System.out.println("El usuario canceló el cierre de la ventana.");
+                }
+            }
+        });
 
         btnEnter.addActionListener(new ActionListener() {
             @Override
@@ -130,6 +157,11 @@ public class vistaConsola implements IVistaJuego, IVistaInicio, Serializable {
         println(controlador.getNombreRival() + ": " + tanto);
         flujoActual = new FlujoEleccionEnvido(this, controlador, estado);
         flujoActual.mostrarSiguienteTexto();
+    }
+
+    @Override
+    public void cantaronFlor(String flor, EstadoFlor estado) throws RemoteException {
+
     }
 
     @Override

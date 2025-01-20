@@ -31,5 +31,9 @@ public enum Eventos implements Serializable {
     ABANDONO_PARTIDA,
     RESTABLECER_PARTIDA,
     RESTABLECIO_UN_JUGADOR,
+    FLOR_QUERIDA,
+    CANTO_FLOR,
+    CANTO_CONTRAFLOR,
+    CANTO_CONTRAFLOR_ALRESTO,
 }
 

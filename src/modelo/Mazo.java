@@ -6,10 +6,16 @@ import java.util.Collections;
 import java.util.Random;
 
 public class Mazo implements Serializable {
-    // atributos
+
+    //
+    // Atributos
+    //
+
     private ArrayList<Carta> mazoCartas = new ArrayList<>(); // mazo que contiene las 40 cartas
 
+    //
     // constructor
+    //
 
     public Mazo() {
         // levanto el mazo del archivo
@@ -17,31 +23,31 @@ public class Mazo implements Serializable {
     }
 
 
-
+    //
     // metodos publicos
+    //
 
     // le asigna las cartas a los jugadores pasados por parametros
-    public void repartirCartas(Jugador j1, Jugador j2){
+    public void repartirCartas(Jugador j1, Jugador j2) {
         ArrayList<Carta> cartasJ1 = new ArrayList<>();
         ArrayList<Carta> cartasJ2 = new ArrayList<>();
         Random random = new Random();
         int indiceAleatorio;
 
         mezclarCartas();
-        while(cartasJ1.size() < 3){
+        while (cartasJ1.size() < 3) {
             indiceAleatorio = random.nextInt(mazoCartas.size());
-            if(cartasJ1.isEmpty()) cartasJ1.add(mazoCartas.get(indiceAleatorio));
-            else if(!cartasJ1.contains(mazoCartas.get(indiceAleatorio))) cartasJ1.add(mazoCartas.get(indiceAleatorio));
+            if (cartasJ1.isEmpty()) cartasJ1.add(mazoCartas.get(indiceAleatorio));
+            else if (!cartasJ1.contains(mazoCartas.get(indiceAleatorio))) cartasJ1.add(mazoCartas.get(indiceAleatorio));
         }
 
         mezclarCartas();
 
-        while(cartasJ2.size() < 3){
+        while (cartasJ2.size() < 3) {
             indiceAleatorio = random.nextInt(mazoCartas.size());
-            if(cartasJ2.isEmpty() && !cartasJ1.contains(mazoCartas.get(indiceAleatorio))) {
+            if (cartasJ2.isEmpty() && !cartasJ1.contains(mazoCartas.get(indiceAleatorio))) {
                 cartasJ2.add(mazoCartas.get(indiceAleatorio));
-            }
-            else if(!cartasJ1.contains(mazoCartas.get(indiceAleatorio)) && !cartasJ2.contains(mazoCartas.get(indiceAleatorio))) {
+            } else if (!cartasJ1.contains(mazoCartas.get(indiceAleatorio)) && !cartasJ2.contains(mazoCartas.get(indiceAleatorio))) {
                 cartasJ2.add(mazoCartas.get(indiceAleatorio));
             }
         }
@@ -51,17 +57,19 @@ public class Mazo implements Serializable {
 
     }
 
-    public void mostrarMazo(){
-        for(int i=0; i<mazoCartas.size(); i++){
+    public void mostrarMazo() {
+        for (int i = 0; i < mazoCartas.size(); i++) {
             System.out.println(mazoCartas.get(i).toString());
         }
     }
 
-
+    //
     // metodos privados
+    //
+
 
     // mezcla las cartas dentro del ArrayList
-    private void mezclarCartas(){
+    private void mezclarCartas() {
         Collections.shuffle(mazoCartas);
     }
 
@@ -81,7 +89,9 @@ public class Mazo implements Serializable {
         }
     }
 
+    //
     // GETTERS y SETTERS
+    //
 
     public ArrayList<Carta> getMazoCartas() {
         return mazoCartas;

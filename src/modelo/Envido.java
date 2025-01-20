@@ -29,9 +29,9 @@ public class Envido implements Serializable {
     // metodos publicos
 
     // calcula los puntos del envido segun que cartas iguales tiene el jugador
-    public int calcularPuntosEnvido(Jugador j) {
+    public int calcularPuntosEnvido(ArrayList<Carta> cartasJugador) {
         ArrayList<Carta> cartasIguales;
-        ArrayList<Carta> cartasJugador = j.getCartasObtenidas();
+
         puntosEnvido = 0; // para resetear cada vez que le pido los puntos
 
         cartasIguales = calcularCartasIguales(cartasJugador);
@@ -48,6 +48,22 @@ public class Envido implements Serializable {
             }
         }
         return puntosEnvido;
+    }
+
+    // si tiene flor ===> si la 1 = 2 & 1 = 3 => entonces => 1 = 2 = 3
+    public boolean tieneFlor(ArrayList<Carta> cartas){
+        return ( ( cartas.get(0).getPaloCarta() == cartas.get(1).getPaloCarta() ) && ( cartas.get(0).getPaloCarta() == cartas.get(2).getPaloCarta() ) );
+    }
+
+    // retorna cuantos puntos tiene en caso de contra flor
+    public int puntosFlor(ArrayList<Carta> cartas){
+        int puntos = 20;
+
+        if(cartas.get(0).getNumeroCarta() < 8) puntos += cartas.get(0).getNumeroCarta();
+        if(cartas.get(1).getNumeroCarta() < 8) puntos += cartas.get(1).getNumeroCarta();    // los 10, 11 y 12 suman 0 entonces solo sumo si no son esas cartas
+        if(cartas.get(2).getNumeroCarta() < 8) puntos += cartas.get(2).getNumeroCarta();
+
+        return puntos;
     }
 
     //

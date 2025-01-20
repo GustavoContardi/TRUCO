@@ -111,4 +111,67 @@ public class PersistenciaCantos implements Serializable {
 
         return listaCantos.get(random.nextInt(listaCantos.size()));
     }
+
+    public static String mensajeCantoFlor(){
+        Random random = new Random();
+
+        try {
+            FileInputStream fos = new FileInputStream("Cantos.bin");
+            var oos = new ObjectInputStream(fos);
+            listaCantosGeneral = (ArrayList<ArrayList<String>>) oos.readObject();
+            fos.close();
+        } catch (FileNotFoundException e) {
+            return null;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
+        listaCantos = listaCantosGeneral.get(8);
+
+        return listaCantos.get(random.nextInt(listaCantos.size()));
+    }
+
+    public static String mensajeCantoContraFlor(){
+        Random random = new Random();
+
+        try {
+            FileInputStream fos = new FileInputStream("Cantos.bin");
+            var oos = new ObjectInputStream(fos);
+            listaCantosGeneral = (ArrayList<ArrayList<String>>) oos.readObject();
+            fos.close();
+        } catch (FileNotFoundException e) {
+            return null;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
+        listaCantos = listaCantosGeneral.get(9);
+
+        return listaCantos.get(random.nextInt(listaCantos.size()));
+    }
+
+    public static String mensajeCantoContraFlorResto(){
+        Random random = new Random();
+
+        try {
+            FileInputStream fos = new FileInputStream("Cantos.bin");
+            var oos = new ObjectInputStream(fos);
+            listaCantosGeneral = (ArrayList<ArrayList<String>>) oos.readObject();
+            fos.close();
+        } catch (FileNotFoundException e) {
+            return null;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
+        listaCantos = listaCantosGeneral.get(10);
+
+        return listaCantos.get(random.nextInt(listaCantos.size()));
+    }
 }

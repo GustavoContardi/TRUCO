@@ -4,6 +4,7 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 
 import enums.EstadoEnvido;
+import enums.EstadoFlor;
 import enums.EstadoTruco;
 import interfaces.IControlador;
 import interfaces.IVistaJuego;
@@ -22,8 +23,9 @@ import java.util.ArrayList;
 
 import static enums.EstadoEnvido.*;
 import static enums.EstadoTruco.*;
+import static javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE;
 
-public class vistaGrafica implements IVistaJuego, Serializable {
+public class VistaGrafica implements IVistaJuego, Serializable {
     private JPanel ventana;
     private JButton btnEnvido;
     private JButton TRUCOButton;
@@ -48,22 +50,35 @@ public class vistaGrafica implements IVistaJuego, Serializable {
     private JFrame frame;
     private IControlador controlador;
 
-    public vistaGrafica() throws RemoteException {
+    public VistaGrafica() throws RemoteException {
         this.frame = new JFrame("TRUCONTARDI");
         frame.setContentPane(ventana);
         frame.pack();
         frame.setResizable(false);
         frame.setLocationRelativeTo(null);
         frame.setSize(730, 820);
+        frame.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 
 
-        // captura del evento que el jugador cierra la ventana y guardo la partida
+        // Control de cierre de ventana
         frame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                int response = JOptionPane.showConfirmDialog(frame, "¿Estás seguro de que quieres cerrar la ventana? La partida sera guardada", "Confirmar Cierre", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                // Mostrar el cuadro de confirmación
+                int response = JOptionPane.showConfirmDialog(
+                        frame,
+                        "¿Estás seguro de que quieres cerrar la ventana? La partida será guardada.",
+                        "Confirmar Cierre",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.QUESTION_MESSAGE
+                );
+
                 if (response == JOptionPane.YES_OPTION) {
-                    frame.dispose();  // Cierra la ventana
+                    // Cierra la ventana si el usuario confirma
+                    frame.dispose();
+                } else {
+                    // Evita cualquier acción adicional si selecciona "No"
+                    System.out.println("El usuario canceló el cierre de la ventana.");
                 }
             }
         });
@@ -467,6 +482,93 @@ public class vistaGrafica implements IVistaJuego, Serializable {
     }
 
     @Override
+    public void cantaronFlor(String flor, EstadoFlor estado) throws RemoteException {
+        removeBtnActionListener();
+
+        btnEnvido.setText("         ");
+        IRALMAZOButton.setText("         ");
+        TRUCOButton.setText("         ");
+        btnAuxiliar.setText("         ");
+        btnQuiero.setEnabled(false);
+        btnNoQuiero.setEnabled(false);
+        btnAuxiliar.setEnabled(false);
+        IRALMAZOButton.setEnabled(false);
+        btnEnvido.setEnabled(true);
+        TRUCOButton.setEnabled(true);
+
+        accionesJ2.setText(flor);
+
+        // a los botones de 'Quiero' y 'NoQuiero' los dejo seteados y solo los activo y desactivo segun lo necesite
+        btnQuiero.addActionListener(e -> {
+            try {
+                controlador.florQuerida(estado);
+                setBotones();
+            } catch (RemoteException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+
+        btnNoQuiero.addActionListener(e -> {
+            try {
+                controlador.noQuieroFlor(estado);
+                setBotones();
+            } catch (RemoteException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+
+        switch (estado){
+            case FLOR -> {
+                if(controlador.tengoFlor()){
+                    btnEnvido.setText("CONTRA FLOR");
+                    btnEnvido.addActionListener( e -> {
+                        try {
+                            setBotones();
+                            controlador.cantarContraFlor();
+                        } catch (RemoteException ex) {
+                            ex.printStackTrace();
+                        }
+                    });
+                    TRUCOButton.setText("CONTRA FLOR AL RESTO");
+                    TRUCOButton.addActionListener( e -> {
+                        try {
+                            setBotones();
+                            controlador.cantarContraFlorAlResto();
+                        } catch (RemoteException ex) {
+                            ex.printStackTrace();
+                        }
+                    });
+                }
+                else{
+                    mostrarAviso("Tu rival te cantó FLOR y tú no tienes. Son 3 puntos para tu rival.");
+                    setBotones();
+                }
+            }
+            case CONTRA_FLOR -> {
+                btnEnvido.setEnabled(false);
+                TRUCOButton.setText("CONTRA FLOR AL RESTO");
+                TRUCOButton.addActionListener( e -> {
+                    try {
+                        controlador.cantarContraFlorAlResto();
+                        setBotones();
+                    } catch (RemoteException ex) {
+                        ex.printStackTrace();
+                    }
+                });
+
+                btnQuiero.setEnabled(true);
+                btnNoQuiero.setEnabled(true);
+            }
+            case CONTRA_FLOR_AL_RESTO -> {
+                btnQuiero.setEnabled(true);
+                btnNoQuiero.setEnabled(true);
+            }
+        }
+
+
+    }
+
+    @Override
     public void println(String text) {
         // nada aca, es para la vista consola
     }
@@ -679,9 +781,8 @@ public class vistaGrafica implements IVistaJuego, Serializable {
 
     }
 
-    public void setBotonesEnvido(){
+    public void setBotonesEnvido() throws RemoteException {
         btnQuiero.setEnabled(false);
-        btnNoQuiero.setEnabled(false);
         removeBtnActionListener();
 
         IRALMAZOButton.setText("   VOLVER   ");
@@ -746,7 +847,22 @@ public class vistaGrafica implements IVistaJuego, Serializable {
                 }
             }
         });
-
+        if(controlador.tengoFlor() && controlador.seJuegaConFlor()){
+            btnNoQuiero.setEnabled(true);
+            btnNoQuiero.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    try {
+                        controlador.cantarFlor();
+                        btnNoQuiero.setEnabled(false);
+                        setBotones();
+                    } catch (RemoteException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                }
+            });
+        }
+        else btnNoQuiero.setEnabled(false);
 
     }
 

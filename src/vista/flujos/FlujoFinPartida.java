@@ -1,9 +1,7 @@
 package vista.flujos;
 
-import controlador.Controlador;
 import interfaces.IControlador;
-import vista.vistaConsola;
-import vista.vistaGrafica;
+import vista.VistaConsola;
 
 import java.io.Serializable;
 import java.rmi.RemoteException;
@@ -11,7 +9,7 @@ import java.rmi.RemoteException;
 public class FlujoFinPartida extends Flujo implements Serializable {
 
 
-    public FlujoFinPartida(vistaConsola vista, IControlador controlador) {
+    public FlujoFinPartida(VistaConsola vista, IControlador controlador) {
         super(vista, controlador);
     }
 

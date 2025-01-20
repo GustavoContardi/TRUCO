@@ -16,9 +16,27 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 
 public class ServidorTruco {
-    private int port;
+    //
+    // atributos
+    //
+
+    private     int         port;
+    private     int         puntosParaGanar;    // 15 o 30 puntos para ganar
+    private     boolean     flor;               // true = se juega con flor | false = se juega sin flor
+
+    //
+    // constructor 1
+    //
 
     public ServidorTruco() throws RemoteException {
+        ArrayList<String> opcionesFlor = new ArrayList<>();
+        opcionesFlor.add("CON FLOR");
+        opcionesFlor.add("SIN FLOR");
+
+        ArrayList<String> opcionesPuntos = new ArrayList<>();
+        opcionesPuntos.add("15 PUNTOS - PARTIDA RÁPIDA");
+        opcionesPuntos.add("30 PUNTOS - PARTIDA LARGA");
+
         ArrayList<String> ips = Util.getIpDisponibles();
         String ip = (String) JOptionPane.showInputDialog(
                 null,
@@ -62,7 +80,31 @@ public class ServidorTruco {
                 }
         }
 
-        Partida modelo = new Partida();
+        String puntos = (String) JOptionPane.showInputDialog(
+                null,
+                "Seleccione a cuantos puntos quiere jugar la partida", "Configuración de la Partida",
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                opcionesPuntos.toArray(),
+                null
+        );
+
+        String jardinera = (String) JOptionPane.showInputDialog(
+                null,
+                "Seleccione si quiere jugar la partida con o sin flor", "Configuración de la Partida",
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                opcionesFlor.toArray(),
+                null
+        );
+
+        if(jardinera.equals("CON FLOR")) flor = true;
+        else flor = false;
+
+        if(puntos.equals("15 PUNTOS - PARTIDA RÁPIDA")) puntosParaGanar = 15;
+        else puntosParaGanar = 30;
+
+        Partida modelo = new Partida(puntosParaGanar, flor);
         Servidor servidor = new Servidor(ip, port);
 
         try {
@@ -75,6 +117,10 @@ public class ServidorTruco {
             e.printStackTrace();
         }
     }
+
+    //
+    // constructor 2
+    //
 
     // si se ejecuta este es porque se va a reanudar una partida seleccionada
 
@@ -137,6 +183,11 @@ public class ServidorTruco {
             e.printStackTrace();
         }
     }
+
+
+    //
+    //  main
+    //
 
     public static void main(String[] args) throws RemoteException {
         //new ServidorTruco();

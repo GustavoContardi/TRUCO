@@ -8,15 +8,17 @@ public class Anotador implements Serializable {
     private     String   nombreJ2    ;
     private     int      puntosJ1    ;
     private     int      puntosJ2    ;
+    private     int      puntosParaGanar    ;
 
 
     // constructor
 
-    public Anotador(String j2, String j1) {
-        this.nombreJ2 =  j2  ;
-        this.nombreJ1 =  j1  ;
-        puntosJ1  =  0   ;
-        puntosJ2  =  0   ;
+    public Anotador(String j2, String j1, int puntosParaGanar) {
+        this.nombreJ2           =   j2;
+        this.nombreJ1           =   j1;
+        puntosJ1                =   0;
+        puntosJ2                =   0;
+        this.puntosParaGanar    =   puntosParaGanar;
     }
 
     // metodos publicos

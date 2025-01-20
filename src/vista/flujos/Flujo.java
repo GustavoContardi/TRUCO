@@ -1,18 +1,16 @@
 package vista.flujos;
 
-import controlador.Controlador;
 import interfaces.IControlador;
-import vista.vistaConsola;
-import vista.vistaGrafica;
+import vista.VistaConsola;
 
 import java.io.Serializable;
 import java.rmi.RemoteException;
 
 public abstract class Flujo implements Serializable {
-    protected final vistaConsola vista;
+    protected final VistaConsola vista;
     protected final IControlador controlador;
 
-    public Flujo(vistaConsola vista, IControlador controlador) {
+    public Flujo(VistaConsola vista, IControlador controlador) {
         this.vista = vista;
         this.controlador = controlador;
     }

@@ -1,6 +1,7 @@
 package interfaces;
 
 import ar.edu.unlu.rmimvc.observer.IObservableRemoto;
+import enums.EstadoFlor;
 import enums.EstadoTruco;
 import enums.EstadoEnvido;
 import modelo.Carta;
@@ -22,6 +23,7 @@ public interface IModelo extends IObservableRemoto {
     String puntosActuales() throws RemoteException;
     void cantarRabon(int id, EstadoTruco estado) throws RemoteException;
     void cantarEnvido(int id, EstadoEnvido estado) throws RemoteException;
+    void cantarFlor(int id, EstadoFlor estado) throws RemoteException;
     void meVoyAlMazo(int id) throws RemoteException;
     boolean esFinDePartida() throws RemoteException;
     void agregarJugador(Jugador jugador) throws RemoteException;
@@ -41,11 +43,13 @@ public interface IModelo extends IObservableRemoto {
     int getQuienCantoEnvidoDoble()throws RemoteException;
     int getQuienCantoRealEnvido()throws RemoteException;
     int getQuienCantoFaltaEnvido()throws RemoteException;
+    int getQuienCantoFlor()throws RemoteException;
     Carta ultimaCartaTiradaJ1()throws RemoteException;
     Carta ultimaCartaTiradaJ2()throws RemoteException;
     int getIdJ1()throws RemoteException;
     int getIdJ2()throws RemoteException;
     int getIdJugadorNoQuizoCanto()throws RemoteException;
+    int getIdJugadorQuiereCantar() throws RemoteException;
     String getUltimoMensaje()throws RemoteException;;
     ArrayList<Carta> getCartasJ1() throws RemoteException;
     ArrayList<Carta> getCartasJ2() throws RemoteException;
@@ -53,6 +57,8 @@ public interface IModelo extends IObservableRemoto {
     void tantoNoQuerido(int idjugNoQuizo) throws RemoteException; // jugador que no quizo
     void rabonQuerido(int idJugadorQuizo) throws RemoteException; //
     void rabonNoQuerido(int idjugNoQuizo) throws RemoteException; // jugador que no quizo
+    void florQuerida(int idjugQuizo) throws RemoteException; // jugador que quizo
+    void florNoQuerida(int idjugNoQuizo) throws RemoteException; // jugador que no quizo
     String getResultadoTanto() throws RemoteException;
     String getJugadorGanador() throws RemoteException;
     String getNombreRival(int idJugador) throws RemoteException; // le paso el jugador mio, necesito el contrario
@@ -66,4 +72,5 @@ public interface IModelo extends IObservableRemoto {
     boolean setPartidaRecuperada() throws RemoteException;
     void actualizarListaJugadores() throws RemoteException;
     ArrayList<Jugador> getJugadores() throws RemoteException;
+    boolean getSeJuegaConFlor() throws RemoteException;
 }

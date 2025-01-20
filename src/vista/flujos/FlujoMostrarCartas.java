@@ -1,18 +1,15 @@
 package vista.flujos;
 
-import controlador.Controlador;
 import enums.EstadoTruco;
 import interfaces.IControlador;
-import vista.vistaConsola;
-import vista.vistaGrafica;
+import vista.VistaConsola;
 
-import javax.swing.*;
 import java.io.Serializable;
 import java.rmi.RemoteException;
 
 public class FlujoMostrarCartas extends Flujo implements Serializable {
 
-    public FlujoMostrarCartas(vistaConsola vista, IControlador controlador) {
+    public FlujoMostrarCartas(VistaConsola vista, IControlador controlador) {
         super(vista, controlador);
     }
 

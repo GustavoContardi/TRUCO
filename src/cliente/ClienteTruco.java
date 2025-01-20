@@ -6,10 +6,10 @@ import interfaces.IVistaEleccion;
 import ar.edu.unlu.rmimvc.cliente.Cliente;
 import ar.edu.unlu.rmimvc.RMIMVCException;
 import interfaces.IVistaJuego;
-import vista.inicio;
-import vista.vistaConsola;
-import vista.vistaGrafica;
-import vista.vistaEleccion;
+import vista.VistaInicio;
+import vista.VistaConsola;
+import vista.VistaGrafica;
+import vista.VistaEleccion;
 
 import javax.swing.*;
 import java.io.IOException;
@@ -47,7 +47,7 @@ public class ClienteTruco {
 
         if (ip == null) {
             JOptionPane.showMessageDialog(null, "Operación cancelada.");
-            inicio ini = new inicio();
+            VistaInicio ini = new VistaInicio();
             ini.iniciar(); // inicia sin pantalla de carga asi da la sensacion que solo volvio para atrás
             return;
         }
@@ -67,7 +67,7 @@ public class ClienteTruco {
 
                 if (portStr == null) {
                     JOptionPane.showMessageDialog(null, "Operación cancelada.");
-                    inicio ini = new inicio();
+                    VistaInicio ini = new VistaInicio();
                     ini.iniciar(); // inicia sin pantalla de carga asi da la sensacion que solo volvio para atrás
                     return;
                 }
@@ -104,7 +104,7 @@ public class ClienteTruco {
 
         if (ipServidor == null) {
             JOptionPane.showMessageDialog(null, "Operación cancelada.");
-            inicio ini = new inicio();
+            VistaInicio ini = new VistaInicio();
             ini.iniciar(); // inicia sin pantalla de carga asi da la sensacion que solo volvio para atrás
             return;
         }
@@ -124,7 +124,7 @@ public class ClienteTruco {
 
                 if (portStr == null) {
                     JOptionPane.showMessageDialog(null, "Operación cancelada.");
-                    inicio ini = new inicio();
+                    VistaInicio ini = new VistaInicio();
                     ini.iniciar(); // inicia sin pantalla de carga asi da la sensacion que solo volvio para atrás
                     return;
                 }
@@ -161,22 +161,22 @@ public class ClienteTruco {
 
         if (interfaz == null) {
             JOptionPane.showMessageDialog(null, "Operación cancelada.");
-            inicio ini = new inicio();
+            VistaInicio ini = new VistaInicio();
             ini.iniciar(); // inicia sin pantalla de carga asi da la sensacion que solo volvio para atrás
             return;
         }
 
         IVistaJuego vista;
         Controlador controlador = new Controlador();
-        IVistaEleccion vistaEleccion = new vistaEleccion();
+        IVistaEleccion vistaEleccion = new VistaEleccion();
         controlador.setVistaEleccion(vistaEleccion);
         vistaEleccion.setControlador(controlador);
 
         if (interfaz.equals("Consola Gráfica")) {
-            vista = new vistaConsola();
+            vista = new VistaConsola();
             controlador.setVistaJuego(vista);
         } else {
-            vista = new vistaGrafica();
+            vista = new VistaGrafica();
             controlador.setVistaJuego(vista);
         }
 

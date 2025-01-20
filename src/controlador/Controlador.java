@@ -3,6 +3,7 @@ package controlador;
 import ar.edu.unlu.rmimvc.cliente.IControladorRemoto;
 import ar.edu.unlu.rmimvc.observer.IObservableRemoto;
 import enums.EstadoEnvido;
+import enums.EstadoFlor;
 import enums.EstadoTruco;
 import enums.Eventos;
 import interfaces.*;
@@ -10,17 +11,20 @@ import modelo.Carta;
 import modelo.Jugador;
 import modelo.Partida;
 import persistencia.*;
-import vista.inicio;
+import vista.VistaInicio;
 
 import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+
+import static enums.EstadoFlor.*;
 
 public class Controlador implements IControladorRemoto, IControlador, Serializable {
 
     //
     // Atributos
     //
+
     private   IModelo          modelo;
     private   IVistaJuego      vistaJuego;
     private   IVistaEleccion   vistaEleccion;
@@ -37,7 +41,7 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
 
 
     //
-    // Metodos
+    // Metodos publicos
     //
 
     @Override
@@ -323,7 +327,7 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
 
     @Override
     public void volverAlMenuPrincipal() throws RemoteException {
-        new inicio();
+        new VistaInicio();
     }
 
     @Override
@@ -402,6 +406,41 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
         } catch (RemoteException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public boolean tengoFlor() throws RemoteException {
+        return jugador.tengoFlor();
+    }
+
+    @Override
+    public void cantarFlor() throws RemoteException {
+        modelo.cantarFlor(jugador.getIDJugador(), FLOR);
+    }
+
+    @Override
+    public void cantarContraFlor() throws RemoteException {
+        modelo.cantarFlor(jugador.getIDJugador(), CONTRA_FLOR);
+    }
+
+    @Override
+    public void cantarContraFlorAlResto() throws RemoteException {
+        modelo.cantarFlor(jugador.getIDJugador(), CONTRA_FLOR_AL_RESTO);
+    }
+
+    @Override
+    public void noQuieroFlor(EstadoFlor estado) throws RemoteException {
+        modelo.florNoQuerida(jugador.getIDJugador());
+    }
+
+    @Override
+    public void florQuerida(EstadoFlor estado) throws RemoteException {
+        modelo.florQuerida(jugador.getIDJugador());
+    }
+
+    @Override
+    public boolean seJuegaConFlor() throws RemoteException {
+        return modelo.getSeJuegaConFlor();
     }
 
 
@@ -503,10 +542,10 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
                 vistaEleccion.actualizarListaJugadores(PersistenciaJugador.listaJugadoresGuardados(false));
             }
             case CANTO_QUERIDO -> {
-                if(modelo.getIdJugadorNoQuizoCanto() != jugador.getIDJugador()) vistaJuego.mostrarMensaje(PersistenciaCantos.mensajeCantoQuiero());       // le paso el origen entonce si coincide es porque le dije yo al contrincante
+                if(modelo.getIdJugadorQuiereCantar() != jugador.getIDJugador()) vistaJuego.mostrarMensaje(PersistenciaCantos.mensajeCantoQuiero());       //
             }                                                                                                                                           //
-            case CANTO_NO_QUERIDO -> {                                                                                                                  // le paso el destinatario entonce si coincide es porque me dijieron ami
-                    if(modelo.getIdJugadorNoQuizoCanto() == jugador.getIDJugador()) vistaJuego.mostrarMensaje(PersistenciaCantos.mensajeCantoNoQuiero());     //
+            case CANTO_NO_QUERIDO -> {                                                                                                                  // i
+                    if(modelo.getIdJugadorNoQuizoCanto() != jugador.getIDJugador()) vistaJuego.mostrarMensaje(PersistenciaCantos.mensajeCantoNoQuiero());     //
                 }
             case TANTO_QUERIDO -> {
                 System.out.println(modelo.getResultadoTanto());
@@ -517,6 +556,15 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
             }
             case RESTABLECIO_UN_JUGADOR -> {
                 vistaJuego.mostrarEsperaRival();
+            }
+            case CANTO_FLOR -> {
+                if(modelo.getQuienCantoFlor() != jugador.getIDJugador()) vistaJuego.mostrarMensaje(PersistenciaCantos.mensajeCantoFlor());
+            }
+            case CANTO_CONTRAFLOR -> {
+                if(modelo.getQuienCantoFlor() != jugador.getIDJugador()) vistaJuego.mostrarMensaje(PersistenciaCantos.mensajeCantoContraFlorResto());
+            }
+            case CANTO_CONTRAFLOR_ALRESTO -> {
+                if(modelo.getQuienCantoFlor() != jugador.getIDJugador()) vistaJuego.mostrarMensaje(PersistenciaCantos.mensajeCantoContraFlor());
             }
 
         }

@@ -12,6 +12,11 @@ import java.util.Collection;
 import java.util.Comparator;
 
 public class Jugador implements Comparable<Jugador>, Serializable{
+
+    //
+    // Atributos
+    //
+
     private  String                      nombre               ;
     private  int                         IDJugador            ;
     private  ArrayList<Carta>            cartasObtenidas      ;
@@ -51,7 +56,7 @@ public class Jugador implements Comparable<Jugador>, Serializable{
 
     // rettorna cuantos puntos tiene para el envido llamando el metodo de la instancia 'Envido' creada en el constructor
     public int puntosEnvido(){
-        return envido.calcularPuntosEnvido(this);
+        return envido.calcularPuntosEnvido(this.getCartasObtenidas());
     }
 
     public void recibirCartas(ArrayList<Carta> lista){
@@ -73,6 +78,13 @@ public class Jugador implements Comparable<Jugador>, Serializable{
         PersistenciaJugador.sumarPartidaGanadaJugador(IDJugador);
     }
 
+    public boolean tengoFlor(){
+        return envido.tieneFlor(cartasObtenidas);
+    }
+
+    public int puntosFlor(){
+        return envido.puntosFlor(cartasObtenidas);
+    }
 
     // muestra los atributos del jugador, mas que nada para el 'TOP MAS GANADORES' y para mostrarlo cuando lo eligen en una partida
     @Override

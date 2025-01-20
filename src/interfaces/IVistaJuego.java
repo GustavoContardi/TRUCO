@@ -1,6 +1,7 @@
 package interfaces;
 
 import enums.EstadoEnvido;
+import enums.EstadoFlor;
 import enums.EstadoTruco;
 
 import java.rmi.RemoteException;
@@ -14,6 +15,7 @@ public interface IVistaJuego {
     void finDeLaPartida(String nombreGanador) throws RemoteException;
     void cantaronRabon(String rabon, EstadoTruco estado) throws RemoteException;
     void cantaronTanto(String tanto, EstadoEnvido estado) throws RemoteException;
+    void cantaronFlor(String flor, EstadoFlor estado) throws RemoteException;
     void println(String text);
     void mostrarMenuPrincipal() throws RemoteException;
     void setControlador(IControlador controlador);

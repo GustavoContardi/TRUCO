@@ -1,9 +1,7 @@
 package vista.flujos;
 
-import controlador.Controlador;
 import interfaces.IControlador;
-import vista.vistaConsola;
-import vista.vistaGrafica;
+import vista.VistaConsola;
 
 import java.io.Serializable;
 import java.rmi.RemoteException;
@@ -12,7 +10,7 @@ import static enums.EstadoEnvido.*;
 
 public class FlujoEnvido extends Flujo implements Serializable {
 
-    public FlujoEnvido(vistaConsola vista, IControlador controlador) {
+    public FlujoEnvido(VistaConsola vista, IControlador controlador) {
         super(vista, controlador);
     }
 
