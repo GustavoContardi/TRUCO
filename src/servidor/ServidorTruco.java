@@ -68,7 +68,7 @@ public class ServidorTruco {
 
                 // Intentar abrir el puerto para verificar su disponibilidad
                 try (ServerSocket serverSocket = new ServerSocket(port)) {
-                    JOptionPane.showMessageDialog(null, "¡Servidor iniciado!");
+                    //JOptionPane.showMessageDialog(null, "¡Servidor iniciado!");
                     break;
                 }
                 } catch (BindException ex) {
@@ -109,6 +109,7 @@ public class ServidorTruco {
 
         try {
             servidor.iniciar(modelo);
+            JOptionPane.showMessageDialog(null, "¡Servidor iniciado!");
         } catch (RemoteException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

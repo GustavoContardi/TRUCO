@@ -56,7 +56,7 @@ public class VistaEleccion implements IVistaEleccion {
             @Override
             public void actionPerformed(ActionEvent e) {
                 //ventanaCrearJugador();
-                nombreJugador = JOptionPane.showInputDialog(frame, "Por favor, ingresa el nombre:", "TRUCONTARDI - CREAR JUGADOR", JOptionPane.QUESTION_MESSAGE);
+                nombreJugador = JOptionPane.showInputDialog(frame, "Por favor, ingresa el nombre:", "CREAR JUGADOR", JOptionPane.QUESTION_MESSAGE);
                 if(!(nombreJugador.trim().isEmpty())){
                     try {
                         controlador.agregarJugador(nombreJugador);
@@ -140,7 +140,7 @@ public class VistaEleccion implements IVistaEleccion {
     @Override
     public void actualizarListaJugadores(ArrayList<Jugador> lista) {
 
-        if(lista.isEmpty()) listModel.addElement("¡No hay Jugadores creados aún!");
+        if(lista == null || lista.isEmpty()) listModel.addElement("¡No hay Jugadores creados aún!");
 
         else{
 
@@ -270,9 +270,10 @@ public class VistaEleccion implements IVistaEleccion {
     }
 
     private void ventanaActualizarJugador(){
-        JFrame frame2 = new JFrame("TRUCONTARDI - ACTUALIZAR JUGADOR");
-        frame2.setSize(425, 300);
+        JFrame frame2 = new JFrame("ACTUALIZAR JUGADOR");
+        frame2.setSize(445, 300);
         frame2.setLayout(new BorderLayout());
+        frame2.setResizable(false);
         JComboBox<Jugador> comboBox = new JComboBox<>();
 
         ArrayList<Jugador> lista = controlador.listaJugadoresMasGanadores();
@@ -315,9 +316,10 @@ public class VistaEleccion implements IVistaEleccion {
 
 
     private void ventanaEliminarJugador() {
-        JFrame frame2 = new JFrame("TRUCONTARDI - ELIMINAR JUGADOR");
-        frame2.setSize(425, 300);
+        JFrame frame2 = new JFrame("ELIMINAR JUGADOR");
+        frame2.setSize(445, 300);
         frame2.setLayout(new BorderLayout());
+        frame2.setResizable(false);
         JComboBox<Jugador> comboBox = new JComboBox<>();
 
         // Agregar jugadores al comboBox

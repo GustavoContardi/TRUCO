@@ -63,6 +63,23 @@ public class Mazo implements Serializable {
         }
     }
 
+    // este metodo es pura y exclusivamente para hacer los TEST de la flor in game
+    public void repartirFlor(Jugador j1, Jugador j2){
+        ArrayList<Carta> lista1 = new ArrayList<>();
+        ArrayList<Carta> lista2 = new ArrayList<>();
+
+        lista1.add(mazoCartas.get(0));
+        lista1.add(mazoCartas.get(1));
+        lista1.add(mazoCartas.get(2));
+
+        lista2.add(mazoCartas.get(11));
+        lista2.add(mazoCartas.get(12));
+        lista2.add(mazoCartas.get(14));
+
+        j1.recibirCartas(lista1);
+        j2.recibirCartas(lista2);
+    }
+
     //
     // metodos privados
     //

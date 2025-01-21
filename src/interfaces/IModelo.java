@@ -59,6 +59,7 @@ public interface IModelo extends IObservableRemoto {
     void rabonNoQuerido(int idjugNoQuizo) throws RemoteException; // jugador que no quizo
     void florQuerida(int idjugQuizo) throws RemoteException; // jugador que quizo
     void florNoQuerida(int idjugNoQuizo) throws RemoteException; // jugador que no quizo
+    boolean tieneFlor(int idJug) throws RemoteException;
     String getResultadoTanto() throws RemoteException;
     String getJugadorGanador() throws RemoteException;
     String getNombreRival(int idJugador) throws RemoteException; // le paso el jugador mio, necesito el contrario

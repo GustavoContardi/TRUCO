@@ -87,10 +87,6 @@ public class VistaGrafica implements IVistaJuego, Serializable {
 
     @Override
     public void mostrarCartas() throws RemoteException {
-        String basePath = "fotocartas/";
-        int ronda = controlador.nroDeRonda();
-        String carta1="", carta2="", carta3="";
-
         btnCarta1.removeAll();
         btnCarta2.removeAll();
         btnCarta3.removeAll();
@@ -102,18 +98,6 @@ public class VistaGrafica implements IVistaJuego, Serializable {
         ArrayList<String> cartas = controlador.obtenerTodasLasCartas();
 
         if (cartas != null) {
-            if(cartas.get(0) != null) carta1 = cartas.get(0).replace(" ", "").toLowerCase();
-            if(cartas.get(1) != null) carta2 = cartas.get(1).replace(" ", "").toLowerCase();
-            if(cartas.get(2) != null) carta3 = cartas.get(2).replace(" ", "").toLowerCase();
-
-            String imagen1 = basePath + carta1 + ".jpeg";
-            String imagen2 = basePath + carta2 + ".jpeg";
-            String imagen3 = basePath + carta3 + ".jpeg";
-
-            setButtonImage(btnCarta1, imagen1, 200, 220);
-            setButtonImage(btnCarta2, imagen2, 200, 220);
-            setButtonImage(btnCarta3, imagen3, 200, 220);
-
             actualizar();
         }
         else {
@@ -139,31 +123,7 @@ public class VistaGrafica implements IVistaJuego, Serializable {
     @Override
     public void finDeMano() throws RemoteException {
         panelAvisos("Fin de la mano");
-
-        CartasOP1.removeAll();
-        CartasOP1.revalidate();
-        CartasOP1.repaint();
-        CartasOP2.removeAll();
-        CartasOP2.revalidate();
-        CartasOP2.repaint();
-        CartasOP3.removeAll();
-        CartasOP3.revalidate();
-        CartasOP3.repaint();
-
-        CartasYo1.removeAll();
-        CartasYo1.revalidate();
-        CartasYo1.repaint();
-        CartasYo2.removeAll();
-        CartasYo2.revalidate();
-        CartasYo2.repaint();
-        CartasYo3.removeAll();
-        CartasYo3.revalidate();
-        CartasYo3.repaint();
-
-        btnCarta1.setIcon(null);
-        btnCarta2.setIcon(null);
-        btnCarta3.setIcon(null);
-
+        removerCartas();
         eliminarTodosAL();
 
         btnCarta1.setEnabled(true);
@@ -177,30 +137,7 @@ public class VistaGrafica implements IVistaJuego, Serializable {
 
         removeBtnActionListener();
         eliminarTodosAL();
-
-        CartasOP1.removeAll();
-        CartasOP1.revalidate();
-        CartasOP1.repaint();
-        CartasOP2.removeAll();
-        CartasOP2.revalidate();
-        CartasOP2.repaint();
-        CartasOP3.removeAll();
-        CartasOP3.revalidate();
-        CartasOP3.repaint();
-
-        CartasYo1.removeAll();
-        CartasYo1.revalidate();
-        CartasYo1.repaint();
-        CartasYo2.removeAll();
-        CartasYo2.revalidate();
-        CartasYo2.repaint();
-        CartasYo3.removeAll();
-        CartasYo3.revalidate();
-        CartasYo3.repaint();
-
-        btnCarta1.setIcon(null);
-        btnCarta2.setIcon(null);
-        btnCarta3.setIcon(null);
+        removerCartas();
 
         accionesJ2.setText("Presione cualquier boton para volver al menu..");
         btnEnvido.setEnabled(true);
@@ -520,7 +457,7 @@ public class VistaGrafica implements IVistaJuego, Serializable {
         switch (estado){
             case FLOR -> {
                 if(controlador.tengoFlor()){
-                    btnEnvido.setText("CONTRA FLOR");
+                    btnEnvido.setText(" CONTRA FLOR ");
                     btnEnvido.addActionListener( e -> {
                         try {
                             setBotones();
@@ -600,7 +537,7 @@ public class VistaGrafica implements IVistaJuego, Serializable {
         removeAllActionListeners(btnCarta3);
         String imagen1 = "", imagen2 = "", imagen3 = "";
 
-        ArrayList<String> cartas = controlador.obtenerCartas();
+        ArrayList<String> cartas = controlador.obtenerTodasLasCartas();
 
         if (cartas != null && !cartas.isEmpty()) {
             String carta1 = cartas.get(0).replace(" ", "").toLowerCase();
@@ -611,6 +548,9 @@ public class VistaGrafica implements IVistaJuego, Serializable {
             imagen2 = basePath + carta2 + ".jpeg";
             imagen3 = basePath + carta3 + ".jpeg";
 
+            setButtonImage(btnCarta1, imagen1, 200, 220);
+            setButtonImage(btnCarta2, imagen2, 200, 220);
+            setButtonImage(btnCarta3, imagen3, 200, 220);
         }
 
         setBotonesCartas(imagen1, imagen2, imagen3);
@@ -696,88 +636,90 @@ public class VistaGrafica implements IVistaJuego, Serializable {
         if(controlador.seCantoEnvido() || controlador.nroDeRonda() > 1) btnEnvido.setEnabled(false);
         else btnEnvido.setEnabled(true);
 
-        btnEnvido.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    if(!controlador.seCantoEnvido()) setBotonesEnvido();
-                } catch (RemoteException ex) {
-                    ex.printStackTrace();
-                }
-            }
-        });
+        if(controlador.esMiTurno()) {
 
-        TRUCOButton.setEnabled(true);
-        switch (controlador.estadoDelRabon()){
-            case NADA -> {
-                TRUCOButton.setEnabled(true);
-                TRUCOButton.setText("  TRUCO  ");
-            }
-            case TRUCO -> {
-                TRUCOButton.setEnabled(true);
-                TRUCOButton.setText(" RE TRUCO  ");
-            }                                               // activo todos los botones
-            case RE_TRUCO -> {
-                TRUCOButton.setEnabled(true);
-                TRUCOButton.setText(" VALE CUATRO ");
-            }
-            case VALE_CUATRO -> {
-                TRUCOButton.setText(" -- ");
-                TRUCOButton.setEnabled(false);
-            }
-        }
-        TRUCOButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    switch (controlador.estadoDelRabon()){
-                        case NADA -> {
-                            if(controlador.esMiTurno() && controlador.puedoCantarTruco(TRUCO)){
-                                TRUCOButton.setText("  RE TRUCO  ");
-                                TRUCOButton.setEnabled(false);
-                                controlador.cantarRabon(TRUCO);
-                                setBotones();
-                            }
-                        }
-                        case TRUCO -> {
-                            if(controlador.esMiTurno() && controlador.puedoCantarTruco(RE_TRUCO)){
-
-                                TRUCOButton.setText("  VALE CUATRO  ");
-                                TRUCOButton.setEnabled(false);
-                                controlador.cantarRabon(RE_TRUCO);
-                                setBotones();
-                            }
-                        }
-                        case RE_TRUCO -> {
-                            if(controlador.esMiTurno() && controlador.puedoCantarTruco(RE_TRUCO)){
-
-                                TRUCOButton.setText("  ---  ");
-                                TRUCOButton.setEnabled(false);
-                                controlador.cantarRabon(VALE_CUATRO);
-                                setBotones();
-                            }
-                        }
+            btnEnvido.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    try {
+                        if (!controlador.seCantoEnvido()) setBotonesEnvido();
+                    } catch (RemoteException ex) {
+                        ex.printStackTrace();
                     }
-                } catch (RemoteException ex) {
-                    ex.printStackTrace();
-                };
-            }
-        });
+                }
+            });
 
-        IRALMAZOButton.setText(" IR AL MAZO ");
-        IRALMAZOButton.setEnabled(true);
-        IRALMAZOButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    controlador.meVoyAlMazo();
-                } catch (RemoteException ex) {
-                    ex.printStackTrace();
+            TRUCOButton.setEnabled(true);
+            switch (controlador.estadoDelRabon()) {
+                case NADA -> {
+                    TRUCOButton.setEnabled(true);
+                    TRUCOButton.setText("  TRUCO  ");
+                }
+                case TRUCO -> {
+                    TRUCOButton.setEnabled(true);
+                    TRUCOButton.setText(" RE TRUCO  ");
+                }                                               // activo todos los botones
+                case RE_TRUCO -> {
+                    TRUCOButton.setEnabled(true);
+                    TRUCOButton.setText(" VALE CUATRO ");
+                }
+                case VALE_CUATRO -> {
+                    TRUCOButton.setText(" -- ");
+                    TRUCOButton.setEnabled(false);
                 }
             }
-        });
+            TRUCOButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    try {
+                        switch (controlador.estadoDelRabon()) {
+                            case NADA -> {
+                                if (controlador.esMiTurno() && controlador.puedoCantarTruco(TRUCO)) {
+                                    TRUCOButton.setText("  RE TRUCO  ");
+                                    TRUCOButton.setEnabled(false);
+                                    controlador.cantarRabon(TRUCO);
+                                    setBotones();
+                                }
+                            }
+                            case TRUCO -> {
+                                if (controlador.esMiTurno() && controlador.puedoCantarTruco(RE_TRUCO)) {
 
-        // terminar para los demas botones
+                                    TRUCOButton.setText("  VALE CUATRO  ");
+                                    TRUCOButton.setEnabled(false);
+                                    controlador.cantarRabon(RE_TRUCO);
+                                    setBotones();
+                                }
+                            }
+                            case RE_TRUCO -> {
+                                if (controlador.esMiTurno() && controlador.puedoCantarTruco(RE_TRUCO)) {
+
+                                    TRUCOButton.setText("  ---  ");
+                                    TRUCOButton.setEnabled(false);
+                                    controlador.cantarRabon(VALE_CUATRO);
+                                    setBotones();
+                                }
+                            }
+                        }
+                    } catch (RemoteException ex) {
+                        ex.printStackTrace();
+                    }
+                    ;
+                }
+            });
+
+            IRALMAZOButton.setText(" IR AL MAZO ");
+            IRALMAZOButton.setEnabled(true);
+            IRALMAZOButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    try {
+                        controlador.meVoyAlMazo();
+                    } catch (RemoteException ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            });
+        }
 
     }
 
@@ -849,6 +791,7 @@ public class VistaGrafica implements IVistaJuego, Serializable {
         });
         if(controlador.tengoFlor() && controlador.seJuegaConFlor()){
             btnNoQuiero.setEnabled(true);
+            btnNoQuiero.setText("    FLOR    ");
             btnNoQuiero.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
@@ -1077,6 +1020,32 @@ public class VistaGrafica implements IVistaJuego, Serializable {
 
         setBotones();
 
+    }
+
+    private void removerCartas(){
+        CartasOP1.removeAll();
+        CartasOP1.revalidate();
+        CartasOP1.repaint();
+        CartasOP2.removeAll();
+        CartasOP2.revalidate();
+        CartasOP2.repaint();
+        CartasOP3.removeAll();
+        CartasOP3.revalidate();
+        CartasOP3.repaint();
+
+        CartasYo1.removeAll();
+        CartasYo1.revalidate();
+        CartasYo1.repaint();
+        CartasYo2.removeAll();
+        CartasYo2.revalidate();
+        CartasYo2.repaint();
+        CartasYo3.removeAll();
+        CartasYo3.revalidate();
+        CartasYo3.repaint();
+
+        btnCarta1.setIcon(null);
+        btnCarta2.setIcon(null);
+        btnCarta3.setIcon(null);
     }
 
     private void eliminarTodosAL(){

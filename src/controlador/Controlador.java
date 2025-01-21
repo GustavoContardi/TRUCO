@@ -87,6 +87,8 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
         if (jugador.getIDJugador() == modelo.getIdJ1()) cartasJugador = modelo.getCartasJ1();
         else cartasJugador = modelo.getCartasJ2();
 
+        if(cartasJugador == null) return null;
+
         for(Carta c : cartasJugador){
             cartasStr.add(c.fotoCarta());
         }
@@ -410,7 +412,7 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
 
     @Override
     public boolean tengoFlor() throws RemoteException {
-        return jugador.tengoFlor();
+        return modelo.tieneFlor(jugador.getIDJugador());
     }
 
     @Override
@@ -558,13 +560,13 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
                 vistaJuego.mostrarEsperaRival();
             }
             case CANTO_FLOR -> {
-                if(modelo.getQuienCantoFlor() != jugador.getIDJugador()) vistaJuego.mostrarMensaje(PersistenciaCantos.mensajeCantoFlor());
+                if(modelo.getQuienCantoFlor() != jugador.getIDJugador()) vistaJuego.cantaronFlor(PersistenciaCantos.mensajeCantoFlor(), FLOR);
             }
             case CANTO_CONTRAFLOR -> {
-                if(modelo.getQuienCantoFlor() != jugador.getIDJugador()) vistaJuego.mostrarMensaje(PersistenciaCantos.mensajeCantoContraFlorResto());
+                if(modelo.getQuienCantoFlor() != jugador.getIDJugador()) vistaJuego.cantaronFlor(PersistenciaCantos.mensajeCantoContraFlor(), CONTRA_FLOR);
             }
             case CANTO_CONTRAFLOR_ALRESTO -> {
-                if(modelo.getQuienCantoFlor() != jugador.getIDJugador()) vistaJuego.mostrarMensaje(PersistenciaCantos.mensajeCantoContraFlor());
+                if(modelo.getQuienCantoFlor() != jugador.getIDJugador()) vistaJuego.cantaronFlor(PersistenciaCantos.mensajeCantoContraFlorResto(), CONTRA_FLOR_AL_RESTO);
             }
 
         }

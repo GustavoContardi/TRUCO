@@ -1,3 +1,5 @@
+import modelo.Mazo;
+import org.w3c.dom.ls.LSOutput;
 import persistencia.PersistenciaJugador;
 import vista.VistaInicio;
 
@@ -9,7 +11,6 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 
 public class Main {
-
     public static void main(String[] args) throws RemoteException {
 /*
         ArrayList<ArrayList<String>> listas = new ArrayList<>();
@@ -133,9 +134,14 @@ public class Main {
         System.out.println(jugador.getNombre() + " puntos de envido: " + jugador.puntosEnvido());
         System.out.println(jugador2.getCartasObtenidas().get(0).toString()+ " " + jugador2.getCartasObtenidas().get(1).toString()+ " " +jugador2.getCartasObtenidas().get(2).toString());
         System.out.println(jugador2.getNombre() + " puntos de envido: " + jugador2.puntosEnvido());*/
-    }
 
-        //PersistenciaJugador.delvolverTodosJugadores();
+        PersistenciaJugador.delvolverTodosJugadores();
+        VistaInicio inicio = new VistaInicio();
+        VistaInicio inicio2 = new VistaInicio();
+        inicio.iniciar();
+        inicio2.iniciar();
+
+    }
 
 
 }

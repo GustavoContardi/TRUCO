@@ -148,20 +148,20 @@ public class VistaConsola implements IVistaJuego, IVistaInicio, Serializable {
     @Override
     public void cantaronRabon(String rabon, EstadoTruco estado) throws RemoteException {
         println(controlador.getNombreRival() + ": " + rabon);
-        flujoActual = new FlujoEleccionTruco(this, controlador, estado);
-        flujoActual.mostrarSiguienteTexto();
+        setFlujoActual(new FlujoEleccionTruco(this, controlador, estado));
     }
 
     @Override
     public void cantaronTanto(String tanto, EstadoEnvido estado) throws RemoteException {
         println(controlador.getNombreRival() + ": " + tanto);
-        flujoActual = new FlujoEleccionEnvido(this, controlador, estado);
-        flujoActual.mostrarSiguienteTexto();
+        setFlujoActual(new FlujoEleccionEnvido(this, controlador, estado));
     }
 
     @Override
     public void cantaronFlor(String flor, EstadoFlor estado) throws RemoteException {
-
+        println(controlador.getNombreRival() + ": " + flor);
+        if(controlador.tengoFlor()) setFlujoActual(new FlujoFlor(this, controlador, estado));
+        else setFlujoActual(new FlujoMostrarCartas(this, controlador)); // si no tengo flor no tiene sentido que pueda hacer otra cosa, sigue la partida
     }
 
     @Override

@@ -140,7 +140,8 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
                 j1.devolverCartas();
                 j2.devolverCartas();
 
-                mazo.repartirCartas(j1, j2);
+                //mazo.repartirCartas(j1, j2);
+                mazo.repartirFlor(j1, j2);
                 replicarCartasJugadores();
             }
             else finDePartida();
@@ -568,6 +569,12 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
         }
         notificarCantoNoQuerido(idjugNoQuizo);
         notificarPuntos();
+    }
+
+    @Override
+    public boolean tieneFlor(int idJug) throws RemoteException {
+        if(j1.getIDJugador() == idJug) return j1.tengoFlor();
+        else return j2.tengoFlor();
     }
 
 
@@ -1005,6 +1012,7 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
     }
 
     private void replicarCartasJugadores(){
+        if(j1.getCartasObtenidas() == null || j2.getCartasObtenidas() == null) return;
         cartasJ1.add(j1.getCartasObtenidas().get(0));
         cartasJ1.add(j1.getCartasObtenidas().get(1));
         cartasJ1.add(j1.getCartasObtenidas().get(2));

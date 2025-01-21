@@ -52,7 +52,7 @@ public class Envido implements Serializable {
 
     // si tiene flor ===> si la 1 = 2 & 1 = 3 => entonces => 1 = 2 = 3
     public boolean tieneFlor(ArrayList<Carta> cartas){
-        return ( ( cartas.get(0).getPaloCarta() == cartas.get(1).getPaloCarta() ) && ( cartas.get(0).getPaloCarta() == cartas.get(2).getPaloCarta() ) );
+        return ( ( cartas.get(0).getPaloCarta().equals(cartas.get(1).getPaloCarta()) ) && ( cartas.get(0).getPaloCarta().equals(cartas.get(2).getPaloCarta()) ) );
     }
 
     // retorna cuantos puntos tiene en caso de contra flor

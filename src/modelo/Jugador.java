@@ -29,11 +29,13 @@ public class Jugador implements Comparable<Jugador>, Serializable{
     //
 
     public Jugador(String nombre) {
-        this.nombre = nombre;
-        partidasGanadas = 0;
-        electo = false;
-        envido = new Envido();
-        IDJugador = generarID();
+        this.nombre         = nombre;
+        partidasGanadas     = 0;
+        electo              = false;
+        envido              = new Envido();
+        IDJugador           = generarID();
+        cartasObtenidas     = new ArrayList<>();
+
         PersistenciaJugador.guardarJugador(this);
     }
 
