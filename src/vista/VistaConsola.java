@@ -35,7 +35,7 @@ public class VistaConsola implements IVistaJuego, IVistaInicio, Serializable {
     //
 
     public VistaConsola() throws RemoteException {
-        this.frame = new JFrame("APP TRUCO - MODO CONSOLA");
+        this.frame = new JFrame("TRUCO - MODO CONSOLA");
         frame.setContentPane(ventana);
         frame.pack();
         frame.setResizable(false);
@@ -210,9 +210,10 @@ public class VistaConsola implements IVistaJuego, IVistaInicio, Serializable {
 
     @Override
     public void mostrarAviso(String aviso) {
-        println("---------------------------------------------------------------------------");
-        println(aviso);
-        println("---------------------------------------------------------------------------");
+        int caracteres = aviso.length() + 2;
+        println("-".repeat(caracteres));
+        println(" " + aviso);
+        println("-".repeat(caracteres));
     }
 
     @Override
@@ -240,7 +241,10 @@ public class VistaConsola implements IVistaJuego, IVistaInicio, Serializable {
         // muestra los botones disponibles actuales
 
         if( (controlador.nroDeRonda() == 1)){
-            if(!controlador.seCantoEnvido()) println("1- Envido | 2- Truco | 3- Tirar Carta | 4- Ir al mazo");
+            if(!controlador.seCantoEnvido()) {
+                if(controlador.seJuegaConFlor() && controlador.tengoFlor()) println("1- Envido | 2- Truco | 3- Tirar Carta | 4- Ir al mazo | 5- Flor");
+                else println("1- Envido | 2- Truco | 3- Tirar Carta | 4- Ir al mazo");
+            }
             else println("2- Truco | 3- Tirar Carta | 4- Ir al mazo");
         }
         else{
@@ -276,8 +280,8 @@ public class VistaConsola implements IVistaJuego, IVistaInicio, Serializable {
                     println("| " + cartasYo.get(0) + " | " + cartasRival.get(0) + " | ");
 
                     if(cartasYo.size() <= 1 && cartasRival.size() <= 1) println("|                   |                   |");
-                    else if(cartasYo.size() > 1 && cartasRival.size() <= 1) println("| " + cartasYo.get(1) + " |               ");
-                    else if(cartasYo.size() < 1 && cartasRival.size() > 1) println("|               " + " | " + cartasRival.get(1));
+                    else if(cartasYo.size() > 1 && cartasRival.size() <= 1) println("| " + cartasYo.get(1) + " |                   |");
+                    else if(cartasYo.size() < 2 && cartasRival.size() > 1) println("|               " + " | " + cartasRival.get(1) + " |");
                     else  println("| " + cartasYo.get(1) + " | " + cartasRival.get(1) + " | ");
                 }
                 case 3 -> {
@@ -285,8 +289,8 @@ public class VistaConsola implements IVistaJuego, IVistaInicio, Serializable {
                     println("| " + cartasYo.get(1) + " | " + cartasRival.get(1) + " | ");
 
                     if(cartasYo.size() < 2 && cartasRival.size() < 2) println("|                   |                   |");
-                    else if(cartasYo.size() > 2 && cartasRival.size() < 2) println("| " + cartasYo.get(2) + " |               ");
-                    else if(cartasYo.size() < 2 && cartasRival.size() > 2) println("|               " + " | " + cartasRival.get(2));
+                    else if(cartasYo.size() > 2 && cartasRival.size() < 3) println("| " + cartasYo.get(2) + " |                   |");
+                    else if(cartasYo.size() < 3 && cartasRival.size() > 2) println("|               " + " | " + cartasRival.get(2)+ " |");
                     else  println("| " + cartasYo.get(2) + " | " + cartasRival.get(2) + " | ");
                 }
             }

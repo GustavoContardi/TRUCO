@@ -102,8 +102,10 @@ public class VistaInicio extends JFrame {
         frame2.setContentPane(ventana);
         ventana.add(scroll, BorderLayout.CENTER); // Agregar el JScrollPane al centro del BorderLayout
 
+        int indice = 1;
         for (Jugador j : PersistenciaJugador.listaJugadoresGuardados(true)) {
-            if(j != null) listModel.addElement(j.toString());
+            if(j != null) listModel.addElement(indice + "- " + j.toString());
+            indice++;
         }
 
         frame2.setVisible(true);
@@ -111,8 +113,8 @@ public class VistaInicio extends JFrame {
 
     private void pantallaJugar(boolean reanuda){
         // Crear el marco de la ventana
-        JFrame frame = new JFrame("APP TRUCO - REANUDAR PARTIDA");
-        frame.setSize(450, 170);
+        JFrame frame = new JFrame();
+        frame.setSize(400, 175);
         frame.setResizable(false);
         frame.setLocationRelativeTo(null); // Centrar la ventana
 
@@ -136,7 +138,7 @@ public class VistaInicio extends JFrame {
         JButton btnIngresarServer = new JButton();
 
         if(reanuda){
-
+            frame.setTitle("REANUDAR PARTIDA");
             btnCrearServer.setText("CREAR UN SERVIDOR");
             btnIngresarServer.setText("INGRESAR A UN SERVIDOR");
             // le seteo los action listener antes de añadirlos al panel
@@ -182,6 +184,7 @@ public class VistaInicio extends JFrame {
 
         }
         else {
+            frame.setTitle("INICIAR PARTIDA");
             btnCrearServer.setText("CREAR UN JUEGO");
             btnIngresarServer.setText("INGRESAR A UN JUEGO");
             btnCrearServer.addActionListener(e -> {

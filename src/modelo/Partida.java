@@ -103,7 +103,7 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
             notificarPuntos();
         }
 
-        PersistenciaPartida.guardarPartida(this);
+        //PersistenciaPartida.guardarPartida(this);
         actualizarPuntos();
 
         if (finMano){
@@ -146,6 +146,7 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
             }
             else finDePartida();
         }
+        PersistenciaJugador.delvolverTodosJugadores(); // devuelvo por si quieren jugar otra partida, ya quedan guardados porque se guarda la partida.
         notificarNuevaRonda();
     }
 
@@ -238,6 +239,8 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
                     } else {
                         // tambien es parda
                         parda = true;
+                        nroRondasGanadasJ1 += 1;
+                        nroRondasGanadasJ2 += 1;
                     }
                     numeroRonda += 1;
 
@@ -280,7 +283,7 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
         if(nroRondasGanadasJ1 >= 2  && nroRondasGanadasJ1 > nroRondasGanadasJ2) finMano = true;
         else if (nroRondasGanadasJ2 >= 2  && nroRondasGanadasJ1 < nroRondasGanadasJ2) finMano = true;
 
-        PersistenciaPartida.guardarPartida(this);
+        //PersistenciaPartida.guardarPartida(this);
 
         if(finMano){
             finDeLaRonda();
@@ -742,12 +745,10 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
 
     @Override
     public ArrayList<Carta> getCartasJ1() throws RemoteException{
-        if(cartasJ1 == null) System.out.println("efectivamente son null j1");
         return cartasJ1;
     }
     @Override
     public ArrayList<Carta> getCartasJ2() throws RemoteException{
-        if(cartasJ2 == null) System.out.println("efectivamente son null j2");
         return cartasJ2;
     }
 

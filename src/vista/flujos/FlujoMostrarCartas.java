@@ -41,6 +41,9 @@ public class FlujoMostrarCartas extends Flujo implements Serializable {
                     return new FlujoTirarCarta(vista, controlador);
                 }
                 case "4" -> controlador.meVoyAlMazo();
+                case "5" -> {
+                    if(controlador.tengoFlor()) controlador.cantarFlor();
+                }
             }
         }
         return new FlujoMostrarCartas(vista, controlador);

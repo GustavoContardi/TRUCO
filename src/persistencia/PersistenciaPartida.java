@@ -53,7 +53,7 @@ public class PersistenciaPartida implements Serializable{
 
         listaPartidas.removeIf(p -> {
             try {
-                return p.getIdPartida() == partida.getIdPartida();
+                return p.getIdPartida() == idPartida;
             } catch (RemoteException e) {                               // elimina la partida
                 throw new RuntimeException(e);
             }

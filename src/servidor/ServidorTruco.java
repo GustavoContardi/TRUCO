@@ -176,6 +176,7 @@ public class ServidorTruco {
 
         try {
             servidor.iniciar(modelo);
+            JOptionPane.showMessageDialog(null, "Puerto " + port + " está disponible. ¡Servidor iniciado!");
         } catch (RemoteException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

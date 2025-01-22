@@ -366,6 +366,28 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
     }
 
     @Override
+    public boolean verificarCartaTirada(int nroCarta) throws RemoteException {
+        ArrayList<Carta> cartasTiradas = new ArrayList<>();
+        ArrayList<Carta> cartasJugador = new ArrayList<>();
+
+        if(jugador.getIDJugador() == modelo.getIdJ1()) {
+            cartasTiradas = modelo.getCartasTiradasJ1();    // si es igual es porque es mi jugador
+            cartasJugador = modelo.getCartasJ1();
+        }
+        else {
+            cartasTiradas = modelo.getCartasTiradasJ2();
+            cartasJugador = modelo.getCartasJ2();
+        }
+
+        for(Carta c : cartasTiradas){
+            // verifico que la carta que quiere tirar el jugador no esté en las cartas que ya tiro, solamente para la vista consola esto
+            if(c.getIdCarta() == cartasJugador.get(nroCarta-1).getIdCarta()) return false;
+        }
+
+        return true;
+    }
+
+    @Override
     public ArrayList<Partida> getListaPartidasPendientes() throws RemoteException {
         return null;
     }

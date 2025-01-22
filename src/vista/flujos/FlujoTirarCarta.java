@@ -5,6 +5,7 @@ import vista.VistaConsola;
 
 import java.io.Serializable;
 import java.rmi.RemoteException;
+import java.sql.SQLOutput;
 
 public class FlujoTirarCarta extends  Flujo implements Serializable {
 
@@ -18,21 +19,25 @@ public class FlujoTirarCarta extends  Flujo implements Serializable {
         try{
             nroCarta = Integer.parseInt(string);
         }catch (NumberFormatException e) {
-            vista.println("Ingrese un número válido.\n");
+            vista.mostrarAviso("¡Ingrese un número válido! ");
             return this;
         }
 
-        if(nroCarta > controlador.obtenerCartas().size() || 1 > nroCarta) {
-            vista.println("Ingrese un número dentro del rango.\n");
+        if( (nroCarta > controlador.obtenerCartas().size() || 1 > nroCarta)) {
+            vista.mostrarAviso("Ingrese un número dentro del rango. ");
+            return this;
+        }
+        if(!controlador.verificarCartaTirada(nroCarta)){
+            vista.mostrarAviso("Ingrese un numero dentro del rango. ");
             return this;
         }
         else controlador.tirarCarta(nroCarta);
-
         return new FlujoMostrarCartas(vista, controlador);
     }
 
     @Override
     public void mostrarSiguienteTexto() throws RemoteException {
-        vista.println("\nIngrese la carta a tirar: ");
+        vista.mostrarCartasDisponibles();
+        vista.println("\n\nIngrese la carta a tirar: ");
     }
 }

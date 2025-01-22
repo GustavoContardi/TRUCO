@@ -47,6 +47,7 @@ public interface IControlador {
     String getNombreRival()throws RemoteException;
     ArrayList<String> getCartasTiradasYo() throws RemoteException;
     ArrayList<String> getCartasTiradasRival() throws RemoteException;
+    boolean verificarCartaTirada(int nroCarta) throws RemoteException;
     ArrayList<Partida> getListaPartidasPendientes() throws RemoteException;
     ArrayList<Jugador> getJugadoresRecuperados() throws RemoteException;
     void restablecerPartida() throws RemoteException;
