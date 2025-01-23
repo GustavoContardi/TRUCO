@@ -47,6 +47,7 @@ public class ServidorTruco {
                 null
         );
         while (true) {
+            if(ip == null) return;
             try {
                 String portStr = (String) JOptionPane.showInputDialog(
                         null,
@@ -149,7 +150,7 @@ public class ServidorTruco {
                 );
 
                 // Validar si el usuario presionó cancelar o cerró el diálogo
-                if (portStr == null) {
+                if (portStr == null || ip == null) {
                     JOptionPane.showMessageDialog(null, "Operación cancelada.");
                     break;
                 }
@@ -171,7 +172,6 @@ public class ServidorTruco {
             }
         }
 
-        if(ip == null) return;
         Servidor servidor = new Servidor(ip, port);
 
         try {

@@ -477,7 +477,7 @@ public class VistaGrafica implements IVistaJuego, Serializable {
                     });
                 }
                 else{
-                    mostrarAviso("Tu rival te cantó FLOR y tú no tienes. Son 3 puntos para tu rival.");
+                    //mostrarAviso("Tu rival te cantó FLOR y tú no tienes. Son 3 puntos para tu rival.");
                     setBotones();
                 }
             }
@@ -486,8 +486,8 @@ public class VistaGrafica implements IVistaJuego, Serializable {
                 TRUCOButton.setText("CONTRA FLOR AL RESTO");
                 TRUCOButton.addActionListener( e -> {
                     try {
-                        controlador.cantarContraFlorAlResto();
                         setBotones();
+                        controlador.cantarContraFlorAlResto();
                     } catch (RemoteException ex) {
                         ex.printStackTrace();
                     }
@@ -627,11 +627,13 @@ public class VistaGrafica implements IVistaJuego, Serializable {
         btnQuiero.setText("    QUIERO    ");
         btnNoQuiero.setText("    NO QUIERO    ");
         IRALMAZOButton.setText("    IR AL MAZO    ");
+        TRUCOButton.setText("    TRUCO    ");
         btnAuxiliar.setText("");
         accionesJ2.setText("");
         btnAuxiliar.setEnabled(false);
         btnQuiero.setEnabled(false);
         btnNoQuiero.setEnabled(false);
+        IRALMAZOButton.setEnabled(true);
 
         if(controlador.seCantoEnvido() || controlador.nroDeRonda() > 1) btnEnvido.setEnabled(false);
         else btnEnvido.setEnabled(true);

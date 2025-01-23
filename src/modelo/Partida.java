@@ -156,7 +156,9 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
         finMano = true;
 
         if(nroRondasGanadasJ1 > nroRondasGanadasJ2) puntajeRondaJ1 += puntosRabon;
-        else if(nroRondasGanadasJ1 < nroRondasGanadasJ2) puntajeRondaJ2 += puntosRabon;
+        else if (nroRondasGanadasJ2 > nroRondasGanadasJ1) puntajeRondaJ2 += puntosRabon;
+        System.out.println("fin de mano j1: " + j1.getNombre() + " puntaje ronda: " + puntajeRondaJ1 + " rondas ganadas: " + nroRondasGanadasJ1);
+        System.out.println("fin de mano j2: " + j2.getNombre() + " puntaje ronda: " + puntajeRondaJ2 + " rondas ganadas: " + nroRondasGanadasJ2);
 
         Timer timer = new Timer(2000, new ActionListener() {
             @Override
@@ -421,12 +423,23 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
 
         if(idJugSeFue != j1.getIDJugador()) {
             puntajeRondaJ1 += puntos;
-            nroRondasGanadasJ1 += 1;
+            nroRondasGanadasJ1 += 2;
+            System.out.println("se fue ?" + j1.getNombre());
         }
         else if(idJugSeFue != j2.getIDJugador()) {
             puntajeRondaJ2 += puntos;
-            nroRondasGanadasJ1 += 1;
+            nroRondasGanadasJ2 += 2;
+            System.out.println("se fue ?" + j2.getNombre());
         }
+
+        System.out.println("-----------------");
+        System.out.println("me voy al mazo");
+        System.out.println("rondas j1: " + nroRondasGanadasJ1);
+        System.out.println("rondas j2: " + nroRondasGanadasJ2);
+        System.out.println("se fue: " + PersistenciaJugador.recuperarJugador(idJugSeFue).getNombre());
+
+        System.out.println("j1: " + j1.getNombre());
+        System.out.println("j2: " + j2.getNombre());
 
         finDeLaRonda();
     }
@@ -453,6 +466,8 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
 
         if( (j1 != null) && (j2 != null) ) {
             nuevaPartida();
+            System.out.println("j1: " + j1.getNombre());
+            System.out.println("j2: " + j2.getNombre());
         }
     }
 
@@ -514,7 +529,7 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
     public void rabonQuerido(int idJugadorQuizo) throws RemoteException {
         notificarCantoQuerido(idJugadorQuizo);
 
-        PersistenciaPartida.guardarPartida(this); // guardo la partida aca porque actualiza el estado del rabon
+        //PersistenciaPartida.guardarPartida(this); // guardo la partida aca porque actualiza el estado del rabon
     }
 
     @Override
@@ -826,7 +841,7 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
     }
 
     private void notificarPuntos() throws RemoteException {
-        PersistenciaPartida.guardarPartida(this);
+        //PersistenciaPartida.guardarPartida(this);
         mensajesOb = PUNTAJES;
         notificarObservadores(mensajesOb);
     }
