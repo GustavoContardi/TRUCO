@@ -2,6 +2,7 @@ package vista.flujos;
 
 import interfaces.IControlador;
 import vista.VistaConsola;
+import vista.VistaInicio;
 
 import java.io.Serializable;
 import java.rmi.RemoteException;
@@ -16,7 +17,8 @@ public class FlujoFinPartida extends Flujo implements Serializable {
     @Override
     public Flujo procesarEntrada(String string) throws RemoteException {
 
-        vista.salirDelJuego();
+        vista.salir();
+        new VistaInicio().iniciar();
 
         return this; // que retorne cualquier cosa si total va a cerrar la ventana con dispose()
     }

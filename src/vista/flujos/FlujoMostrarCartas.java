@@ -44,6 +44,11 @@ public class FlujoMostrarCartas extends Flujo implements Serializable {
                 case "5" -> {
                     if(controlador.tengoFlor()) controlador.cantarFlor();
                 }
+                case "6" -> {
+                    controlador.abandonarPartida();
+                    vista.limpiarPantalla();
+                    vista.mostrarAviso("¡GRACIAS POR JUGAR AL TRUCONTARDI!");
+                }
             }
         }
         return new FlujoMostrarCartas(vista, controlador);

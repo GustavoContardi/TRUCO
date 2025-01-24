@@ -444,6 +444,29 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
         finDeLaRonda();
     }
 
+    @Override
+    public void abandonoPartida(int idAbandono) throws RemoteException {
+
+        if(j1.getIDJugador() != idAbandono) anotador.sumarPuntosJ1(puntosParaGanar-anotador.getPuntosJ1());
+        else if (j2.getIDJugador() != idAbandono) anotador.sumarPuntosJ2(puntosParaGanar-anotador.getPuntosJ1()); // sumo los que le falten para ganar al que no abandono asi termina la partida
+        actualizarPuntos();
+
+        Timer timer = new Timer(2500, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Código que se ejecutará después de 3 segundos
+                try {
+                    notificarAbandonoPartida();
+                    // espero 2,5 segundos antes de notificar para que se pueda ver lo que paso antes y no sea tan rapido
+                } catch (RemoteException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+        timer.setRepeats(false); // Asegura que el timer solo se ejecute una vez
+        timer.start();
+    }
+
     // pregunto si es fin de partida
     @Override
     public boolean esFinDePartida() throws RemoteException {
@@ -466,8 +489,6 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
 
         if( (j1 != null) && (j2 != null) ) {
             nuevaPartida();
-            System.out.println("j1: " + j1.getNombre());
-            System.out.println("j2: " + j2.getNombre());
         }
     }
 
@@ -803,6 +824,12 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
     }
 
     @Override
+    public int getIDJugadorGanador() throws RemoteException {
+        if(anotador.getPuntosJ1() > anotador.getPuntosJ2()) return j1.getIDJugador();
+        else return j2.getIDJugador();
+    }
+
+    @Override
     public String getNombreRival(int idJugador) throws RemoteException {
         if(j1.getIDJugador() != idJugador) return j1.getNombre();
         else return j2.getNombre();
@@ -908,6 +935,11 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
 
     private void notificarRabon(Eventos e) throws RemoteException {
         mensajesOb = e;
+        notificarObservadores(mensajesOb);
+    }
+
+    private void notificarAbandonoPartida() throws RemoteException {
+        mensajesOb = ABANDONO_PARTIDA;
         notificarObservadores(mensajesOb);
     }
 

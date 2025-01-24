@@ -136,13 +136,12 @@ public class VistaConsola implements IVistaJuego, IVistaInicio, Serializable {
 
         println("-------------------------------------------------------------------------");
         println("                   FIN DE LA PARTIDA                        ");
-        println("            MUCHAS GRACIAS POR USAR LA APLICACION              ");
+        println("         MUCHAS GRACIAS POR USAR LA APLICACION              ");
         println("-------------------------------------------------------------------------");
-        println("            ¡¡ GANADOR: " + nombreGanador + " !!");
+        println("           ¡¡ GANADOR: " + nombreGanador + " !!");
         println("-------------------------------------------------------------------------");
 
-        flujoActual = new FlujoFinPartida(this, controlador);
-        flujoActual.mostrarSiguienteTexto();
+        setFlujoActual(new FlujoFinPartida(this, controlador));
     }
 
     @Override
@@ -188,7 +187,6 @@ public class VistaConsola implements IVistaJuego, IVistaInicio, Serializable {
 
     @Override
     public void salirDelJuego(){
-        //new vistaInicio();
         frame.dispose();
     }
 
@@ -242,10 +240,10 @@ public class VistaConsola implements IVistaJuego, IVistaInicio, Serializable {
 
         if( (controlador.nroDeRonda() == 1)){
             if(!controlador.seCantoEnvido()) {
-                if(controlador.seJuegaConFlor() && controlador.tengoFlor()) println("1- Envido | 2- Truco | 3- Tirar Carta | 4- Ir al mazo | 5- Flor");
+                if(controlador.seJuegaConFlor() && controlador.tengoFlor()) println("1- Envido | 2- Truco | 3- Tirar Carta | 4- Ir al mazo | 5- Flor | 6- Abandonar Partida");
                 else println("1- Envido | 2- Truco | 3- Tirar Carta | 4- Ir al mazo");
             }
-            else println("2- Truco | 3- Tirar Carta | 4- Ir al mazo");
+            else println("2- Truco | 3- Tirar Carta | 4- Ir al mazo | 6- Abandonar Partida");
         }
         else{
             switch (controlador.estadoDelRabon()){
@@ -320,5 +318,6 @@ public class VistaConsola implements IVistaJuego, IVistaInicio, Serializable {
         flujoActual = flujoActual.procesarEntrada(input);
         flujoActual.mostrarSiguienteTexto();
     }
+
 
 }

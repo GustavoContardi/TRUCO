@@ -59,7 +59,6 @@ public class VistaGrafica implements IVistaJuego, Serializable {
         frame.setSize(730, 820);
         frame.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 
-
         // Control de cierre de ventana
         frame.addWindowListener(new WindowAdapter() {
             @Override
@@ -515,6 +514,7 @@ public class VistaGrafica implements IVistaJuego, Serializable {
         iniciar();
         if(controlador != null) {
             frame.setTitle(" APP TRUCO - " + controlador.getNombreJugador());
+            setJMenubar();
         }
         mostrarCartas();
     }
@@ -559,7 +559,7 @@ public class VistaGrafica implements IVistaJuego, Serializable {
 
     @Override
     public void salirDelJuego() {
-
+        frame.dispose();
     }
 
     @Override
@@ -620,6 +620,7 @@ public class VistaGrafica implements IVistaJuego, Serializable {
         iniciar();
         accionesJ2.setText("SE HA REANUDADO LA PARTIDA CORRECTAMENTE. NO PODRÁ JUGAR HASTA QUE SU RIVAL INICIE SESION");
     }
+
 
     public void setBotones() throws RemoteException {
         removeBtnActionListener(); // remuevo todos los actions listeners para que no se acumulen y los vuelvo a poner
@@ -723,6 +724,19 @@ public class VistaGrafica implements IVistaJuego, Serializable {
             });
         }
 
+        if(controlador.tengoFlor() && controlador.seJuegaConFlor() && controlador.nroDeRonda() == 1){
+            btnAuxiliar.setText("  FLOR  ");
+            btnAuxiliar.setEnabled(true);
+            btnAuxiliar.addActionListener(e -> {
+                try {
+                    controlador.cantarFlor();
+                    setBotones();
+                } catch (RemoteException ex) {
+                    throw new RuntimeException(ex);
+                }
+            });
+        }
+
     }
 
     public void setBotonesEnvido() throws RemoteException {
@@ -791,23 +805,6 @@ public class VistaGrafica implements IVistaJuego, Serializable {
                 }
             }
         });
-        if(controlador.tengoFlor() && controlador.seJuegaConFlor()){
-            btnNoQuiero.setEnabled(true);
-            btnNoQuiero.setText("    FLOR    ");
-            btnNoQuiero.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    try {
-                        controlador.cantarFlor();
-                        btnNoQuiero.setEnabled(false);
-                        setBotones();
-                    } catch (RemoteException ex) {
-                        throw new RuntimeException(ex);
-                    }
-                }
-            });
-        }
-        else btnNoQuiero.setEnabled(false);
 
     }
 
@@ -1060,6 +1057,25 @@ public class VistaGrafica implements IVistaJuego, Serializable {
         removeAllActionListeners(btnQuiero);
         removeAllActionListeners(TRUCOButton);
         removeAllActionListeners(IRALMAZOButton);
+    }
+
+    private void setJMenubar() {
+        JMenuBar mnuPrincipal = new JMenuBar();
+        JMenu mnuArchivo = new JMenu("Opciones");
+        mnuPrincipal.add(mnuArchivo);
+        JMenuItem mnuiSalir = new JMenuItem("Abandonar Partida");
+        mnuiSalir.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    controlador.abandonarPartida();
+                } catch (RemoteException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+        mnuArchivo.add(mnuiSalir);
+        frame.setJMenuBar(mnuPrincipal);
     }
 
 }

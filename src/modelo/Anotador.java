@@ -53,7 +53,7 @@ public class Anotador implements Serializable {
     }
 
     public String getGanador(){
-        if (puntosJ1 >= 30) return nombreJ1;
+        if (puntosJ1 >= puntosParaGanar) return nombreJ1;
         else return nombreJ2;
     }
 

@@ -17,6 +17,7 @@ public interface IControlador {
     ArrayList<String> obtenerTodasLasCartas() throws RemoteException;
     void tirarCarta(int numeroDeCarta) throws RemoteException;
     void meVoyAlMazo() throws RemoteException;
+    void abandonarPartida() throws RemoteException;
     void guardarPartida() throws RemoteException;
     void recuperarPartida() throws RemoteException;
     void cantarTanto(EstadoEnvido estado) throws RemoteException;

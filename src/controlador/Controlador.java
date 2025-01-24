@@ -112,8 +112,15 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
     }
 
     @Override
+    public void abandonarPartida() throws RemoteException {
+        modelo.abandonoPartida(jugador.getIDJugador());
+        vistaJuego.salirDelJuego();
+        new VistaInicio().iniciar(); // abandona y lo hago volver a la pantalla principal de una sin tener que esperar
+    }
+
+    @Override
     public void guardarPartida() throws RemoteException {
-        //PersistenciaPartida.guardarPartida(modelo.getObjeto());
+        //PersistenciaPartida.guardarPartida(modelo.getObjeto()); SACARLE EL COMMENT
     }
 
     @Override
@@ -329,7 +336,7 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
 
     @Override
     public void volverAlMenuPrincipal() throws RemoteException {
-        new VistaInicio();
+        new VistaInicio().iniciar();
     }
 
     @Override
@@ -498,7 +505,7 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
 
 
     //
-    //
+    // ob
     //
 
 
@@ -545,7 +552,7 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
                 vistaJuego.actualizar();
                 if(modelo.getIdJ1() != jugador.getIDJugador()) vistaJuego.meTiraronCarta(modelo.ultimaCartaTiradaJ1().toString());
             }
-            case CARTA_TIRADAJ2 -> { // este aviso es que el JUGADOR 1 tiro una carta
+            case CARTA_TIRADAJ2 -> { // este aviso es que el JUGADOR 2 tiro una carta
                 vistaJuego.actualizar();
                 if(modelo.getIdJ2() != jugador.getIDJugador()) vistaJuego.meTiraronCarta(modelo.ultimaCartaTiradaJ2().toString());
             }
@@ -559,10 +566,10 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
                 vistaJuego.mostrarMenuPrincipal();
             }
             case ABANDONO_PARTIDA -> {
-
+                if(jugador.getIDJugador() == modelo.getIDJugadorGanador()) vistaJuego.finDeLaPartida(modelo.getJugadorGanador());
             }
             case LISTA_JUGADORES_TOTALES -> {
-                // aca hay que pasarle la lista no ordenada pero cuando tenga la clase Persistencia
+                // aca hay que pasarle la lista no ordenada
                 vistaEleccion.actualizarListaJugadores(PersistenciaJugador.listaJugadoresGuardados(false));
             }
             case CANTO_QUERIDO -> {
