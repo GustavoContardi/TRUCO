@@ -447,6 +447,7 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
     @Override
     public void abandonoPartida(int idAbandono) throws RemoteException {
 
+
         if(j1.getIDJugador() != idAbandono) anotador.sumarPuntosJ1(puntosParaGanar-anotador.getPuntosJ1());
         else if (j2.getIDJugador() != idAbandono) anotador.sumarPuntosJ2(puntosParaGanar-anotador.getPuntosJ1()); // sumo los que le falten para ganar al que no abandono asi termina la partida
         actualizarPuntos();
