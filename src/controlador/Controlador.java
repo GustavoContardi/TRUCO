@@ -587,6 +587,7 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
             }
             case RESTABLECIO_UN_JUGADOR -> {
                 vistaJuego.mostrarEsperaRival();
+                vistaEleccion.reanudarPartida(getJugadoresRecuperados());
             }
             case CANTO_FLOR -> {
                 if(modelo.getQuienCantoFlor() != jugador.getIDJugador()) vistaJuego.cantaronFlor(PersistenciaCantos.mensajeCantoFlor(), FLOR);

@@ -636,6 +636,8 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
         if(idJugador == j1.getIDJugador()) reanudoJ1 = true;
         else if(idJugador == j2.getIDJugador()) reanudoJ2 = true;
 
+        PersistenciaJugador.jugadorElecto(idJugador); // lo elijo para que se elimine de la lista de elegibles asi no pueden elegir los dos el mismo jugador.
+
         notificarJugadorReanudo(); // para que se ejecute siempre, total si se se unieron los dos se va a notificar abajo y no interfiere
 
         if(reanudoJ1 && reanudoJ2) notificarPartidaReanudada();
@@ -802,8 +804,10 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
     @Override
     public ArrayList<Jugador> getJugadores() throws RemoteException{
         ArrayList<Jugador> lista = new ArrayList<>();
-        if(j1 != null && j2 != null){
+        if(j1 != null){
             lista.add(j1);
+        }                       // si no son nulos los agrega y listo, para el recuperar partida se borren.
+        if(j2 != null){
             lista.add(j2);
         }
         return lista;

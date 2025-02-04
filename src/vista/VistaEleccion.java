@@ -51,7 +51,7 @@ public class VistaEleccion implements IVistaEleccion {
 
     public void procesarAltaJugador() throws RemoteException {
         nombreJugador = ""; // reseteo la variable cada vez que se va a dar de alta un jugador
-
+        removeAllActionListeners(btnCrearJugador);
         btnCrearJugador.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -71,6 +71,7 @@ public class VistaEleccion implements IVistaEleccion {
     }
 
     public void procesarActualizarJugador() throws RemoteException {
+        removeAllActionListeners(btnActualizarJugador);
         btnActualizarJugador.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -119,6 +120,7 @@ public class VistaEleccion implements IVistaEleccion {
     }
 
     public void procesarEliminarJugador(){
+        removeAllActionListeners(btnEliminarJugador);
         btnEliminarJugador.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -222,7 +224,7 @@ public class VistaEleccion implements IVistaEleccion {
 
         procesarEleccionJugadorReanudar(); // le actualizo el action listener al boton para que reanude
 
-        if(lista.isEmpty()) listModel.addElement("¡Ya se eligieron todos los jugadores y la partida esta en curso! Tal vez se equivocó de partida ;)");
+        if(lista.isEmpty()) listModel.addElement("¡Ya se eligieron todos los jugadores y la partida esta en curso! Tal vez se equivocó de partida...;)");
 
         else{
 

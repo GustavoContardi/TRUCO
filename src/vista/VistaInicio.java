@@ -163,6 +163,7 @@ public class VistaInicio extends JFrame {
                     panelPrincipal.setLayout(new BorderLayout());
 
                     JLabel etiqueta1 = new JLabel("NO TIENES PARTIDAS PENDIENTES, ¡PARA JUGAR CREA UNA!");
+                    frame.dispose();
                     panelPrincipal.add(etiqueta1, BorderLayout.CENTER);
 
                     frameMSJ.setVisible(true);
