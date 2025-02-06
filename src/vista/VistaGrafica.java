@@ -808,6 +808,24 @@ public class VistaGrafica implements IVistaJuego, Serializable {
 
     }
 
+    @Override
+    public void bloquearBotones(){
+        // bloqueo los botones cuando me cantan para que responda antes de poder tirar
+
+        removeAllActionListeners(btnCarta1);
+        removeAllActionListeners(btnCarta2);
+        removeAllActionListeners(btnCarta3);
+        removeAllActionListeners(TRUCOButton);
+        removeAllActionListeners(btnAuxiliar);
+        removeAllActionListeners(btnEnvido);
+        removeAllActionListeners(IRALMAZOButton);
+
+    }
+
+    @Override
+    public void desbloquearBotones() throws RemoteException {
+        actualizar();
+    }
 
 
     //
@@ -843,15 +861,6 @@ public class VistaGrafica implements IVistaJuego, Serializable {
 
         frameMSJ.setVisible(true);
         frameMSJ.setLocationRelativeTo(null);
-    }
-
-    private void bloquearBotones(){
-        // bloqueo los botones cuando me cantan para que responda antes de poder tirar
-
-        removeAllActionListeners(btnCarta1);
-        removeAllActionListeners(btnCarta2);
-        removeAllActionListeners(btnCarta3);
-
     }
 
     private void setBotonesCartas(String imagen1, String imagen2, String imagen3) throws RemoteException {

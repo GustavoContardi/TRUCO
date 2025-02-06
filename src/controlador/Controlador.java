@@ -131,6 +131,7 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
     @Override
     public void cantarTanto(EstadoEnvido estado) throws RemoteException {
         try{
+            vistaJuego.bloquearBotones(); // bloqueo los botones hasta que responda el rival para no saturar la comunicacion
             modelo.cantarEnvido(jugador.getIDJugador(), estado);
         } catch(RemoteException e){
             e.printStackTrace();
@@ -141,6 +142,7 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
     public void cantarRabon(EstadoTruco estado) {
 
         try{
+            vistaJuego.bloquearBotones(); // bloqueo los botones hasta que responda el rival para no saturar la comunicacion
             modelo.cantarRabon(jugador.getIDJugador(), estado);
         }catch(RemoteException e){
             e.printStackTrace();
@@ -451,11 +453,13 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
 
     @Override
     public void cantarContraFlor() throws RemoteException {
+        vistaJuego.bloquearBotones(); // bloqueo los botones hasta que responda el rival para no saturar la comunicacion
         modelo.cantarFlor(jugador.getIDJugador(), CONTRA_FLOR);
     }
 
     @Override
     public void cantarContraFlorAlResto() throws RemoteException {
+        vistaJuego.bloquearBotones(); // bloqueo los botones hasta que responda el rival para no saturar la comunicacion
         modelo.cantarFlor(jugador.getIDJugador(), CONTRA_FLOR_AL_RESTO);
     }
 
@@ -567,6 +571,7 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
             }
             case ABANDONO_PARTIDA -> {
                 if(jugador.getIDJugador() == modelo.getIDJugadorGanador()) vistaJuego.finDeLaPartida(modelo.getJugadorGanador());
+                // avisar al rival del que abandono que gano por abandono
             }
             case LISTA_JUGADORES_TOTALES -> {
                 // aca hay que pasarle la lista no ordenada
@@ -574,13 +579,16 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
             }
             case CANTO_QUERIDO -> {
                 if(modelo.getIdJugadorQuiereCantar() != jugador.getIDJugador()) vistaJuego.mostrarMensaje(PersistenciaCantos.mensajeCantoQuiero());       //
+                vistaJuego.desbloquearBotones();
             }                                                                                                                                           //
             case CANTO_NO_QUERIDO -> {                                                                                                                  // i
-                    if(modelo.getIdJugadorNoQuizoCanto() != jugador.getIDJugador()) vistaJuego.mostrarMensaje(PersistenciaCantos.mensajeCantoNoQuiero());     //
-                }
-            case TANTO_QUERIDO -> {
+                if(modelo.getIdJugadorNoQuizoCanto() != jugador.getIDJugador()) vistaJuego.mostrarMensaje(PersistenciaCantos.mensajeCantoNoQuiero());     //
+                vistaJuego.desbloquearBotones();
+            }
+            case TANTO_QUERIDO -> { // este metodo se usa para avisar el resultado del tanto, no para avisar que se dijo 'QUIERO' al envido
                 System.out.println(modelo.getResultadoTanto());
                 vistaJuego.mostrarAviso(modelo.getResultadoTanto());
+                vistaJuego.desbloquearBotones();
             }
             case RESTABLECER_PARTIDA -> {
                 vistaJuego.reanudarPartida();

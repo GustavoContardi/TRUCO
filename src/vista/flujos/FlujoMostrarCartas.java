@@ -16,6 +16,12 @@ public class FlujoMostrarCartas extends Flujo implements Serializable {
     @Override
     public Flujo procesarEntrada(String string) throws RemoteException {
 
+        switch (string){ // primero pongo esta opcion sin ninguna restriccion, si el jugador quiere abandonar lo puede hacer cuando quiera, independientemente del turno y estado de la partida
+            case "6" -> {
+                controlador.abandonarPartida();
+            }
+        }
+
         if(!controlador.esMiTurno()) vista.println("\n----------------------- ESPERE A SU TURNO ----------------------------\n");
         else{
             switch (string){
@@ -43,11 +49,6 @@ public class FlujoMostrarCartas extends Flujo implements Serializable {
                 case "4" -> controlador.meVoyAlMazo();
                 case "5" -> {
                     if(controlador.tengoFlor()) controlador.cantarFlor();
-                }
-                case "6" -> {
-                    controlador.abandonarPartida();
-                    vista.limpiarPantalla();
-                    vista.mostrarAviso("¡GRACIAS POR JUGAR AL TRUCONTARDI!");
                 }
             }
         }

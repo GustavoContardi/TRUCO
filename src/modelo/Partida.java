@@ -103,7 +103,7 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
             notificarPuntos();
         }
 
-        //PersistenciaPartida.guardarPartida(this);
+        PersistenciaPartida.guardarPartida(this);
         actualizarPuntos();
 
         if (finMano){
@@ -140,8 +140,8 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
                 j1.devolverCartas();
                 j2.devolverCartas();
 
-                //mazo.repartirCartas(j1, j2);
-                mazo.repartirFlor(j1, j2);
+                mazo.repartirCartas(j1, j2);
+                //mazo.repartirFlor(j1, j2); pruebas para cuando se juega con flor, no va en el normal, el de arriba si
                 replicarCartasJugadores();
             }
             else finDePartida();
@@ -285,7 +285,7 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
         if(nroRondasGanadasJ1 >= 2  && nroRondasGanadasJ1 > nroRondasGanadasJ2) finMano = true;
         else if (nroRondasGanadasJ2 >= 2  && nroRondasGanadasJ1 < nroRondasGanadasJ2) finMano = true;
 
-        //PersistenciaPartida.guardarPartida(this);
+        PersistenciaPartida.guardarPartida(this);
 
         if(finMano){
             finDeLaRonda();
@@ -551,7 +551,7 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
     public void rabonQuerido(int idJugadorQuizo) throws RemoteException {
         notificarCantoQuerido(idJugadorQuizo);
 
-        //PersistenciaPartida.guardarPartida(this); // guardo la partida aca porque actualiza el estado del rabon
+        PersistenciaPartida.guardarPartida(this); // guardo la partida aca porque actualiza el estado del rabon
     }
 
     @Override
@@ -873,7 +873,7 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
     }
 
     private void notificarPuntos() throws RemoteException {
-        //PersistenciaPartida.guardarPartida(this);
+        PersistenciaPartida.guardarPartida(this);
         mensajesOb = PUNTAJES;
         notificarObservadores(mensajesOb);
     }

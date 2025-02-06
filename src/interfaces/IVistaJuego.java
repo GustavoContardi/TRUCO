@@ -27,4 +27,6 @@ public interface IVistaJuego {
     void mostrarAviso(String aviso);
     void reanudarPartida() throws RemoteException;
     void mostrarEsperaRival() throws RemoteException;
+    void bloquearBotones()throws RemoteException;
+    void desbloquearBotones()throws RemoteException;
 }

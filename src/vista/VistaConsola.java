@@ -28,6 +28,7 @@ public class VistaConsola implements IVistaJuego, IVistaInicio, Serializable {
     private final JFrame frame;
     private Flujo flujoActual;
     private IControlador controlador;
+    private boolean bloqBotones;
 
 
     //
@@ -231,6 +232,16 @@ public class VistaConsola implements IVistaJuego, IVistaInicio, Serializable {
     }
 
     @Override
+    public void bloquearBotones() throws RemoteException {
+        bloqBotones = true;
+    }
+
+    @Override
+    public void desbloquearBotones() throws RemoteException {
+        bloqBotones = false;
+    }
+
+    @Override
     public void salir() {
         frame.setVisible(false);
     }
@@ -247,10 +258,10 @@ public class VistaConsola implements IVistaJuego, IVistaInicio, Serializable {
         }
         else{
             switch (controlador.estadoDelRabon()){
-                case NADA -> println("2- Truco | 3- Tirar Carta | 4- Ir al mazo");
-                case TRUCO -> println("2- Re Truco | 3- Tirar Carta | 4- Ir al mazo");
-                case RE_TRUCO ->  println("2- Vale Cuatro | 3- Tirar Carta | 4- Ir al mazo");
-                case VALE_CUATRO -> println("3- Tirar Carta | 4- Ir al mazo");
+                case NADA -> println("2- Truco | 3- Tirar Carta | 4- Ir al mazo | 6- Abandonar Partida");
+                case TRUCO -> println("2- Re Truco | 3- Tirar Carta | 4- Ir al mazo | 6- Abandonar Partida");
+                case RE_TRUCO ->  println("2- Vale Cuatro | 3- Tirar Carta | 4- Ir al mazo | 6- Abandonar Partida");
+                case VALE_CUATRO -> println("3- Tirar Carta | 4- Ir al mazo | 6- Abandonar Partida");
             }
         }
 
