@@ -109,8 +109,8 @@ public class VistaEleccion implements IVistaEleccion {
                     Jugador jugador = (Jugador) cbEleccion.getSelectedItem();
 
                     if(jugador != null){
-                        controlador.setJugadorReanudar(jugador.getIDJugador());
                         frame.dispose();
+                        controlador.setJugadorReanudar(jugador.getIDJugador());
                     }
                 } catch (RemoteException ex) {
                     ex.printStackTrace();
@@ -162,48 +162,6 @@ public class VistaEleccion implements IVistaEleccion {
     }
 
     @Override
-    public void actualizarListaJugadoresUsados(ArrayList<Jugador> lista) {
-        if(lista != null){
-
-            listModel.clear();
-            for (Jugador jugador: lista) {
-                listModel.addElement(jugador.toString());
-            }
-
-            cbEleccion.removeAllItems();
-            for (Jugador jugador: lista) {
-                if (!jugador.getElecto()) {
-                    cbEleccion.addItem(jugador);
-                }
-            }
-
-        }
-        else{
-            listModel.addElement("¡No hay Jugadores creados aún!");
-        }
-    }
-
-    @Override
-    public void actualizarListaPartidas(ArrayList<Partida> lista) {
-        if(lista != null){
-
-            listModel.clear();
-            for (Partida partida: lista) {
-                listModel.addElement(partida.toString());
-            }
-
-            cbEleccion.removeAllItems();
-            for (Partida partida: lista) {
-                cbEleccion.addItem(partida);
-            }
-
-        }
-        else{
-            listModel.addElement("¡No hay Jugadores creados aún!");
-        }
-    }
-
-    @Override
     public void setControlador(IControlador controlador) {
         this.controlador = controlador;
     }
@@ -227,7 +185,6 @@ public class VistaEleccion implements IVistaEleccion {
         if(lista.isEmpty()) listModel.addElement("¡Ya se eligieron todos los jugadores y la partida esta en curso! Tal vez se equivocó de partida...;)");
 
         else{
-
             listModel.clear();
             for (Jugador jugador: lista) {
                 listModel.addElement(jugador.toString());

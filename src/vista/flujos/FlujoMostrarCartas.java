@@ -22,6 +22,8 @@ public class FlujoMostrarCartas extends Flujo implements Serializable {
             }
         }
 
+        if(vista.getBloquearBotones()) return this;
+
         if(!controlador.esMiTurno()) vista.println("\n----------------------- ESPERE A SU TURNO ----------------------------\n");
         else{
             switch (string){

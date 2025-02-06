@@ -222,7 +222,7 @@ public class VistaGrafica implements IVistaJuego, Serializable {
         switch(estado){
             case TRUCO -> {
                 TRUCOButton.setEnabled(true);
-                TRUCOButton.setText(" RE TRUCO ");
+                TRUCOButton.setText(" RE TRUCO "); // si me cantaron algun rabon/truco solo puedo responder con retruco/quiero/no quiero
                 TRUCOButton.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
@@ -231,6 +231,7 @@ public class VistaGrafica implements IVistaJuego, Serializable {
                             accionesJ2.setText("");
                             TRUCOButton.setEnabled(false);
                             setBotones();
+                            bloquearBotones();
                         } catch (RemoteException ex) {
                             ex.printStackTrace();
                         }
@@ -248,6 +249,7 @@ public class VistaGrafica implements IVistaJuego, Serializable {
                             accionesJ2.setText("");
                             TRUCOButton.setEnabled(false);
                             setBotones();
+                            bloquearBotones();
                         } catch (RemoteException ex) {
                             ex.printStackTrace();
                         }
@@ -258,18 +260,6 @@ public class VistaGrafica implements IVistaJuego, Serializable {
             case VALE_CUATRO -> {
                 TRUCOButton.setText(" - - - ");
                 TRUCOButton.setEnabled(false);
-                TRUCOButton.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        try {
-                            controlador.rabonQuerido();
-                            setBotones();
-                        } catch (RemoteException ex) {
-                            ex.printStackTrace();
-                        }
-                    }
-                });
-
                 // no se puede cantar más
             }
         }
@@ -321,6 +311,7 @@ public class VistaGrafica implements IVistaJuego, Serializable {
                             controlador.cantarTanto(ENVIDO_DOBLE);
                             accionesJ2.setText("");
                             setBotones();
+                            bloquearBotones();
                         } catch (RemoteException ex) {
                             ex.printStackTrace();
                         }
@@ -334,6 +325,7 @@ public class VistaGrafica implements IVistaJuego, Serializable {
                             controlador.cantarTanto(REAL_ENVIDO);
                             accionesJ2.setText("");
                             setBotones();
+                            bloquearBotones();
                         } catch (RemoteException ex) {
                             ex.printStackTrace();
                         }
@@ -348,6 +340,7 @@ public class VistaGrafica implements IVistaJuego, Serializable {
                             controlador.cantarTanto(FALTA_ENVIDO);
                             accionesJ2.setText("");
                             setBotones();
+                            bloquearBotones();
                         } catch (RemoteException ex) {
                             ex.printStackTrace();
                         }
@@ -366,6 +359,7 @@ public class VistaGrafica implements IVistaJuego, Serializable {
                             controlador.cantarTanto(REAL_ENVIDO);
                             accionesJ2.setText("");
                             setBotones();
+                            bloquearBotones();
                         } catch (RemoteException ex) {
                             ex.printStackTrace();
                         }
@@ -380,6 +374,7 @@ public class VistaGrafica implements IVistaJuego, Serializable {
                             controlador.cantarTanto(FALTA_ENVIDO);
                             accionesJ2.setText("");
                             setBotones();
+                            bloquearBotones();
                         } catch (RemoteException ex) {
                             ex.printStackTrace();
                         }
@@ -399,6 +394,7 @@ public class VistaGrafica implements IVistaJuego, Serializable {
                             controlador.cantarTanto(FALTA_ENVIDO);
                             accionesJ2.setText("");
                             setBotones();
+                            bloquearBotones();
                         } catch (RemoteException ex) {
                             ex.printStackTrace();
                         }
@@ -682,6 +678,7 @@ public class VistaGrafica implements IVistaJuego, Serializable {
                                     TRUCOButton.setEnabled(false);
                                     controlador.cantarRabon(TRUCO);
                                     setBotones();
+                                    bloquearBotones();
                                 }
                             }
                             case TRUCO -> {
@@ -691,6 +688,7 @@ public class VistaGrafica implements IVistaJuego, Serializable {
                                     TRUCOButton.setEnabled(false);
                                     controlador.cantarRabon(RE_TRUCO);
                                     setBotones();
+                                    bloquearBotones();
                                 }
                             }
                             case RE_TRUCO -> {
@@ -700,6 +698,7 @@ public class VistaGrafica implements IVistaJuego, Serializable {
                                     TRUCOButton.setEnabled(false);
                                     controlador.cantarRabon(VALE_CUATRO);
                                     setBotones();
+                                    bloquearBotones();
                                 }
                             }
                         }
@@ -765,6 +764,7 @@ public class VistaGrafica implements IVistaJuego, Serializable {
                         controlador.cantarTanto(ENVIDO);
                         btnEnvido.setEnabled(false);
                         setBotones();
+                        bloquearBotones();
                     }
                 } catch (RemoteException ex) {
                     ex.printStackTrace();
@@ -782,6 +782,7 @@ public class VistaGrafica implements IVistaJuego, Serializable {
                         controlador.cantarTanto(REAL_ENVIDO);
                         btnEnvido.setEnabled(false);
                         setBotones();
+                        bloquearBotones();
                     }
                 } catch (RemoteException ex) {
                     ex.printStackTrace();
@@ -799,6 +800,7 @@ public class VistaGrafica implements IVistaJuego, Serializable {
                         controlador.cantarTanto(FALTA_ENVIDO);
                         btnEnvido.setEnabled(false);
                         setBotones();
+                        bloquearBotones();
                     }
                 } catch (RemoteException ex) {
                     ex.printStackTrace();
@@ -955,49 +957,54 @@ public class VistaGrafica implements IVistaJuego, Serializable {
         ArrayList<String> cartasRival   = controlador.getCartasTiradasRival();
 
         // primero seteo las cartas que "mi" jugador tiró
-        for(int i=0; i<cartasYo.size(); i++){
-            cartaAux = basePath + cartasYo.get(i).replace(" ", "").toLowerCase() + ".jpeg"; // basicamente lo hago fotocarta para que pueda crear la imagen
-            ImageIcon imageIcon = createResizedImageIcon(cartaAux, 160, 170);
+        if(!cartasYo.isEmpty()){
 
-            JLabel label = new JLabel(imageIcon);
+            for(int i=0; i<cartasYo.size(); i++){
+                cartaAux = basePath + cartasYo.get(i).replace(" ", "").toLowerCase() + ".jpeg"; // basicamente lo hago fotocarta para que pueda crear la imagen
+                ImageIcon imageIcon = createResizedImageIcon(cartaAux, 160, 170);
 
-            if(i == 0){ // si se guardó primera es porque se tiro primera = ronda 1
-                CartasYo1.add(label);
-                CartasYo1.revalidate();
-                CartasYo1.repaint();
-            }
-            else if(i == 1){ // ronda 2
-                CartasYo2.add(label);
-                CartasYo2.revalidate();
-                CartasYo2.repaint();
-            }
-            else if (i == 2){ // ronda 3
-                CartasYo3.add(label);
-                CartasYo3.revalidate();
-                CartasYo3.repaint();
+                JLabel label = new JLabel(imageIcon);
+
+                if(i == 0){ // si se guardó primera es porque se tiro primera = ronda 1
+                    CartasYo1.add(label);
+                    CartasYo1.revalidate();
+                    CartasYo1.repaint();
+                }
+                else if(i == 1){ // ronda 2
+                    CartasYo2.add(label);
+                    CartasYo2.revalidate();
+                    CartasYo2.repaint();
+                }
+                else if (i == 2){ // ronda 3
+                    CartasYo3.add(label);
+                    CartasYo3.revalidate();
+                    CartasYo3.repaint();
+                }
             }
         }
 
         //lo mismo que en el anterior while pero con las del "oponente"
-        for(int i=0; i<cartasRival.size(); i++){
-            cartaAux = cartasYo.get(i).replace(" ", "").toLowerCase();
-            ImageIcon imageIcon = createResizedImageIcon(cartaAux, 160, 170);
-            JLabel label = new JLabel(imageIcon);
+        if(!cartasRival.isEmpty()){
+            for(int i=0; i<cartasRival.size(); i++){
+                cartaAux = cartasRival.get(i).replace(" ", "").toLowerCase();
+                ImageIcon imageIcon = createResizedImageIcon(cartaAux, 160, 170);
+                JLabel label = new JLabel(imageIcon);
 
-            if(i == 0){
-                CartasOP1.add(label);
-                CartasOP1.revalidate();
-                CartasOP1.repaint();
-            }
-            else if(i == 1){
-                CartasOP2.add(label);
-                CartasOP2.revalidate();
-                CartasOP2.repaint();
-            }
-            else if (i == 2){
-                CartasOP3.add(label);
-                CartasOP3.revalidate();
-                CartasOP3.repaint();
+                if(i == 0){
+                    CartasOP1.add(label);
+                    CartasOP1.revalidate();
+                    CartasOP1.repaint();
+                }
+                else if(i == 1){
+                    CartasOP2.add(label);
+                    CartasOP2.revalidate();
+                    CartasOP2.repaint();
+                }
+                else if (i == 2){
+                    CartasOP3.add(label);
+                    CartasOP3.revalidate();
+                    CartasOP3.repaint();
+                }
             }
         }
     }

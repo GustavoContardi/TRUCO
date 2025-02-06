@@ -76,4 +76,6 @@ public interface IModelo extends IObservableRemoto {
     void actualizarListaJugadores() throws RemoteException;
     ArrayList<Jugador> getJugadores() throws RemoteException;
     boolean getSeJuegaConFlor() throws RemoteException;
+    boolean getReanudoJ1() throws RemoteException;
+    boolean getReanudoJ2() throws RemoteException;
 }

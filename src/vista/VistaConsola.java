@@ -311,10 +311,14 @@ public class VistaConsola implements IVistaJuego, IVistaInicio, Serializable {
 
     public void mostrarCartasDisponibles() throws RemoteException {
         ArrayList<String> cartas = controlador.obtenerCartas();
-
+        println("\n");
         for(int i=0; i<cartas.size(); i++){
             println(i+1 + "- " + cartas.get(i));
         }
+    }
+
+    public boolean getBloquearBotones(){
+        return bloqBotones;
     }
 
     //

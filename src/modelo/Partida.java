@@ -83,6 +83,8 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
         idPartida        =  generarIdPartida();
         puntosParaGanar  =  puntosGanar;
         seJuegaConFlor   =  flor;
+        reanudoJ1        =  false;
+        reanudoJ2        =  false;
     }
 
 
@@ -424,22 +426,11 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
         if(idJugSeFue != j1.getIDJugador()) {
             puntajeRondaJ1 += puntos;
             nroRondasGanadasJ1 += 2;
-            System.out.println("se fue ?" + j1.getNombre());
         }
         else if(idJugSeFue != j2.getIDJugador()) {
             puntajeRondaJ2 += puntos;
             nroRondasGanadasJ2 += 2;
-            System.out.println("se fue ?" + j2.getNombre());
         }
-
-        System.out.println("-----------------");
-        System.out.println("me voy al mazo");
-        System.out.println("rondas j1: " + nroRondasGanadasJ1);
-        System.out.println("rondas j2: " + nroRondasGanadasJ2);
-        System.out.println("se fue: " + PersistenciaJugador.recuperarJugador(idJugSeFue).getNombre());
-
-        System.out.println("j1: " + j1.getNombre());
-        System.out.println("j2: " + j2.getNombre());
 
         finDeLaRonda();
     }
@@ -620,11 +611,11 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
 
     @Override
     public ArrayList<Jugador> jugadoresDeLaPartida() throws RemoteException {
-        ArrayList<Jugador> jugadores = new ArrayList<>(); // por si no hay jugadores que la devuelva vacia para evitar excepcion
+        ArrayList<Jugador> jugadores = new ArrayList<>(); // por si no hay jugadores que la devuelva vacia para evitar excepcion null
 
         if(j1 != null && j2 != null){
-            jugadores.add(j1);
-            jugadores.add(j2);
+            if(!reanudoJ1) jugadores.add(j1);
+            if(!reanudoJ2) jugadores.add(j2);
         }
         return jugadores;
     }
@@ -633,14 +624,20 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
     @Override
     public void reanudoPartida(int idJugador) throws RemoteException {
 
-        if(idJugador == j1.getIDJugador()) reanudoJ1 = true;
-        else if(idJugador == j2.getIDJugador()) reanudoJ2 = true;
+        if(idJugador == j1.getIDJugador()) {
+            reanudoJ1 = true;
+        }
+        else if(idJugador == j2.getIDJugador()) {
+            reanudoJ2 = true;
+        }
 
-        PersistenciaJugador.jugadorElecto(idJugador); // lo elijo para que se elimine de la lista de elegibles asi no pueden elegir los dos el mismo jugador.
+        notificarJugadorReanudo(idJugador); // para que se ejecute siempre, total si se se unieron los dos se va a notificar abajo y no interfiere
 
-        notificarJugadorReanudo(); // para que se ejecute siempre, total si se se unieron los dos se va a notificar abajo y no interfiere
-
-        if(reanudoJ1 && reanudoJ2) notificarPartidaReanudada();
+        if(reanudoJ1 && reanudoJ2) {
+            notificarPartidaReanudada();
+            reanudoJ1 = false;
+            reanudoJ2 = false;  // reanudo la partida y despues seteo de vuelta que no reanudaron, por si se salen de vuelta y quieren reanudar.
+        }
     }
 
     @Override
@@ -804,10 +801,11 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
     @Override
     public ArrayList<Jugador> getJugadores() throws RemoteException{
         ArrayList<Jugador> lista = new ArrayList<>();
-        if(j1 != null){
+        if(j1 != null && !reanudoJ1){
             lista.add(j1);
-        }                       // si no son nulos los agrega y listo, para el recuperar partida se borren.
-        if(j2 != null){
+        }                       // si no son nulos los agrega y listo, para el recuperar partida se borren. Ademas si estan elegidos
+                                // que no los lleve a la lista que actualiza y da la sensacion de borrado cuando se elige
+        if(j2 != null && !reanudoJ2){
             lista.add(j2);
         }
         return lista;
@@ -816,6 +814,16 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
     @Override
     public boolean getSeJuegaConFlor() throws RemoteException {
         return seJuegaConFlor;
+    }
+
+    @Override
+    public boolean getReanudoJ1() throws RemoteException {
+        return reanudoJ1;
+    }
+
+    @Override
+    public boolean getReanudoJ2() throws RemoteException {
+        return reanudoJ2;
     }
 
     @Override
@@ -842,11 +850,13 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
 
     @Override
     public ArrayList<Carta> getCartasTiradasJ1() throws RemoteException {
+        if(cartasTiradasJ1 == null) cartasTiradasJ1 = new ArrayList<>();
         return cartasTiradasJ1;
     }
 
     @Override
     public ArrayList<Carta> getCartasTiradasJ2() throws RemoteException {
+        if(cartasTiradasJ2 == null) cartasTiradasJ2 = new ArrayList<>();
         return cartasTiradasJ2;
     }
 
@@ -912,8 +922,10 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
         notificarObservadores(mensajesOb);
     }
 
-    private void notificarJugadorReanudo() throws RemoteException {
-        mensajesOb = RESTABLECIO_UN_JUGADOR;
+    private void notificarJugadorReanudo(int idJugador) throws RemoteException {
+        if (idJugador == j2.getIDJugador()) mensajesOb = RESTABLECIO_J2;
+        else mensajesOb = RESTABLECIO_J1;
+
         notificarObservadores(mensajesOb);
     }
 

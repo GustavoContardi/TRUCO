@@ -523,24 +523,31 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
             }
             case CANTO_TRUCO -> {
                 if(modelo.getQuienCantoTruco() != jugador.getIDJugador()) vistaJuego.cantaronRabon(PersistenciaCantos.mensajeCantoTruco(EstadoTruco.TRUCO), EstadoTruco.TRUCO);
+                else vistaJuego.bloquearBotones(); // bloqueo los botones al que canto para que no pueda cantar nada mas y no sature la comunicacion
             }
             case CANTO_RETRUCO -> {
                 if(modelo.getQuienCantoReTruco() != jugador.getIDJugador()) vistaJuego.cantaronRabon(PersistenciaCantos.mensajeCantoTruco(EstadoTruco.RE_TRUCO), EstadoTruco.RE_TRUCO);
+                else vistaJuego.bloquearBotones();
             }
             case CANTO_VALE_CUATRO ->{
                 if(modelo.getQuienCantoValeCuatro() != jugador.getIDJugador()) vistaJuego.cantaronRabon(PersistenciaCantos.mensajeCantoTruco(EstadoTruco.VALE_CUATRO), EstadoTruco.VALE_CUATRO);
+                else vistaJuego.bloquearBotones();
             }
             case CANTO_ENVIDO -> {
                 if(modelo.getQuienCantoEnvido() != jugador.getIDJugador()) vistaJuego.cantaronTanto(PersistenciaCantos.mensajeCantoTanto(EstadoEnvido.ENVIDO), EstadoEnvido.ENVIDO);
+                else vistaJuego.bloquearBotones();
             }
             case CANTO_ENVIDO_DOBLE -> {
                 if(modelo.getQuienCantoEnvidoDoble() != jugador.getIDJugador()) vistaJuego.cantaronTanto(PersistenciaCantos.mensajeCantoTanto(EstadoEnvido.ENVIDO_DOBLE), EstadoEnvido.ENVIDO_DOBLE);
+                else vistaJuego.bloquearBotones();
             }
             case CANTO_REAL_ENVIDO -> {
                 if(modelo.getQuienCantoRealEnvido() != jugador.getIDJugador()) vistaJuego.cantaronTanto(PersistenciaCantos.mensajeCantoTanto(EstadoEnvido.REAL_ENVIDO), EstadoEnvido.REAL_ENVIDO);
+                else vistaJuego.bloquearBotones();
             }
             case CANTO_FALTA_ENVIDO -> {
                 if(modelo.getQuienCantoFaltaEnvido() != jugador.getIDJugador()) vistaJuego.cantaronTanto(PersistenciaCantos.mensajeCantoTanto(EstadoEnvido.FALTA_ENVIDO), EstadoEnvido.FALTA_ENVIDO);
+                else vistaJuego.bloquearBotones();
             }
             case NUEVA_RONDA -> {
                 vistaJuego.mostrarCartas();
@@ -579,7 +586,7 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
             }
             case CANTO_QUERIDO -> {
                 if(modelo.getIdJugadorQuiereCantar() != jugador.getIDJugador()) vistaJuego.mostrarMensaje(PersistenciaCantos.mensajeCantoQuiero());       //
-                vistaJuego.desbloquearBotones();
+                vistaJuego.desbloquearBotones(); // desbloqueo los botones a ambos, no pasa nada porque es solo para el canto y si no es el turno no podrá jugar
             }                                                                                                                                           //
             case CANTO_NO_QUERIDO -> {                                                                                                                  // i
                 if(modelo.getIdJugadorNoQuizoCanto() != jugador.getIDJugador()) vistaJuego.mostrarMensaje(PersistenciaCantos.mensajeCantoNoQuiero());     //
@@ -593,18 +600,25 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
             case RESTABLECER_PARTIDA -> {
                 vistaJuego.reanudarPartida();
             }
-            case RESTABLECIO_UN_JUGADOR -> {
-                vistaJuego.mostrarEsperaRival();
-                vistaEleccion.reanudarPartida(getJugadoresRecuperados());
+            case RESTABLECIO_J1 -> {
+                if(jugador == null) System.out.println("el jugador del controlador es null");
+                if(jugador.getIDJugador() == modelo.getIdJ1() && jugador != null) vistaJuego.mostrarEsperaRival();
+                else if(!(modelo.getReanudoJ2())) vistaEleccion.reanudarPartida(getJugadoresRecuperados());
+            }
+            case RESTABLECIO_J2 -> {
+                if(jugador.getIDJugador() == modelo.getIdJ2()) vistaJuego.mostrarEsperaRival();
+                else if(!(modelo.getReanudoJ1())) vistaEleccion.reanudarPartida(getJugadoresRecuperados());
             }
             case CANTO_FLOR -> {
                 if(modelo.getQuienCantoFlor() != jugador.getIDJugador()) vistaJuego.cantaronFlor(PersistenciaCantos.mensajeCantoFlor(), FLOR);
             }
             case CANTO_CONTRAFLOR -> {
                 if(modelo.getQuienCantoFlor() != jugador.getIDJugador()) vistaJuego.cantaronFlor(PersistenciaCantos.mensajeCantoContraFlor(), CONTRA_FLOR);
+                else vistaJuego.bloquearBotones();
             }
             case CANTO_CONTRAFLOR_ALRESTO -> {
                 if(modelo.getQuienCantoFlor() != jugador.getIDJugador()) vistaJuego.cantaronFlor(PersistenciaCantos.mensajeCantoContraFlorResto(), CONTRA_FLOR_AL_RESTO);
+                else vistaJuego.bloquearBotones();
             }
 
         }
