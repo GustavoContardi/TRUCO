@@ -74,7 +74,12 @@ public class VistaGrafica implements IVistaJuego, Serializable {
 
                 if (response == JOptionPane.YES_OPTION) {
                     // Cierra la ventana si el usuario confirma
-                    frame.dispose();
+                    try {
+                        controlador.salirDeLaPartida();
+                        frame.dispose();
+                    } catch (RemoteException ex) {
+                        ex.printStackTrace();
+                    }
                 } else {
                     // Evita cualquier acción adicional si selecciona "No"
                     System.out.println("El usuario canceló el cierre de la ventana.");
@@ -440,6 +445,7 @@ public class VistaGrafica implements IVistaJuego, Serializable {
             }
         });
 
+        btnNoQuiero.setEnabled(true); // si a mi jugador le cantaron y tambien tiene flor, pero no tiene puntaje alto y no quiere arriesgar dice no quiero y es como si solo no tuviese.
         btnNoQuiero.addActionListener(e -> {
             try {
                 controlador.noQuieroFlor(estado);
@@ -476,7 +482,7 @@ public class VistaGrafica implements IVistaJuego, Serializable {
                     setBotones();
                 }
             }
-            case CONTRA_FLOR -> {
+            case CONTRA_FLOR -> { // si me cantaron contra flor es porque tengo flor no hace falta validar
                 btnEnvido.setEnabled(false);
                 TRUCOButton.setText("CONTRA FLOR AL RESTO");
                 TRUCOButton.addActionListener( e -> {
@@ -606,15 +612,31 @@ public class VistaGrafica implements IVistaJuego, Serializable {
 
     @Override
     public void reanudarPartida() throws RemoteException {
+        setJMenubar();
         mostrarCartas();
         mostrarCartasTiradas();
         actualizarPuntaje(controlador.puntajeActual());
+
+        if(controlador.seEstabaCantandoTanto() && controlador.meCantaronElUltimo()){ // mismo que el truco pero con el tanto
+            cantaronTanto(controlador.getCantoTanto(), controlador.estadoDelTanto());
+        }
+        else if(controlador.seEstabaCantandoTruco() && controlador.meCantaronElUltimo()){ // osea, antes de que se corte se estaba cantando algun truco y se lo cantaron a mi jugador
+            cantaronRabon(controlador.getCantoTanto(), controlador.estadoDelRabon());
+        }
+        else if(controlador.seEstabaCantandoFlor() && controlador.meCantaronElUltimo()){ // mismo que el truco pero con la flor
+            cantaronFlor(controlador.getCantoFlor(), controlador.estadoDeLaFlor());
+        }
+
+        if((controlador.seEstabaCantandoTruco() || controlador.seEstabaCantandoTanto() || controlador.seEstabaCantandoFlor()) && !controlador.meCantaronElUltimo()){
+            // si se estaba cantando algo pero no fue a mi jugador, es porque canto mi jugador y tiene que esperar por eso bloqueo
+            bloquearBotones();
+        }
     }
 
     @Override
     public void mostrarEsperaRival() throws RemoteException {
         iniciar();
-        accionesJ2.setText("SE HA REANUDADO LA PARTIDA CORRECTAMENTE. NO PODRÁ JUGAR HASTA QUE SU RIVAL INICIE SESION");
+        accionesJ2.setText("SE REANUDÓ LA PARTIDA CORRECTAMENTE. NO PODRÁ JUGAR HASTA QUE SU RIVAL INICIE SESION");
     }
 
 
@@ -986,8 +1008,9 @@ public class VistaGrafica implements IVistaJuego, Serializable {
         //lo mismo que en el anterior while pero con las del "oponente"
         if(!cartasRival.isEmpty()){
             for(int i=0; i<cartasRival.size(); i++){
-                cartaAux = cartasRival.get(i).replace(" ", "").toLowerCase();
+                cartaAux = basePath + cartasRival.get(i).replace(" ", "").toLowerCase() + ".jpeg";
                 ImageIcon imageIcon = createResizedImageIcon(cartaAux, 160, 170);
+
                 JLabel label = new JLabel(imageIcon);
 
                 if(i == 0){
@@ -1079,8 +1102,9 @@ public class VistaGrafica implements IVistaJuego, Serializable {
         JMenuBar mnuPrincipal = new JMenuBar();
         JMenu mnuArchivo = new JMenu("Opciones");
         mnuPrincipal.add(mnuArchivo);
-        JMenuItem mnuiSalir = new JMenuItem("Abandonar Partida");
-        mnuiSalir.addActionListener(new ActionListener() {
+        JMenuItem mnuiAbandonar = new JMenuItem("Abandonar partida");
+        JMenuItem mnuiSalir = new JMenuItem("Volver al menu principal");
+        mnuiAbandonar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
@@ -1090,7 +1114,18 @@ public class VistaGrafica implements IVistaJuego, Serializable {
                 }
             }
         });
+
+        mnuiSalir.addActionListener(e ->{
+            try {
+                controlador.salirDeLaPartida();
+                frame.dispose();
+            } catch (RemoteException ex) {
+                ex.printStackTrace();
+            }
+        });
+
         mnuArchivo.add(mnuiSalir);
+        mnuArchivo.add(mnuiAbandonar);
         frame.setJMenuBar(mnuPrincipal);
     }
 

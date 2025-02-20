@@ -17,7 +17,9 @@ import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 
+import static enums.EstadoEnvido.*;
 import static enums.EstadoFlor.*;
+import static enums.EstadoTruco.*;
 
 public class Controlador implements IControladorRemoto, IControlador, Serializable {
 
@@ -120,7 +122,7 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
 
     @Override
     public void guardarPartida() throws RemoteException {
-        //PersistenciaPartida.guardarPartida(modelo.getObjeto()); SACARLE EL COMMENT
+        PersistenciaPartida.guardarPartida(modelo.getObjeto());
     }
 
     @Override
@@ -141,21 +143,11 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
     @Override
     public void cantarRabon(EstadoTruco estado) {
 
-        try{
+        try {
             vistaJuego.bloquearBotones(); // bloqueo los botones hasta que responda el rival para no saturar la comunicacion
             modelo.cantarRabon(jugador.getIDJugador(), estado);
-        }catch(RemoteException e){
+        } catch (RemoteException e) {
             e.printStackTrace();
-        }
-    }
-
-    @Override
-    public int esTurnoDe() {
-        try{
-            return modelo.turnoActual();
-        }catch(RemoteException e){
-            e.printStackTrace();
-            return -1;
         }
     }
 
@@ -177,6 +169,11 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
             e.printStackTrace();
             return null;
         }
+    }
+
+    @Override
+    public EstadoFlor estadoDeLaFlor() throws RemoteException {
+        return modelo.estadoFlor();
     }
 
     @Override
@@ -300,6 +297,11 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
     }
 
     @Override
+    public void salirDeLaPartida() throws RemoteException {
+        modelo.jugadorSalioDePartida(jugador.getIDJugador());
+    }
+
+    @Override
     public ArrayList<Jugador> listaJugadoresMasGanadores() {
         return PersistenciaJugador.listaJugadoresGuardados(true);
     }
@@ -338,6 +340,7 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
 
     @Override
     public void volverAlMenuPrincipal() throws RemoteException {
+        guardarPartida(); // guardo por si se hizo algun movimiento que no se guardo antes de salir al menu principal
         new VistaInicio().iniciar();
     }
 
@@ -478,6 +481,53 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
         return modelo.getSeJuegaConFlor();
     }
 
+    @Override
+    public boolean seEstabaCantandoTanto() throws RemoteException {
+        return modelo.getSeEstabaCantandoTanto();
+    }
+
+    @Override
+    public boolean seEstabaCantandoTruco() throws RemoteException {
+        return modelo.getSeEstabaCantandoTruco();
+    }
+
+    @Override
+    public boolean seEstabaCantandoFlor() throws RemoteException {
+        return modelo.getSeEstabaCantandoFlor();
+    }
+
+    // este metodo es para saber si antes de salir de la partida me cantaron algo (tanto, rabon, flor), para poder reanudar correctamente
+    @Override
+    public boolean meCantaronElUltimo() throws RemoteException {
+        if(modelo.getUltimoJugadorCanto() == jugador.getIDJugador()) return false;
+        else return true;
+    }
+
+    // estos metodos son para cuando reanudo poder sacar el canto de algun lado
+    @Override
+    public String getCantoTanto() throws RemoteException {
+        if(estadoDelTanto() == ENVIDO) return PersistenciaCantos.mensajeCantoTanto(ENVIDO);
+        else if(estadoDelTanto() == ENVIDO_DOBLE) return PersistenciaCantos.mensajeCantoTanto(ENVIDO_DOBLE);
+        else if(estadoDelTanto() == REAL_ENVIDO) return PersistenciaCantos.mensajeCantoTanto(REAL_ENVIDO);
+        else if(estadoDelTanto() == FALTA_ENVIDO) return PersistenciaCantos.mensajeCantoTanto(FALTA_ENVIDO);
+        return "null";
+    }
+
+    @Override
+    public String getCantoTruco() throws RemoteException {
+        if(estadoDelRabon() == TRUCO) return PersistenciaCantos.mensajeCantoTruco(TRUCO);
+        else if(estadoDelRabon() == RE_TRUCO) return PersistenciaCantos.mensajeCantoTruco(RE_TRUCO);
+        else if(estadoDelRabon() == VALE_CUATRO) return PersistenciaCantos.mensajeCantoTruco(VALE_CUATRO);
+        return "null";
+    }
+
+    @Override
+    public String getCantoFlor() throws RemoteException {
+        if(estadoDeLaFlor() == CONTRA_FLOR) return PersistenciaCantos.mensajeCantoContraFlor();
+        else if(estadoDeLaFlor() == CONTRA_FLOR_AL_RESTO) return PersistenciaCantos.mensajeCantoContraFlorResto();
+        return "null";
+    }
+
 
     @Override
     public void setJugador(int idJugador) throws RemoteException {
@@ -509,7 +559,7 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
 
 
     //
-    // ob
+    // observer
     //
 
 
@@ -522,7 +572,7 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
                 vistaEleccion.actualizarListaJugadores(PersistenciaJugador.listaJugadoresGuardados(false));
             }
             case CANTO_TRUCO -> {
-                if(modelo.getQuienCantoTruco() != jugador.getIDJugador()) vistaJuego.cantaronRabon(PersistenciaCantos.mensajeCantoTruco(EstadoTruco.TRUCO), EstadoTruco.TRUCO);
+                if(modelo.getQuienCantoTruco() != jugador.getIDJugador()) vistaJuego.cantaronRabon(PersistenciaCantos.mensajeCantoTruco(TRUCO), TRUCO);
                 else vistaJuego.bloquearBotones(); // bloqueo los botones al que canto para que no pueda cantar nada mas y no sature la comunicacion
             }
             case CANTO_RETRUCO -> {
@@ -534,11 +584,11 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
                 else vistaJuego.bloquearBotones();
             }
             case CANTO_ENVIDO -> {
-                if(modelo.getQuienCantoEnvido() != jugador.getIDJugador()) vistaJuego.cantaronTanto(PersistenciaCantos.mensajeCantoTanto(EstadoEnvido.ENVIDO), EstadoEnvido.ENVIDO);
+                if(modelo.getQuienCantoEnvido() != jugador.getIDJugador()) vistaJuego.cantaronTanto(PersistenciaCantos.mensajeCantoTanto(ENVIDO), ENVIDO);
                 else vistaJuego.bloquearBotones();
             }
             case CANTO_ENVIDO_DOBLE -> {
-                if(modelo.getQuienCantoEnvidoDoble() != jugador.getIDJugador()) vistaJuego.cantaronTanto(PersistenciaCantos.mensajeCantoTanto(EstadoEnvido.ENVIDO_DOBLE), EstadoEnvido.ENVIDO_DOBLE);
+                if(modelo.getQuienCantoEnvidoDoble() != jugador.getIDJugador()) vistaJuego.cantaronTanto(PersistenciaCantos.mensajeCantoTanto(ENVIDO_DOBLE), ENVIDO_DOBLE);
                 else vistaJuego.bloquearBotones();
             }
             case CANTO_REAL_ENVIDO -> {
@@ -577,8 +627,13 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
                 vistaJuego.mostrarMenuPrincipal();
             }
             case ABANDONO_PARTIDA -> {
-                if(jugador.getIDJugador() == modelo.getIDJugadorGanador()) vistaJuego.finDeLaPartida(modelo.getJugadorGanador());
-                // avisar al rival del que abandono que gano por abandono
+                if(jugador.getIDJugador() == modelo.getIDJugadorGanador()) vistaJuego.finDeLaPartida(modelo.getJugadorGanador() + "(POR ABANDONO)");
+            }
+            case SALIO_DE_PARTIDA -> {
+                if(jugador.getIDJugador() != modelo.getIDJugadorSalio()) {
+                    vistaJuego.bloquearBotones();
+                    vistaJuego.mostrarAviso("SU RIVAL SALIO DE LA PARTIDA, NO PODRA JUGAR HASTA QUE VUELVA ");
+                }
             }
             case LISTA_JUGADORES_TOTALES -> {
                 // aca hay que pasarle la lista no ordenada
@@ -601,16 +656,22 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
                 vistaJuego.reanudarPartida();
             }
             case RESTABLECIO_J1 -> {
-                if(jugador == null) System.out.println("el jugador del controlador es null");
-                if(jugador.getIDJugador() == modelo.getIdJ1() && jugador != null) vistaJuego.mostrarEsperaRival();
+                if(jugador != null) {
+                    if(jugador.getIDJugador() == modelo.getIdJ1()) vistaJuego.mostrarEsperaRival();
+                }
                 else if(!(modelo.getReanudoJ2())) vistaEleccion.reanudarPartida(getJugadoresRecuperados());
             }
             case RESTABLECIO_J2 -> {
-                if(jugador.getIDJugador() == modelo.getIdJ2()) vistaJuego.mostrarEsperaRival();
+                if(jugador != null) {
+                    if(jugador.getIDJugador() == modelo.getIdJ2()) vistaJuego.mostrarEsperaRival();
+                }
                 else if(!(modelo.getReanudoJ1())) vistaEleccion.reanudarPartida(getJugadoresRecuperados());
             }
             case CANTO_FLOR -> {
                 if(modelo.getQuienCantoFlor() != jugador.getIDJugador()) vistaJuego.cantaronFlor(PersistenciaCantos.mensajeCantoFlor(), FLOR);
+
+                // si el jugador al que le cantaron no tiene flor ya le sumo los 3 al que canto y tiene
+                if(modelo.getQuienCantoFlor() != jugador.getIDJugador() && !jugador.tengoFlor()) modelo.florNoQuerida(jugador.getIDJugador());
             }
             case CANTO_CONTRAFLOR -> {
                 if(modelo.getQuienCantoFlor() != jugador.getIDJugador()) vistaJuego.cantaronFlor(PersistenciaCantos.mensajeCantoContraFlor(), CONTRA_FLOR);

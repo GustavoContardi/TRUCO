@@ -33,6 +33,17 @@ public class ClienteTruco {
         opciones.add("Interfaz Gráfica");
         opciones.add("Consola Gráfica");
 
+        // Interfaz del cliente
+        String interfaz = (String) JOptionPane.showInputDialog(
+                null,
+                "Seleccione cómo quiere visualizar el juego",
+                "Interfaz gráfica",
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                opciones.toArray(),
+                null
+        );
+
         // Obtener IP del cliente
         ArrayList<String> ips = Util.getIpDisponibles();
         String ip = (String) JOptionPane.showInputDialog(
@@ -47,8 +58,7 @@ public class ClienteTruco {
 
         if (ip == null) {
             JOptionPane.showMessageDialog(null, "Operación cancelada.");
-            VistaInicio ini = new VistaInicio();
-            ini.iniciar(); // inicia sin pantalla de carga asi da la sensacion que solo volvio para atrás
+            new VistaInicio().iniciar(); // inicia sin pantalla de carga asi da la sensacion que solo volvio para atrás
             return;
         }
 
@@ -148,21 +158,10 @@ public class ClienteTruco {
             }
         }
 
-        // Interfaz del cliente
-        String interfaz = (String) JOptionPane.showInputDialog(
-                null,
-                "Seleccione cómo quiere visualizar el juego",
-                "Interfaz gráfica",
-                JOptionPane.QUESTION_MESSAGE,
-                null,
-                opciones.toArray(),
-                null
-        );
 
         if (interfaz == null) {
             JOptionPane.showMessageDialog(null, "Operación cancelada.");
-            VistaInicio ini = new VistaInicio();
-            ini.iniciar(); // inicia sin pantalla de carga asi da la sensacion que solo volvio para atrás
+            new VistaInicio().iniciar(); // inicia sin pantalla de carga asi da la sensacion que solo volvio para atrás
             return;
         }
 

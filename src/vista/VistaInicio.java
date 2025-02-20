@@ -30,16 +30,24 @@ public class VistaInicio extends JFrame {
     private JButton btnReanudar;
 
     public VistaInicio() {
-        setSize(500, 450);
         setContentPane(panel1);
         setResizable(false);
         setLocationRelativeTo(null);
+        setSize(450, 460);
         setTitle("Menú principal - Truco");
 
         instrucciones.setText("¡Bienvenido al Trucontardi! Seleccione una opción");
 
         // EVENTOS
-        btnCrearNuevo.addActionListener(e -> pantallaJugar(false));
+        btnCrearNuevo.addActionListener(e -> {
+            //pantallaJugar(false);
+            try {
+                new ServidorTruco();
+                new ClienteTruco(false);
+            } catch (RemoteException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
 
         btnSalir.addActionListener(e -> System.exit(0));
 
@@ -50,8 +58,7 @@ public class VistaInicio extends JFrame {
         btnReglas.addActionListener(e -> abrirURL("https://trucogame.com/pages/reglamento-de-truco-argentino"));
 
         btnAnotador.addActionListener(e -> {
-            AnotadorGrafico anotador = new AnotadorGrafico(this);
-            anotador.iniciar();
+            new AnotadorGrafico(this).iniciar();
             setVisible(false);
         });
 
@@ -114,7 +121,7 @@ public class VistaInicio extends JFrame {
     private void pantallaJugar(boolean reanuda){
         // Crear el marco de la ventana
         JFrame frame = new JFrame();
-        frame.setSize(400, 175);
+        frame.setSize(500, 175);
         frame.setResizable(false);
         frame.setLocationRelativeTo(null); // Centrar la ventana
 
@@ -145,8 +152,8 @@ public class VistaInicio extends JFrame {
             btnIngresarServer.addActionListener(e -> {
             try {
                 new ClienteTruco(true);
-                dispose();
-                frame.dispose();
+                dispose(); // frame de la vista inicio
+                frame.dispose(); // mini frame de la vista para elegir las opciones de inicio
             } catch (RemoteException ex) {
                 ex.printStackTrace();
             }
@@ -178,9 +185,11 @@ public class VistaInicio extends JFrame {
                             partidas.toArray(),
                             null
                     );
-                    new ServidorTruco(partida);
+                    if(partida != null) {
+                        btnCrearServer.setEnabled(false);
+                        new ServidorTruco(partida);
+                    }
                 }
-                    btnCrearServer.setEnabled(false);
             });
 
         }
@@ -191,7 +200,6 @@ public class VistaInicio extends JFrame {
             btnCrearServer.addActionListener(e -> {
                 try {
                     new ServidorTruco();
-                    //instrucciones.setText("¡Servido creado con éxito! Ahora puede ingresar a él");
                 } catch (RemoteException ex) {
                     throw new RuntimeException(ex);
                 }
@@ -200,8 +208,8 @@ public class VistaInicio extends JFrame {
             btnIngresarServer.addActionListener(e -> {
                 try {
                     new ClienteTruco(false);
-                    dispose();
-                    frame.dispose();
+                    dispose(); // frame de la vista inicio
+                    frame.dispose(); // frame de la mini vista para iniciar
                 } catch (RemoteException ex) {
                     ex.printStackTrace();
                 }

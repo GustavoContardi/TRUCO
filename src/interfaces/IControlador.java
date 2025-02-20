@@ -22,9 +22,9 @@ public interface IControlador {
     void recuperarPartida() throws RemoteException;
     void cantarTanto(EstadoEnvido estado) throws RemoteException;
     void cantarRabon(EstadoTruco estado) throws RemoteException;
-    int esTurnoDe() throws RemoteException;
     EstadoEnvido estadoDelTanto() throws RemoteException;
-    EstadoTruco estadoDelRabon()throws RemoteException ;
+    EstadoTruco estadoDelRabon() throws RemoteException;
+    EstadoFlor estadoDeLaFlor() throws RemoteException;
     void cantoNoQuerido() throws RemoteException;
     void setModelo(IModelo modelo);
     boolean esMiTurno()throws RemoteException ;
@@ -40,6 +40,7 @@ public interface IControlador {
     void rabonNoQuerido() throws RemoteException;
     void tantoQuerido() throws RemoteException;
     void tantoNoQuerido() throws RemoteException ;
+    void salirDeLaPartida() throws RemoteException ;
     ArrayList<Jugador> listaJugadoresMasGanadores();
     boolean puedoCantarTruco(EstadoTruco estado) throws RemoteException;
     boolean puedoCantarEnvido(EstadoEnvido estado);
@@ -63,6 +64,13 @@ public interface IControlador {
     void noQuieroFlor(EstadoFlor estado) throws RemoteException;
     void florQuerida(EstadoFlor estado) throws RemoteException;
     boolean seJuegaConFlor() throws RemoteException;
+    boolean seEstabaCantandoTanto() throws RemoteException;
+    boolean seEstabaCantandoTruco() throws RemoteException;
+    boolean seEstabaCantandoFlor() throws RemoteException;
+    boolean meCantaronElUltimo() throws RemoteException;
+    String getCantoTanto() throws RemoteException;
+    String getCantoTruco() throws RemoteException;
+    String getCantoFlor() throws RemoteException;
 
     void setJugador(int idJugador) throws RemoteException;
     void setJugadorReanudar(int idJugador) throws RemoteException;

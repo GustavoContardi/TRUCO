@@ -59,7 +59,12 @@ public class VistaConsola implements IVistaJuego, IVistaInicio, Serializable {
 
                 if (response == JOptionPane.YES_OPTION) {
                     // Cierra la ventana si el usuario confirma
-                    frame.dispose();
+                    try {
+                        controlador.salirDeLaPartida();
+                        frame.dispose();
+                    } catch (RemoteException ex) {
+                        ex.printStackTrace();
+                    }
                 } else {
                     // Evita cualquier acción adicional si selecciona "No"
                     System.out.println("El usuario canceló el cierre de la ventana.");
@@ -94,6 +99,7 @@ public class VistaConsola implements IVistaJuego, IVistaInicio, Serializable {
             }
         });
 
+        bloqBotones = false;
     }
 
     //
@@ -218,9 +224,16 @@ public class VistaConsola implements IVistaJuego, IVistaInicio, Serializable {
     @Override
     public void reanudarPartida() throws RemoteException {
         // solo tengo que mostrar la mesa porque tiene todo
-
+        bloqBotones = false;
         limpiarPantalla(); // limpio para que no quede nada arriba de lo que viene abajo
+
         setFlujoActual(new FlujoMostrarCartas(this, controlador));
+
+        if(controlador.seEstabaCantandoTanto() && controlador.meCantaronElUltimo()) cantaronTanto(controlador.getCantoTanto(), controlador.estadoDelTanto());
+        else if(controlador.seEstabaCantandoTruco() && controlador.meCantaronElUltimo()) cantaronRabon(controlador.getCantoTanto(), controlador.estadoDelRabon());
+        else if(controlador.seEstabaCantandoFlor() && controlador.meCantaronElUltimo()) cantaronFlor(controlador.getCantoFlor(), controlador.estadoDeLaFlor());
+        else if((controlador.seEstabaCantandoTruco() || controlador.seEstabaCantandoTanto() || controlador.seEstabaCantandoFlor()) && !controlador.meCantaronElUltimo()) bloquearBotones();
+        //else setFlujoActual(new FlujoMostrarCartas(this, controlador));
     }
 
     @Override
@@ -251,17 +264,17 @@ public class VistaConsola implements IVistaJuego, IVistaInicio, Serializable {
 
         if( (controlador.nroDeRonda() == 1)){
             if(!controlador.seCantoEnvido()) {
-                if(controlador.seJuegaConFlor() && controlador.tengoFlor()) println("1- Envido | 2- Truco | 3- Tirar Carta | 4- Ir al mazo | 5- Flor | 6- Abandonar Partida");
-                else println("1- Envido | 2- Truco | 3- Tirar Carta | 4- Ir al mazo");
+                if(controlador.seJuegaConFlor() && controlador.tengoFlor()) println("1- Envido | 2- Truco | 3- Tirar Carta | 4- Ir al mazo | 5- Flor | 6- Abandonar Partida | 7- Volver al menu principal");
+                else println("1- Envido | 2- Truco | 3- Tirar Carta | 4- Ir al mazo | 6- Abandonar Partida | 7- Volver al menu principal");
             }
-            else println("2- Truco | 3- Tirar Carta | 4- Ir al mazo | 6- Abandonar Partida");
+            else println("2- Truco | 3- Tirar Carta | 4- Ir al mazo | 6- Abandonar Partida | 7- Volver al menu principal");
         }
         else{
             switch (controlador.estadoDelRabon()){
-                case NADA -> println("2- Truco | 3- Tirar Carta | 4- Ir al mazo | 6- Abandonar Partida");
-                case TRUCO -> println("2- Re Truco | 3- Tirar Carta | 4- Ir al mazo | 6- Abandonar Partida");
-                case RE_TRUCO ->  println("2- Vale Cuatro | 3- Tirar Carta | 4- Ir al mazo | 6- Abandonar Partida");
-                case VALE_CUATRO -> println("3- Tirar Carta | 4- Ir al mazo | 6- Abandonar Partida");
+                case NADA -> println("2- Truco | 3- Tirar Carta | 4- Ir al mazo | 6- Abandonar Partida | 7- Volver al menu principal");
+                case TRUCO -> println("2- Re Truco | 3- Tirar Carta | 4- Ir al mazo | 6- Abandonar Partida | 7- Volver al menu principal");
+                case RE_TRUCO ->  println("2- Vale Cuatro | 3- Tirar Carta | 4- Ir al mazo | 6- Abandonar Partida | 7- Volver al menu principal");
+                case VALE_CUATRO -> println("3- Tirar Carta | 4- Ir al mazo | 6- Abandonar Partida | 7- Volver al menu principal");
             }
         }
 

@@ -135,7 +135,7 @@ public class Main {
         System.out.println(jugador2.getCartasObtenidas().get(0).toString()+ " " + jugador2.getCartasObtenidas().get(1).toString()+ " " +jugador2.getCartasObtenidas().get(2).toString());
         System.out.println(jugador2.getNombre() + " puntos de envido: " + jugador2.puntosEnvido());*/
 
-        //PersistenciaJugador.delvolverTodosJugadores();
+        PersistenciaJugador.delvolverTodosJugadores();
         VistaInicio inicio = new VistaInicio();
         VistaInicio inicio2 = new VistaInicio();
         inicio.iniciar();

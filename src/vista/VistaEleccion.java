@@ -47,6 +47,7 @@ public class VistaEleccion implements IVistaEleccion {
         procesarActualizarJugador();
         procesarEliminarJugador();
         procesarEleccionJugador();
+        setJMenubar();
     }
 
     public void procesarAltaJugador() throws RemoteException {
@@ -336,5 +337,19 @@ public class VistaEleccion implements IVistaEleccion {
         });
     }
 
+    private void setJMenubar() {
+        JMenuBar mnuPrincipal = new JMenuBar();
+        JMenu mnuArchivo = new JMenu("Opciones");
+        mnuPrincipal.add(mnuArchivo);
+        JMenuItem mnuiSalir = new JMenuItem("Volver al menu principal");
+
+        mnuiSalir.addActionListener(e ->{
+            new VistaInicio().iniciar();
+            frame.dispose();
+        });
+
+        mnuArchivo.add(mnuiSalir);
+        frame.setJMenuBar(mnuPrincipal);
+    }
 
 }

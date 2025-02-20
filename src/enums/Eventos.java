@@ -29,6 +29,7 @@ public enum Eventos implements Serializable {
     PUNTAJES,
     NUEVA_RONDA,
     ABANDONO_PARTIDA,
+    SALIO_DE_PARTIDA,
     RESTABLECER_PARTIDA,
     RESTABLECIO_J1,
     RESTABLECIO_J2,
