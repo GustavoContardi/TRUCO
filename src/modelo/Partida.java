@@ -721,6 +721,7 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
 
     @Override
     public String toString(){
+        if(anotador == null) return "ID: " + idPartida;
         return "ID: " + idPartida + " | " + anotador.toString();
     }
 

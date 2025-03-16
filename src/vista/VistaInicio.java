@@ -9,6 +9,7 @@ import persistencia.PersistenciaPartida;
 import servidor.ServidorTruco;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -28,25 +29,20 @@ public class VistaInicio extends JFrame {
     private JLabel titulo;
     private JLabel instrucciones;
     private JButton btnReanudar;
+    private Image icono;
 
     public VistaInicio() {
         setContentPane(panel1);
-        setResizable(false);
-        setLocationRelativeTo(null);
         setSize(450, 460);
         setTitle("Menú principal - Truco");
+        setLocationRelativeTo(null);
+        setResizable(false);
 
         instrucciones.setText("¡Bienvenido al Trucontardi! Seleccione una opción");
 
         // EVENTOS
         btnCrearNuevo.addActionListener(e -> {
-            //pantallaJugar(false);
-            try {
-                new ServidorTruco();
-                new ClienteTruco(false);
-            } catch (RemoteException ex) {
-                throw new RuntimeException(ex);
-            }
+            pantallaJugar(false);
         });
 
         btnSalir.addActionListener(e -> System.exit(0));
@@ -61,7 +57,9 @@ public class VistaInicio extends JFrame {
             new AnotadorGrafico(this).iniciar();
             setVisible(false);
         });
-
+        initIcono();
+        //setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/icono.jpeg")));
+        setIconImage(icono);
 
     }
 
@@ -124,6 +122,7 @@ public class VistaInicio extends JFrame {
         frame.setSize(500, 175);
         frame.setResizable(false);
         frame.setLocationRelativeTo(null); // Centrar la ventana
+        frame.setIconImage(icono);
 
         // Crear el panel principal
         JPanel panel = new JPanel();
@@ -223,5 +222,37 @@ public class VistaInicio extends JFrame {
         panel.add(buttonPanel, BorderLayout.SOUTH);
         frame.add(panel);
         frame.setVisible(true);
+    }
+
+    private void initIcono() {
+        icono = new ImageIcon("icono.jpeg").getImage();
+        Image originalImage = icono;
+        Image scaledImage = originalImage.getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+        icono = new ImageIcon(scaledImage).getImage();
+    }
+
+
+    private static class RoundedBorder implements Border {
+        private int radius;
+
+        public RoundedBorder(int radius) {
+            this.radius = radius;
+        }
+
+        @Override
+        public Insets getBorderInsets(Component c) {
+            return new Insets(radius, radius, radius, radius);
+        }
+
+        @Override
+        public boolean isBorderOpaque() {
+            return true;
+        }
+
+        @Override
+        public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
+            g.setColor(Color.GRAY);
+            g.drawRoundRect(x, y, width - 1, height - 1, radius, radius);
+        }
     }
 }

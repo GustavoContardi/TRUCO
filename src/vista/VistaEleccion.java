@@ -30,6 +30,7 @@ public class VistaEleccion implements IVistaEleccion {
     private final JFrame frame;
     private IControlador controlador;
     private String nombreJugador;
+    private Image icono;
 
     private DefaultListModel<String> listModel;
 
@@ -48,6 +49,8 @@ public class VistaEleccion implements IVistaEleccion {
         procesarEliminarJugador();
         procesarEleccionJugador();
         setJMenubar();
+        initIcono();
+        frame.setIconImage(icono);
     }
 
     public void procesarAltaJugador() throws RemoteException {
@@ -350,6 +353,13 @@ public class VistaEleccion implements IVistaEleccion {
 
         mnuArchivo.add(mnuiSalir);
         frame.setJMenuBar(mnuPrincipal);
+    }
+
+    private void initIcono() {
+        icono = new ImageIcon("icono.jpeg").getImage();
+        Image originalImage = icono;
+        Image scaledImage = originalImage.getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+        icono = new ImageIcon(scaledImage).getImage();
     }
 
 }

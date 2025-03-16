@@ -3,6 +3,7 @@ package vista;
 import interfaces.IVistaInicio;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.Serializable;
@@ -20,6 +21,7 @@ public class AnotadorGrafico implements Serializable {
     private JLabel JUGADOR2Label;
     private JFrame frame;
     private VistaInicio inicio;
+    private Image icono;
 
     private Integer puntosJugador1;
     private Integer puntosJugador2;
@@ -33,6 +35,9 @@ public class AnotadorGrafico implements Serializable {
         frame.setSize(470, 500);
 
         this.inicio = inicio;
+
+        initIcono();
+        frame.setIconImage(icono);
     }
 
     public void iniciar(){
@@ -98,5 +103,12 @@ public class AnotadorGrafico implements Serializable {
 
     private void createUIComponents() {
         // TODO: place custom component creation code here
+    }
+
+    private void initIcono() {
+        icono = new ImageIcon("icono.jpeg").getImage();
+        Image originalImage = icono;
+        Image scaledImage = originalImage.getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+        icono = new ImageIcon(scaledImage).getImage();
     }
 }

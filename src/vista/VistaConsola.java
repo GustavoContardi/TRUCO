@@ -9,6 +9,7 @@ import interfaces.IVistaJuego;
 import vista.flujos.*;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -29,6 +30,7 @@ public class VistaConsola implements IVistaJuego, IVistaInicio, Serializable {
     private Flujo flujoActual;
     private IControlador controlador;
     private boolean bloqBotones;
+    private Image icono;
 
 
     //
@@ -36,7 +38,7 @@ public class VistaConsola implements IVistaJuego, IVistaInicio, Serializable {
     //
 
     public VistaConsola() throws RemoteException {
-        this.frame = new JFrame("TRUCO - MODO CONSOLA");
+        this.frame = new JFrame("APP TRUCO");
         frame.setContentPane(ventana);
         frame.pack();
         frame.setResizable(false);
@@ -100,6 +102,9 @@ public class VistaConsola implements IVistaJuego, IVistaInicio, Serializable {
         });
 
         bloqBotones = false;
+
+        initIcono();
+        frame.setIconImage(icono);
     }
 
     //
@@ -178,6 +183,7 @@ public class VistaConsola implements IVistaJuego, IVistaInicio, Serializable {
     @Override
     public void mostrarMenuPrincipal() throws RemoteException {
         limpiarPantalla();
+        frame.setTitle("APP TRUCO - " + controlador.getNombreJugador());
         iniciar();
         setFlujoActual(new FlujoMostrarCartas(this, controlador));
     }
@@ -347,5 +353,11 @@ public class VistaConsola implements IVistaJuego, IVistaInicio, Serializable {
         flujoActual.mostrarSiguienteTexto();
     }
 
+    private void initIcono() {
+        icono = new ImageIcon("icono.jpeg").getImage();
+        Image originalImage = icono;
+        Image scaledImage = originalImage.getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+        icono = new ImageIcon(scaledImage).getImage();
+    }
 
 }

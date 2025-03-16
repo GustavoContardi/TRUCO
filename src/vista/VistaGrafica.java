@@ -49,6 +49,7 @@ public class VistaGrafica implements IVistaJuego, Serializable {
     private JButton btnAuxiliar;
     private JFrame frame;
     private IControlador controlador;
+    private Image icono;
 
     public VistaGrafica() throws RemoteException {
         this.frame = new JFrame("TRUCONTARDI");
@@ -86,6 +87,10 @@ public class VistaGrafica implements IVistaJuego, Serializable {
                 }
             }
         });
+
+        initIcono();
+        frame.setIconImage(icono);
+
     }
 
 
@@ -97,7 +102,6 @@ public class VistaGrafica implements IVistaJuego, Serializable {
         removeAllActionListeners(btnCarta1);
         removeAllActionListeners(btnCarta2);
         removeAllActionListeners(btnCarta3);
-
 
         ArrayList<String> cartas = controlador.obtenerTodasLasCartas();
 
@@ -1127,6 +1131,13 @@ public class VistaGrafica implements IVistaJuego, Serializable {
         mnuArchivo.add(mnuiSalir);
         mnuArchivo.add(mnuiAbandonar);
         frame.setJMenuBar(mnuPrincipal);
+    }
+
+    private void initIcono() {
+        icono = new ImageIcon("icono.jpeg").getImage();
+        Image originalImage = icono;
+        Image scaledImage = originalImage.getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+        icono = new ImageIcon(scaledImage).getImage();
     }
 
 }
