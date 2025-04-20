@@ -1,7 +1,6 @@
 package vista;
 
 import cliente.ClienteTruco;
-import modelo.Anotador;
 import modelo.Jugador;
 import modelo.Partida;
 import persistencia.PersistenciaJugador;
@@ -11,8 +10,7 @@ import servidor.ServidorTruco;
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -28,7 +26,6 @@ public class VistaInicio extends JFrame {
     private JButton btnAnotador;
     private JLabel titulo;
     private JLabel instrucciones;
-    private JButton btnReanudar;
     private Image icono;
 
     public VistaInicio() {
@@ -38,28 +35,10 @@ public class VistaInicio extends JFrame {
         setLocationRelativeTo(null);
         setResizable(false);
 
-        instrucciones.setText("¡Bienvenido al Trucontardi! Seleccione una opción");
-
-        // EVENTOS
-        btnCrearNuevo.addActionListener(e -> {
-            pantallaJugar(false);
-        });
-
-        btnSalir.addActionListener(e -> System.exit(0));
-
-        btnTop.addActionListener(e -> pantallaTopJugadores());
-
-        btnReanudar.addActionListener(e -> pantallaJugar(true)); // Reanudar partida
-
-        btnReglas.addActionListener(e -> abrirURL("https://trucogame.com/pages/reglamento-de-truco-argentino"));
-
-        btnAnotador.addActionListener(e -> {
-            new AnotadorGrafico(this).iniciar();
-            setVisible(false);
-        });
         initIcono();
-        //setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/icono.jpeg")));
         setIconImage(icono);
+
+        setBotonesInicio();
 
     }
 
@@ -93,7 +72,7 @@ public class VistaInicio extends JFrame {
     }
 
     private void pantallaTopJugadores(){
-        JFrame frame2 = new JFrame("TRUCONTARDI");
+        JFrame frame2 = new JFrame("TRUCONTARDI - TOP JUGADORES");
         frame2.setResizable(false);
         frame2.setSize(500, 600);
         frame2.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -116,114 +95,6 @@ public class VistaInicio extends JFrame {
         frame2.setVisible(true);
     }
 
-    private void pantallaJugar(boolean reanuda){
-        // Crear el marco de la ventana
-        JFrame frame = new JFrame();
-        frame.setSize(500, 175);
-        frame.setResizable(false);
-        frame.setLocationRelativeTo(null); // Centrar la ventana
-        frame.setIconImage(icono);
-
-        // Crear el panel principal
-        JPanel panel = new JPanel();
-        panel.setLayout(new BorderLayout());
-
-        // Etiqueta de instrucciones
-        JLabel label = new JLabel("INGRESE UNA OPCION PARA REANUDAR LA PARTIDA", JLabel.CENTER);
-        label.setFont(new Font("Arial", Font.BOLD, 13));
-        panel.add(label, BorderLayout.CENTER);
-
-        // Espaciador entre la etiqueta y los botones
-        //panel.add(Box.createVerticalStrut(20), BorderLayout.CENTER);
-
-        // Panel para botones
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 10));
-
-        JButton btnCrearServer = new JButton();
-        JButton btnIngresarServer = new JButton();
-
-        if(reanuda){
-            frame.setTitle("REANUDAR PARTIDA");
-            btnCrearServer.setText("CREAR UN SERVIDOR");
-            btnIngresarServer.setText("INGRESAR A UN SERVIDOR");
-            // le seteo los action listener antes de añadirlos al panel
-            btnIngresarServer.addActionListener(e -> {
-            try {
-                new ClienteTruco(true);
-                dispose(); // frame de la vista inicio
-                frame.dispose(); // mini frame de la vista para elegir las opciones de inicio
-            } catch (RemoteException ex) {
-                ex.printStackTrace();
-            }
-            });
-
-            btnCrearServer.addActionListener(e -> {
-                ArrayList<Partida> partidas = PersistenciaPartida.listaPartidasGuardadas();
-
-                if(partidas == null || partidas.isEmpty()) {
-                    JFrame frameMSJ;
-                    frameMSJ = new JFrame("TRUCONTARDI");
-                    frameMSJ.setSize(400, 100);
-                    JPanel panelPrincipal = (JPanel) frameMSJ.getContentPane();
-                    panelPrincipal.setLayout(new BorderLayout());
-
-                    JLabel etiqueta1 = new JLabel("NO TIENES PARTIDAS PENDIENTES, ¡PARA JUGAR CREA UNA!");
-                    frame.dispose();
-                    panelPrincipal.add(etiqueta1, BorderLayout.CENTER);
-
-                    frameMSJ.setVisible(true);
-                    frameMSJ.setLocationRelativeTo(null);
-                }
-                else{
-                    Partida partida = (Partida) JOptionPane.showInputDialog(
-                            null,
-                            "Seleccione la partida que quiera reanudar", "PARTIDAS PENDIENTES",
-                            JOptionPane.QUESTION_MESSAGE,
-                            null,
-                            partidas.toArray(),
-                            null
-                    );
-                    if(partida != null) {
-                        btnCrearServer.setEnabled(false);
-                        new ServidorTruco(partida);
-                    }
-                }
-            });
-
-        }
-        else {
-            frame.setTitle("INICIAR PARTIDA");
-            btnCrearServer.setText("CREAR UN JUEGO");
-            btnIngresarServer.setText("INGRESAR A UN JUEGO");
-            btnCrearServer.addActionListener(e -> {
-                try {
-                    new ServidorTruco();
-                } catch (RemoteException ex) {
-                    throw new RuntimeException(ex);
-                }
-            });
-
-            btnIngresarServer.addActionListener(e -> {
-                try {
-                    new ClienteTruco(false);
-                    dispose(); // frame de la vista inicio
-                    frame.dispose(); // frame de la mini vista para iniciar
-                } catch (RemoteException ex) {
-                    ex.printStackTrace();
-                }
-            });
-        }
-
-        buttonPanel.add(btnCrearServer);
-        buttonPanel.add(btnIngresarServer);
-
-
-        panel.add(buttonPanel, BorderLayout.SOUTH);
-        frame.add(panel);
-        frame.setVisible(true);
-    }
-
     private void initIcono() {
         icono = new ImageIcon("icono.jpeg").getImage();
         Image originalImage = icono;
@@ -231,28 +102,164 @@ public class VistaInicio extends JFrame {
         icono = new ImageIcon(scaledImage).getImage();
     }
 
+    private void setBotonesInicio(){
+        eliminarAllActionListener();
+        btnReglas.setEnabled(true);
+        btnAnotador.setEnabled(true);
+        btnCrearNuevo.setEnabled(true);
 
-    private static class RoundedBorder implements Border {
-        private int radius;
+        instrucciones.setText("¡Bienvenido al Trucontardi! Seleccione una opción");
 
-        public RoundedBorder(int radius) {
-            this.radius = radius;
-        }
+        // EVENTOS
 
-        @Override
-        public Insets getBorderInsets(Component c) {
-            return new Insets(radius, radius, radius, radius);
-        }
+        btnCrearNuevo.addActionListener(e -> {
+            setBotonesJugar();
+        });
 
-        @Override
-        public boolean isBorderOpaque() {
-            return true;
-        }
+        btnSalir.setText("  SALIR  ");
+        btnSalir.addActionListener(e -> System.exit(0));
 
-        @Override
-        public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
-            g.setColor(Color.GRAY);
-            g.drawRoundRect(x, y, width - 1, height - 1, radius, radius);
+        btnTop.addActionListener(e -> pantallaTopJugadores());
+
+
+        btnReglas.addActionListener(e -> abrirURL("https://trucogame.com/pages/reglamento-de-truco-argentino"));
+
+        btnAnotador.addActionListener(e -> {
+            new AnotadorGrafico(this).iniciar();
+            setVisible(false);
+        });
+    }
+
+    private void setBotonesJugar(){
+        eliminarAllActionListener();
+
+        instrucciones.setText("Seleccione una opción para empezar a jugar");
+
+        btnCrearNuevo.setEnabled(true);
+        btnCrearNuevo.setText("INICIAR NUEVA PARTIDA");
+        btnCrearNuevo.addActionListener(e -> {
+            setBotonesCrearNueva();
+        });
+
+        btnTop.setText("REANUDAR UNA PARTIDA");
+        btnTop.addActionListener(e -> {
+            setBotonesReanudar();
+        });
+
+        btnAnotador.setEnabled(false);
+        btnReglas.setEnabled(false);
+
+        btnSalir.setText("  VOLVER  ");
+        btnSalir.addActionListener(e -> {
+            setBotonesInicio();
+        });
+    }
+
+    private void setBotonesReanudar(){
+        eliminarAllActionListener();
+
+        instrucciones.setText("Elija una opcion para ingresar a la partida");
+
+        btnCrearNuevo.setEnabled(true);
+        btnCrearNuevo.setText("REANUDAR NUEVA PARTIDA");
+        btnCrearNuevo.addActionListener(e -> {
+            ArrayList<Partida> partidas = PersistenciaPartida.listaPartidasGuardadas();
+
+            if(partidas == null || partidas.isEmpty()) {
+                JFrame frameMSJ;
+                frameMSJ = new JFrame("TRUCONTARDI");
+                frameMSJ.setSize(400, 100);
+                JPanel panelPrincipal = (JPanel) frameMSJ.getContentPane();
+                panelPrincipal.setLayout(new BorderLayout());
+
+                JLabel etiqueta1 = new JLabel("NO TIENES PARTIDAS PENDIENTES, ¡PARA JUGAR CREA UNA!");
+                frameMSJ.dispose();
+                panelPrincipal.add(etiqueta1, BorderLayout.CENTER);
+
+                frameMSJ.setVisible(true);
+                frameMSJ.setLocationRelativeTo(null);
+            }
+            else{
+                Partida partida = (Partida) JOptionPane.showInputDialog(
+                        null,
+                        "Seleccione la partida que quiera reanudar", "PARTIDAS PENDIENTES",
+                        JOptionPane.QUESTION_MESSAGE,
+                        null,
+                        partidas.toArray(),
+                        null
+                );
+                if(partida != null) {
+                    new ServidorTruco(partida);
+                    btnCrearNuevo.setEnabled(false);
+                }
+            }
+        });
+
+        btnTop.setText("INGRESAR UNA PARTIDA");
+        btnTop.addActionListener(e -> {
+            try {
+                new ClienteTruco(true);
+                dispose();
+            } catch (RemoteException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+
+        btnAnotador.setEnabled(false);
+        btnReglas.setEnabled(false);
+
+        btnSalir.setText("  VOLVER  ");
+        btnSalir.addActionListener(e -> {
+            setBotonesJugar();
+        });
+    }
+
+    private void setBotonesCrearNueva(){
+        eliminarAllActionListener();
+
+        instrucciones.setText("Elija una opcion para iniciar la partida");
+
+        btnCrearNuevo.setText("CREAR NUEVA PARTIDA");
+        btnCrearNuevo.addActionListener(e -> {
+            try {
+                new ServidorTruco();
+                btnCrearNuevo.setEnabled(false);
+            } catch (RemoteException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+
+        btnTop.setText("INGRESAR UNA PARTIDA");
+        btnTop.addActionListener(e -> {
+            try {
+                new ClienteTruco(false);
+                dispose(); // frame de la vista inicio
+            } catch (RemoteException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+
+        btnAnotador.setEnabled(false);
+        btnReglas.setEnabled(false);
+
+        btnSalir.setText("  VOLVER  ");
+        btnSalir.addActionListener(e -> {
+            setBotonesJugar();
+        });
+    }
+
+    private void eliminarAllActionListener(){
+        removeAllActionListeners(btnAnotador);
+        removeAllActionListeners(btnCrearNuevo);
+        removeAllActionListeners(btnTop);
+        removeAllActionListeners(btnSalir);
+        removeAllActionListeners(btnReglas);
+    }
+
+    private void removeAllActionListeners(AbstractButton button) {
+        ActionListener[] listeners = button.getActionListeners();
+        for (ActionListener listener : listeners) {
+            button.removeActionListener(listener);
         }
     }
 }
