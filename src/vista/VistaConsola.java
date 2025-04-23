@@ -316,7 +316,7 @@ public class VistaConsola implements IVistaJuego, IVistaInicio, Serializable {
                     println("| " + cartasYo.get(0) + " | " + cartasRival.get(0) + " | ");
                     println("| " + cartasYo.get(1) + " | " + cartasRival.get(1) + " | ");
 
-                    if(cartasYo.size() < 2 && cartasRival.size() < 2) println("|                   |                   |");
+                    if(cartasYo.size() <= 2 && cartasRival.size() <= 2) println("|                   |                   |");
                     else if(cartasYo.size() > 2 && cartasRival.size() < 3) println("| " + cartasYo.get(2) + " |                   |");
                     else if(cartasYo.size() < 3 && cartasRival.size() > 2) println("|               " + " | " + cartasRival.get(2)+ " |");
                     else  println("| " + cartasYo.get(2) + " | " + cartasRival.get(2) + " | ");

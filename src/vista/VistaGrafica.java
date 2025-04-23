@@ -107,6 +107,7 @@ public class VistaGrafica implements IVistaJuego, Serializable {
 
         if (cartas != null) {
             actualizar();
+            accionesJ2.setText("");
         }
         else {
             accionesJ2.setText("Esperando contrincante...");
@@ -120,7 +121,7 @@ public class VistaGrafica implements IVistaJuego, Serializable {
 
     @Override
     public void mostrarMensaje(String msj) {
-        puntajesLabel.setText(msj);
+        accionesJ2.setText(msj);
     }
 
     @Override
@@ -240,7 +241,7 @@ public class VistaGrafica implements IVistaJuego, Serializable {
                             accionesJ2.setText("");
                             TRUCOButton.setEnabled(false);
                             setBotones();
-                            bloquearBotones();
+                            //bloquearBotones();
                         } catch (RemoteException ex) {
                             ex.printStackTrace();
                         }
@@ -258,7 +259,7 @@ public class VistaGrafica implements IVistaJuego, Serializable {
                             accionesJ2.setText("");
                             TRUCOButton.setEnabled(false);
                             setBotones();
-                            bloquearBotones();
+                            //bloquearBotones();
                         } catch (RemoteException ex) {
                             ex.printStackTrace();
                         }
@@ -320,7 +321,7 @@ public class VistaGrafica implements IVistaJuego, Serializable {
                             controlador.cantarTanto(ENVIDO_DOBLE);
                             accionesJ2.setText("");
                             setBotones();
-                            bloquearBotones();
+                            //bloquearBotones();
                         } catch (RemoteException ex) {
                             ex.printStackTrace();
                         }
@@ -334,7 +335,7 @@ public class VistaGrafica implements IVistaJuego, Serializable {
                             controlador.cantarTanto(REAL_ENVIDO);
                             accionesJ2.setText("");
                             setBotones();
-                            bloquearBotones();
+                            //bloquearBotones();
                         } catch (RemoteException ex) {
                             ex.printStackTrace();
                         }
@@ -349,7 +350,7 @@ public class VistaGrafica implements IVistaJuego, Serializable {
                             controlador.cantarTanto(FALTA_ENVIDO);
                             accionesJ2.setText("");
                             setBotones();
-                            bloquearBotones();
+                            //bloquearBotones();
                         } catch (RemoteException ex) {
                             ex.printStackTrace();
                         }
@@ -368,7 +369,7 @@ public class VistaGrafica implements IVistaJuego, Serializable {
                             controlador.cantarTanto(REAL_ENVIDO);
                             accionesJ2.setText("");
                             setBotones();
-                            bloquearBotones();
+                            //bloquearBotones();
                         } catch (RemoteException ex) {
                             ex.printStackTrace();
                         }
@@ -383,7 +384,7 @@ public class VistaGrafica implements IVistaJuego, Serializable {
                             controlador.cantarTanto(FALTA_ENVIDO);
                             accionesJ2.setText("");
                             setBotones();
-                            bloquearBotones();
+                            //bloquearBotones();
                         } catch (RemoteException ex) {
                             ex.printStackTrace();
                         }
@@ -403,7 +404,7 @@ public class VistaGrafica implements IVistaJuego, Serializable {
                             controlador.cantarTanto(FALTA_ENVIDO);
                             accionesJ2.setText("");
                             setBotones();
-                            bloquearBotones();
+                            //bloquearBotones();
                         } catch (RemoteException ex) {
                             ex.printStackTrace();
                         }
@@ -554,9 +555,9 @@ public class VistaGrafica implements IVistaJuego, Serializable {
             imagen2 = basePath + carta2 + ".jpeg";
             imagen3 = basePath + carta3 + ".jpeg";
 
-            setButtonImage(btnCarta1, imagen1, 200, 220);
-            setButtonImage(btnCarta2, imagen2, 200, 220);
-            setButtonImage(btnCarta3, imagen3, 200, 220);
+            setButtonImage(btnCarta1, imagen1, 200, 210);
+            setButtonImage(btnCarta2, imagen2, 200, 210);
+            setButtonImage(btnCarta3, imagen3, 200, 210);
         }
 
         setBotonesCartas(imagen1, imagen2, imagen3);
@@ -595,7 +596,7 @@ public class VistaGrafica implements IVistaJuego, Serializable {
             CartasOP3.repaint();
         }
 
-        setBotones();
+        actualizar();
 
     }
 
@@ -652,7 +653,7 @@ public class VistaGrafica implements IVistaJuego, Serializable {
         IRALMAZOButton.setText("    IR AL MAZO    ");
         TRUCOButton.setText("    TRUCO    ");
         btnAuxiliar.setText("");
-        accionesJ2.setText("");
+        //accionesJ2.setText("");
         btnAuxiliar.setEnabled(false);
         btnQuiero.setEnabled(false);
         btnNoQuiero.setEnabled(false);
@@ -790,7 +791,6 @@ public class VistaGrafica implements IVistaJuego, Serializable {
                         controlador.cantarTanto(ENVIDO);
                         btnEnvido.setEnabled(false);
                         setBotones();
-                        bloquearBotones();
                     }
                 } catch (RemoteException ex) {
                     ex.printStackTrace();
@@ -808,7 +808,6 @@ public class VistaGrafica implements IVistaJuego, Serializable {
                         controlador.cantarTanto(REAL_ENVIDO);
                         btnEnvido.setEnabled(false);
                         setBotones();
-                        bloquearBotones();
                     }
                 } catch (RemoteException ex) {
                     ex.printStackTrace();
@@ -826,7 +825,6 @@ public class VistaGrafica implements IVistaJuego, Serializable {
                         controlador.cantarTanto(FALTA_ENVIDO);
                         btnEnvido.setEnabled(false);
                         setBotones();
-                        bloquearBotones();
                     }
                 } catch (RemoteException ex) {
                     ex.printStackTrace();
@@ -906,6 +904,7 @@ public class VistaGrafica implements IVistaJuego, Serializable {
                         mostrarCartaTiradaYO(imagen1);
                         btnCarta1.setEnabled(false);
                         controlador.tirarCarta(1);
+                        actualizar();
                     }
                 } catch (RemoteException ex) {
                     ex.printStackTrace();
@@ -921,6 +920,7 @@ public class VistaGrafica implements IVistaJuego, Serializable {
                         mostrarCartaTiradaYO(imagen2);
                         btnCarta2.setEnabled(false);
                         controlador.tirarCarta(2);
+                        actualizar();
                     }
                 } catch (RemoteException ex) {
                     ex.printStackTrace();
@@ -936,6 +936,7 @@ public class VistaGrafica implements IVistaJuego, Serializable {
                         mostrarCartaTiradaYO(imagen3);
                         btnCarta3.setEnabled(false);
                         controlador.tirarCarta(3);
+                        actualizar();
                     }
                 } catch (RemoteException ex) {
                     ex.printStackTrace();

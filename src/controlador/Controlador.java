@@ -602,20 +602,17 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
             case NUEVA_RONDA -> {
                 vistaJuego.mostrarCartas();
             }
-            case MENSAJEJ1 -> {
-                vistaJuego.actualizar();
-            }
-            case MENSAJEJ2 -> {
-                // si
-                vistaJuego.actualizar();
-            }
+            case MENSAJEJ1 -> vistaJuego.actualizar();
+
+            case MENSAJEJ2 -> vistaJuego.actualizar();
+
             case CARTA_TIRADAJ1 -> { // este aviso es que el JUGADOR 1 tiro una carta
-                vistaJuego.actualizar();
                 if(modelo.getIdJ1() != jugador.getIDJugador()) vistaJuego.meTiraronCarta(modelo.ultimaCartaTiradaJ1().toString());
+                vistaJuego.actualizar();
             }
             case CARTA_TIRADAJ2 -> { // este aviso es que el JUGADOR 2 tiro una carta
-                vistaJuego.actualizar();
                 if(modelo.getIdJ2() != jugador.getIDJugador()) vistaJuego.meTiraronCarta(modelo.ultimaCartaTiradaJ2().toString());
+                vistaJuego.actualizar();
             }
             case FIN_PARTIDA -> vistaJuego.finDeLaPartida(modelo.getJugadorGanador());
             case PUNTAJES -> vistaJuego.actualizarPuntaje(modelo.puntosActuales());
@@ -637,20 +634,21 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
             }
             case LISTA_JUGADORES_TOTALES -> {
                 // aca hay que pasarle la lista no ordenada
+                System.out.println("");
                 vistaEleccion.actualizarListaJugadores(PersistenciaJugador.listaJugadoresGuardados(false));
             }
             case CANTO_QUERIDO -> {
                 if(modelo.getIdJugadorQuiereCantar() != jugador.getIDJugador()) vistaJuego.mostrarMensaje(PersistenciaCantos.mensajeCantoQuiero());       //
                 vistaJuego.desbloquearBotones(); // desbloqueo los botones a ambos, no pasa nada porque es solo para el canto y si no es el turno no podrá jugar
             }                                                                                                                                           //
-            case CANTO_NO_QUERIDO -> {                                                                                                                  // i
+            case CANTO_NO_QUERIDO -> {
                 if(modelo.getIdJugadorNoQuizoCanto() != jugador.getIDJugador()) vistaJuego.mostrarMensaje(PersistenciaCantos.mensajeCantoNoQuiero());     //
                 vistaJuego.desbloquearBotones();
             }
             case TANTO_QUERIDO -> { // este metodo se usa para avisar el resultado del tanto, no para avisar que se dijo 'QUIERO' al envido
+                vistaJuego.desbloquearBotones();
                 System.out.println(modelo.getResultadoTanto());
                 vistaJuego.mostrarAviso(modelo.getResultadoTanto());
-                vistaJuego.desbloquearBotones();
             }
             case RESTABLECER_PARTIDA -> {
                 vistaJuego.reanudarPartida();

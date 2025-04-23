@@ -56,9 +56,11 @@ public class VistaInicio extends JFrame {
         setVisible(false);
     }
 
+
     //
     //  metodos privados
     //
+
 
     // abre una pestaña del navegador con la url que se le pase
     private void abrirURL(String url){
@@ -72,7 +74,7 @@ public class VistaInicio extends JFrame {
     }
 
     private void pantallaTopJugadores(){
-        JFrame frame2 = new JFrame("TRUCONTARDI - TOP JUGADORES");
+        JFrame frame2 = new JFrame("Top jugadores - Truco");
         frame2.setResizable(false);
         frame2.setSize(500, 600);
         frame2.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -119,6 +121,7 @@ public class VistaInicio extends JFrame {
         btnSalir.setText("  SALIR  ");
         btnSalir.addActionListener(e -> System.exit(0));
 
+        btnTop.setText(" TOP JUGADORES");
         btnTop.addActionListener(e -> pantallaTopJugadores());
 
 
@@ -165,6 +168,7 @@ public class VistaInicio extends JFrame {
         btnCrearNuevo.addActionListener(e -> {
             ArrayList<Partida> partidas = PersistenciaPartida.listaPartidasGuardadas();
 
+            // pregunto si tiene partidas guardadas pendientes
             if(partidas == null || partidas.isEmpty()) {
                 JFrame frameMSJ;
                 frameMSJ = new JFrame("TRUCONTARDI");
@@ -247,6 +251,10 @@ public class VistaInicio extends JFrame {
             setBotonesJugar();
         });
     }
+
+    //
+    // Actions listeners
+    //
 
     private void eliminarAllActionListener(){
         removeAllActionListeners(btnAnotador);
