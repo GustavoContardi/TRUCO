@@ -3,6 +3,7 @@ import org.w3c.dom.ls.LSOutput;
 import persistencia.PersistenciaJugador;
 import vista.VistaInicio;
 
+import javax.swing.*;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -140,6 +141,8 @@ public class Main {
         VistaInicio inicio2 = new VistaInicio();
         inicio.iniciar();
         inicio2.iniciar();
+
+        JOptionPane.showMessageDialog(null, "AVISO PARROQUIAL");
 
     }
 

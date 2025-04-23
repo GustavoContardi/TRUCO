@@ -131,7 +131,7 @@ public class VistaGrafica implements IVistaJuego, Serializable {
 
     @Override
     public void finDeMano() throws RemoteException {
-        panelAvisos("Fin de la mano");
+        mostrarAviso("Fin de la mano");
         removerCartas();
         eliminarTodosAL();
 
@@ -142,7 +142,7 @@ public class VistaGrafica implements IVistaJuego, Serializable {
 
     @Override
     public void finDeLaPartida(String nombreGanador) {
-        panelAvisos( "LA PARTIDA TERMINO. EL GANADOR ES: " + nombreGanador);
+        mostrarAviso( "LA PARTIDA TERMINO. EL GANADOR ES: " + nombreGanador);
 
         removeBtnActionListener();
         eliminarTodosAL();
@@ -612,7 +612,7 @@ public class VistaGrafica implements IVistaJuego, Serializable {
 
     @Override
     public void mostrarAviso(String aviso) {
-        panelAvisos(aviso);
+        JOptionPane.showMessageDialog(null, aviso);
     }
 
     @Override

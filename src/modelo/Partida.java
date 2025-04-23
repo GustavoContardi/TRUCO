@@ -119,7 +119,7 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
                 puntajeRondaEnvido      = 0;
                 quienCantoTruco         = 0;
                 quienCantoReTruco       = 0;
-                puntosRabon             = 1;
+                puntosRabon             = 0;
                 hizoPrimera             = 0;
                 cantoEnvido             = false;
                 cantoEnvidoDoble        = false;
@@ -163,6 +163,8 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
     @Override
     public void finDeLaRonda() throws RemoteException{
         finMano = true;
+
+        puntosRabon = calcularPuntosTruco();
 
         if(nroRondasGanadasJ1 > nroRondasGanadasJ2) puntajeRondaJ1 += puntosRabon;
         else if (nroRondasGanadasJ2 > nroRondasGanadasJ1) puntajeRondaJ2 += puntosRabon;
@@ -330,27 +332,25 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
     // metodo que activa el controlador cuando algun jugador quiere cantar el rabon (truco, retruco, vale cuatro), actualizo los atributos segun que canto y notifico
     @Override
     public void cantarRabon(int idJugadorCanto, EstadoTruco estado) throws RemoteException{
+        // rabon == truco
         Eventos evento = NADA;
 
         switch(estado){ // el estado es el que se tiene que cantar no el actual
             case TRUCO ->{
-                if(!cantoEnvido) cantoEnvido = true;
+                cantoEnvido = true;
                 quienCantoTruco = idJugadorCanto;
                 evento = CANTO_TRUCO;
                 estadoDelTruco = TRUCO;
-                puntosRabon = 2;
             }
             case RE_TRUCO -> {
                 quienCantoReTruco = idJugadorCanto;
                 evento = CANTO_RETRUCO;
                 estadoDelTruco = RE_TRUCO;
-                puntosRabon = 3;
             }
             case VALE_CUATRO -> {
                 quienCantoValeCuatro = idJugadorCanto; // tengo que identificar quien canto que cosa porque no podes cantar dos veces seguidas (por regla)
                 evento = CANTO_VALE_CUATRO;
                 estadoDelTruco = VALE_CUATRO;
-                puntosRabon = 4;
             }
         }
         idUltimoJugCanto = idJugadorCanto;
@@ -423,16 +423,11 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
     // cuando un jugador se va al mazo termina la ronda como este, el controlador llama a este metodo y automaticamente termina la ronda
     @Override
     public void meVoyAlMazo(int idJugSeFue) throws RemoteException {
-        int puntos = 0;
-
-        if(numeroRonda == 1 && !cantaronEnvido() && estadoDelTruco == EstadoTruco.NADA) puntos = 1; // por reglas si se va al mazo en la primer mano sin cantar nada son 2 puntos para el contrario
 
         if(idJugSeFue != j1.getIDJugador()) {
-            puntajeRondaJ1 += puntos;
             nroRondasGanadasJ1 += 2;
         }
         else if(idJugSeFue != j2.getIDJugador()) {
-            puntajeRondaJ2 += puntos;
             nroRondasGanadasJ2 += 2;
         }
 
@@ -562,9 +557,9 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
 
     @Override
     public void rabonNoQuerido(int idjugNoQuizo) throws RemoteException {
-        puntosRabon -= 1;
-        if(idjugNoQuizo != j1.getIDJugador()) puntajeRondaJ1 = puntosRabon;
-        else if(idjugNoQuizo != j2.getIDJugador()) puntajeRondaJ2 = puntosRabon;
+
+        if(idjugNoQuizo != j1.getIDJugador()) puntajeRondaJ1 -= 1; // le resto uno al que canto y no le quisieron para despues en el metodo de calcular me de bien
+        else if(idjugNoQuizo != j2.getIDJugador()) puntajeRondaJ2 -= 1;
 
         seEstabaCantandoTruco = false;
 
@@ -1033,6 +1028,20 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
             case CONTRA_FLOR -> puntos = 4;
             case CONTRA_FLOR_AL_RESTO  -> puntos = 6;
         }
+
+        return puntos;
+    }
+
+    private int calcularPuntosTruco(){
+        int puntos = 0;
+
+        // por reglas si se va al mazo en la primer mano sin cantar nada son 2 puntos para el contrario
+        if(numeroRonda == 1 && !cantoEnvido) puntos = 2;
+        //si no es primera ronda o si se canto envido entra en el de abajo
+        else if(estadoDelTruco == EstadoTruco.NADA) puntos = 1;
+        else if(estadoDelTruco == TRUCO) puntos = 2;
+        else if(estadoDelTruco == RE_TRUCO) puntos = 3;
+        else if(estadoDelTruco == VALE_CUATRO) puntos = 2;
 
         return puntos;
     }

@@ -120,7 +120,7 @@ public class ServidorTruco {
 
         try {
             servidor.iniciar(modelo);
-            JOptionPane.showMessageDialog(null, "¡Servidor iniciado!");
+            JOptionPane.showMessageDialog(null, "¡Servidor iniciado! Ahora puedes ingresar a él.");
         } catch (RemoteException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

@@ -127,6 +127,7 @@ public class VistaInicio extends JFrame {
 
         btnReglas.addActionListener(e -> abrirURL("https://trucogame.com/pages/reglamento-de-truco-argentino"));
 
+        btnAnotador.setText(" ANOTADOR ");
         btnAnotador.addActionListener(e -> {
             new AnotadorGrafico(this).iniciar();
             setVisible(false);
@@ -139,17 +140,31 @@ public class VistaInicio extends JFrame {
         instrucciones.setText("Seleccione una opción para empezar a jugar");
 
         btnCrearNuevo.setEnabled(true);
-        btnCrearNuevo.setText("INICIAR NUEVA PARTIDA");
+        btnCrearNuevo.setText("CREAR NUEVA PARTIDA");
         btnCrearNuevo.addActionListener(e -> {
-            setBotonesCrearNueva();
+            try {
+                new ServidorTruco();
+                btnCrearNuevo.setEnabled(false);
+            } catch (RemoteException ex) {
+                ex.printStackTrace();
+            }
         });
 
         btnTop.setText("REANUDAR UNA PARTIDA");
         btnTop.addActionListener(e -> {
-            setBotonesReanudar();
+            reanudarPartida();
         });
 
-        btnAnotador.setEnabled(false);
+        btnAnotador.setText("INGRESAR A UNA PARTIDA");
+        btnAnotador.addActionListener(e -> {
+            try {
+                new ClienteTruco(ingresarPartida());
+                dispose();
+            } catch (RemoteException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+
         btnReglas.setEnabled(false);
 
         btnSalir.setText("  VOLVER  ");
@@ -158,98 +173,57 @@ public class VistaInicio extends JFrame {
         });
     }
 
-    private void setBotonesReanudar(){
-        eliminarAllActionListener();
+    private boolean ingresarPartida(){
+        ArrayList<String> opcionesPuntos = new ArrayList<>();
 
-        instrucciones.setText("Elija una opcion para ingresar a la partida");
+        opcionesPuntos.add("INGRESAR A UNA PARTIDA NUEVA");
+        opcionesPuntos.add("INGRESAR A UNA PARTIDA PENDIENTE");
 
-        btnCrearNuevo.setEnabled(true);
-        btnCrearNuevo.setText("REANUDAR NUEVA PARTIDA");
-        btnCrearNuevo.addActionListener(e -> {
-            ArrayList<Partida> partidas = PersistenciaPartida.listaPartidasGuardadas();
+        String tipoPartida = (String) JOptionPane.showInputDialog(
+                null,
+                "Seleccione al tipo de partida que quiere ingresar", "Ingresar a la partida",
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                opcionesPuntos.toArray(),
+                null
+        );
 
-            // pregunto si tiene partidas guardadas pendientes
-            if(partidas == null || partidas.isEmpty()) {
-                JFrame frameMSJ;
-                frameMSJ = new JFrame("TRUCONTARDI");
-                frameMSJ.setSize(400, 100);
-                JPanel panelPrincipal = (JPanel) frameMSJ.getContentPane();
-                panelPrincipal.setLayout(new BorderLayout());
-
-                JLabel etiqueta1 = new JLabel("NO TIENES PARTIDAS PENDIENTES, ¡PARA JUGAR CREA UNA!");
-                frameMSJ.dispose();
-                panelPrincipal.add(etiqueta1, BorderLayout.CENTER);
-
-                frameMSJ.setVisible(true);
-                frameMSJ.setLocationRelativeTo(null);
-            }
-            else{
-                Partida partida = (Partida) JOptionPane.showInputDialog(
-                        null,
-                        "Seleccione la partida que quiera reanudar", "PARTIDAS PENDIENTES",
-                        JOptionPane.QUESTION_MESSAGE,
-                        null,
-                        partidas.toArray(),
-                        null
-                );
-                if(partida != null) {
-                    new ServidorTruco(partida);
-                    btnCrearNuevo.setEnabled(false);
-                }
-            }
-        });
-
-        btnTop.setText("INGRESAR UNA PARTIDA");
-        btnTop.addActionListener(e -> {
-            try {
-                new ClienteTruco(true);
-                dispose();
-            } catch (RemoteException ex) {
-                throw new RuntimeException(ex);
-            }
-        });
-
-        btnAnotador.setEnabled(false);
-        btnReglas.setEnabled(false);
-
-        btnSalir.setText("  VOLVER  ");
-        btnSalir.addActionListener(e -> {
-            setBotonesJugar();
-        });
+        if(tipoPartida.equals("INGRESAR A UNA PARTIDA NUEVA")) return false;
+        else return true;
     }
 
-    private void setBotonesCrearNueva(){
-        eliminarAllActionListener();
+    private void reanudarPartida(){
+        ArrayList<Partida> partidas = PersistenciaPartida.listaPartidasGuardadas();
 
-        instrucciones.setText("Elija una opcion para iniciar la partida");
+        // pregunto si tiene partidas guardadas pendientes
+        if(partidas == null || partidas.isEmpty()) {
+            JFrame frameMSJ;
+            frameMSJ = new JFrame("TRUCONTARDI");
+            frameMSJ.setSize(400, 100);
+            JPanel panelPrincipal = (JPanel) frameMSJ.getContentPane();
+            panelPrincipal.setLayout(new BorderLayout());
 
-        btnCrearNuevo.setText("CREAR NUEVA PARTIDA");
-        btnCrearNuevo.addActionListener(e -> {
-            try {
-                new ServidorTruco();
+            JLabel etiqueta1 = new JLabel("NO TIENES PARTIDAS PENDIENTES, ¡PARA JUGAR CREA UNA!");
+            frameMSJ.dispose();
+            panelPrincipal.add(etiqueta1, BorderLayout.CENTER);
+
+            frameMSJ.setVisible(true);
+            frameMSJ.setLocationRelativeTo(null);
+        }
+        else{
+            Partida partida = (Partida) JOptionPane.showInputDialog(
+                    null,
+                    "Seleccione la partida que quiera reanudar", "PARTIDAS PENDIENTES",
+                    JOptionPane.QUESTION_MESSAGE,
+                    null,
+                    partidas.toArray(),
+                    null
+            );
+            if(partida != null) {
+                new ServidorTruco(partida);
                 btnCrearNuevo.setEnabled(false);
-            } catch (RemoteException ex) {
-                throw new RuntimeException(ex);
             }
-        });
-
-        btnTop.setText("INGRESAR UNA PARTIDA");
-        btnTop.addActionListener(e -> {
-            try {
-                new ClienteTruco(false);
-                dispose(); // frame de la vista inicio
-            } catch (RemoteException ex) {
-                throw new RuntimeException(ex);
-            }
-        });
-
-        btnAnotador.setEnabled(false);
-        btnReglas.setEnabled(false);
-
-        btnSalir.setText("  VOLVER  ");
-        btnSalir.addActionListener(e -> {
-            setBotonesJugar();
-        });
+        }
     }
 
     //
