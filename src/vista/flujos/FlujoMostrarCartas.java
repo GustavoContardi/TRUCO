@@ -64,7 +64,6 @@ public class FlujoMostrarCartas extends Flujo implements Serializable {
             vista.mostrarMesa();
             vista.println("");
             vista.println("\nCARTAS DE: " + controlador.getNombreJugador().toUpperCase());
-            vista.println("");
             vista.mostrarCartasDisponibles();
             vista.println("");
             vista.mostrarOpciones();

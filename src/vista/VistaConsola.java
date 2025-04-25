@@ -103,6 +103,8 @@ public class VistaConsola implements IVistaJuego, IVistaInicio, Serializable {
 
         bloqBotones = false;
 
+        txtVista.setEditable(false);
+
         initIcono();
         frame.setIconImage(icono);
     }
@@ -158,18 +160,21 @@ public class VistaConsola implements IVistaJuego, IVistaInicio, Serializable {
 
     @Override
     public void cantaronRabon(String rabon, EstadoTruco estado) throws RemoteException {
+        println("");
         println(controlador.getNombreRival() + ": " + rabon);
         setFlujoActual(new FlujoEleccionTruco(this, controlador, estado));
     }
 
     @Override
     public void cantaronTanto(String tanto, EstadoEnvido estado) throws RemoteException {
+        println("");
         println(controlador.getNombreRival() + ": " + tanto);
         setFlujoActual(new FlujoEleccionEnvido(this, controlador, estado));
     }
 
     @Override
     public void cantaronFlor(String flor, EstadoFlor estado) throws RemoteException {
+        println("");
         println(controlador.getNombreRival() + ": " + flor);
         if(controlador.tengoFlor()) setFlujoActual(new FlujoFlor(this, controlador, estado));
         else setFlujoActual(new FlujoMostrarCartas(this, controlador)); // si no tengo flor no tiene sentido que pueda hacer otra cosa, sigue la partida
@@ -222,7 +227,7 @@ public class VistaConsola implements IVistaJuego, IVistaInicio, Serializable {
     @Override
     public void mostrarAviso(String aviso) {
         int caracteres = aviso.length() + 2;
-        println("-".repeat(caracteres));
+        println("\n-".repeat(caracteres));
         println(" " + aviso);
         println("-".repeat(caracteres));
     }
@@ -287,6 +292,7 @@ public class VistaConsola implements IVistaJuego, IVistaInicio, Serializable {
 
     }
 
+    // este metodo muestra todo: puntos, cartas tiradas y acciones
     public void mostrarMesa() throws RemoteException {
 
         if(controlador != null){
@@ -294,6 +300,7 @@ public class VistaConsola implements IVistaJuego, IVistaInicio, Serializable {
             ArrayList<String> cartasYo = controlador.getCartasTiradasYo();
             ArrayList<String> cartasRival = controlador.getCartasTiradasRival();
 
+            println("---------------------------------------------------\n");
             println(controlador.puntajeActual());
             println("\n----------------- MESA -----------------");
             println("|  " + controlador.getNombreJugador() + "        |        " + controlador.getNombreRival() + "  |");

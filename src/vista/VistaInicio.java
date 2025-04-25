@@ -158,8 +158,11 @@ public class VistaInicio extends JFrame {
         btnAnotador.setText("INGRESAR A UNA PARTIDA");
         btnAnotador.addActionListener(e -> {
             try {
-                new ClienteTruco(ingresarPartida());
-                dispose();
+                int tipoPartida = ingresarPartida();
+                if(tipoPartida == 1) new ClienteTruco(false); // 1 == ingresa a una nueva partida
+                else if (tipoPartida == 2) new ClienteTruco(true); // 1 == reanuda una partida pendiente
+
+                if(tipoPartida == 2 || tipoPartida == 1) dispose();
             } catch (RemoteException ex) {
                 throw new RuntimeException(ex);
             }
@@ -173,7 +176,7 @@ public class VistaInicio extends JFrame {
         });
     }
 
-    private boolean ingresarPartida(){
+    private int ingresarPartida(){
         ArrayList<String> opcionesPuntos = new ArrayList<>();
 
         opcionesPuntos.add("INGRESAR A UNA PARTIDA NUEVA");
@@ -188,8 +191,9 @@ public class VistaInicio extends JFrame {
                 null
         );
 
-        if(tipoPartida.equals("INGRESAR A UNA PARTIDA NUEVA")) return false;
-        else return true;
+        if(tipoPartida == null) return 0; // 0 == null osea que cancelo no hago nada
+        else if(tipoPartida.equals("INGRESAR A UNA PARTIDA NUEVA")) return 1; // 1 == ingresa a una partida nueva
+        else return 2; // reanuda una partida pendiente
     }
 
     private void reanudarPartida(){
