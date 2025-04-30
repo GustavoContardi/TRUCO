@@ -17,7 +17,7 @@ public class PersistenciaJugador implements Comparable<Jugador>, Serializable{
     // metodos statics publicos
 
     public static Jugador recuperarJugador(int id){
-        listaJugadoresActivos = listaJugadoresGuardados(false);
+        listaJugadoresActivos = getJugadoresGuardados(false);
 
         for(Jugador j : listaJugadoresActivos){
             if(j.getIDJugador() == id) return j;
@@ -27,11 +27,12 @@ public class PersistenciaJugador implements Comparable<Jugador>, Serializable{
     }
 
     public static void guardarJugador(Jugador j){
-        listaJugadoresActivos = listaJugadoresGuardados(false);
+        listaJugadoresActivos = getJugadoresGuardados(false);
 
         if(listaJugadoresActivos == null) listaJugadoresActivos = new ArrayList<>();
 
         listaJugadoresActivos.add(j);
+        guardarJugadorHistorico(j);
 
         try {
             FileOutputStream fos = new FileOutputStream("jugadoresActivos.bin");
@@ -45,7 +46,7 @@ public class PersistenciaJugador implements Comparable<Jugador>, Serializable{
         }
     }
 
-    public static ArrayList<Jugador> listaJugadoresGuardados(boolean ordenado){
+    public static ArrayList<Jugador> getJugadoresGuardados(boolean ordenado){
         try {
             FileInputStream fos = new FileInputStream("jugadoresActivos.bin");
             var oos = new ObjectInputStream(fos);
@@ -59,14 +60,14 @@ public class PersistenciaJugador implements Comparable<Jugador>, Serializable{
             throw new RuntimeException(e);
         }
 
-        if(ordenado && (listaJugadoresActivos != null) ) Collections.sort(listaJugadoresActivos);
         if(listaJugadoresActivos == null) listaJugadoresActivos = new ArrayList<>();
+        Collections.sort(listaJugadoresActivos);
 
         return listaJugadoresActivos;
     }
 
     public static void eliminarJugador(int idJugador){
-        listaJugadoresActivos = listaJugadoresGuardados(false);
+        listaJugadoresActivos = getJugadoresGuardados(false);
 
         if(listaJugadoresActivos != null) listaJugadoresActivos.removeIf(j -> j.getIDJugador() == idJugador);
 
@@ -92,7 +93,7 @@ public class PersistenciaJugador implements Comparable<Jugador>, Serializable{
             }
         }
 
-        listaJugadoresActivos = listaJugadoresGuardados(false);
+        listaJugadoresActivos = getJugadoresGuardados(false);
         jugEliminado.setNombre(nuevoNombre);
         listaJugadoresActivos.add(jugEliminado);
 
@@ -109,7 +110,7 @@ public class PersistenciaJugador implements Comparable<Jugador>, Serializable{
     }
 
     public static void jugadorElecto(int idJugador){
-        listaJugadoresActivos = listaJugadoresGuardados(false);
+        listaJugadoresActivos = getJugadoresGuardados(false);
 
         for(Jugador j : listaJugadoresActivos){
             if(j.getIDJugador() == idJugador) j.jugadorFueElecto();
@@ -148,10 +149,17 @@ public class PersistenciaJugador implements Comparable<Jugador>, Serializable{
 
 
     public static void delvolverTodosJugadores(){
-        listaJugadoresActivos = listaJugadoresGuardados(false);
+        listaJugadoresActivos = getJugadoresGuardados(false);
+        listaJugadoresHistoricos = getJugadoresHistoricos();
 
         if(listaJugadoresActivos != null){
             for(Jugador j : listaJugadoresActivos){
+                j.jugadorFueDevuelto();
+            }
+        }
+
+        if(listaJugadoresHistoricos != null){
+            for(Jugador j : listaJugadoresHistoricos){
                 j.jugadorFueDevuelto();
             }
         }
@@ -168,10 +176,65 @@ public class PersistenciaJugador implements Comparable<Jugador>, Serializable{
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
+        try {
+            FileInputStream fos = new FileInputStream("jugadoresHistoricos.bin");
+            var oos = new ObjectInputStream(fos);
+            listaJugadoresHistoricos = (ArrayList<Jugador>) oos.readObject();
+            fos.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 
+    //
+    // jugadores historicos
+    //
 
+    public static void guardarJugadorHistorico(Jugador jugador){
+        listaJugadoresHistoricos = getJugadoresHistoricos();
+
+        if(listaJugadoresHistoricos == null) listaJugadoresHistoricos = new ArrayList<>();
+
+        listaJugadoresHistoricos.add(jugador);
+
+        try {
+            FileOutputStream fos = new FileOutputStream("jugadoresHistoricos.bin");
+            var oos = new ObjectOutputStream(fos);
+            oos.writeObject(listaJugadoresActivos);
+            fos.close();
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
+    public static ArrayList<Jugador> getJugadoresHistoricos(){
+        try {
+            FileInputStream fos = new FileInputStream("jugadoresHistoricos.bin");
+            var oos = new ObjectInputStream(fos);
+            listaJugadoresHistoricos = (ArrayList<Jugador>) oos.readObject();
+            fos.close();
+        } catch (FileNotFoundException e) {
+            return null;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
+        if(listaJugadoresHistoricos == null) listaJugadoresHistoricos = new ArrayList<>();
+        Collections.sort(listaJugadoresHistoricos); // lo devuelvo si o si ordenado sino no tiene sentido
+
+        return listaJugadoresHistoricos;
+    }
 
 
 

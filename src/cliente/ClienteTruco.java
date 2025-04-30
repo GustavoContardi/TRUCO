@@ -12,6 +12,7 @@ import vista.VistaGrafica;
 import vista.VistaEleccion;
 
 import javax.swing.*;
+import java.awt.*;
 import java.io.IOException;
 import java.net.BindException;
 import java.net.ConnectException;
@@ -28,6 +29,10 @@ public class ClienteTruco {
 
     // reanuda = true -> es que va a reanudar una partida por terminar
     public ClienteTruco(boolean reanuda) throws RemoteException {
+        ImageIcon iconoOriginal = new ImageIcon("/icono.jpeg");
+        Image imagenRedimensionada = iconoOriginal.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+        ImageIcon icono = new ImageIcon(imagenRedimensionada);
+
         Socket clientSocket = null;
         ArrayList<String> opciones = new ArrayList<>();
         opciones.add("Interfaz Gráfica");
@@ -39,7 +44,7 @@ public class ClienteTruco {
                 "Seleccione cómo quiere visualizar el juego",
                 "Interfaz gráfica",
                 JOptionPane.QUESTION_MESSAGE,
-                null,
+                icono,
                 opciones.toArray(),
                 null
         );
@@ -51,7 +56,7 @@ public class ClienteTruco {
                 "Seleccione la IP en la que escuchará peticiones el cliente",
                 "IP del cliente",
                 JOptionPane.QUESTION_MESSAGE,
-                null,
+                icono,
                 ips.toArray(),
                 null
         );
@@ -70,7 +75,7 @@ public class ClienteTruco {
                         "Seleccione el puerto en el que escuchará peticiones el cliente",
                         "Puerto del cliente",
                         JOptionPane.QUESTION_MESSAGE,
-                        null,
+                        icono,
                         null,
                         9999
                 );
@@ -127,7 +132,7 @@ public class ClienteTruco {
                         "Seleccione el puerto al que desea conectarse",
                         "Conexión al servidor",
                         JOptionPane.QUESTION_MESSAGE,
-                        null,
+                        icono,
                         null,
                         8888
                 );
@@ -199,5 +204,10 @@ public class ClienteTruco {
     public static void main(String[] args) throws RemoteException {
         //new ClienteTruco(OpcionesInicio.VISTA_GRAFICA_NO_REANUDAR);
     }
+
+    //
+    // metodos privados
+    //
+
 }
 

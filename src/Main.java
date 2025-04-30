@@ -1,3 +1,4 @@
+import modelo.Jugador;
 import modelo.Mazo;
 import org.w3c.dom.ls.LSOutput;
 import persistencia.PersistenciaJugador;
@@ -146,7 +147,6 @@ public class Main {
         VistaInicio inicio2 = new VistaInicio();
         inicio.iniciar();
         inicio2.iniciar();
-
     }
 
 

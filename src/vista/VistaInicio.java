@@ -8,7 +8,6 @@ import persistencia.PersistenciaPartida;
 import servidor.ServidorTruco;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.io.IOException;
@@ -31,7 +30,7 @@ public class VistaInicio extends JFrame {
     public VistaInicio() {
         setContentPane(panel1);
         setSize(450, 460);
-        setTitle("Menú principal - Truco");
+        setTitle("Menú principal - Trucontardi");
         setLocationRelativeTo(null);
         setResizable(false);
 
@@ -74,7 +73,7 @@ public class VistaInicio extends JFrame {
     }
 
     private void pantallaTopJugadores(){
-        JFrame frame2 = new JFrame("Top jugadores - Truco");
+        JFrame frame2 = new JFrame("Top jugadores - Trucontardi");
         frame2.setResizable(false);
         frame2.setSize(500, 600);
         frame2.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -89,8 +88,8 @@ public class VistaInicio extends JFrame {
         ventana.add(scroll, BorderLayout.CENTER); // Agregar el JScrollPane al centro del BorderLayout
 
         int indice = 1;
-        for (Jugador j : PersistenciaJugador.listaJugadoresGuardados(true)) {
-            if(j != null) listModel.addElement(indice + "- " + j.toString());
+        for (Jugador j : PersistenciaJugador.getJugadoresHistoricos()) {
+            if(j != null) listModel.addElement(indice + "- " + j);
             indice++;
         }
 

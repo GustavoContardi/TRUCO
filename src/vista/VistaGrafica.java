@@ -199,7 +199,7 @@ public class VistaGrafica implements IVistaJuego, Serializable {
     public void cantaronRabon(String rabon, EstadoTruco estado) throws RemoteException {
         removeBtnActionListener();
 
-        accionesJ2.setText(rabon);
+        accionesJ2.setText(controlador.getNombreRival() + ": " + rabon);
         btnEnvido.setEnabled(false);
         btnQuiero.setEnabled(true);
         btnNoQuiero.setEnabled(true);
@@ -281,7 +281,7 @@ public class VistaGrafica implements IVistaJuego, Serializable {
     public void cantaronTanto(String tanto, EstadoEnvido estado) throws RemoteException {
         removeBtnActionListener();
 
-        accionesJ2.setText(tanto);
+        accionesJ2.setText(controlador.getNombreRival() + ": " + tanto);
         btnQuiero.setEnabled(true);
         btnNoQuiero.setEnabled(true);
 
@@ -438,7 +438,7 @@ public class VistaGrafica implements IVistaJuego, Serializable {
         btnEnvido.setEnabled(true);
         TRUCOButton.setEnabled(true);
 
-        accionesJ2.setText(flor);
+        accionesJ2.setText(controlador.getNombreRival() + ": " + flor);
 
         // a los botones de 'Quiero' y 'NoQuiero' los dejo seteados y solo los activo y desactivo segun lo necesite
         btnQuiero.addActionListener(e -> {
@@ -520,7 +520,7 @@ public class VistaGrafica implements IVistaJuego, Serializable {
     public void mostrarMenuPrincipal() throws RemoteException {
         iniciar();
         if(controlador != null) {
-            frame.setTitle(" APP TRUCO - " + controlador.getNombreJugador());
+            frame.setTitle(controlador.getNombreJugador() + " - Trucontardi ");
             setJMenubar();
         }
         mostrarCartas();
@@ -617,6 +617,7 @@ public class VistaGrafica implements IVistaJuego, Serializable {
 
     @Override
     public void reanudarPartida() throws RemoteException {
+        frame.setTitle(controlador.getNombreJugador() + " - Trucontardi");
         setJMenubar();
         mostrarCartas();
         mostrarCartasTiradas();
@@ -908,7 +909,7 @@ public class VistaGrafica implements IVistaJuego, Serializable {
 
         // Margen horizontal (para que el texto no quede pegado a los bordes)
         int margenHorizontal = 50;
-        int anchoVentana = Math.min(600, textoWidth + margenHorizontal); // Límite máximo de 600px
+        int anchoVentana = Math.min(700, textoWidth + margenHorizontal); // Límite máximo de 600px
 
         // Alto de la ventana (incluye espacio para el botón)
         int altoVentana = textoHeight + 100; // 100px extra para el botón y márgenes

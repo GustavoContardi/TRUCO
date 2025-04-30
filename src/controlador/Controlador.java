@@ -303,7 +303,7 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
 
     @Override
     public ArrayList<Jugador> listaJugadoresMasGanadores() {
-        return PersistenciaJugador.listaJugadoresGuardados(true);
+        return PersistenciaJugador.getJugadoresGuardados(true);
     }
 
     @Override
@@ -340,7 +340,7 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
 
     @Override
     public void volverAlMenuPrincipal() throws RemoteException {
-        guardarPartida(); // guardo por si se hizo algun movimiento que no se guardo antes de salir al menu principal
+        //guardarPartida(); // guardo por si se hizo algun movimiento que no se guardo antes de salir al menu principal
         new VistaInicio().iniciar();
     }
 
@@ -569,7 +569,7 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
 
         switch (evento){
             case LISTA_JUGADORES_DISPONIBLES -> {
-                vistaEleccion.actualizarListaJugadores(PersistenciaJugador.listaJugadoresGuardados(false));
+                vistaEleccion.actualizarListaJugadores(PersistenciaJugador.getJugadoresGuardados(false));
             }
             case CANTO_TRUCO -> {
                 if(modelo.getQuienCantoTruco() != jugador.getIDJugador()) vistaJuego.cantaronRabon(PersistenciaCantos.mensajeCantoTruco(TRUCO), TRUCO);
@@ -635,7 +635,7 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
             case LISTA_JUGADORES_TOTALES -> {
                 // aca hay que pasarle la lista no ordenada
                 System.out.println("");
-                vistaEleccion.actualizarListaJugadores(PersistenciaJugador.listaJugadoresGuardados(false));
+                vistaEleccion.actualizarListaJugadores(PersistenciaJugador.getJugadoresGuardados(false));
             }
             case CANTO_QUERIDO -> {
                 if(modelo.getIdJugadorQuiereCantar() != jugador.getIDJugador()) vistaJuego.mostrarMensaje(PersistenciaCantos.mensajeCantoQuiero());       //

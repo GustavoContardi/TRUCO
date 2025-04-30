@@ -29,6 +29,10 @@ public class ServidorTruco {
     //
 
     public ServidorTruco() throws RemoteException {
+        ImageIcon iconoOriginal = new ImageIcon("icono.jpeg");
+        Image imagenRedimensionada = iconoOriginal.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+        ImageIcon icono = new ImageIcon(imagenRedimensionada); // inicio el icono
+
         ArrayList<String> opcionesFlor = new ArrayList<>();
         opcionesFlor.add("CON FLOR");
         opcionesFlor.add("SIN FLOR");
@@ -41,7 +45,7 @@ public class ServidorTruco {
                 null,
                 "Seleccione a cuantos puntos quiere jugar la partida", "Configuración de la Partida",
                 JOptionPane.QUESTION_MESSAGE,
-                null,
+                icono,
                 opcionesPuntos.toArray(),
                 null
         );
@@ -50,7 +54,7 @@ public class ServidorTruco {
                 null,
                 "Seleccione si quiere jugar la partida con o sin flor", "Configuración de la Partida",
                 JOptionPane.QUESTION_MESSAGE,
-                null,
+                icono,
                 opcionesFlor.toArray(),
                 null
         );
@@ -60,7 +64,7 @@ public class ServidorTruco {
                 null,
                 "Seleccione la IP en la que escuchará peticiones el servidor", "IP del servidor",
                 JOptionPane.QUESTION_MESSAGE,
-                null,
+                icono,
                 ips.toArray(),
                 null
         );
@@ -75,7 +79,7 @@ public class ServidorTruco {
                         "Seleccione el puerto en el que escuchará peticiones el servidor",
                         "Puerto del servidor",
                         JOptionPane.QUESTION_MESSAGE,
-                        null,
+                        icono,
                         null,
                         8888
                 );
@@ -137,13 +141,17 @@ public class ServidorTruco {
     // si se ejecuta este es porque se va a reanudar una partida seleccionada
 
     public ServidorTruco(Partida modelo) {
+        ImageIcon iconoOriginal = new ImageIcon("icono.jpeg");
+        Image imagenRedimensionada = iconoOriginal.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+        ImageIcon icono = new ImageIcon(imagenRedimensionada); // inicio el icono
+
         port = 0;
         ArrayList<String> ips = Util.getIpDisponibles();
         String ip = (String) JOptionPane.showInputDialog(
                 null,
                 "Seleccione la IP en la que escuchará peticiones el servidor", "IP del servidor",
                 JOptionPane.QUESTION_MESSAGE,
-                null,
+                icono,
                 ips.toArray(),
                 null
         );
@@ -158,7 +166,7 @@ public class ServidorTruco {
                         "Seleccione el puerto en el que escuchará peticiones el servidor",
                         "Puerto del servidor",
                         JOptionPane.QUESTION_MESSAGE,
-                        null,
+                        icono,
                         null,
                         8888
                 );

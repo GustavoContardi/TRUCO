@@ -130,7 +130,11 @@ public class VistaConsola implements IVistaJuego, IVistaInicio, Serializable {
 
     @Override
     public void mostrarMensaje(String msj) {
-        println("\n" + msj);
+        try {
+            println("\n" + controlador.getNombreRival() + msj);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -188,7 +192,7 @@ public class VistaConsola implements IVistaJuego, IVistaInicio, Serializable {
     @Override
     public void mostrarMenuPrincipal() throws RemoteException {
         limpiarPantalla();
-        frame.setTitle("APP TRUCO - " + controlador.getNombreJugador());
+        frame.setTitle(controlador.getNombreJugador() + " - Trucontardi");
         iniciar();
         setFlujoActual(new FlujoMostrarCartas(this, controlador));
     }

@@ -206,17 +206,46 @@ public class VistaEleccion implements IVistaEleccion {
     }
 
     private void panelAvisos(String text){
-        JFrame frameMSJ;
-        frameMSJ = new JFrame("TRUCONTARDI");
-        frameMSJ.setSize(400, 100);
-        JPanel panelPrincipal = (JPanel) frameMSJ.getContentPane();
-        panelPrincipal.setLayout(new BorderLayout());
-
-        JLabel etiqueta1 = new JLabel(text);
-        panelPrincipal.add(etiqueta1, BorderLayout.CENTER);
-
-        frameMSJ.setVisible(true);
+        JFrame frameMSJ = new JFrame("Aviso - Trucontardi");
+        frameMSJ.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frameMSJ.setLocationRelativeTo(null);
+
+        // Panel principal
+        JPanel panel = new JPanel(new BorderLayout(10, 10));
+        panel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
+
+        // Label con el mensaje (centrado)
+        JLabel titulo = new JLabel("<html><div style='text-align: center;'>" + text + "</div></html>");
+        titulo.setFont(new Font("Arial", Font.BOLD, 16));
+        panel.add(titulo, BorderLayout.CENTER);
+
+        // Botón "Aceptar"
+        JButton botonAceptar = new JButton("Aceptar");
+        botonAceptar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                frameMSJ.dispose();
+            }
+        });
+        JPanel panelBoton = new JPanel();
+        panelBoton.add(botonAceptar);
+        panel.add(panelBoton, BorderLayout.SOUTH);
+
+        // --- Cálculo dinámico del tamaño ---
+        FontMetrics metrics = titulo.getFontMetrics(titulo.getFont());
+        int textoWidth = metrics.stringWidth(text); // Ancho del texto en píxeles
+        int textoHeight = metrics.getHeight(); // Alto de una línea
+
+        // Margen horizontal (para que el texto no quede pegado a los bordes)
+        int margenHorizontal = 50;
+        int anchoVentana = Math.min(600, textoWidth + margenHorizontal); // Límite máximo de 600px
+
+        // Alto de la ventana (incluye espacio para el botón)
+        int altoVentana = textoHeight + 100; // 100px extra para el botón y márgenes
+
+        frameMSJ.setSize(anchoVentana, altoVentana+18);
+        frameMSJ.add(panel);
+        frameMSJ.setVisible(true);
     }
 
 
