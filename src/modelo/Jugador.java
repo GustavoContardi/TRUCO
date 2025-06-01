@@ -1,15 +1,11 @@
 package modelo;
 
-import persistencia.Persistencia;
 import persistencia.PersistenciaJugador;
 
 import java.io.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Collection;
-import java.util.Comparator;
 
 public class Jugador implements Comparable<Jugador>, Serializable{
 
@@ -101,12 +97,29 @@ public class Jugador implements Comparable<Jugador>, Serializable{
 
     // genera el ID intentando que sea lo mas unico posible
     private int generarID(){
-        LocalDateTime now = LocalDateTime.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
-        String formattedDate = now.format(formatter);
-        String idString = nombre.substring(0, Math.min(3, nombre.length())).toUpperCase() + formattedDate;
+        int id = 0;
 
-        return Math.abs(idString.hashCode());
+        do {
+            LocalDateTime now = LocalDateTime.now();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+            String formattedDate = now.format(formatter);
+            String idString = nombre.substring(0, Math.min(3, nombre.length())).toUpperCase() + formattedDate;
+
+            id = Math.abs(idString.hashCode());
+
+        } while(idEstaRepetido(id));
+
+        return id;
+    }
+
+    private boolean idEstaRepetido(int id){
+        ArrayList<Jugador> lista = PersistenciaJugador.getJugadoresGuardados(false);
+
+        for(Jugador j : lista){
+            if (j.getIDJugador() == id) return true;
+        }
+
+        return false;
     }
 
     // este metodo compara con otro jugador para que se lo pueda ordenar en la lista, para el top
