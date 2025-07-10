@@ -125,6 +125,7 @@ public class VistaInicio extends JFrame {
 
 
         btnReglas.addActionListener(e -> abrirURL("https://trucogame.com/pages/reglamento-de-truco-argentino"));
+        //btnReglas.addActionListener(e -> abrirURL(""));
 
         btnAnotador.setText(" ANOTADOR ");
         btnAnotador.addActionListener(e -> {
