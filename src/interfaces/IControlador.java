@@ -13,8 +13,8 @@ public interface IControlador {
     void iniciarPartida() throws RemoteException;
     void agregarJugador(String jugador) throws RemoteException;
     String puntajeActual() throws RemoteException;
-    ArrayList<String> obtenerCartas() throws RemoteException;
-    ArrayList<String> obtenerTodasLasCartas() throws RemoteException;
+    ArrayList<String> obtenerCartasDisponibles() throws RemoteException;
+    ArrayList<String> obtenerFotoCartas() throws RemoteException;
     void tirarCarta(int numeroDeCarta) throws RemoteException;
     void meVoyAlMazo() throws RemoteException;
     void abandonarPartida() throws RemoteException;

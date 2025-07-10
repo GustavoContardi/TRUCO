@@ -62,32 +62,25 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
     }
 
     @Override
-    public ArrayList<String> obtenerCartas() throws RemoteException {
-        ArrayList<String> lista =  null;
-        ArrayList<Carta> cartasJugador = new ArrayList<>();
+    public ArrayList<String> obtenerCartasDisponibles() throws RemoteException { // este es para las cartas de la vista consola
+        ArrayList<Carta> cartas = modelo.obtenerCartas(jugador.getIDJugador());
+        ArrayList<String> cartasStr = new ArrayList<>();
 
-        if (jugador.getIDJugador() == modelo.getIdJ1()) cartasJugador = modelo.getCartasJ1();
-        else cartasJugador = modelo.getCartasJ2();
-
-        if(cartasJugador != null && !cartasJugador.isEmpty()){
-            lista = new ArrayList<>();
-            for(Carta carta : cartasJugador){
-                if (!carta.isFueTirada()) lista.add(carta.toString()); // le agrego solo las cartas disponibles a tirar
-                else lista.add(" "); // esto para no verificar que la posicion es vacia en la vista y que me tire una excepcion null
-
+        if(cartas != null && !cartas.isEmpty()){
+            cartasStr = new ArrayList<>();
+            for(Carta carta : cartas){
+                if (!carta.isFueTirada()) cartasStr.add(carta.toString()); // le agrego solo las cartas disponibles a tirar
+                else cartasStr.add(" "); // esto para no verificar que la posicion es vacia en la vista y que me tire una excepcion null
             }
         }
 
-        return lista;
+       return cartasStr;
     }
 
     @Override
-    public ArrayList<String> obtenerTodasLasCartas() throws RemoteException {
-        ArrayList<Carta> cartasJugador = new ArrayList<>();
+    public ArrayList<String> obtenerFotoCartas() throws RemoteException { // este es para la vista grafica
+        ArrayList<Carta> cartasJugador = modelo.obtenerCartas(jugador.getIDJugador());
         ArrayList<String> cartasStr = new ArrayList<>();
-
-        if (jugador.getIDJugador() == modelo.getIdJ1()) cartasJugador = modelo.getCartasJ1();
-        else cartasJugador = modelo.getCartasJ2();
 
         if(cartasJugador == null) return null;
 

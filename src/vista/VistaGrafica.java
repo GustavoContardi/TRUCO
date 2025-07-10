@@ -103,7 +103,7 @@ public class VistaGrafica implements IVistaJuego, Serializable {
         removeAllActionListeners(btnCarta2);
         removeAllActionListeners(btnCarta3);
 
-        ArrayList<String> cartas = controlador.obtenerTodasLasCartas();
+        ArrayList<String> cartas = controlador.obtenerFotoCartas();
 
         if (cartas != null) {
             actualizar();
@@ -544,7 +544,7 @@ public class VistaGrafica implements IVistaJuego, Serializable {
         removeAllActionListeners(btnCarta3);
         String imagen1 = "", imagen2 = "", imagen3 = "";
 
-        ArrayList<String> cartas = controlador.obtenerTodasLasCartas();
+        ArrayList<String> cartas = controlador.obtenerFotoCartas();
 
         if (cartas != null && !cartas.isEmpty()) {
             String carta1 = cartas.get(0).replace(" ", "").toLowerCase();

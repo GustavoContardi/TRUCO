@@ -59,7 +59,7 @@ public class FlujoMostrarCartas extends Flujo implements Serializable {
 
     @Override
     public void mostrarSiguienteTexto() throws RemoteException {
-        if(controlador.obtenerCartas() != null){
+        if(controlador.obtenerCartasDisponibles() != null){
             vista.println("");
             vista.mostrarMesa();
             vista.println("");

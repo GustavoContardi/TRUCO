@@ -30,6 +30,7 @@ public interface IModelo extends IObservableRemoto {
     void agregarJugador(Jugador jugador) throws RemoteException;
     void altaJugador(String nombre) throws RemoteException;
     void actualizarPuntos() throws RemoteException;
+    ArrayList<Carta> obtenerCartas(int idJugador) throws RemoteException;
     EstadoTruco estadoRabon() throws RemoteException;
     EstadoEnvido estadoTanto() throws RemoteException;
     EstadoFlor estadoFlor() throws RemoteException;

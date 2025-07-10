@@ -670,6 +670,12 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
     }
 
     @Override
+    public ArrayList<Carta> obtenerCartas(int idJugador) throws RemoteException {
+        if(idJugador == j1.getIDJugador()) return cartasJ1;
+        else return cartasJ2;
+    }
+
+    @Override
     public void actualizarListaJugadores() throws RemoteException {
         notificarEvento(LISTA_JUGADORES_DISPONIBLES);
     }

@@ -5,7 +5,6 @@ import vista.VistaConsola;
 
 import java.io.Serializable;
 import java.rmi.RemoteException;
-import java.sql.SQLOutput;
 
 public class FlujoTirarCarta extends  Flujo implements Serializable {
 
@@ -23,7 +22,7 @@ public class FlujoTirarCarta extends  Flujo implements Serializable {
             return this;
         }
 
-        if( (nroCarta > controlador.obtenerCartas().size() || 1 > nroCarta)) {
+        if( (nroCarta > controlador.obtenerCartasDisponibles().size() || 1 > nroCarta)) {
             vista.mostrarAviso("Ingrese un número dentro del rango. ");
             return this;
         }

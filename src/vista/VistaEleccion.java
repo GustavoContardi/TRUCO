@@ -61,7 +61,7 @@ public class VistaEleccion implements IVistaEleccion {
             public void actionPerformed(ActionEvent e) {
                 //ventanaCrearJugador();
                 nombreJugador = JOptionPane.showInputDialog(frame, "Por favor, ingresa el nombre:", "CREAR JUGADOR", JOptionPane.QUESTION_MESSAGE);
-                if(!(nombreJugador.trim().isEmpty())){
+                if(nombreJugador != null && !(nombreJugador.trim().isEmpty())){
                     try {
                         controlador.agregarJugador(nombreJugador);
                         panelAvisos("¡JUGADOR REGISTRADO CON ÉXITO!");

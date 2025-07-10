@@ -115,6 +115,8 @@ public class Jugador implements Comparable<Jugador>, Serializable{
     private boolean idEstaRepetido(int id){
         ArrayList<Jugador> lista = PersistenciaJugador.getJugadoresGuardados(false);
 
+        if(lista == null) return false;
+
         for(Jugador j : lista){
             if (j.getIDJugador() == id) return true;
         }
