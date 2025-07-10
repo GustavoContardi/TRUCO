@@ -112,7 +112,7 @@ public class ClienteTruco {
                 "Ingrese la IP del servidor",
                 "IP del servidor",
                 JOptionPane.QUESTION_MESSAGE,
-                null,
+                icono,
                 null,
                 null
         );

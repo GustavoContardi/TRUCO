@@ -25,7 +25,8 @@ public class VistaInicio extends JFrame {
     private JButton btnAnotador;
     private JLabel titulo;
     private JLabel instrucciones;
-    private Image icono;
+    private Image icono; // este es para el frame de la venta
+    private ImageIcon icono2; // este es para los seleccionar
 
     public VistaInicio() {
         setContentPane(panel1);
@@ -36,6 +37,7 @@ public class VistaInicio extends JFrame {
 
         initIcono();
         setIconImage(icono);
+
 
         setBotonesInicio();
 
@@ -101,6 +103,10 @@ public class VistaInicio extends JFrame {
         Image originalImage = icono;
         Image scaledImage = originalImage.getScaledInstance(50, 50, Image.SCALE_SMOOTH);
         icono = new ImageIcon(scaledImage).getImage();
+
+        ImageIcon iconoOriginal = new ImageIcon("icono.jpeg");
+        Image imagenRedimensionada = iconoOriginal.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+        icono2 = new ImageIcon(imagenRedimensionada); // inicio el icono
     }
 
     private void setBotonesInicio(){
@@ -186,7 +192,7 @@ public class VistaInicio extends JFrame {
                 null,
                 "Seleccione al tipo de partida que quiere ingresar", "Ingresar a la partida",
                 JOptionPane.QUESTION_MESSAGE,
-                null,
+                icono2,
                 opcionesPuntos.toArray(),
                 null
         );
@@ -197,6 +203,7 @@ public class VistaInicio extends JFrame {
     }
 
     private void reanudarPartida(){
+        initIcono();
         ArrayList<Partida> partidas = PersistenciaPartida.listaPartidasGuardadas();
 
         // pregunto si tiene partidas guardadas pendientes
@@ -219,7 +226,7 @@ public class VistaInicio extends JFrame {
                     null,
                     "Seleccione la partida que quiera reanudar", "PARTIDAS PENDIENTES",
                     JOptionPane.QUESTION_MESSAGE,
-                    null,
+                    icono2,
                     partidas.toArray(),
                     null
             );
