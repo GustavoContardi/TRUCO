@@ -97,6 +97,7 @@ public class Envido implements Serializable {
             iguales.add(masAlta(lista));
         }
 
+        System.out.println(iguales);
         return iguales;
     }
 

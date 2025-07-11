@@ -27,7 +27,7 @@ public class AnotadorGrafico implements Serializable {
     private Integer puntosJugador2;
 
     public AnotadorGrafico(VistaInicio inicio) {
-        this.frame = new JFrame("TRUCONTARDI");
+        this.frame = new JFrame("App Truco");
         frame.setContentPane(ventana);
         frame.pack();
         frame.setResizable(false);

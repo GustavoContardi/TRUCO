@@ -326,6 +326,7 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
     // devuelve el puntaje actual de la partida
     @Override
     public String puntosActuales()  throws RemoteException {
+        if(anotador == null) return "| Faltan unirse jugadores |";
         return anotador.toString();
     }
 
@@ -903,8 +904,9 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
 
     @Override
     public String getNombreRival(int idJugador) throws RemoteException {
-        if(j1.getIDJugador() != idJugador) return j1.getNombre();
-        else return j2.getNombre();
+        if(j1.getIDJugador() != idJugador && j1 != null) return j1.getNombre();
+        else if(j2 != null) return j2.getNombre();
+        return "";
     }
 
     @Override

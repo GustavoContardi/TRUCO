@@ -38,7 +38,7 @@ public class VistaConsola implements IVistaJuego, IVistaInicio, Serializable {
     //
 
     public VistaConsola() throws RemoteException {
-        this.frame = new JFrame("APP TRUCO");
+        this.frame = new JFrame("App Truco");
         frame.setContentPane(ventana);
         frame.pack();
         frame.setResizable(false);
@@ -192,7 +192,7 @@ public class VistaConsola implements IVistaJuego, IVistaInicio, Serializable {
     @Override
     public void mostrarMenuPrincipal() throws RemoteException {
         limpiarPantalla();
-        frame.setTitle(controlador.getNombreJugador() + " - Trucontardi");
+        frame.setTitle(controlador.getNombreJugador() + " - App Truco");
         iniciar();
         setFlujoActual(new FlujoMostrarCartas(this, controlador));
     }

@@ -35,7 +35,7 @@ public class VistaEleccion implements IVistaEleccion {
     private DefaultListModel<String> listModel;
 
     public VistaEleccion() throws RemoteException {
-        this.frame = new JFrame("TRUCONTARDI");
+        this.frame = new JFrame("App Truco");
         frame.setContentPane(ventana);
         frame.setSize(600, 450);
         frame.setResizable(false);
@@ -206,7 +206,7 @@ public class VistaEleccion implements IVistaEleccion {
     }
 
     private void panelAvisos(String text){
-        JFrame frameMSJ = new JFrame("Aviso - Trucontardi");
+        JFrame frameMSJ = new JFrame("Aviso - App Truco");
         frameMSJ.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frameMSJ.setLocationRelativeTo(null);
 
@@ -297,7 +297,7 @@ public class VistaEleccion implements IVistaEleccion {
                 Jugador jugador = (Jugador) comboBox.getSelectedItem();
 
                 if(jugador != null){
-                    nombreJugador = JOptionPane.showInputDialog(frame, "Por favor, ingresa el nombre:", "TRUCONTARDI - ACTUALIZAR JUGADOR", JOptionPane.QUESTION_MESSAGE);
+                    nombreJugador = JOptionPane.showInputDialog(frame, "Por favor, ingresa el nombre:", "TRUCO - ACTUALIZAR JUGADOR", JOptionPane.QUESTION_MESSAGE);
                     controlador.actualizarJugador(jugador.getIDJugador(), nombreJugador);
                     frame2.dispose();
                 }

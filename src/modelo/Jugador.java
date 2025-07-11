@@ -77,6 +77,7 @@ public class Jugador implements Comparable<Jugador>, Serializable{
     }
 
     public boolean tengoFlor(){
+        if(cartasObtenidas.isEmpty()) return false;
         return envido.tieneFlor(cartasObtenidas);
     }
 

@@ -52,7 +52,7 @@ public class VistaGrafica implements IVistaJuego, Serializable {
     private Image icono;
 
     public VistaGrafica() throws RemoteException {
-        this.frame = new JFrame("TRUCONTARDI");
+        this.frame = new JFrame("TRUCO");
         frame.setContentPane(ventana);
         frame.pack();
         frame.setResizable(false);
@@ -520,7 +520,7 @@ public class VistaGrafica implements IVistaJuego, Serializable {
     public void mostrarMenuPrincipal() throws RemoteException {
         iniciar();
         if(controlador != null) {
-            frame.setTitle(controlador.getNombreJugador() + " - Trucontardi ");
+            frame.setTitle(controlador.getNombreJugador() + " - App Truco ");
             setJMenubar();
         }
         mostrarCartas();
@@ -617,7 +617,7 @@ public class VistaGrafica implements IVistaJuego, Serializable {
 
     @Override
     public void reanudarPartida() throws RemoteException {
-        frame.setTitle(controlador.getNombreJugador() + " - Trucontardi");
+        frame.setTitle(controlador.getNombreJugador() + " - App Truco");
         setJMenubar();
         mostrarCartas();
         mostrarCartasTiradas();
@@ -877,7 +877,7 @@ public class VistaGrafica implements IVistaJuego, Serializable {
 
 
     private void panelAvisos(String text){
-        JFrame frameMSJ = new JFrame("Aviso - Trucontardi");
+        JFrame frameMSJ = new JFrame("Aviso - App Truco");
         frameMSJ.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frameMSJ.setLocationRelativeTo(null);
 

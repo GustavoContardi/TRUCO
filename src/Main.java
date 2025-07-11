@@ -21,7 +21,7 @@ public class Main {
     public static void main(String[] args) throws RemoteException {
         // MAIN \\
 
-        //PersistenciaJugador.delvolverTodosJugadores();
+        PersistenciaJugador.delvolverTodosJugadores();
         VistaInicio inicio = new VistaInicio();
         VistaInicio inicio2 = new VistaInicio();
 

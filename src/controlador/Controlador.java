@@ -181,88 +181,48 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
     }
 
     @Override
-    public boolean esMiTurno() {
-        try{
-            return modelo.turnoActual() == jugador.getIDJugador();
-        }catch(RemoteException e){
-            e.printStackTrace();
-            return false;
-        }
+    public boolean esMiTurno() throws RemoteException {
+        return modelo.turnoActual() == jugador.getIDJugador();
     }
 
     @Override
-    public boolean seCantoEnvido() {
-       try{
-           return modelo.cantaronEnvido();
-       }catch(RemoteException e){
-           e.printStackTrace();
-           return false;
-       }
+    public boolean seCantoEnvido()  throws RemoteException{
+        return modelo.cantaronEnvido();
     }
 
     @Override
-    public boolean seCantoEnvidoDoble() {
-        try{
-            return modelo.cantaronEnvidoDoble();
-        }catch(RemoteException e){
-            e.printStackTrace();
-            return false;
-        }
+    public boolean seCantoEnvidoDoble()  throws RemoteException {
+        return modelo.cantaronEnvidoDoble();
     }
 
     @Override
-    public boolean seCantoRealEnvido() {
-        try{
-            return modelo.cantaronRealEnvido();
-        }catch(RemoteException e){
-            e.printStackTrace();
-            return false;
-        }
+    public boolean seCantoRealEnvido()  throws RemoteException {
+        return modelo.cantaronRealEnvido();
     }
 
     @Override
-    public boolean seCantoFaltaEnvido() {
-        try{
-            return modelo.cantaronFaltaEnvido();
-        }catch(RemoteException e){
-            e.printStackTrace();
-            return false;
-        }
+    public boolean seCantoFaltaEnvido()  throws RemoteException {
+        return modelo.cantaronFaltaEnvido();
     }
 
     @Override
-    public boolean seCantoTruco() {
-        try{
-            return modelo.getQuienCantoTruco() != 0;
-        }catch(RemoteException e){
-            e.printStackTrace();
-            return false;
-        }
+    public boolean seCantoTruco()  throws RemoteException {
+        return modelo.getQuienCantoTruco() != 0;
     }
 
     @Override
-    public boolean seCantoReTruco() {
-        try{
-            return modelo.getQuienCantoReTruco() != 0;
-        }catch(RemoteException e){
-            e.printStackTrace();
-            return false;
-        }
+    public boolean seCantoReTruco()  throws RemoteException {
+        return modelo.getQuienCantoReTruco() != 0;
     }
 
     @Override
-    public boolean seCantoValeCuatro() {
+    public boolean seCantoValeCuatro()  throws RemoteException {
         return false;
     }
 
     @Override
-    public int nroDeRonda() {
-        try{
-            return modelo.numeroDeRonda();
-        }catch(RemoteException e){
-            e.printStackTrace();
-            return -1;
-        }
+    public int nroDeRonda()  throws RemoteException{
+        return modelo.numeroDeRonda();
     }
 
     @Override

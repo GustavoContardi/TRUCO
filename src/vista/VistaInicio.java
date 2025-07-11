@@ -31,7 +31,7 @@ public class VistaInicio extends JFrame {
     public VistaInicio() {
         setContentPane(panel1);
         setSize(450, 460);
-        setTitle("Menú principal - Trucontardi");
+        setTitle("Menú principal - Truco");
         setLocationRelativeTo(null);
         setResizable(false);
 
@@ -75,7 +75,7 @@ public class VistaInicio extends JFrame {
     }
 
     private void pantallaTopJugadores(){
-        JFrame frame2 = new JFrame("Top jugadores - Trucontardi");
+        JFrame frame2 = new JFrame("Top jugadores - App Truco");
         frame2.setResizable(false);
         frame2.setSize(500, 600);
         frame2.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -115,7 +115,7 @@ public class VistaInicio extends JFrame {
         btnAnotador.setEnabled(true);
         btnCrearNuevo.setEnabled(true);
 
-        instrucciones.setText("¡Bienvenido al Trucontardi! Seleccione una opción");
+        instrucciones.setText("¡Bienvenido a la App Truco! Seleccione una opción");
 
         // EVENTOS
 
@@ -209,7 +209,7 @@ public class VistaInicio extends JFrame {
         // pregunto si tiene partidas guardadas pendientes
         if(partidas == null || partidas.isEmpty()) {
             JFrame frameMSJ;
-            frameMSJ = new JFrame("TRUCONTARDI");
+            frameMSJ = new JFrame("TRUCO");
             frameMSJ.setSize(400, 100);
             JPanel panelPrincipal = (JPanel) frameMSJ.getContentPane();
             panelPrincipal.setLayout(new BorderLayout());
