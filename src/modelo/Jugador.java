@@ -52,9 +52,9 @@ public class Jugador implements Comparable<Jugador>, Serializable{
         return null;
     }
 
-    // rettorna cuantos puntos tiene para el envido llamando el metodo de la instancia 'Envido' creada en el constructor
+    // retorna cuantos puntos tiene para el envido llamando el metodo de la instancia 'Envido' creada en el constructor
     public int puntosEnvido(){
-        return envido.calcularPuntosEnvido(this.getCartasObtenidas());
+        return envido.calcularPuntosEnvido(cartasObtenidas);
     }
 
     public void recibirCartas(ArrayList<Carta> lista){

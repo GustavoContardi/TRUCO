@@ -157,6 +157,7 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
         PersistenciaPartida.guardarPartida(this);
         PersistenciaJugador.delvolverTodosJugadores(); // devuelvo por si quieren jugar otra partida, ya quedan guardados porque se guarda la partida.
         notificarEvento(NUEVA_RONDA);
+
     }
 
     // se llama a este metodo cuando finalizo la ronda
@@ -984,7 +985,6 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
             puntos += 3;
         }
 
-        System.out.println("Puntos Envido Querido: " + puntos);
         return puntos;
     }
 

@@ -1,7 +1,6 @@
 package modelo;
 
-import java.io.Serializable;
-import java.lang.reflect.Array;
+import java.io.*;
 import java.util.ArrayList;
 
 public class Envido implements Serializable {
@@ -12,18 +11,7 @@ public class Envido implements Serializable {
     // constructor
     public Envido() {
         puntosEnvido = 0;
-        if (jerarquiaCartas.isEmpty()) { // creo el arraylist con las jerarquias de las cartas para el envido, uso el patron singgletton para que haya uno solo
-            jerarquiaCartas.add(7);
-            jerarquiaCartas.add(6);
-            jerarquiaCartas.add(5);
-            jerarquiaCartas.add(4);
-            jerarquiaCartas.add(3);
-            jerarquiaCartas.add(2);
-            jerarquiaCartas.add(1);
-            jerarquiaCartas.add(12);
-            jerarquiaCartas.add(11);
-            jerarquiaCartas.add(10);
-        }
+        recuperarListaJerarquia();
     }
 
     // metodos publicos
@@ -31,6 +19,7 @@ public class Envido implements Serializable {
     // calcula los puntos del envido segun que cartas iguales tiene el jugador
     public int calcularPuntosEnvido(ArrayList<Carta> cartasJugador) {
         ArrayList<Carta> cartasIguales;
+        recuperarListaJerarquia();
 
         puntosEnvido = 0; // para resetear cada vez que le pido los puntos
 
@@ -76,8 +65,15 @@ public class Envido implements Serializable {
 
         if(lista.get(0).getPaloCarta().equals(lista.get(1).getPaloCarta()) && lista.get(0).getPaloCarta().equals(lista.get(2).getPaloCarta())){
             // si las tres son iguales entonces tengo que elegir las dos mas altas
-            Carta c1 = masAlta(lista);
+            /*Carta c1 = masAlta(lista);
             Carta c2 = masAlta(lista, c1);
+            iguales.add(c1);
+            iguales.add(c2);*/
+
+            ArrayList<Carta> ordenadas = cartasOrdenadasPorJerarquia(lista);
+            Carta c1 = ordenadas.get(0);
+            Carta c2 = ordenadas.get(1);
+
             iguales.add(c1);
             iguales.add(c2);
         }
@@ -97,7 +93,6 @@ public class Envido implements Serializable {
             iguales.add(masAlta(lista));
         }
 
-        System.out.println(iguales);
         return iguales;
     }
 
@@ -107,8 +102,10 @@ public class Envido implements Serializable {
         int max = 99;
 
         for(int i=0; i<lista.size(); i++){
-            if(jerarquiaCartas.indexOf(lista.get(i).getNumeroCarta()) < max) {
-                max = jerarquiaCartas.indexOf(lista.get(i).getNumeroCarta());
+            int indice = jerarquiaCartas.indexOf(lista.get(i).getNumeroCarta());
+
+            if(indice < max && indice != -1) {
+                max = indice;
                 cartaAlta = lista.get(i);
             }
         }
@@ -129,6 +126,36 @@ public class Envido implements Serializable {
         }
 
         return cartaAlta;
+    }
+
+    private ArrayList<Carta> cartasOrdenadasPorJerarquia(ArrayList<Carta> cartas) {
+        ArrayList<Carta> resultado = new ArrayList<>(cartas);
+
+        // Ordenar según la jerarquía de envido
+
+        resultado.sort((c1, c2) -> Integer.compare(
+                jerarquiaCartas.indexOf(c1.getNumeroCarta()),
+                jerarquiaCartas.indexOf(c2.getNumeroCarta())
+        ));
+
+        return resultado;
+    }
+
+    private void recuperarListaJerarquia() {
+        try {
+            FileInputStream fos = new FileInputStream("listaJerarquiaEnvido.bin");
+            var oos = new ObjectInputStream(fos);
+            jerarquiaCartas = (ArrayList<Integer>) oos.readObject();
+            fos.close();
+
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
 

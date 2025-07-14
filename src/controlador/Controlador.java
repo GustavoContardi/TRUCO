@@ -600,7 +600,6 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
             }
             case TANTO_QUERIDO -> { // este metodo se usa para avisar el resultado del tanto, no para avisar que se dijo 'QUIERO' al envido
                 vistaJuego.desbloquearBotones();
-                System.out.println(modelo.getResultadoTanto());
                 vistaJuego.mostrarAviso(modelo.getResultadoTanto());
             }
             case RESTABLECER_PARTIDA -> {

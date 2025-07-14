@@ -69,7 +69,6 @@ public class VistaConsola implements IVistaJuego, IVistaInicio, Serializable {
                     }
                 } else {
                     // Evita cualquier acción adicional si selecciona "No"
-                    System.out.println("El usuario canceló el cierre de la ventana.");
                 }
             }
         });

@@ -83,7 +83,7 @@ public class VistaGrafica implements IVistaJuego, Serializable {
                     }
                 } else {
                     // Evita cualquier acción adicional si selecciona "No"
-                    System.out.println("El usuario canceló el cierre de la ventana.");
+                    //System.out.println("El usuario canceló el cierre de la ventana.");
                 }
             }
         });
@@ -878,7 +878,6 @@ public class VistaGrafica implements IVistaJuego, Serializable {
 
     private void panelAvisos(String text){
         JFrame frameMSJ = new JFrame("Aviso - App Truco");
-        frameMSJ.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frameMSJ.setLocationRelativeTo(null);
 
         // Panel principal
