@@ -3,7 +3,7 @@
   <grid id="27dc6" binding="ventana" layout-manager="GridLayoutManager" row-count="6" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
     <margin top="0" left="0" bottom="0" right="0"/>
     <constraints>
-      <xy x="8" y="32" width="645" height="499"/>
+      <xy x="8" y="32" width="608" height="595"/>
     </constraints>
     <properties/>
     <border type="none"/>
@@ -138,27 +138,29 @@
           </grid>
         </children>
       </grid>
-      <grid id="5813b" layout-manager="GridLayoutManager" row-count="1" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+      <grid id="5813b" binding="panelBtnCartas" layout-manager="GridLayoutManager" row-count="1" column-count="3" same-size-horizontally="true" same-size-vertically="false" hgap="15" vgap="5">
         <margin top="0" left="0" bottom="0" right="0"/>
         <constraints>
-          <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+          <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="1" hsize-policy="1" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
-          <background color="-6448740"/>
+          <background color="-262154"/>
+          <enabled value="true"/>
         </properties>
-        <border type="bevel-raised"/>
+        <border type="bevel-raised" title-justification="2" title-position="3"/>
         <children>
           <component id="ad991" class="javax.swing.JButton" binding="btnCarta1">
             <constraints>
-              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
+              <horizontalTextPosition value="0"/>
               <text value=""/>
             </properties>
           </component>
           <component id="c7e29" class="javax.swing.JButton" binding="btnCarta2">
             <constraints>
-              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
               <text value=""/>
@@ -166,9 +168,10 @@
           </component>
           <component id="59ac0" class="javax.swing.JButton" binding="btnCarta3">
             <constraints>
-              <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+              <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
+              <enabled value="true"/>
               <horizontalTextPosition value="0"/>
               <text value=""/>
             </properties>

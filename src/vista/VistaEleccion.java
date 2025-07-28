@@ -193,16 +193,13 @@ public class VistaEleccion implements IVistaEleccion {
             for (Jugador jugador: lista) {
                 listModel.addElement(jugador.toString());
             }
-
             cbEleccion.removeAllItems();
             for (Jugador jugador: lista) {
                 if (!jugador.getElecto()) {
                     cbEleccion.addItem(jugador);
                 }
             }
-
         }
-
     }
 
     private void panelAvisos(String text){

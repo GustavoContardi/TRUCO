@@ -47,6 +47,7 @@ public class VistaGrafica implements IVistaJuego, Serializable {
     private JLabel puntajesLabel;
     private JToolBar toolBtn;
     private JButton btnAuxiliar;
+    private JPanel panelBtnCartas;
     private JFrame frame;
     private IControlador controlador;
     private Image icono;
@@ -57,7 +58,7 @@ public class VistaGrafica implements IVistaJuego, Serializable {
         frame.pack();
         frame.setResizable(false);
         frame.setLocationRelativeTo(null);
-        frame.setSize(730, 820);
+        frame.setSize(765, 815);
         frame.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 
         // Control de cierre de ventana
@@ -88,6 +89,7 @@ public class VistaGrafica implements IVistaJuego, Serializable {
             }
         });
 
+        panelBtnCartas.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
         initIcono();
         frame.setIconImage(icono);
 
@@ -622,6 +624,7 @@ public class VistaGrafica implements IVistaJuego, Serializable {
         mostrarCartas();
         mostrarCartasTiradas();
         actualizarPuntaje(controlador.puntajeActual());
+        desbloquearBotones();
 
         if(controlador.seEstabaCantandoTanto() && controlador.meCantaronElUltimo()){ // mismo que el truco pero con el tanto
             cantaronTanto(controlador.getCantoTanto(), controlador.estadoDelTanto());
@@ -642,6 +645,7 @@ public class VistaGrafica implements IVistaJuego, Serializable {
     @Override
     public void mostrarEsperaRival() throws RemoteException {
         iniciar();
+        bloquearBotones();
         accionesJ2.setText("SE REANUDÓ LA PARTIDA CORRECTAMENTE. NO PODRÁ JUGAR HASTA QUE SU RIVAL INICIE SESION");
     }
 
@@ -919,8 +923,6 @@ public class VistaGrafica implements IVistaJuego, Serializable {
     }
 
     private void setBotonesCartas(String imagen1, String imagen2, String imagen3) throws RemoteException {
-        int ronda = controlador.nroDeRonda();
-
         removeAllActionListeners(btnCarta1);
         removeAllActionListeners(btnCarta2);
         removeAllActionListeners(btnCarta3);

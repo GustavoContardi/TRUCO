@@ -4,6 +4,7 @@ import modelo.Jugador;
 import modelo.Mazo;
 import org.w3c.dom.ls.LSOutput;
 import persistencia.PersistenciaJugador;
+import vista.VistaGrafica;
 import vista.VistaInicio;
 
 import javax.swing.*;

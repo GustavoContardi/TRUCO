@@ -609,7 +609,7 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
                 if(jugador != null) {
                     if(jugador.getIDJugador() == modelo.getIdJ1()) vistaJuego.mostrarEsperaRival();
                 }
-                else if(!(modelo.getReanudoJ2())) vistaEleccion.reanudarPartida(getJugadoresRecuperados());
+                else if(!(modelo.getReanudoJ2())) vistaEleccion.reanudarPartida(getJugadoresRecuperados()); // esto es para que se elimine el jugador de la eleccion
             }
             case RESTABLECIO_J2 -> {
                 if(jugador != null) {
