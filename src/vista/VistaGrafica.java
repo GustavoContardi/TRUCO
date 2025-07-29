@@ -623,6 +623,7 @@ public class VistaGrafica implements IVistaJuego, Serializable {
         setJMenubar();
         mostrarCartas();
         mostrarCartasTiradas();
+        desactivarCartasTiradas();
         actualizarPuntaje(controlador.puntajeActual());
         desbloquearBotones();
 
@@ -888,6 +889,7 @@ public class VistaGrafica implements IVistaJuego, Serializable {
         JPanel panel = new JPanel(new BorderLayout(10, 10));
         panel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
 
+
         // Label con el mensaje (centrado)
         JLabel titulo = new JLabel("<html><div style='text-align: center;'>" + text + "</div></html>");
         titulo.setFont(new Font("Arial", Font.BOLD, 16));
@@ -1071,6 +1073,7 @@ public class VistaGrafica implements IVistaJuego, Serializable {
     private void mostrarCartaTiradaYO(String carta) throws RemoteException {
         // metodo privado, lo que solo hace es mostrar en el panel de mis cartas tiradas
 
+
         int ronda = controlador.nroDeRonda();
         ImageIcon imageIcon = createResizedImageIcon(carta, 160, 170);
 
@@ -1093,6 +1096,16 @@ public class VistaGrafica implements IVistaJuego, Serializable {
         }
 
         setBotones();
+    }
+
+    // metodo para desactivar los botones de cartas que ya tire cunado reanudo la partida
+    private void desactivarCartasTiradas() throws RemoteException {
+        ArrayList<String> cartasDisponibles = controlador.obtenerCartasDisponibles();
+
+        // el espacio en blanco quiere decir que fue tirada y la correspondencia posicion de carta en lista y boton es: i = i+1
+        if(cartasDisponibles.get(0).equals(" ")) btnCarta1.setEnabled(false);
+        if(cartasDisponibles.get(1).equals(" ")) btnCarta2.setEnabled(false);
+        if(cartasDisponibles.get(2).equals(" ")) btnCarta3.setEnabled(false);
 
     }
 

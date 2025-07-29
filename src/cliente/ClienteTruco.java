@@ -34,9 +34,10 @@ public class ClienteTruco {
         ImageIcon icono = new ImageIcon(imagenRedimensionada);
 
         Socket clientSocket = null;
-        ArrayList<String> opciones = new ArrayList<>();
-        opciones.add("Interfaz Gráfica");
-        opciones.add("Consola Gráfica");
+        ArrayList<String> opcionesInterfaz = new ArrayList<>();
+        opcionesInterfaz.add("Interfaz Gráfica");
+        opcionesInterfaz.add("Consola Gráfica");
+
 
         // Interfaz del cliente
         String interfaz = (String) JOptionPane.showInputDialog(
@@ -45,9 +46,15 @@ public class ClienteTruco {
                 "Interfaz gráfica",
                 JOptionPane.QUESTION_MESSAGE,
                 icono,
-                opciones.toArray(),
+                opcionesInterfaz.toArray(),
                 null
         );
+
+        if (interfaz == null) {
+            JOptionPane.showMessageDialog(null, "Operación cancelada.");
+            new VistaInicio().iniciarBotonesInicio();
+            return;
+        }
 
         // Obtener IP del cliente
         ArrayList<String> ips = Util.getIpDisponibles();
@@ -63,7 +70,8 @@ public class ClienteTruco {
 
         if (ip == null) {
             JOptionPane.showMessageDialog(null, "Operación cancelada.");
-            new VistaInicio().iniciar(); // inicia sin pantalla de carga asi da la sensacion que solo volvio para atrás
+            //new VistaInicio().iniciar(); // inicia sin pantalla de carga asi da la sensacion que solo volvio para atrás
+            new VistaInicio().iniciarBotonesInicio();
             return;
         }
 
@@ -82,8 +90,7 @@ public class ClienteTruco {
 
                 if (portStr == null) {
                     JOptionPane.showMessageDialog(null, "Operación cancelada.");
-                    VistaInicio ini = new VistaInicio();
-                    ini.iniciar(); // inicia sin pantalla de carga asi da la sensacion que solo volvio para atrás
+                    new VistaInicio().iniciarBotonesInicio();
                     return;
                 }
 
@@ -119,8 +126,7 @@ public class ClienteTruco {
 
         if (ipServidor == null) {
             JOptionPane.showMessageDialog(null, "Operación cancelada.");
-            VistaInicio ini = new VistaInicio();
-            ini.iniciar(); // inicia sin pantalla de carga asi da la sensacion que solo volvio para atrás
+            new VistaInicio().iniciarBotonesInicio();
             return;
         }
 
@@ -139,8 +145,7 @@ public class ClienteTruco {
 
                 if (portStr == null) {
                     JOptionPane.showMessageDialog(null, "Operación cancelada.");
-                    VistaInicio ini = new VistaInicio();
-                    ini.iniciar(); // inicia sin pantalla de carga asi da la sensacion que solo volvio para atrás
+                    new VistaInicio().iniciarBotonesInicio(); // no me queda otra
                     return;
                 }
 
@@ -163,12 +168,6 @@ public class ClienteTruco {
             }
         }
 
-
-        if (interfaz == null) {
-            JOptionPane.showMessageDialog(null, "Operación cancelada.");
-            new VistaInicio().iniciar(); // inicia sin pantalla de carga asi da la sensacion que solo volvio para atrás
-            return;
-        }
 
         IVistaJuego vista;
         Controlador controlador = new Controlador();

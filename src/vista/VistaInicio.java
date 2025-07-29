@@ -53,6 +53,12 @@ public class VistaInicio extends JFrame {
         setVisible(true);
     }
 
+    // momentaneo hasta que consigamos que hacer, sino quedara asi
+    public void iniciarBotonesInicio(){
+        setVisible(true);
+        setBotonesInicio();
+    }
+
     public void salir(){
         setVisible(false);
     }
@@ -150,7 +156,7 @@ public class VistaInicio extends JFrame {
         btnCrearNuevo.addActionListener(e -> {
             try {
                 new ServidorTruco();
-                btnCrearNuevo.setEnabled(false);
+                //btnCrearNuevo.setEnabled(false);
             } catch (RemoteException ex) {
                 ex.printStackTrace();
             }
@@ -165,10 +171,16 @@ public class VistaInicio extends JFrame {
         btnAnotador.addActionListener(e -> {
             try {
                 int tipoPartida = ingresarPartida();
-                if(tipoPartida == 1) new ClienteTruco(false); // 1 == ingresa a una nueva partida
-                else if (tipoPartida == 2) new ClienteTruco(true); // 1 == reanuda una partida pendiente
+                if(tipoPartida == 1) {
+                    dispose();
+                    new ClienteTruco(false); // 1 == ingresa a una nueva partida
+                }
+                else if (tipoPartida == 2) {
+                    dispose();
+                    new ClienteTruco(true); // 2 == reanuda una partida pendiente
+                }
 
-                if(tipoPartida == 2 || tipoPartida == 1) dispose();
+                //if(tipoPartida == 2 || tipoPartida == 1) //dispose();
             } catch (RemoteException ex) {
                 throw new RuntimeException(ex);
             }
@@ -232,7 +244,7 @@ public class VistaInicio extends JFrame {
             );
             if(partida != null) {
                 new ServidorTruco(partida);
-                btnCrearNuevo.setEnabled(false);
+                //btnCrearNuevo.setEnabled(false);
             }
         }
     }

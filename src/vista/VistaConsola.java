@@ -43,7 +43,7 @@ public class VistaConsola implements IVistaJuego, IVistaInicio, Serializable {
         frame.pack();
         frame.setResizable(false);
         frame.setLocationRelativeTo(null);
-        frame.setSize(600, 450);
+        frame.setSize(670, 450);
         frame.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 
         // Control de cierre de ventana
@@ -238,6 +238,7 @@ public class VistaConsola implements IVistaJuego, IVistaInicio, Serializable {
     @Override
     public void reanudarPartida() throws RemoteException {
         // solo tengo que mostrar la mesa porque tiene todo
+        frame.setTitle(controlador.getNombreJugador() +  " - App Truco");
         bloqBotones = false;
         limpiarPantalla(); // limpio para que no quede nada arriba de lo que viene abajo
 
@@ -296,7 +297,7 @@ public class VistaConsola implements IVistaJuego, IVistaInicio, Serializable {
     }
 
     // este metodo muestra todo: puntos, cartas tiradas y acciones
-    public void mostrarMesa() throws RemoteException {
+    /*public void mostrarMesa() throws RemoteException {
 
         if(controlador != null){
 
@@ -336,6 +337,49 @@ public class VistaConsola implements IVistaJuego, IVistaInicio, Serializable {
 
         }
     }
+
+    tranquilo gordo programador, solo es un poco de chat gpt
+     */
+
+    public void mostrarMesa() throws RemoteException {
+        if (controlador != null) {
+            ArrayList<String> cartasYo = controlador.getCartasTiradasYo();
+            ArrayList<String> cartasRival = controlador.getCartasTiradasRival();
+
+            txtVista.setFont(new Font("Monospaced", Font.PLAIN, 12));
+            println(controlador.puntajeActual());
+
+            println("\n                MESA");
+            println("+------------------------+------------------------+");
+
+            String nombre1 = centrarTexto(controlador.getNombreJugador(), 24);
+            String nombre2 = centrarTexto(controlador.getNombreRival(), 24);
+            println("|" + nombre1 + "|" + nombre2 + "|");
+
+            println("+------------------------+------------------------+");
+
+            for (int i = 0; i < 3; i++) {
+                String cartaYo = (i < cartasYo.size()) ? cartasYo.get(i) : "";
+                String cartaRival = (i < cartasRival.size()) ? cartasRival.get(i) : "";
+
+                String cartaYoFmt = centrarTexto(cartaYo, 24);
+                String cartaRivalFmt = centrarTexto(cartaRival, 24);
+                println("|" + cartaYoFmt + "|" + cartaRivalFmt + "|");
+            }
+
+            println("+------------------------+------------------------+");
+        }
+    }
+
+    private String centrarTexto(String texto, int ancho) {
+        if (texto.length() >= ancho) return texto.substring(0, ancho);
+        int espacios = ancho - texto.length();
+        int izq = espacios / 2;
+        int der = espacios - izq;
+        return " ".repeat(izq) + texto + " ".repeat(der);
+    }
+
+
 
 
     public void mostrarCartasDisponibles() throws RemoteException {
