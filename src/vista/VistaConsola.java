@@ -45,6 +45,7 @@ public class VistaConsola implements IVistaJuego, IVistaInicio, Serializable {
         frame.setLocationRelativeTo(null);
         frame.setSize(670, 450);
         frame.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+        txtVista.setFont(new Font("Monospaced", Font.PLAIN, 12));
 
         // Control de cierre de ventana
         frame.addWindowListener(new WindowAdapter() {
@@ -346,7 +347,6 @@ public class VistaConsola implements IVistaJuego, IVistaInicio, Serializable {
             ArrayList<String> cartasYo = controlador.getCartasTiradasYo();
             ArrayList<String> cartasRival = controlador.getCartasTiradasRival();
 
-            txtVista.setFont(new Font("Monospaced", Font.PLAIN, 12));
             println(controlador.puntajeActual());
 
             println("\n                MESA");

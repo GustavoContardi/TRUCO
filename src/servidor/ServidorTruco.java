@@ -49,6 +49,10 @@ public class ServidorTruco {
                 opcionesPuntos.toArray(),
                 null
         );
+        if(puntos == null) {
+            JOptionPane.showMessageDialog(null, "Operación cancelada.");
+            return;
+        }
 
         String jardinera = (String) JOptionPane.showInputDialog(
                 null,
@@ -58,6 +62,10 @@ public class ServidorTruco {
                 opcionesFlor.toArray(),
                 null
         );
+        if(jardinera == null) {
+            JOptionPane.showMessageDialog(null, "Operación cancelada.");
+            return;
+        }
 
         ArrayList<String> ips = Util.getIpDisponibles();
         String ip = (String) JOptionPane.showInputDialog(
@@ -68,11 +76,13 @@ public class ServidorTruco {
                 ips.toArray(),
                 null
         );
+
+        if(ip == null) {
+            JOptionPane.showMessageDialog(null, "Operación cancelada.");
+            return;
+        }
+
         while (true) {
-            if(ip == null) {
-                JOptionPane.showMessageDialog(null, "Operación cancelada.");
-                return;
-            }
             try {
                 String portStr = (String) JOptionPane.showInputDialog(
                         null,
@@ -107,11 +117,6 @@ public class ServidorTruco {
         }
 
 
-        // valido si alguno de los inputs es null para que no pinche
-        if(puntos == null || jardinera == null){
-            JOptionPane.showMessageDialog(null, "Operación cancelada.");
-            return;
-        }
 
         if(jardinera.equals("CON FLOR")) flor = true;
         else flor = false;
