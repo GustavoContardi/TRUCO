@@ -23,15 +23,14 @@ public class ServidorTruco {
     private     int         port;
     private     int         puntosParaGanar;    // 15 o 30 puntos para ganar
     private     boolean     flor;               // true = se juega con flor | false = se juega sin flor
+    private ImageIcon icono;
 
     //
     // constructor 1
     //
 
     public ServidorTruco() throws RemoteException {
-        ImageIcon iconoOriginal = new ImageIcon("icono.jpeg");
-        Image imagenRedimensionada = iconoOriginal.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
-        ImageIcon icono = new ImageIcon(imagenRedimensionada); // inicio el icono
+        iniciarIcono();
 
         ArrayList<String> opcionesFlor = new ArrayList<>();
         opcionesFlor.add("CON FLOR");
@@ -146,9 +145,7 @@ public class ServidorTruco {
     // si se ejecuta este es porque se va a reanudar una partida seleccionada
 
     public ServidorTruco(Partida modelo) {
-        ImageIcon iconoOriginal = new ImageIcon("icono.jpeg");
-        Image imagenRedimensionada = iconoOriginal.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
-        ImageIcon icono = new ImageIcon(imagenRedimensionada); // inicio el icono
+        iniciarIcono();
 
         port = 0;
         ArrayList<String> ips = Util.getIpDisponibles();
@@ -211,6 +208,16 @@ public class ServidorTruco {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+    }
+
+    //
+    // metodos privados
+    //
+
+    private void iniciarIcono(){
+        ImageIcon iconoOriginal = new ImageIcon("icono.jpeg");
+        Image imagenRedimensionada = iconoOriginal.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+        icono = new ImageIcon(imagenRedimensionada); // inicio el icono
     }
 
 

@@ -1,3 +1,4 @@
+import ar.edu.unlu.rmimvc.Util;
 import modelo.Carta;
 import modelo.Envido;
 import modelo.Jugador;
@@ -46,6 +47,39 @@ public class Main {
         // ACORDARSE A LO ULTIMO PONER LAS PANTALLAS DE CARGA
         inicio.iniciar();
         inicio2.iniciar();
+
+
+       /* JDialog dialog = new JDialog();
+        dialog.setModal(false); // NO bloquea la app
+        dialog.setTitle("Puerto del Servidor - App Truco ");
+        dialog.setLayout(new FlowLayout());
+        //dialog.setIconImage(icono.getImage());
+
+        ArrayList<String> ips = Util.getIpDisponibles();
+        JTextField campoPuerto = new JTextField("", 10);
+        JComboBox comboBox = new JComboBox();
+        for(String ip : ips) {
+            comboBox.addItem(ip);
+        }
+
+        dialog.add(new JLabel("Seleccione la IP:"));
+        dialog.add(comboBox);
+        //dialog.add(campoPuerto);
+
+        JButton aceptar = new JButton("Aceptar");
+        aceptar.addActionListener(e -> {
+            String ip = (String) comboBox.getSelectedItem();
+            dialog.dispose();
+        });
+        dialog.add(aceptar);
+
+        dialog.pack();
+        dialog.setLocationRelativeTo(null);
+        dialog.setVisible(true);
+
+        */
+
+
 
     }
 }

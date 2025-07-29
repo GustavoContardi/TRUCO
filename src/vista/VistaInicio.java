@@ -85,6 +85,7 @@ public class VistaInicio extends JFrame {
         frame2.setResizable(false);
         frame2.setSize(500, 600);
         frame2.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frame2.setIconImage(icono);
         JPanel ventana = new JPanel();
         ventana.setLayout(new BorderLayout()); // Usar BorderLayout para que el JScrollPane ocupe todo el espacio
         JList<String> list = new JList<>();
@@ -156,7 +157,6 @@ public class VistaInicio extends JFrame {
         btnCrearNuevo.addActionListener(e -> {
             try {
                 new ServidorTruco();
-                //btnCrearNuevo.setEnabled(false);
             } catch (RemoteException ex) {
                 ex.printStackTrace();
             }
@@ -222,9 +222,10 @@ public class VistaInicio extends JFrame {
         if(partidas == null || partidas.isEmpty()) {
             JFrame frameMSJ;
             frameMSJ = new JFrame("TRUCO");
-            frameMSJ.setSize(400, 100);
+            frameMSJ.setSize(402, 100);
             JPanel panelPrincipal = (JPanel) frameMSJ.getContentPane();
             panelPrincipal.setLayout(new BorderLayout());
+            frameMSJ.setIconImage(icono);
 
             JLabel etiqueta1 = new JLabel("NO TIENES PARTIDAS PENDIENTES, ¡PARA JUGAR CREA UNA!");
             frameMSJ.dispose();
@@ -248,6 +249,7 @@ public class VistaInicio extends JFrame {
             }
         }
     }
+
 
     //
     // Actions listeners
