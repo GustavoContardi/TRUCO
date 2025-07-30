@@ -14,7 +14,7 @@ import java.util.Random;
 
 public class Persistencia implements Serializable{
 
-    public Persistencia(ArrayList<Integer> lista2) {
+    public Persistencia() {
 
     }
 }

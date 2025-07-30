@@ -69,9 +69,9 @@ public class FlujoMostrarCartas extends Flujo implements Serializable {
             vista.mostrarOpciones();
         }
         else{
-            vista.println("-----------------------------------------------------------------------");
-            vista.println("----------------- ESPERANDO AL RIVAL ----------------------");
-            vista.println("-----------------------------------------------------------------------\n");
+            vista.println("--------------------------------------");
+            vista.println("--------- ESPERANDO AL RIVAL ---------");
+            vista.println("--------------------------------------\n");
         }
     }
 }

@@ -23,7 +23,7 @@ public class ServidorTruco {
     private     int         port;
     private     int         puntosParaGanar;    // 15 o 30 puntos para ganar
     private     boolean     flor;               // true = se juega con flor | false = se juega sin flor
-    private ImageIcon icono;
+    private     ImageIcon   icono;              // icono para las ventanas de eleccion
 
     //
     // constructor 1
@@ -31,10 +31,6 @@ public class ServidorTruco {
 
     public ServidorTruco() throws RemoteException {
         iniciarIcono();
-
-        ArrayList<String> opcionesFlor = new ArrayList<>();
-        opcionesFlor.add("CON FLOR");
-        opcionesFlor.add("SIN FLOR");
 
         ArrayList<String> opcionesPuntos = new ArrayList<>();
         opcionesPuntos.add("15 PUNTOS - PARTIDA RÁPIDA");
@@ -52,6 +48,10 @@ public class ServidorTruco {
             JOptionPane.showMessageDialog(null, "Operación cancelada.");
             return;
         }
+
+        ArrayList<String> opcionesFlor = new ArrayList<>();
+        opcionesFlor.add("CON FLOR");
+        opcionesFlor.add("SIN FLOR");
 
         String jardinera = (String) JOptionPane.showInputDialog(
                 null,

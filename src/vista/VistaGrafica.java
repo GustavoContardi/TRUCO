@@ -105,14 +105,32 @@ public class VistaGrafica implements IVistaJuego, Serializable {
         removeAllActionListeners(btnCarta2);
         removeAllActionListeners(btnCarta3);
 
-        ArrayList<String> cartas = controlador.obtenerFotoCartas();
+        //ArrayList<String> cartas = controlador.obtenerFotoCartas();
+        ArrayList<String> cartas = null;
+        frame.setVisible(true);
 
         if (cartas != null) {
             actualizar();
             accionesJ2.setText("");
         }
         else {
-            accionesJ2.setText("Esperando contrincante...");
+            frame.setVisible(false);
+            JFrame frameIMG;
+            frameIMG = new JFrame("Esperando rival - App Truco");
+            frameIMG.setSize(520, 380);
+            JPanel panelPrincipal = (JPanel) frameIMG.getContentPane();
+            panelPrincipal.setLayout(new FlowLayout());
+            frameIMG.setIconImage(icono);
+            frameIMG.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+
+            ImageIcon esperando = new ImageIcon("esperandoContrincante.jpeg");
+            //accionesJ2.setText("Esperando contrincante...");
+            Image img = esperando.getImage().getScaledInstance(520, 380, Image.SCALE_SMOOTH);
+
+            JLabel label = new JLabel(new ImageIcon(img));
+            panelPrincipal.add(label);
+
+            frameIMG.setVisible(true);
         }
     }
 

@@ -221,7 +221,7 @@ public class VistaInicio extends JFrame {
         // pregunto si tiene partidas guardadas pendientes
         if(partidas == null || partidas.isEmpty()) {
             JFrame frameMSJ;
-            frameMSJ = new JFrame("TRUCO");
+            frameMSJ = new JFrame("Partidas pendientes - App Truco");
             frameMSJ.setSize(402, 100);
             JPanel panelPrincipal = (JPanel) frameMSJ.getContentPane();
             panelPrincipal.setLayout(new BorderLayout());

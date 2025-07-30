@@ -5,6 +5,7 @@ import modelo.Jugador;
 import modelo.Mazo;
 import org.w3c.dom.ls.LSOutput;
 import persistencia.PersistenciaJugador;
+import vista.VistaConsola;
 import vista.VistaGrafica;
 import vista.VistaInicio;
 
@@ -45,8 +46,8 @@ public class Main {
 
 
         // ACORDARSE A LO ULTIMO PONER LAS PANTALLAS DE CARGA
-        inicio.iniciar();
-        inicio2.iniciar();
+        //inicio.iniciar();
+        //inicio2.iniciar();
 
 
        /* JDialog dialog = new JDialog();
@@ -79,8 +80,8 @@ public class Main {
 
         */
 
-
-
+        VistaGrafica vista = new VistaGrafica();
+        vista.mostrarCartas();
     }
 }
 

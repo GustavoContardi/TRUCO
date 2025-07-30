@@ -144,20 +144,20 @@ public class VistaConsola implements IVistaJuego, IVistaInicio, Serializable {
 
     @Override
     public void finDeMano() {
-        println("-------------------------------");
-        println("-     FIN DE LA MANO     -");
-        println("-------------------------------");
+        println("----------------");
+        println(" FIN DE LA MANO ");
+        println("----------------");
     }
 
     @Override
     public void finDeLaPartida(String nombreGanador) throws RemoteException {
 
-        println("-------------------------------------------------------------------------");
-        println("                   FIN DE LA PARTIDA                        ");
-        println("         MUCHAS GRACIAS POR USAR LA APLICACION              ");
-        println("-------------------------------------------------------------------------");
-        println("           ¡¡ GANADOR: " + nombreGanador + " !!");
-        println("-------------------------------------------------------------------------");
+        println("------------------------------------------------");
+        println("                FIN DE LA PARTIDA                        ");
+        println("       MUCHAS GRACIAS POR USAR LA APLICACION              ");
+        println("------------------------------------------------");
+        println("            ¡¡ GANADOR: " + nombreGanador + " !!");
+        println("------------------------------------------------");
 
         setFlujoActual(new FlujoFinPartida(this, controlador));
     }
@@ -255,9 +255,10 @@ public class VistaConsola implements IVistaJuego, IVistaInicio, Serializable {
     @Override
     public void mostrarEsperaRival() throws RemoteException {
         iniciar();
-        println("--------------------------------------------------------------------------------------------------------------------------------------");
-        println(" SE HA REANUDADO LA PARTIDA CORRECTAMENTE. NO PODRÁ JUGAR HASTA QUE SU RIVAL INICIE SESION");
-        println("--------------------------------------------------------------------------------------------------------------------------------------");
+        println("--------------------------------------------------");
+        println(" SE HA REANUDADO LA PARTIDA CORRECTAMENTE. " +
+                "\n NO PODRÁ JUGAR HASTA QUE SU RIVAL INICIE SESION");
+        println("--------------------------------------------------");
     }
 
     @Override
@@ -280,21 +281,19 @@ public class VistaConsola implements IVistaJuego, IVistaInicio, Serializable {
 
         if( (controlador.nroDeRonda() == 1)){
             if(!controlador.seCantoEnvido()) {
-                if(controlador.seJuegaConFlor() && controlador.tengoFlor()) println("1- Envido | 2- Truco | 3- Tirar Carta | 4- Ir al mazo | 5- Flor | 6- Abandonar Partida | 7- Volver al menu principal");
-                else println("1- Envido | 2- Truco | 3- Tirar Carta | 4- Ir al mazo | 6- Abandonar Partida | 7- Volver al menu principal");
+                if(controlador.seJuegaConFlor() && controlador.tengoFlor()) println("1- Envido | 2- Truco | 3- Tirar Carta | 4- Ir al mazo | 5- Flor \n 6- Abandonar Partida | 7- Volver al menu principal");
+                else println("1- Envido | 2- Truco | 3- Tirar Carta | 4- Ir al mazo \n 6- Abandonar Partida | 7- Volver al menu principal");
             }
-            else println("2- Truco | 3- Tirar Carta | 4- Ir al mazo | 6- Abandonar Partida | 7- Volver al menu principal");
+            else println("2- Truco | 3- Tirar Carta | 4- Ir al mazo \n 6- Abandonar Partida | 7- Volver al menu principal");
         }
         else{
             switch (controlador.estadoDelRabon()){
-                case NADA -> println("2- Truco | 3- Tirar Carta | 4- Ir al mazo | 6- Abandonar Partida | 7- Volver al menu principal");
-                case TRUCO -> println("2- Re Truco | 3- Tirar Carta | 4- Ir al mazo | 6- Abandonar Partida | 7- Volver al menu principal");
-                case RE_TRUCO ->  println("2- Vale Cuatro | 3- Tirar Carta | 4- Ir al mazo | 6- Abandonar Partida | 7- Volver al menu principal");
-                case VALE_CUATRO -> println("3- Tirar Carta | 4- Ir al mazo | 6- Abandonar Partida | 7- Volver al menu principal");
+                case NADA -> println("2- Truco | 3- Tirar Carta | 4- Ir al mazo \n 6- Abandonar Partida | 7- Volver al menu principal");
+                case TRUCO -> println("2- Re Truco | 3- Tirar Carta | 4- Ir al mazo \n 6- Abandonar Partida | 7- Volver al menu principal");
+                case RE_TRUCO ->  println("2- Vale Cuatro | 3- Tirar Carta | 4- Ir al mazo \n 6- Abandonar Partida | 7- Volver al menu principal");
+                case VALE_CUATRO -> println("3- Tirar Carta | 4- Ir al mazo \n 6- Abandonar Partida | 7- Volver al menu principal");
             }
         }
-
-
     }
 
     // este metodo muestra todo: puntos, cartas tiradas y acciones
@@ -349,7 +348,7 @@ public class VistaConsola implements IVistaJuego, IVistaInicio, Serializable {
 
             println(controlador.puntajeActual());
 
-            println("\n                MESA");
+            println("\n                 MESA");
             println("+------------------------+------------------------+");
 
             String nombre1 = centrarTexto(controlador.getNombreJugador(), 24);
