@@ -105,32 +105,15 @@ public class VistaGrafica implements IVistaJuego, Serializable {
         removeAllActionListeners(btnCarta2);
         removeAllActionListeners(btnCarta3);
 
-        //ArrayList<String> cartas = controlador.obtenerFotoCartas();
-        ArrayList<String> cartas = null;
-        frame.setVisible(true);
+        ArrayList<String> cartas = controlador.obtenerFotoCartas();
 
         if (cartas != null) {
+            frame.setVisible(true);
             actualizar();
             accionesJ2.setText("");
         }
         else {
-            frame.setVisible(false);
-            JFrame frameIMG;
-            frameIMG = new JFrame("Esperando rival - App Truco");
-            frameIMG.setSize(520, 380);
-            JPanel panelPrincipal = (JPanel) frameIMG.getContentPane();
-            panelPrincipal.setLayout(new FlowLayout());
-            frameIMG.setIconImage(icono);
-            frameIMG.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-
-            ImageIcon esperando = new ImageIcon("esperandoContrincante.jpeg");
-            //accionesJ2.setText("Esperando contrincante...");
-            Image img = esperando.getImage().getScaledInstance(520, 380, Image.SCALE_SMOOTH);
-
-            JLabel label = new JLabel(new ImageIcon(img));
-            panelPrincipal.add(label);
-
-            frameIMG.setVisible(true);
+            mostrarEsperaRival();
         }
     }
 
@@ -637,6 +620,7 @@ public class VistaGrafica implements IVistaJuego, Serializable {
 
     @Override
     public void reanudarPartida() throws RemoteException {
+        frame.setVisible(true);
         frame.setTitle(controlador.getNombreJugador() + " - App Truco");
         setJMenubar();
         mostrarCartas();
@@ -663,9 +647,26 @@ public class VistaGrafica implements IVistaJuego, Serializable {
 
     @Override
     public void mostrarEsperaRival() throws RemoteException {
-        iniciar();
+        //iniciar();
+        frame.setVisible(false);
         bloquearBotones();
-        accionesJ2.setText("SE REANUDÓ LA PARTIDA CORRECTAMENTE. NO PODRÁ JUGAR HASTA QUE SU RIVAL INICIE SESION");
+
+        JFrame frameIMG;
+        frameIMG = new JFrame("Esperando rival - App Truco");
+        frameIMG.setSize(520, 380);
+        JPanel panelPrincipal = (JPanel) frameIMG.getContentPane();
+        panelPrincipal.setLayout(new FlowLayout());
+        frameIMG.setIconImage(icono);
+        frameIMG.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+
+        ImageIcon esperando = new ImageIcon("esperandoContrincante.jpeg");
+        //accionesJ2.setText("Esperando contrincante...");
+        Image img = esperando.getImage().getScaledInstance(520, 380, Image.SCALE_SMOOTH);
+
+        JLabel label = new JLabel(new ImageIcon(img));
+        panelPrincipal.add(label);
+
+        frameIMG.setVisible(true);
     }
 
 
