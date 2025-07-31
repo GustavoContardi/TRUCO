@@ -75,11 +75,11 @@ public class PersistenciaPartida implements Serializable{
 
     public static Partida recuperarPartida(int idPartida) throws RemoteException {
         listaPartidas = listaPartidasGuardadas();
+        partida = null;
 
         for(Partida game : listaPartidas){
             if(game.getIdPartida() == idPartida) partida = game;
         }
-
 
         return partida;
     }

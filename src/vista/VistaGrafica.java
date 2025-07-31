@@ -62,6 +62,7 @@ public class VistaGrafica implements IVistaJuego, Serializable {
         frame.setSize(765, 815);
         frame.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 
+
         // Control de cierre de ventana
         frame.addWindowListener(new WindowAdapter() {
             @Override

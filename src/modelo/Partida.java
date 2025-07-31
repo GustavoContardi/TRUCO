@@ -474,14 +474,15 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
 
     // este metodo lo llama el controlador desde la 'vista elección' cuando se estan uniendo los jugadores a la partida por primera vez
     @Override
-    public void agregarJugador(Jugador jugador) throws RemoteException {
+    public void agregarJugador(int idJugador) throws RemoteException {
+
         if(j1 == null && j2 == null){
-            j1 = jugador;
+            j1 = PersistenciaJugador.recuperarJugador(idJugador);
             j1.setElecto(true);
             notificarEvento(LISTA_JUGADORES_DISPONIBLES);
         }
         else if(j1 != null && j2 == null){
-            j2 = jugador;
+            j2 = PersistenciaJugador.recuperarJugador(idJugador);
             j2.setElecto(true);
         }
 
@@ -860,6 +861,12 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
     }
 
     @Override
+    public String getNombreJugador(int idJugador) throws RemoteException {
+        if(idJugador == j1.getIDJugador()) return j1.getNombre();
+        else return j2.getNombre();
+    }
+
+    @Override
     public boolean getSeEstabaCantandoTruco() throws RemoteException {
         return seEstabaCantandoTruco;
     }
@@ -1058,19 +1065,23 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
     }
 
     // Genera el ID de la partida trantando que sea lo mas unico posible
-    private int generarIdPartida(){
-        Random random = new Random();
-        LocalDateTime now = LocalDateTime.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
-        String formattedDate = now.format(formatter);
+    private int generarIdPartida() throws RemoteException {
+        int idGenerado = -1;
+        do {
+            Random random = new Random();
+            LocalDateTime now = LocalDateTime.now();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+            String formattedDate = now.format(formatter);
 
-        String nombre = " ";
-        if(j1 != null) nombre = j1.getNombre();
+            String nombre = " ";
+            if (j1 != null) nombre = j1.getNombre();
 
-        String idString = nombre.substring(0, Math.min(3, nombre.length())).toUpperCase() + formattedDate;
+            String idString = nombre.substring(0, Math.min(3, nombre.length())).toUpperCase() + formattedDate;
+            idGenerado = Math.abs(idString.hashCode() / random.nextInt(1, 18));
 
-        return Math.abs(idString.hashCode() / random.nextInt(1, 18));
+        } while (PersistenciaPartida.recuperarPartida(idGenerado) != null);
 
+        return idGenerado;
     }
 
     private void replicarCartasJugadores(){

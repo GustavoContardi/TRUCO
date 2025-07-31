@@ -27,7 +27,7 @@ public interface IModelo extends IObservableRemoto {
     void meVoyAlMazo(int id) throws RemoteException;
     void abandonoPartida(int idAbandono) throws RemoteException;
     boolean esFinDePartida() throws RemoteException;
-    void agregarJugador(Jugador jugador) throws RemoteException;
+    void agregarJugador(int idJugador) throws RemoteException;
     void altaJugador(String nombre) throws RemoteException;
     void actualizarPuntos() throws RemoteException;
     ArrayList<Carta> obtenerCartas(int idJugador) throws RemoteException;
@@ -82,6 +82,7 @@ public interface IModelo extends IObservableRemoto {
     boolean getSeJuegaConFlor() throws RemoteException;
     boolean getReanudoJ1() throws RemoteException;
     boolean getReanudoJ2() throws RemoteException;
+    String getNombreJugador(int idJugador) throws RemoteException;
     boolean getSeEstabaCantandoTruco() throws RemoteException;
     boolean getSeEstabaCantandoTanto() throws RemoteException;
     boolean getSeEstabaCantandoFlor() throws RemoteException;
