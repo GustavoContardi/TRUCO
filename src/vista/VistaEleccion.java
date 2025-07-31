@@ -93,6 +93,7 @@ public class VistaEleccion implements IVistaEleccion {
                     Jugador jugador = (Jugador) cbEleccion.getSelectedItem();
 
                     if(jugador != null){
+                        System.out.println("Jugador seleccionado: " + jugador.getNombre());
                         controlador.setJugador(jugador.getIDJugador());
                         frame.dispose();
                     }

@@ -71,6 +71,8 @@ public interface IControlador {
     String getCantoTanto() throws RemoteException;
     String getCantoTruco() throws RemoteException;
     String getCantoFlor() throws RemoteException;
+    int numeroDeMano() throws RemoteException;
+    boolean seReanudoPartida() throws RemoteException;
 
     void setJugador(int idJugador) throws RemoteException;
     void setJugadorReanudar(int idJugador) throws RemoteException;

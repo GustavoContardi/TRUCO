@@ -46,8 +46,8 @@ public class Main {
 
 
         // ACORDARSE A LO ULTIMO PONER LAS PANTALLAS DE CARGA
-        //inicio.iniciar();
-        //inicio2.iniciar();
+        inicio.iniciar();
+        inicio2.iniciar();
 
 
        /* JDialog dialog = new JDialog();
@@ -79,9 +79,6 @@ public class Main {
         dialog.setVisible(true);
 
         */
-
-        VistaGrafica vista = new VistaGrafica();
-        vista.mostrarCartas();
     }
 }
 

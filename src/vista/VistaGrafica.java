@@ -51,6 +51,7 @@ public class VistaGrafica implements IVistaJuego, Serializable {
     private JFrame frame;
     private IControlador controlador;
     private Image icono;
+    private JFrame frameEspera;
 
     public VistaGrafica() throws RemoteException {
         this.frame = new JFrame("TRUCO");
@@ -107,8 +108,9 @@ public class VistaGrafica implements IVistaJuego, Serializable {
 
         ArrayList<String> cartas = controlador.obtenerFotoCartas();
 
-        if (cartas != null) {
+        if (cartas != null && (controlador.numeroDeMano() > -1 || controlador.seReanudoPartida())) {
             frame.setVisible(true);
+            cerrarEsperaRival();
             actualizar();
             accionesJ2.setText("");
         }
@@ -651,13 +653,12 @@ public class VistaGrafica implements IVistaJuego, Serializable {
         frame.setVisible(false);
         bloquearBotones();
 
-        JFrame frameIMG;
-        frameIMG = new JFrame("Esperando rival - App Truco");
-        frameIMG.setSize(520, 380);
-        JPanel panelPrincipal = (JPanel) frameIMG.getContentPane();
+        frameEspera = new JFrame("Esperando rival - App Truco");
+        frameEspera.setSize(520, 380);
+        JPanel panelPrincipal = (JPanel) frameEspera.getContentPane();
         panelPrincipal.setLayout(new FlowLayout());
-        frameIMG.setIconImage(icono);
-        frameIMG.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        frameEspera.setIconImage(icono);
+        frameEspera.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         ImageIcon esperando = new ImageIcon("esperandoContrincante.jpeg");
         //accionesJ2.setText("Esperando contrincante...");
@@ -666,7 +667,7 @@ public class VistaGrafica implements IVistaJuego, Serializable {
         JLabel label = new JLabel(new ImageIcon(img));
         panelPrincipal.add(label);
 
-        frameIMG.setVisible(true);
+        frameEspera.setVisible(true);
     }
 
 
@@ -1202,6 +1203,10 @@ public class VistaGrafica implements IVistaJuego, Serializable {
         Image originalImage = icono;
         Image scaledImage = originalImage.getScaledInstance(50, 50, Image.SCALE_SMOOTH);
         icono = new ImageIcon(scaledImage).getImage();
+    }
+
+    private void cerrarEsperaRival(){
+        frameEspera.setVisible(false);
     }
 
 }

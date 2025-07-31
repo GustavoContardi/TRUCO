@@ -192,7 +192,7 @@ public class VistaConsola implements IVistaJuego, IVistaInicio, Serializable {
     @Override
     public void mostrarMenuPrincipal() throws RemoteException {
         limpiarPantalla();
-        frame.setTitle(controlador.getNombreJugador() + " - App Truco");
+        if(controlador != null) frame.setTitle(controlador.getNombreJugador() + " - App Truco");
         iniciar();
         setFlujoActual(new FlujoMostrarCartas(this, controlador));
     }

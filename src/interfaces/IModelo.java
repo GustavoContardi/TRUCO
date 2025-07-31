@@ -86,4 +86,6 @@ public interface IModelo extends IObservableRemoto {
     boolean getSeEstabaCantandoTanto() throws RemoteException;
     boolean getSeEstabaCantandoFlor() throws RemoteException;
     int getUltimoJugadorCanto() throws RemoteException;
+    int getNumeroMano() throws RemoteException;
+
 }

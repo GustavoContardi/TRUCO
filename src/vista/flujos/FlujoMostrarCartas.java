@@ -59,7 +59,8 @@ public class FlujoMostrarCartas extends Flujo implements Serializable {
 
     @Override
     public void mostrarSiguienteTexto() throws RemoteException {
-        if(controlador.obtenerCartasDisponibles() != null){
+        if(controlador.obtenerCartasDisponibles() != null && (controlador.numeroDeMano() > -1 || controlador.seReanudoPartida())){
+            System.out.println("numero de mano: " + controlador.numeroDeMano());
             vista.println("");
             vista.mostrarMesa();
             vista.println("");

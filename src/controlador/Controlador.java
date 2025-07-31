@@ -481,6 +481,15 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
         return "null";
     }
 
+    @Override
+    public int numeroDeMano() throws RemoteException {
+        return modelo.getNumeroMano(); // si es -1 todavia no se unieron
+    }
+
+    @Override
+    public boolean seReanudoPartida() throws RemoteException {
+        return modelo.getReanudoJ1() && modelo.getReanudoJ2(); // si reanudaron los dos se reanudo la partida
+    }
 
     @Override
     public void setJugador(int idJugador) throws RemoteException {
@@ -488,7 +497,7 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
         if(!reanudarPartida){
             modelo.agregarJugador(jugador);
         }
-
+        System.out.println("Jugador seteado, ahora va para la vista menu principal");
         vistaJuego.mostrarMenuPrincipal();
     }
 

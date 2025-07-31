@@ -53,13 +53,11 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
     private     EstadoEnvido        estadoDelEnvido;
     private     EstadoFlor          estadoDeLaFlor;
     private     boolean             cantoEnvido, cantoEnvidoDoble,cantoRealEnvido, cantoFaltaEnvido;
-    private     int                 puntajeRondaJ1, puntajeRondaJ2, puntajeRondaEnvido;
+    private     int                 puntajeRondaJ1, puntajeRondaJ2;
     private     boolean             finMano;
     private     int                 nroRondasGanadasJ1, nroRondasGanadasJ2;
     private     int                 idJugadorNoQuizoCanto, idJugadorQuiereCantar;
     private     boolean             parda;
-    private     boolean             partidaRecuperada;
-    private     Eventos             mensajesOb;
     private     Carta               ultimaCartaJ1, ultimaCartaJ2;
     private     String              ultimoMensaje;
     private     String              resultadoTanto;
@@ -116,7 +114,6 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
                 estadoDelEnvido         = EstadoEnvido.NADA;
                 puntajeRondaJ1          = 0;
                 puntajeRondaJ2          = 0;
-                puntajeRondaEnvido      = 0;
                 quienCantoTruco         = 0;
                 quienCantoReTruco       = 0;
                 puntosRabon             = 0;
@@ -883,6 +880,11 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
     }
 
     @Override
+    public int getNumeroMano() throws RemoteException {
+        return numeroMano;
+    }
+
+    @Override
     public String getResultadoTanto() throws RemoteException {
         return resultadoTanto;
     }
@@ -950,7 +952,8 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
     // notificar general para el notificar un evento, que este se le pasa por parametro
     private void notificarEvento(Eventos e) throws RemoteException {
         notificarObservadores(e);
-        PersistenciaPartida.guardarPartida(this); // guardo la partida aca porque actualizan cosas que necesito persistir en cada actualizacion
+        // sino me guarda la partida innecesariamente cuando se une un jugador
+        if(numeroMano != -1) PersistenciaPartida.guardarPartida(this); // guardo la partida aca porque actualizan cosas que necesito persistir en cada actualizacion
     }
 
 
