@@ -205,8 +205,9 @@ public class VistaEleccion implements IVistaEleccion {
 
     private void panelAvisos(String text){
         JFrame frameMSJ = new JFrame("Aviso - App Truco");
-        frameMSJ.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        //frameMSJ.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frameMSJ.setLocationRelativeTo(null);
+        frameMSJ.setIconImage(icono);
 
         // Panel principal
         JPanel panel = new JPanel(new BorderLayout(10, 10));
@@ -265,6 +266,7 @@ public class VistaEleccion implements IVistaEleccion {
         frame2.setLayout(new BorderLayout());
         frame2.setResizable(false);
         JComboBox<Jugador> comboBox = new JComboBox<>();
+        frame2.setIconImage(icono);
 
         ArrayList<Jugador> lista = controlador.listaJugadoresMasGanadores();
         for(Jugador j : lista){
@@ -311,6 +313,7 @@ public class VistaEleccion implements IVistaEleccion {
         frame2.setLayout(new BorderLayout());
         frame2.setResizable(false);
         JComboBox<Jugador> comboBox = new JComboBox<>();
+        frame2.setIconImage(icono);
 
         // Agregar jugadores al comboBox
         ArrayList<Jugador> lista = controlador.listaJugadoresMasGanadores();
