@@ -62,6 +62,7 @@ public class VistaGrafica implements IVistaJuego, Serializable {
         frame.setSize(765, 815);
         frame.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 
+        frameEspera = new JFrame("Esperando rival - App Truco");
 
         // Control de cierre de ventana
         frame.addWindowListener(new WindowAdapter() {
@@ -654,7 +655,6 @@ public class VistaGrafica implements IVistaJuego, Serializable {
         frame.setVisible(false);
         bloquearBotones();
 
-        frameEspera = new JFrame("Esperando rival - App Truco");
         frameEspera.setSize(520, 380);
         JPanel panelPrincipal = (JPanel) frameEspera.getContentPane();
         panelPrincipal.setLayout(new FlowLayout());
@@ -727,7 +727,7 @@ public class VistaGrafica implements IVistaJuego, Serializable {
                     try {
                         switch (controlador.estadoDelRabon()) {
                             case NADA -> {
-                                if (controlador.esMiTurno() && controlador.puedoCantarTruco(TRUCO)) {
+                                if (controlador.esMiTurno() && controlador.puedoCantarTruco()) {
                                     TRUCOButton.setText("  RE TRUCO  ");
                                     TRUCOButton.setEnabled(false);
                                     controlador.cantarRabon(TRUCO);
@@ -736,7 +736,7 @@ public class VistaGrafica implements IVistaJuego, Serializable {
                                 }
                             }
                             case TRUCO -> {
-                                if (controlador.esMiTurno() && controlador.puedoCantarTruco(RE_TRUCO)) {
+                                if (controlador.esMiTurno() && controlador.puedoCantarTruco()) {
 
                                     TRUCOButton.setText("  VALE CUATRO  ");
                                     TRUCOButton.setEnabled(false);
@@ -746,7 +746,7 @@ public class VistaGrafica implements IVistaJuego, Serializable {
                                 }
                             }
                             case RE_TRUCO -> {
-                                if (controlador.esMiTurno() && controlador.puedoCantarTruco(RE_TRUCO)) {
+                                if (controlador.esMiTurno() && controlador.puedoCantarTruco()) {
 
                                     TRUCOButton.setText("  ---  ");
                                     TRUCOButton.setEnabled(false);

@@ -115,7 +115,7 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
 
     @Override
     public void guardarPartida() throws RemoteException {
-        PersistenciaPartida.guardarPartida(modelo.getObjeto());
+        modelo.guardarPartida();
     }
 
     @Override
@@ -260,25 +260,8 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
     }
 
     @Override
-    public boolean puedoCantarTruco(EstadoTruco estado) throws RemoteException {
-        switch (estado){
-            case NADA -> {
-                return true;
-            }
-            case TRUCO -> {
-                if(modelo.getQuienCantoTruco() != idJugador) return true;
-            }
-            case RE_TRUCO -> {
-                if(modelo.getQuienCantoReTruco() != idJugador) return true;
-            }
-            case VALE_CUATRO -> {
-                return false;
-            }
-
-            // como le paso el estado actual del truco en la partida, si mi estado es TRUCO solo puedo cantar RE TRUCO si mi oponente fue quien canto el TRUCO
-        }
-
-        return false;
+    public boolean puedoCantarTruco() throws RemoteException {
+        return modelo.puedeCantarTruco(idJugador);
     }
 
     @Override
@@ -457,28 +440,21 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
     }
 
     // estos metodos son para cuando reanudo poder sacar el canto de algun lado
+    // cambiar
     @Override
     public String getCantoTanto() throws RemoteException {
-        if(estadoDelTanto() == ENVIDO) return PersistenciaCantos.mensajeCantoTanto(ENVIDO);
-        else if(estadoDelTanto() == ENVIDO_DOBLE) return PersistenciaCantos.mensajeCantoTanto(ENVIDO_DOBLE);
-        else if(estadoDelTanto() == REAL_ENVIDO) return PersistenciaCantos.mensajeCantoTanto(REAL_ENVIDO);
-        else if(estadoDelTanto() == FALTA_ENVIDO) return PersistenciaCantos.mensajeCantoTanto(FALTA_ENVIDO);
-        return "null";
+        return modelo.getCantoTanto();
     }
 
+    // cambiar
     @Override
     public String getCantoTruco() throws RemoteException {
-        if(estadoDelRabon() == TRUCO) return PersistenciaCantos.mensajeCantoTruco(TRUCO);
-        else if(estadoDelRabon() == RE_TRUCO) return PersistenciaCantos.mensajeCantoTruco(RE_TRUCO);
-        else if(estadoDelRabon() == VALE_CUATRO) return PersistenciaCantos.mensajeCantoTruco(VALE_CUATRO);
-        return "null";
+        return modelo.getCantoTruco();
     }
 
     @Override
     public String getCantoFlor() throws RemoteException {
-        if(estadoDeLaFlor() == CONTRA_FLOR) return PersistenciaCantos.mensajeCantoContraFlor();
-        else if(estadoDeLaFlor() == CONTRA_FLOR_AL_RESTO) return PersistenciaCantos.mensajeCantoContraFlorResto();
-        return "null";
+        return modelo.getCantoFlor();
     }
 
     @Override
@@ -617,13 +593,13 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
                 if(idJugador != -1) {
                     if(idJugador == modelo.getIdJ1()) vistaJuego.mostrarEsperaRival();
                 }
-                else if(!(modelo.getReanudoJ2())) vistaEleccion.reanudarPartida(getJugadoresRecuperados()); // esto es para que se elimine el jugador de la eleccion
+                vistaEleccion.reanudarPartida(getJugadoresRecuperados()); // esto es para que se elimine el jugador de la eleccion
             }
             case RESTABLECIO_J2 -> {
                 if(idJugador != -1) {
                     if(idJugador == modelo.getIdJ2()) vistaJuego.mostrarEsperaRival();
                 }
-                else if(!(modelo.getReanudoJ1())) vistaEleccion.reanudarPartida(getJugadoresRecuperados());
+                vistaEleccion.reanudarPartida(getJugadoresRecuperados());
             }
             case CANTO_FLOR -> {
                 if(modelo.getQuienCantoFlor() != idJugador) vistaJuego.cantaronFlor(PersistenciaCantos.mensajeCantoFlor(), FLOR);

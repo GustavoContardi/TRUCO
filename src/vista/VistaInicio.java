@@ -25,6 +25,7 @@ public class VistaInicio extends JFrame {
     private JButton btnAnotador;
     private JLabel titulo;
     private JLabel instrucciones;
+    private JLabel labelBordeIzquierdo;
     private Image icono; // este es para el frame de la venta
     private ImageIcon icono2; // este es para los seleccionar
 
@@ -37,8 +38,6 @@ public class VistaInicio extends JFrame {
 
         initIcono();
         setIconImage(icono);
-
-
         setBotonesInicio();
 
     }
@@ -57,6 +56,11 @@ public class VistaInicio extends JFrame {
     public void iniciarBotonesInicio(){
         setVisible(true);
         setBotonesInicio();
+    }
+
+    public void iniciarBotonesJugar(){
+        setVisible(true);
+        setBotonesJugar();
     }
 
     public void salir(){

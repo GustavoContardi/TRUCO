@@ -91,7 +91,7 @@ public class PersistenciaPartida implements Serializable{
             listaPartidas = (ArrayList<Partida>) oos.readObject();
             fos.close();
         } catch (FileNotFoundException e) {
-            return null;
+            return new ArrayList<>();
         } catch (IOException e) {
             throw new RuntimeException(e);
         } catch (ClassNotFoundException e) {
@@ -100,10 +100,19 @@ public class PersistenciaPartida implements Serializable{
 
         if(listaPartidas == null) {
             listaPartidas = new ArrayList<>(); // si es null le incicializo la lista aca para que no de errores despues
-            System.out.println("no arreglamos el null aca?");
         }
 
         return listaPartidas;
+    }
+
+    public static boolean existePartida(int idPartida) throws RemoteException {
+        listaPartidas = listaPartidasGuardadas();
+
+        for(Partida game : listaPartidas){
+            if(game.getIdPartida() == idPartida) return true;
+        }
+
+        return false;
     }
 
 }

@@ -52,7 +52,7 @@ public class ClienteTruco {
 
         if (interfaz == null) {
             JOptionPane.showMessageDialog(null, "Operación cancelada.");
-            new VistaInicio().iniciarBotonesInicio();
+            new VistaInicio().iniciarBotonesJugar();
             return;
         }
 
@@ -71,7 +71,7 @@ public class ClienteTruco {
         if (ip == null) {
             JOptionPane.showMessageDialog(null, "Operación cancelada.");
             //new VistaInicio().iniciar(); // inicia sin pantalla de carga asi da la sensacion que solo volvio para atrás
-            new VistaInicio().iniciarBotonesInicio();
+            new VistaInicio().iniciarBotonesJugar();
             return;
         }
 
@@ -90,7 +90,7 @@ public class ClienteTruco {
 
                 if (portStr == null) {
                     JOptionPane.showMessageDialog(null, "Operación cancelada.");
-                    new VistaInicio().iniciarBotonesInicio();
+                    new VistaInicio().iniciarBotonesJugar();
                     return;
                 }
 
@@ -126,7 +126,7 @@ public class ClienteTruco {
 
         if (ipServidor == null) {
             JOptionPane.showMessageDialog(null, "Operación cancelada.");
-            new VistaInicio().iniciarBotonesInicio();
+            new VistaInicio().iniciarBotonesJugar();
             return;
         }
 
@@ -145,7 +145,7 @@ public class ClienteTruco {
 
                 if (portStr == null) {
                     JOptionPane.showMessageDialog(null, "Operación cancelada.");
-                    new VistaInicio().iniciarBotonesInicio(); // no me queda otra
+                    new VistaInicio().iniciarBotonesJugar(); // no me queda otra
                     return;
                 }
 

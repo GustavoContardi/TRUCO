@@ -14,9 +14,8 @@ import java.util.ArrayList;
 public interface IModelo extends IObservableRemoto {
 
     void nuevaPartida() throws RemoteException;
-    void nuevaRonda() throws RemoteException;
+    void nuevaMano() throws RemoteException;
     void finDeLaRonda() throws RemoteException;
-    void siguienteTurno() throws RemoteException;
     int turnoActual() throws RemoteException;
     void tirarCarta(int idJugador, int idCarta) throws RemoteException;
     void finDePartida() throws RemoteException;
@@ -35,10 +34,15 @@ public interface IModelo extends IObservableRemoto {
     EstadoEnvido estadoTanto() throws RemoteException;
     EstadoFlor estadoFlor() throws RemoteException;
     int numeroDeRonda() throws RemoteException;
+    void guardarPartida() throws RemoteException;
+    boolean puedeCantarTruco(int idJugador) throws RemoteException;
     boolean cantaronEnvido() throws RemoteException;
     boolean cantaronEnvidoDoble() throws RemoteException;
     boolean cantaronRealEnvido() throws RemoteException;
     boolean cantaronFaltaEnvido() throws RemoteException;
+    String getCantoTanto() throws RemoteException;
+    String getCantoTruco() throws RemoteException;
+    String getCantoFlor() throws RemoteException;
     int getQuienCantoTruco() throws RemoteException;
     int getQuienCantoReTruco() throws RemoteException;
     int getQuienCantoValeCuatro() throws RemoteException;
@@ -53,7 +57,6 @@ public interface IModelo extends IObservableRemoto {
     int getIdJ2()throws RemoteException;
     int getIdJugadorNoQuizoCanto()throws RemoteException;
     int getIdJugadorQuiereCantar() throws RemoteException;
-    String getUltimoMensaje()throws RemoteException;;
     ArrayList<Carta> getCartasJ1() throws RemoteException;
     ArrayList<Carta> getCartasJ2() throws RemoteException;
     void tantoQuerido(int idJugadorQuizo) throws RemoteException; //

@@ -6,6 +6,7 @@ import enums.EstadoFlor;
 import enums.EstadoTruco;
 import enums.Eventos;
 import interfaces.IModelo;
+import persistencia.PersistenciaCantos;
 import persistencia.PersistenciaJugador;
 import persistencia.PersistenciaPartida;
 
@@ -36,8 +37,6 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
     private     Mazo                mazo;
     private     int                 idPartida;
     private     Anotador            anotador;
-    private     int                 numeroMano, numeroRonda, turno;
-    private     ArrayList<Carta>    cartasTiradasJ1, cartasTiradasJ2;
     private     ArrayList<Carta>    cartasJ1, cartasJ2;
     private     int                 quienCantoTruco;
     private     int                 quienCantoReTruco;
@@ -48,24 +47,20 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
     private     int                 quienCantoFaltaEnvido;
     private     int                 quienCantoValeCuatro;
     private     int                 quienCantoFlor;
-    private     int                 hizoPrimera; // ID del jugador
     private     EstadoTruco         estadoDelTruco;
     private     EstadoEnvido        estadoDelEnvido;
     private     EstadoFlor          estadoDeLaFlor;
     private     boolean             cantoEnvido, cantoEnvidoDoble,cantoRealEnvido, cantoFaltaEnvido;
     private     int                 puntajeRondaJ1, puntajeRondaJ2;
     private     boolean             finMano;
-    private     int                 nroRondasGanadasJ1, nroRondasGanadasJ2;
     private     int                 idJugadorNoQuizoCanto, idJugadorQuiereCantar;
-    private     boolean             parda;
-    private     Carta               ultimaCartaJ1, ultimaCartaJ2;
-    private     String              ultimoMensaje;
     private     String              resultadoTanto;
-    private     boolean             reanudoJ1, reanudoJ2;
+    private     boolean             reanudoJ1, reanudoJ2, primeraMano;
     private     int                 puntosParaGanar; // la partida se puede jugar a 15 (rapida) o 30 (lenta) puntos
     private     boolean             seJuegaConFlor;
     private     int                 idJugadorSalio, idUltimoJugCanto;
     private     boolean             seEstabaCantandoEnvido, seEstabaCantandoTruco, seEstabaCantandoFlor; // banderas para saber si se estaba cantando algo antes de que se posponga la partida
+    private     Mesa                mesa;
 
 
     //               \\
@@ -75,8 +70,6 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
     public Partida(int puntosGanar, boolean flor) throws RemoteException {
         j1               =  null;
         j2               =  null;
-        numeroMano       =  -1;
-        numeroRonda      =   1;
         finMano          =  true;
         mazo             =  new Mazo();
         idPartida        =  generarIdPartida();
@@ -84,6 +77,8 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
         seJuegaConFlor   =  flor;
         reanudoJ1        =  false;
         reanudoJ2        =  false;
+        primeraMano      =  true;
+        mesa             =  new Mesa(); // esto es para que no pinche, despues se crea bien con el otro constructor.
     }
 
 
@@ -93,23 +88,22 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
 
     // metodo que se ejecuta 1 vez, cuando se inicia la partida. Llama a iniciar la ronda
     public void nuevaPartida() throws RemoteException {
-        nuevaRonda();
+        nuevaMano();
     }
 
     @Override
-    public void nuevaRonda() throws RemoteException {
+    public void nuevaMano() throws RemoteException {
         // seteo los atributos de inicio
-        if(numeroMano == -1) {
+        if(primeraMano) {
             anotador = new Anotador(j2.getNombre(), j1.getNombre(), puntosParaGanar);
             notificarEvento(PUNTAJES);
+            mesa = new Mesa(this, j1.getIDJugador(), j2.getIDJugador());
         }
 
         actualizarPuntos();
 
         if (finMano){
             if(!esFinDePartida()){
-                numeroMano              += 1;
-                numeroRonda             = 1;
                 estadoDelTruco          = EstadoTruco.NADA;
                 estadoDelEnvido         = EstadoEnvido.NADA;
                 puntajeRondaJ1          = 0;
@@ -117,17 +111,11 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
                 quienCantoTruco         = 0;
                 quienCantoReTruco       = 0;
                 puntosRabon             = 0;
-                hizoPrimera             = 0;
                 cantoEnvido             = false;
                 cantoEnvidoDoble        = false;
                 cantoRealEnvido         = false;
                 cantoFaltaEnvido        = false;
-                cartasTiradasJ1         = new ArrayList<>();
-                cartasTiradasJ2         = new ArrayList<>();
                 finMano                 = false;
-                nroRondasGanadasJ1      = 0;
-                nroRondasGanadasJ2      = 0;
-                parda                   = false;
                 cartasJ1                = new ArrayList<>();
                 cartasJ2                = new ArrayList<>();
                 idJugadorNoQuizoCanto   = 0;
@@ -138,23 +126,20 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
                 seEstabaCantandoTruco   = false;
                 seEstabaCantandoFlor    = false;
 
-
-                if( (numeroMano % 2) == 0) turno = j1.getIDJugador();
-                else turno = j2.getIDJugador();
-
                 j1.devolverCartas();
                 j2.devolverCartas();
 
                 mazo.repartirCartas(j1, j2);
                 //mazo.repartirFlor(j1, j2); pruebas para cuando se juega con flor, no va en el normal, el de arriba si
                 replicarCartasJugadores();
+                mesa.nuevaMano();
             }
             else finDePartida();
         }
-        if(numeroMano != -1) PersistenciaPartida.guardarPartida(this); // sino me guarda la partida cuando solo se une 1 solo jugador totalmente innecesario
+        if(primeraMano) guardarPartida(); // sino me guarda la partida cuando solo se une 1 solo jugador totalmente innecesario
         PersistenciaJugador.delvolverTodosJugadores(); // devuelvo por si quieren jugar otra partida, ya quedan guardados porque se guarda la partida.
         notificarEvento(NUEVA_RONDA);
-
+        primeraMano = false;
     }
 
     // se llama a este metodo cuando finalizo la ronda
@@ -163,6 +148,9 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
         finMano = true;
 
         puntosRabon = calcularPuntosTruco();
+
+        int nroRondasGanadasJ1 = mesa.getRondasGanadasJ1();
+        int nroRondasGanadasJ2 = mesa.getRondasGanadasJ2();
 
         if(nroRondasGanadasJ1 > nroRondasGanadasJ2) puntajeRondaJ1 += puntosRabon;
         else if (nroRondasGanadasJ2 > nroRondasGanadasJ1) puntajeRondaJ2 += puntosRabon;
@@ -174,7 +162,7 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
                 try {
                     notificarEvento(FIN_MANO);
                     // espero 2 segundos antes de notificar para que se pueda ver lo que paso antes y no sea tan rapido
-                    nuevaRonda();
+                    nuevaMano();
                 } catch (RemoteException ex) {
                     ex.printStackTrace();
                 }
@@ -186,114 +174,30 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
     }
 
     @Override
-    public void siguienteTurno() throws RemoteException{
-        if(turno == j1.getIDJugador())  turno = j2.getIDJugador();
-        else                            turno = j1.getIDJugador();
-    }
-
-    @Override
     public int turnoActual() throws RemoteException {
-        return turno;
+        return mesa.getTurno();
     }
 
     // este metodo recibe el jugador que tiro la carta y que carta tiro, con los IDs alcanza para identificar ambas.
     @Override
     public void tirarCarta(int idJugador, int idCarta) throws RemoteException{
-        Carta c = null;
+        Carta carta = null;
+        int turno = mesa.getTurno();
+
+
         if(idJugador == j1.getIDJugador() && turno == idJugador){
-            c = j1.tirarCarta(idCarta);
-            cartasTiradasJ1.add(c);
-            ultimaCartaJ1 = c;
-            siguienteTurno();
+            carta = j1.tirarCarta(idCarta);
+            mesa.tirarCarta(idJugador, carta);
             notificarEvento(CARTA_TIRADAJ1);
+
         }
         else if(idJugador == j2.getIDJugador() && idJugador == turno){
-            c = j2.tirarCarta(idCarta);
-            cartasTiradasJ2.add(c);
-            ultimaCartaJ2 = c;
-            siguienteTurno();
+            carta = j2.tirarCarta(idCarta);
+            mesa.tirarCarta(idJugador, carta);
             notificarEvento(CARTA_TIRADAJ2);
         }
 
-
-        if((cartasTiradasJ1.size() == cartasTiradasJ2.size()) && !cartasTiradasJ2.isEmpty()) {
-            if (!cantoEnvido) cantoEnvido = true;
-            if (numeroRonda == 1) {
-                if (j1.getIDJugador() == compararCartas(cartasTiradasJ1.get(0), cartasTiradasJ2.get(0))) {
-                    nroRondasGanadasJ1 += 1;
-                    hizoPrimera = j1.getIDJugador();
-                    turno = j1.getIDJugador();
-                } else if (j2.getIDJugador() == compararCartas(cartasTiradasJ1.get(0), cartasTiradasJ2.get(0))) {
-                    nroRondasGanadasJ2 += 1;
-                    hizoPrimera = j2.getIDJugador();
-                    turno = j2.getIDJugador();
-                } else { // si es null/-1 es porque es parda
-                    nroRondasGanadasJ2 += 1;
-                    nroRondasGanadasJ1 += 1;
-                    parda = true;
-                }
-                numeroRonda += 1;
-
-            } else if (numeroRonda == 2) {
-                if (parda) {
-                    if (j1.getIDJugador() == compararCartas(cartasTiradasJ1.get(1), cartasTiradasJ2.get(1))) {
-                        nroRondasGanadasJ1 += 1;
-
-                    } else if (j2.getIDJugador() == compararCartas(cartasTiradasJ1.get(1), cartasTiradasJ2.get(1))) {
-                        nroRondasGanadasJ2 += 1;
-                    } else {
-                        // tambien es parda
-                        parda = true;
-                        nroRondasGanadasJ1 += 1;
-                        nroRondasGanadasJ2 += 1;
-                    }
-                    numeroRonda += 1;
-
-                } else if (j1.getIDJugador() == compararCartas(cartasTiradasJ1.get(1), cartasTiradasJ2.get(1))) {
-                    nroRondasGanadasJ1 += 1;
-                    turno = j1.getIDJugador();
-                } else if (j2.getIDJugador() == compararCartas(cartasTiradasJ1.get(1), cartasTiradasJ2.get(1))) {
-                    nroRondasGanadasJ2 += 1;
-                    turno = j2.getIDJugador();
-                } else { // si es null es porque es parda
-                    if (j1.getIDJugador() == hizoPrimera) nroRondasGanadasJ1 += 1;
-                    else if (j2.getIDJugador() == hizoPrimera) nroRondasGanadasJ2 += 1;
-                }
-                numeroRonda += 1;
-
-            } else if (numeroRonda == 3) {
-                if (parda) {
-                    if (j1.getIDJugador() == compararCartas(cartasTiradasJ1.get(2), cartasTiradasJ2.get(2))) {
-                        nroRondasGanadasJ1 += 1;
-                    } else if (j2.getIDJugador() == compararCartas(cartasTiradasJ1.get(2), cartasTiradasJ2.get(2))) {
-                        nroRondasGanadasJ1 += 1;
-                    } else {
-                        if (j1.getIDJugador() == hizoPrimera) nroRondasGanadasJ1 += 1;
-                        else if (j2.getIDJugador() == hizoPrimera) nroRondasGanadasJ2 += 1;
-                    }
-                } else if (j1.getIDJugador() == compararCartas(cartasTiradasJ1.get(2), cartasTiradasJ2.get(2))) {
-                    nroRondasGanadasJ1 += 1;
-                    turno = j1.getIDJugador();
-                } else if (j2.getIDJugador() == compararCartas(cartasTiradasJ1.get(2), cartasTiradasJ2.get(2))) {
-                    nroRondasGanadasJ2 += 1;
-                    turno = j2.getIDJugador();
-                } else { // si es null es porque es parda
-                    if (j1.getIDJugador() == hizoPrimera) nroRondasGanadasJ1 += 1;
-                    else if (j2.getIDJugador() == hizoPrimera) nroRondasGanadasJ2 += 1;
-                }
-
-            }
-        }
-
-        if(nroRondasGanadasJ1 >= 2  && nroRondasGanadasJ1 > nroRondasGanadasJ2) finMano = true;
-        else if (nroRondasGanadasJ2 >= 2  && nroRondasGanadasJ1 < nroRondasGanadasJ2) finMano = true;
-
-        PersistenciaPartida.guardarPartida(this);
-
-        if(finMano){
-            finDeLaRonda();
-        }
-
+        guardarPartida();
     }
 
     // se llama a este metodo cuando finalizo la partida.
@@ -424,10 +328,10 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
     public void meVoyAlMazo(int idJugSeFue) throws RemoteException {
 
         if(idJugSeFue != j1.getIDJugador()) {
-            nroRondasGanadasJ1 += 2;
+           mesa.setRondasGanadasJ1(2);
         }
         else if(idJugSeFue != j2.getIDJugador()) {
-            nroRondasGanadasJ2 += 2;
+            mesa.setRondasGanadasJ2(2);
         }
 
         finDeLaRonda();
@@ -513,11 +417,11 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
             resultadoTanto = "El ganador del Envido es: " + j2.getNombre() + " con " + j2.puntosEnvido() + " puntos";
         }
         else { // si tienen el mismo tanto se decide por el que es mano (el que no repartió)
-            if( (numeroMano % 2) == 0) {
+            if( (mesa.getNroMano() % 2) == 0) {
                 anotador.sumarPuntosJ1(puntos);
                 resultadoTanto = "El ganador del Envido es: " + j1.getNombre() + " con " + j1.puntosEnvido() + " puntos";
             }
-            else if( (numeroMano % 2) == 1) {
+            else if( (mesa.getNroMano() % 2) == 1) {
                 anotador.sumarPuntosJ2(puntos);
                 resultadoTanto = "El ganador del Envido es: " + j2.getNombre() + " con " + j2.puntosEnvido() + " puntos";
             }
@@ -582,11 +486,11 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
             resultadoTanto = "El ganador de la FLOR es: " + j2.getNombre() + " con " + j2.puntosFlor() + " puntos";
         }
         else { // si tienen el mismo puntaje de flor se decide por el que es mano (el que no repartió)
-            if( (numeroMano % 2) == 0) {
+            if( (mesa.getNroMano() % 2) == 0) {
                 anotador.sumarPuntosJ1(puntos);
                 resultadoTanto = "El ganador de la FLOR es: " + j1.getNombre() + " con " + j1.puntosFlor() + " puntos";
             }
-            else if( (numeroMano % 2) == 1) {
+            else if( (mesa.getNroMano() % 2) == 1) {
                 anotador.sumarPuntosJ2(puntos);
                 resultadoTanto = "El ganador de la FLOR es: " + j2.getNombre() + " con " + j2.puntosFlor() + " puntos";
             }
@@ -697,7 +601,34 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
 
     @Override
     public int numeroDeRonda() throws RemoteException {
-        return numeroRonda;
+        return mesa.getNroRonda();
+    }
+
+    @Override
+    public void guardarPartida() throws RemoteException {
+        PersistenciaPartida.guardarPartida(this);
+    }
+
+    @Override
+    public boolean puedeCantarTruco(int idJugador) throws RemoteException {
+        switch (estadoDelTruco){
+            case NADA -> {
+                return true;
+            }
+            case TRUCO -> {
+                if(quienCantoTruco != idJugador) return true;
+            }
+            case RE_TRUCO -> {
+                if(quienCantoReTruco != idJugador) return true;
+            }
+            case VALE_CUATRO -> {
+                return false; // si estamos en VALE CUATRO ya no se puede cantar nada
+            }
+
+            // como le paso el estado actual del truco en la partida, si mi estado es TRUCO solo puedo cantar RE TRUCO si mi oponente fue quien canto el TRUCO
+        }
+
+        return false;
     }
 
     @Override
@@ -718,6 +649,30 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
     @Override
     public boolean cantaronFaltaEnvido() throws RemoteException {
         return cantoFaltaEnvido;
+    }
+
+    @Override
+    public String getCantoTanto() throws RemoteException {
+        if(estadoDelEnvido == ENVIDO) return PersistenciaCantos.mensajeCantoTanto(ENVIDO);
+        else if(estadoDelEnvido == ENVIDO_DOBLE) return PersistenciaCantos.mensajeCantoTanto(ENVIDO_DOBLE);
+        else if(estadoDelEnvido == REAL_ENVIDO) return PersistenciaCantos.mensajeCantoTanto(REAL_ENVIDO);
+        else if(estadoDelEnvido == FALTA_ENVIDO) return PersistenciaCantos.mensajeCantoTanto(FALTA_ENVIDO);
+        return "null";
+    }
+
+    @Override
+    public String getCantoTruco() throws RemoteException {
+        if(estadoDelTruco == TRUCO) return PersistenciaCantos.mensajeCantoTruco(TRUCO);
+        else if(estadoDelTruco == RE_TRUCO) return PersistenciaCantos.mensajeCantoTruco(RE_TRUCO);
+        else if(estadoDelTruco == VALE_CUATRO) return PersistenciaCantos.mensajeCantoTruco(VALE_CUATRO);
+        return "null";
+    }
+
+    @Override
+    public String getCantoFlor() throws RemoteException {
+        if(estadoDeLaFlor == CONTRA_FLOR) return PersistenciaCantos.mensajeCantoContraFlor();
+        else if(estadoDeLaFlor == CONTRA_FLOR_AL_RESTO) return PersistenciaCantos.mensajeCantoContraFlorResto();
+        return "null";
     }
 
     @Override
@@ -780,12 +735,12 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
 
     @Override
     public Carta ultimaCartaTiradaJ1() throws RemoteException{
-        return ultimaCartaJ1;
+        return mesa.getUltimaCartaTiradaJ1();
     }
 
     @Override
     public Carta ultimaCartaTiradaJ2() throws RemoteException{
-        return ultimaCartaJ2;
+        return mesa.getUltimaCartaTiradaJ2();
     }
 
     @Override
@@ -806,11 +761,6 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
     @Override
     public int getIdJugadorQuiereCantar() throws RemoteException {
         return idJugadorQuiereCantar;
-    }
-
-    @Override
-    public String getUltimoMensaje() throws RemoteException{
-        return ultimoMensaje;
     }
 
     @Override
@@ -888,7 +838,7 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
 
     @Override
     public int getNumeroMano() throws RemoteException {
-        return numeroMano;
+        return mesa.getNroMano();
     }
 
     @Override
@@ -921,14 +871,12 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
 
     @Override
     public ArrayList<Carta> getCartasTiradasJ1() throws RemoteException {
-        if(cartasTiradasJ1 == null) cartasTiradasJ1 = new ArrayList<>();
-        return cartasTiradasJ1;
+        return mesa.getCartasTiradasJ1();
     }
 
     @Override
     public ArrayList<Carta> getCartasTiradasJ2() throws RemoteException {
-        if(cartasTiradasJ2 == null) cartasTiradasJ2 = new ArrayList<>();
-        return cartasTiradasJ2;
+        return mesa.getCartasTiradasJ2();
     }
 
     @Override
@@ -947,20 +895,12 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
     // metodos privados
     //
 
-    // le paso dos cartas y las compara, devuelve el ID del jugador que tiene la carta mas alta, si son de igual poder devuelve -1 que indica que es PARDA
-    private int compararCartas(Carta cj1, Carta cj2) throws RemoteException{
-        if(cj1.getPoderCarta() > cj2.getPoderCarta()) return j1.getIDJugador();
-        else if(cj1.getPoderCarta() < cj2.getPoderCarta()) return j2.getIDJugador();
-
-        return -1; // caso de que sean el mismo poder es PARDA
-    }
-
 
     // notificar general para el notificar un evento, que este se le pasa por parametro
     private void notificarEvento(Eventos e) throws RemoteException {
         notificarObservadores(e);
         // sino me guarda la partida innecesariamente cuando se une un jugador
-        if(numeroMano != -1) PersistenciaPartida.guardarPartida(this); // guardo la partida aca porque actualizan cosas que necesito persistir en cada actualizacion
+        if(primeraMano) guardarPartida(); // guardo la partida aca porque actualizan cosas que necesito persistir en cada actualizacion
     }
 
 
@@ -1054,7 +994,7 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
         int puntos = 0;
 
         // por reglas si se va al mazo en la primer mano sin cantar nada son 2 puntos para el contrario
-        if(numeroRonda == 1 && !cantoEnvido) puntos = 2;
+        if(mesa.getNroRonda() == 1 && !cantoEnvido) puntos = 2;
         //si no es primera ronda o si se canto envido entra en el de abajo
         else if(estadoDelTruco == EstadoTruco.NADA) puntos = 1;
         else if(estadoDelTruco == TRUCO) puntos = 2;
@@ -1079,7 +1019,7 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
             String idString = nombre.substring(0, Math.min(3, nombre.length())).toUpperCase() + formattedDate;
             idGenerado = Math.abs(idString.hashCode() / random.nextInt(1, 18));
 
-        } while (PersistenciaPartida.recuperarPartida(idGenerado) != null);
+        } while (PersistenciaPartida.existePartida(idGenerado));
 
         return idGenerado;
     }

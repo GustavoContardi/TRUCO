@@ -42,7 +42,7 @@ public interface IControlador {
     void tantoNoQuerido() throws RemoteException ;
     void salirDeLaPartida() throws RemoteException ;
     ArrayList<Jugador> listaJugadoresMasGanadores();
-    boolean puedoCantarTruco(EstadoTruco estado) throws RemoteException;
+    boolean puedoCantarTruco() throws RemoteException;
     boolean puedoCantarEnvido(EstadoEnvido estado);
     String getNombreJugador() throws RemoteException;
     void volverAlMenuPrincipal() throws RemoteException;

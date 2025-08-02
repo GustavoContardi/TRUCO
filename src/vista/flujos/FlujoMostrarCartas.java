@@ -32,7 +32,7 @@ public class FlujoMostrarCartas extends Flujo implements Serializable {
                     else return new FlujoEnvido(vista, controlador);
                 }
                 case "2" -> {
-                    if(controlador.puedoCantarTruco(controlador.estadoDelRabon())){
+                    if(controlador.puedoCantarTruco()){
                         switch (controlador.estadoDelRabon()){
                             case NADA -> controlador.cantarRabon(EstadoTruco.TRUCO);
                             case TRUCO -> controlador.cantarRabon(EstadoTruco.RE_TRUCO);
@@ -60,7 +60,6 @@ public class FlujoMostrarCartas extends Flujo implements Serializable {
     @Override
     public void mostrarSiguienteTexto() throws RemoteException {
         if(controlador.obtenerCartasDisponibles() != null && (controlador.numeroDeMano() > -1 || controlador.seReanudoPartida())){
-            System.out.println("numero de mano: " + controlador.numeroDeMano());
             vista.println("");
             vista.mostrarMesa();
             vista.println("");
