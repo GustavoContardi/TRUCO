@@ -52,7 +52,6 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
     private     EstadoFlor          estadoDeLaFlor;
     private     boolean             cantoEnvido, cantoEnvidoDoble,cantoRealEnvido, cantoFaltaEnvido;
     private     int                 puntajeRondaJ1, puntajeRondaJ2;
-    private     boolean             finMano;
     private     int                 idJugadorNoQuizoCanto, idJugadorQuiereCantar;
     private     String              resultadoTanto;
     private     boolean             reanudoJ1, reanudoJ2, primeraMano;
@@ -70,7 +69,6 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
     public Partida(int puntosGanar, boolean flor) throws RemoteException {
         j1               =  null;
         j2               =  null;
-        finMano          =  true;
         mazo             =  new Mazo();
         idPartida        =  generarIdPartida();
         puntosParaGanar  =  puntosGanar;
@@ -97,12 +95,12 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
         if(primeraMano) {
             anotador = new Anotador(j2.getNombre(), j1.getNombre(), puntosParaGanar);
             notificarEvento(PUNTAJES);
-            mesa = new Mesa(this, j1.getIDJugador(), j2.getIDJugador());
+            mesa = new Mesa(j1.getIDJugador(), j2.getIDJugador());
         }
 
         actualizarPuntos();
 
-        if (finMano){
+        if (mesa.esFinDeMano()){
             if(!esFinDePartida()){
                 estadoDelTruco          = EstadoTruco.NADA;
                 estadoDelEnvido         = EstadoEnvido.NADA;
@@ -115,21 +113,20 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
                 cantoEnvidoDoble        = false;
                 cantoRealEnvido         = false;
                 cantoFaltaEnvido        = false;
-                finMano                 = false;
                 cartasJ1                = new ArrayList<>();
                 cartasJ2                = new ArrayList<>();
                 idJugadorNoQuizoCanto   = 0;
                 idJugadorQuiereCantar   = 0;
                 idJugadorSalio          = 0;
-                idUltimoJugCanto = 0;
+                idUltimoJugCanto        = 0;
                 seEstabaCantandoEnvido  = false;
                 seEstabaCantandoTruco   = false;
                 seEstabaCantandoFlor    = false;
 
+                mesa.setFinDeMano(false);
                 j1.devolverCartas();
                 j2.devolverCartas();
-
-                mazo.repartirCartas(j1, j2);
+                mazo.repartirCartas(j1.getCartasObtenidas(), j2.getCartasObtenidas());
                 //mazo.repartirFlor(j1, j2); pruebas para cuando se juega con flor, no va en el normal, el de arriba si
                 replicarCartasJugadores();
                 mesa.nuevaMano();
@@ -144,8 +141,8 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
 
     // se llama a este metodo cuando finalizo la ronda
     @Override
-    public void finDeLaRonda() throws RemoteException{
-        finMano = true;
+    public void finDeLaMano() throws RemoteException{
+        mesa.setFinDeMano(true);
 
         puntosRabon = calcularPuntosTruco();
 
@@ -187,15 +184,19 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
 
         if(idJugador == j1.getIDJugador() && turno == idJugador){
             carta = j1.tirarCarta(idCarta);
-            mesa.tirarCarta(idJugador, carta);
+            mesa.setUltimaCartaTiradaJ1(carta);
             notificarEvento(CARTA_TIRADAJ1);
+            mesa.tirarCarta(idJugador, carta);
 
         }
         else if(idJugador == j2.getIDJugador() && idJugador == turno){
             carta = j2.tirarCarta(idCarta);
-            mesa.tirarCarta(idJugador, carta);
+            mesa.setUltimaCartaTiradaJ2(carta);
             notificarEvento(CARTA_TIRADAJ2);
+            mesa.tirarCarta(idJugador, carta);
         }
+
+        if(mesa.esFinDeMano()) finDeLaMano();
 
         guardarPartida();
     }
@@ -334,7 +335,7 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
             mesa.setRondasGanadasJ2(2);
         }
 
-        finDeLaRonda();
+        finDeLaMano();
     }
 
     @Override

@@ -148,6 +148,7 @@ public class Jugador implements Comparable<Jugador>, Serializable{
     }
 
     public ArrayList<Carta> getCartasObtenidas() {
+        if(cartasObtenidas == null) return new ArrayList<>();
         return cartasObtenidas;
     }
 

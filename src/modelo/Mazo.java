@@ -28,9 +28,7 @@ public class Mazo implements Serializable {
     //
 
     // le asigna las cartas a los jugadores pasados por parametros
-    public void repartirCartas(Jugador j1, Jugador j2) {
-        ArrayList<Carta> cartasJ1 = new ArrayList<>();
-        ArrayList<Carta> cartasJ2 = new ArrayList<>();
+    public void repartirCartas(ArrayList<Carta> cartasJ1, ArrayList<Carta> cartasJ2) {
         Random random = new Random();
         int indiceAleatorio;
 
@@ -52,9 +50,6 @@ public class Mazo implements Serializable {
             }
         }
 
-        j1.recibirCartas(cartasJ1);
-        j2.recibirCartas(cartasJ2);
-
     }
 
     public void mostrarMazo() {
@@ -64,7 +59,7 @@ public class Mazo implements Serializable {
     }
 
     // este metodo es pura y exclusivamente para hacer los TEST de la flor in game
-    public void repartirFlor(Jugador j1, Jugador j2){
+    /*public void repartirFlor(Jugador j1, Jugador j2){
         ArrayList<Carta> lista1 = new ArrayList<>();
         ArrayList<Carta> lista2 = new ArrayList<>();
 
@@ -79,6 +74,7 @@ public class Mazo implements Serializable {
         j1.recibirCartas(lista1);
         j2.recibirCartas(lista2);
     }
+     */
 
     //
     // metodos privados

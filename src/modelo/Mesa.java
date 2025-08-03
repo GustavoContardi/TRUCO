@@ -14,8 +14,6 @@ public class Mesa implements Serializable {
     private int nroMano, nroRonda;
     boolean parda, finMano;
     Carta ultimaCartaTiradaJ1, ultimaCartaTiradaJ2;
-    private Partida partida;
-
 
     //
     // constructores
@@ -30,9 +28,10 @@ public class Mesa implements Serializable {
         nroRonda                =  1;
         rondasGanadasJ1         =  0;
         rondasGanadasJ2         =  0;
+        finMano                 = true;
     }
 
-    public Mesa(Partida partida, int idJugador1, int idJugador2) {
+    public Mesa(int idJugador1, int idJugador2) {
         this.idJugador1         =  idJugador1;
         this.idJugador2         =  idJugador2;
         cartasTiradasJ1         =  new ArrayList<>();
@@ -41,6 +40,7 @@ public class Mesa implements Serializable {
         nroRonda                =  1;
         rondasGanadasJ1         =  0;
         rondasGanadasJ2         =  0;
+        finMano                 =  true;
     }
 
     public void nuevaMano() {
@@ -52,8 +52,9 @@ public class Mesa implements Serializable {
         rondasGanadasJ1             =  0;
         rondasGanadasJ2             =  0;
         nroMano                     += 1;
-        ultimaCartaTiradaJ1         = null;
-        ultimaCartaTiradaJ2         = null;
+        nroRonda                    =  1;
+        ultimaCartaTiradaJ1         =  null;
+        ultimaCartaTiradaJ2         =  null;
         cartasTiradasJ2.clear();
         cartasTiradasJ1.clear();
     }
@@ -90,7 +91,7 @@ public class Mesa implements Serializable {
                     rondasGanadasJ1 += 1;
                     parda = true;
                 }
-                nroRonda += 1; // sumo ronda para que la proxima valide abajo
+               nroRonda = 2; // sumo ronda para que la proxima valide abajo
 
             } else if (nroRonda == 2) {
                 // primero pregunto si venimos de una parda, tiene prioridad, aca el que tira la carta mas alta gana la mano
@@ -107,7 +108,6 @@ public class Mesa implements Serializable {
                         rondasGanadasJ1 += 1;
                         rondasGanadasJ2 += 1;
                     }
-                    nroRonda += 1;
                 }
                 // si no es parda comparo las cartas y sumo a quien gane la ronda
                 else if (idJugador1 == compararCartas(cartasTiradasJ1.get(1), cartasTiradasJ2.get(1))) {
@@ -122,7 +122,7 @@ public class Mesa implements Serializable {
                     if (idJugador1 == hizoPrimera) rondasGanadasJ1 += 1;
                     else if (idJugador2 == hizoPrimera) rondasGanadasJ2 += 1;
                 }
-                nroRonda += 1;
+                nroRonda = 3;
 
             } else if (nroRonda == 3) {
                 // lo mismo que la ronda 2
@@ -147,15 +147,13 @@ public class Mesa implements Serializable {
                     else if (idJugador2 == hizoPrimera) rondasGanadasJ2 += 1;
                 }
 
+
             }
         }
 
         if(rondasGanadasJ1 >= 2  && rondasGanadasJ1 > rondasGanadasJ2) finMano = true;
         else if (rondasGanadasJ2 >= 2  && rondasGanadasJ1 < rondasGanadasJ2) finMano = true;
 
-        if(finMano){
-            partida.finDePartida();
-        }
     }
 
     // esto es para manjear los turnos dentro de la mano
@@ -164,6 +162,17 @@ public class Mesa implements Serializable {
         else turno = idJugador1;
     }
 
+
+    //
+    // sets y gets
+    //
+
+    public boolean esFinDeMano(){
+        return finMano;
+    }
+    public void setFinDeMano(boolean finMano){
+        this.finMano = finMano;
+    }
     public ArrayList<Carta> getCartasTiradasJ1() {
         return cartasTiradasJ1;
     }
@@ -210,6 +219,13 @@ public class Mesa implements Serializable {
 
     public int getNroMano(){
         return nroMano;
+    }
+
+    public void setUltimaCartaTiradaJ1(Carta carta){
+        ultimaCartaTiradaJ1 = carta;
+    }
+    public void setUltimaCartaTiradaJ2(Carta carta){
+        ultimaCartaTiradaJ2 = carta;
     }
 
     public int getNroRonda(){

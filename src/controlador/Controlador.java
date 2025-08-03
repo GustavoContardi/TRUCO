@@ -593,13 +593,13 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
                 if(idJugador != -1) {
                     if(idJugador == modelo.getIdJ1()) vistaJuego.mostrarEsperaRival();
                 }
-                vistaEleccion.reanudarPartida(getJugadoresRecuperados()); // esto es para que se elimine el jugador de la eleccion
+                else if(!(modelo.getReanudoJ2())) vistaEleccion.reanudarPartida(getJugadoresRecuperados()); // esto es para que se elimine el jugador de la eleccion
             }
             case RESTABLECIO_J2 -> {
                 if(idJugador != -1) {
                     if(idJugador == modelo.getIdJ2()) vistaJuego.mostrarEsperaRival();
                 }
-                vistaEleccion.reanudarPartida(getJugadoresRecuperados());
+                else if(!(modelo.getReanudoJ1())) vistaEleccion.reanudarPartida(getJugadoresRecuperados());
             }
             case CANTO_FLOR -> {
                 if(modelo.getQuienCantoFlor() != idJugador) vistaJuego.cantaronFlor(PersistenciaCantos.mensajeCantoFlor(), FLOR);

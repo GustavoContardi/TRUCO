@@ -591,6 +591,7 @@ public class VistaGrafica implements IVistaJuego, Serializable {
             CartasOP1.add(label);
             CartasOP1.revalidate();
             CartasOP1.repaint();
+            System.out.println("tendria que entrar aca la carta: " + carta);
         }
         else if(ronda == 2){
             CartasOP2.add(label);
