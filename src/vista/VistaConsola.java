@@ -214,6 +214,7 @@ public class VistaConsola implements IVistaJuego, IVistaInicio, Serializable {
 
     @Override
     public void meTiraronCarta(String carta) throws RemoteException {
+        System.out.println("carta que me tiraron: " + carta);
         setFlujoActual(new FlujoMostrarCartas(this, controlador));
     }
 

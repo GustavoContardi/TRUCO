@@ -61,6 +61,7 @@ public class VistaGrafica implements IVistaJuego, Serializable {
         frame.setLocationRelativeTo(null);
         frame.setSize(765, 815);
         frame.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+        toolBtn.setFloatable(false);
 
         frameEspera = new JFrame("Esperando rival - App Truco");
 
@@ -149,57 +150,20 @@ public class VistaGrafica implements IVistaJuego, Serializable {
 
     @Override
     public void finDeLaPartida(String nombreGanador) {
-        mostrarAviso( "LA PARTIDA TERMINO. EL GANADOR ES: " + nombreGanador);
+        bloquearBotones();
+        avisoFinPartida(nombreGanador);
 
-        removeBtnActionListener();
+        /*removeBtnActionListener();
         eliminarTodosAL();
         removerCartas();
 
         accionesJ2.setText("Presione cualquier boton para volver al menu..");
-        btnEnvido.setEnabled(true);
-        btnAuxiliar.setEnabled(true);
-        TRUCOButton.setEnabled(true);
-        btnEnvido.setText("  VOLVER  ");
-        TRUCOButton.setText("  AL  ");
-        btnAuxiliar.setText("  INICIO  ");
-
-        btnEnvido.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    controlador.volverAlMenuPrincipal();
-                    frame.dispose();
-                } catch (RemoteException ex) {
-                    ex.printStackTrace();
-                }
-            }
-        });
-
-        TRUCOButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    controlador.volverAlMenuPrincipal();
-                    frame.dispose();
-                } catch (RemoteException ex) {
-                    ex.printStackTrace();
-                }
-            }
-        });
-
-        btnAuxiliar.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    controlador.volverAlMenuPrincipal();
-                    frame.dispose();
-                } catch (RemoteException ex) {
-                    ex.printStackTrace();
-                }
-            }
-        });
-        IRALMAZOButton.setEnabled(false);
-
+        btnEnvido.setEnabled(false);
+        btnAuxiliar.setEnabled(false);
+        TRUCOButton.setEnabled(false);
+        btnEnvido.setText("");
+        TRUCOButton.setText("");
+        btnAuxiliar.setText("");*/
     }
 
     @Override
@@ -490,7 +454,7 @@ public class VistaGrafica implements IVistaJuego, Serializable {
                     });
                 }
                 else{
-                    //mostrarAviso("Tu rival te cantó FLOR y tú no tienes. Son 3 puntos para tu rival.");
+                    mostrarAviso("Tu rival te cantó FLOR y tú no tienes.\nSon 3 puntos para tu rival.");
                     setBotones();
                 }
             }
@@ -591,7 +555,6 @@ public class VistaGrafica implements IVistaJuego, Serializable {
             CartasOP1.add(label);
             CartasOP1.revalidate();
             CartasOP1.repaint();
-            System.out.println("tendria que entrar aca la carta: " + carta);
         }
         else if(ronda == 2){
             CartasOP2.add(label);
@@ -904,8 +867,10 @@ public class VistaGrafica implements IVistaJuego, Serializable {
 
 
     private void panelAvisos(String text){
+        initIcono();
         JFrame frameMSJ = new JFrame("Aviso - App Truco");
         frameMSJ.setLocationRelativeTo(null);
+        frameMSJ.setIconImage(icono);
 
         // Panel principal
         JPanel panel = new JPanel(new BorderLayout(10, 10));
@@ -1209,6 +1174,49 @@ public class VistaGrafica implements IVistaJuego, Serializable {
 
     private void cerrarEsperaRival(){
         frameEspera.setVisible(false);
+    }
+
+    private void avisoFinPartida(String nombreGanador){
+        initIcono();
+        JFrame frameMSJ = new JFrame("Fin de la Partida - App Truco");
+        frameMSJ.setLocationRelativeTo(null);
+        frameMSJ.setIconImage(icono);
+        frameMSJ.setResizable(false);
+        String text = "LA PARTIDA HA FINALIZADO, EL GANADOR ES ¡" + nombreGanador + "! Presione ACEPTAR para volver al menu principal.";
+
+        // Panel principal
+        JPanel panel = new JPanel(new BorderLayout(10, 10));
+        panel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
+
+
+        // Label con el mensaje (centrado)
+        JLabel titulo = new JLabel("<html><div style='text-align: center;'>" + text + "</div></html>");
+        titulo.setFont(new Font("Arial", Font.BOLD, 16));
+        panel.add(titulo, BorderLayout.CENTER);
+
+        // Botón "Aceptar"
+        JButton botonAceptar = new JButton("Aceptar");
+        botonAceptar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    controlador.volverAlMenuPrincipal();
+                    frameMSJ.dispose();
+                    frame.dispose();
+                } catch (RemoteException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+        JPanel panelBoton = new JPanel();
+        panelBoton.add(botonAceptar);
+        panel.add(panelBoton, BorderLayout.SOUTH);
+
+
+        frameMSJ.setSize(610, 170);
+        frameMSJ.add(panel);
+        frameMSJ.setVisible(true);
+
     }
 
 }

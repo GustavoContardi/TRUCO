@@ -130,7 +130,14 @@ public class PersistenciaJugador implements Comparable<Jugador>, Serializable{
     }
 
     public static void sumarPartidaGanadaJugador(int idJugador){
+        listaJugadoresActivos = getJugadoresGuardados(false);
+        listaJugadoresHistoricos = getJugadoresHistoricos();
+
         for(Jugador j : listaJugadoresActivos){
+            if(j.getIDJugador() == idJugador) j.partidaGanada();
+        }
+
+        for(Jugador j : listaJugadoresHistoricos){
             if(j.getIDJugador() == idJugador) j.partidaGanada();
         }
 
@@ -139,6 +146,17 @@ public class PersistenciaJugador implements Comparable<Jugador>, Serializable{
             FileOutputStream fos = new FileOutputStream("jugadoresActivos.bin");
             var oos = new ObjectOutputStream(fos);
             oos.writeObject(listaJugadoresActivos);
+            fos.close();
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        try {
+            FileOutputStream fos = new FileOutputStream("jugadoresHistoricos.bin");
+            var oos = new ObjectOutputStream(fos);
+            oos.writeObject(listaJugadoresHistoricos);
             fos.close();
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
@@ -206,7 +224,7 @@ public class PersistenciaJugador implements Comparable<Jugador>, Serializable{
         try {
             FileOutputStream fos = new FileOutputStream("jugadoresHistoricos.bin");
             var oos = new ObjectOutputStream(fos);
-            oos.writeObject(listaJugadoresActivos);
+            oos.writeObject(listaJugadoresHistoricos);
             fos.close();
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
@@ -234,6 +252,33 @@ public class PersistenciaJugador implements Comparable<Jugador>, Serializable{
         Collections.sort(listaJugadoresHistoricos); // lo devuelvo si o si ordenado sino no tiene sentido
 
         return listaJugadoresHistoricos;
+    }
+
+    //
+    // metodos privados
+    //
+
+    public static void sumarPartidaJugadorHistorico(int idJugador){
+        listaJugadoresHistoricos = getJugadoresHistoricos();
+
+        for(Jugador j : listaJugadoresHistoricos){
+            if(j.getIDJugador() == idJugador) {
+                listaJugadoresHistoricos.remove(j);
+                j.partidaGanada();
+                listaJugadoresHistoricos.add(j);
+            };
+        }
+
+        try {
+            FileOutputStream fos = new FileOutputStream("jugadoresHistoricos.bin");
+            var oos = new ObjectOutputStream(fos);
+            oos.writeObject(listaJugadoresHistoricos);
+            fos.close();
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 

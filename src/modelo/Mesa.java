@@ -60,16 +60,6 @@ public class Mesa implements Serializable {
     }
 
     public void tirarCarta(int idJugador, Carta carta) throws RemoteException {
-        // agregar las cartas tiradas al array
-
-        if(idJugador == idJugador1) {
-            cartasTiradasJ1.add(carta);
-            ultimaCartaTiradaJ1 = carta;
-        }
-        else if(idJugador == idJugador2) {
-            cartasTiradasJ2.add(carta);
-            ultimaCartaTiradaJ2 = carta;
-        }
 
         siguienteTurno();
 
@@ -223,9 +213,11 @@ public class Mesa implements Serializable {
 
     public void setUltimaCartaTiradaJ1(Carta carta){
         ultimaCartaTiradaJ1 = carta;
+        cartasTiradasJ1.add(carta);
     }
     public void setUltimaCartaTiradaJ2(Carta carta){
         ultimaCartaTiradaJ2 = carta;
+        cartasTiradasJ2.add(carta);
     }
 
     public int getNroRonda(){

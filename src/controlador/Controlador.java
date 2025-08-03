@@ -302,17 +302,14 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
     @Override
     public ArrayList<String> getCartasTiradasRival() throws RemoteException {
         ArrayList<String> lista = new ArrayList<>();
-        ArrayList<Carta> cartas = new ArrayList<>();
-
-        if(idJugador != modelo.getIdJ1()) cartas = modelo.getCartasTiradasJ1();    // si es distinto es porque es el rival
-        else cartas = modelo.getCartasTiradasJ2();                                              // sino es el j2 el rival
-
-        for(Carta carta : cartas){
+        System.out.println("desde controlador cartas tiradas rival: " +  modelo.getCartasTiradasRival(idJugador));
+        for(Carta carta : modelo.getCartasTiradasRival(idJugador)){
             lista.add(carta.toString());
         }
         return lista;
     }
 
+    // cambiar
     @Override
     public boolean verificarCartaTirada(int nroCarta) throws RemoteException {
         ArrayList<Carta> cartasTiradas = new ArrayList<>();
@@ -561,7 +558,7 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
                 vistaJuego.mostrarMenuPrincipal();
             }
             case ABANDONO_PARTIDA -> {
-                if(idJugador == modelo.getIDJugadorGanador()) vistaJuego.finDeLaPartida(modelo.getJugadorGanador() + "(POR ABANDONO)");
+                if(idJugador == modelo.getIDJugadorGanador()) vistaJuego.finDeLaPartida(modelo.getJugadorGanador() /*+ " (POR ABANDONO)"*/);
             }
             case SALIO_DE_PARTIDA -> {
                 if(idJugador != modelo.getIDJugadorSalio()) {
