@@ -131,7 +131,7 @@ public class VistaConsola implements IVistaJuego, IVistaInicio, Serializable {
     @Override
     public void mostrarMensaje(String msj) {
         try {
-            println("\n" + controlador.getNombreRival() + msj);
+            println("\n" + controlador.getNombreRival() + ": " + msj);
         } catch (RemoteException e) {
             e.printStackTrace();
         }
@@ -151,7 +151,6 @@ public class VistaConsola implements IVistaJuego, IVistaInicio, Serializable {
 
     @Override
     public void finDeLaPartida(String nombreGanador) throws RemoteException {
-
         println("------------------------------------------------");
         println("                FIN DE LA PARTIDA                        ");
         println("       MUCHAS GRACIAS POR USAR LA APLICACION              ");

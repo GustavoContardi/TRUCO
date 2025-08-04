@@ -62,7 +62,6 @@ public class FlujoMostrarCartas extends Flujo implements Serializable {
         if(controlador.obtenerCartasDisponibles() != null && (controlador.numeroDeMano() > -1 || controlador.seReanudoPartida())){
             vista.println("");
             vista.mostrarMesa();
-            vista.println("");
             vista.println("\nCARTAS DE: " + controlador.getNombreJugador().toUpperCase());
             vista.mostrarCartasDisponibles();
             vista.println("");

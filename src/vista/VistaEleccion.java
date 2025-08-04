@@ -359,6 +359,7 @@ public class VistaEleccion implements IVistaEleccion {
                     if (respuesta == JOptionPane.YES_OPTION) {
                         controlador.eliminarJugador(jugador.getIDJugador());
                         JOptionPane.showMessageDialog(frame2, "Jugador eliminado exitosamente.");
+                        frame2.dispose();
                     } else {
                         JOptionPane.showMessageDialog(frame2, "Eliminación cancelada.");
                     }

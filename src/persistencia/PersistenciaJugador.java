@@ -241,7 +241,7 @@ public class PersistenciaJugador implements Comparable<Jugador>, Serializable{
             listaJugadoresHistoricos = (ArrayList<Jugador>) oos.readObject();
             fos.close();
         } catch (FileNotFoundException e) {
-            return null;
+            return new ArrayList<>();
         } catch (IOException e) {
             throw new RuntimeException(e);
         } catch (ClassNotFoundException e) {
