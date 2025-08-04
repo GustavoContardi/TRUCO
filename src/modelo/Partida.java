@@ -179,7 +179,7 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
     @Override
     public void tirarCarta(int idJugador, int numeroCarta) throws RemoteException{
         Carta carta = null;
-        int idCarta = -1;
+        int idCarta = 0;
         int turno = mesa.getTurno();
 
         if(idJugador == getIdJ1()) idCarta = getCartasJ1().get(numeroCarta-1).getIdCarta();
@@ -563,7 +563,7 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
             if(c.getIdCarta() == cartasJugador.get(nroCarta-1).getIdCarta()) return false;
         }
 
-        return false;
+        return true;
     }
 
     // cuando quieren reanudar la partida, recien cuando se unan los dos notifico que puedan empezar, sino inician y les salta la advertencia
@@ -907,12 +907,27 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
     }
 
     @Override
-    public ArrayList<String> getCartasTiradasStr(int idJugador) throws RemoteException {
+    public ArrayList<String> getCartasTiradasYoStr(int idJugador) throws RemoteException {
         ArrayList<String> lista = new ArrayList<>();
         ArrayList<Carta> cartas = new ArrayList<>();
 
         if(idJugador == getIdJ1()) cartas = getCartasTiradasJ1();
         else if(idJugador == getIdJ2()) cartas = getCartasTiradasJ2();
+
+        for(Carta carta : cartas){
+            lista.add(carta.toString());
+        }
+
+        return lista;
+    }
+
+    @Override
+    public ArrayList<String> getCartasTiradasRivalStr(int idJugador) throws RemoteException {
+        ArrayList<String> lista = new ArrayList<>();
+        ArrayList<Carta> cartas = new ArrayList<>();
+
+        if(idJugador != getIdJ1()) cartas = getCartasTiradasJ1();
+        else if(idJugador != getIdJ2()) cartas = getCartasTiradasJ2();
 
         for(Carta carta : cartas){
             lista.add(carta.toString());

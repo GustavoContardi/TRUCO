@@ -259,12 +259,12 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
 
     @Override
     public ArrayList<String> getCartasTiradasYo() throws RemoteException {
-        return modelo.getCartasTiradasStr(idJugador);
+        return modelo.getCartasTiradasYoStr(idJugador);
     }
 
     @Override
     public ArrayList<String> getCartasTiradasRival() throws RemoteException {
-        return modelo.getCartasTiradasStr(idJugador);
+        return modelo.getCartasTiradasRivalStr(idJugador);
     }
 
     @Override

@@ -60,7 +60,6 @@ public class Mesa implements Serializable {
     }
 
     public void tirarCarta(int idJugador, Carta carta) throws RemoteException {
-
         siguienteTurno();
 
         // recien valido cuando los dos tengan las mismas cartas tiradas para poder compararlas

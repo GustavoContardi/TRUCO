@@ -213,7 +213,6 @@ public class VistaConsola implements IVistaJuego, IVistaInicio, Serializable {
 
     @Override
     public void meTiraronCarta(String carta) throws RemoteException {
-        System.out.println("carta que me tiraron: " + carta);
         setFlujoActual(new FlujoMostrarCartas(this, controlador));
     }
 
@@ -345,6 +344,8 @@ public class VistaConsola implements IVistaJuego, IVistaInicio, Serializable {
         if (controlador != null) {
             ArrayList<String> cartasYo = controlador.getCartasTiradasYo();
             ArrayList<String> cartasRival = controlador.getCartasTiradasRival();
+            System.out.println("cartas tiradas yo: " + cartasYo);
+            System.out.println("cartas tiradas rival: " + cartasRival);
 
             println(controlador.puntajeActual());
 
@@ -385,7 +386,7 @@ public class VistaConsola implements IVistaJuego, IVistaInicio, Serializable {
         ArrayList<String> cartas = controlador.obtenerCartasDisponibles();
         println("\n");
         for(int i=0; i<cartas.size(); i++){
-            println(i+1 + "- " + cartas.get(i));
+            println("- " + cartas.get(i));
         }
     }
 
