@@ -61,6 +61,7 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
         return modelo.puntosActuales();
     }
 
+    // cambiar
     @Override
     public ArrayList<String> obtenerCartasDisponibles() throws RemoteException { // este es para las cartas de la vista consola
         ArrayList<Carta> cartas = modelo.obtenerCartas(idJugador);
@@ -77,28 +78,15 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
        return cartasStr;
     }
 
+    //cambiar
     @Override
     public ArrayList<String> obtenerFotoCartas() throws RemoteException { // este es para la vista grafica
-        ArrayList<Carta> cartasJugador = modelo.obtenerCartas(idJugador);
-        ArrayList<String> cartasStr = new ArrayList<>();
-
-        if(cartasJugador == null) return null;
-
-        for(Carta c : cartasJugador){
-            cartasStr.add(c.fotoCarta());
-        }
-
-        return cartasStr;
+        return modelo.getFotoCartas(idJugador);
     }
 
     @Override
     public void tirarCarta(int numeroDeCarta) throws RemoteException { // en realidad no es el id de la carta, porque cuando la tiro de la vista no sabe como pasarle el id pq no conoce al objeto
-        int idCarta = 0;
-
-        if(idJugador == modelo.getIdJ1()) idCarta = modelo.getCartasJ1().get(numeroDeCarta-1).getIdCarta();
-        else idCarta = modelo.getCartasJ2().get(numeroDeCarta-1).getIdCarta();
-
-        modelo.tirarCarta(idJugador, idCarta);
+        modelo.tirarCarta(idJugador, numeroDeCarta);
     }
 
     @Override
@@ -231,12 +219,8 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
     }
 
     @Override
-    public void rabonNoQuerido() {
-        try{
-            modelo.rabonNoQuerido(idJugador);
-        }catch(RemoteException e){
-            e.printStackTrace();
-        }
+    public void rabonNoQuerido() throws RemoteException{
+        modelo.rabonNoQuerido(idJugador);
     }
 
     @Override
@@ -287,49 +271,17 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
 
     @Override
     public ArrayList<String> getCartasTiradasYo() throws RemoteException {
-        ArrayList<String> lista = new ArrayList<>();
-        ArrayList<Carta> cartas = new ArrayList<>();
-
-        if(idJugador == modelo.getIdJ1()) cartas = modelo.getCartasTiradasJ1();    // si es igual es porque es mi jugador
-        else cartas = modelo.getCartasTiradasJ2();                                              // sino es el j2 el mio
-
-        for(Carta carta : cartas){
-            lista.add(carta.toString());
-        }
-        return lista;
+        return modelo.getCartasTiradasStr(idJugador);
     }
 
     @Override
     public ArrayList<String> getCartasTiradasRival() throws RemoteException {
-        ArrayList<String> lista = new ArrayList<>();
-        System.out.println("desde controlador cartas tiradas rival: " +  modelo.getCartasTiradasRival(idJugador));
-        for(Carta carta : modelo.getCartasTiradasRival(idJugador)){
-            lista.add(carta.toString());
-        }
-        return lista;
+        return modelo.getCartasTiradasStr(idJugador);
     }
 
-    // cambiar
     @Override
     public boolean verificarCartaTirada(int nroCarta) throws RemoteException {
-        ArrayList<Carta> cartasTiradas = new ArrayList<>();
-        ArrayList<Carta> cartasJugador = new ArrayList<>();
-
-        if(idJugador == modelo.getIdJ1()) {
-            cartasTiradas = modelo.getCartasTiradasJ1();    // si es igual es porque es mi jugador
-            cartasJugador = modelo.getCartasJ1();
-        }
-        else {
-            cartasTiradas = modelo.getCartasTiradasJ2();
-            cartasJugador = modelo.getCartasJ2();
-        }
-
-        for(Carta c : cartasTiradas){
-            // verifico que la carta que quiere tirar el jugador no esté en las cartas que ya tiro, solamente para la vista consola esto
-            if(c.getIdCarta() == cartasJugador.get(nroCarta-1).getIdCarta()) return false;
-        }
-
-        return true;
+        return modelo.verificarCartaTirada(idJugador, nroCarta);
     }
 
     @Override

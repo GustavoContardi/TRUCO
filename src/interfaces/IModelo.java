@@ -74,10 +74,13 @@ public interface IModelo extends IObservableRemoto {
     String getNombreRival(int idJugador) throws RemoteException; // le paso el jugador mio, necesito el contrario
     ArrayList<Carta> getCartasTiradasJ1() throws RemoteException;
     ArrayList<Carta> getCartasTiradasJ2() throws RemoteException;
+    ArrayList<String> getCartasTiradasStr(int idJugador) throws RemoteException;
+    ArrayList<String> getFotoCartas(int idJugador) throws RemoteException;
     ArrayList<Carta> getCartasTiradasRival(int idNoRival) throws RemoteException;
     int getIdPartida() throws RemoteException;
     Partida getObjeto() throws RemoteException;
     ArrayList<Jugador> jugadoresDeLaPartida() throws RemoteException;
+    boolean verificarCartaTirada(int idJugador, int nroCarta) throws RemoteException;
     void reanudoPartida(int idReanudo) throws RemoteException;
     boolean getPartidaRecuperada() throws RemoteException;
     boolean setPartidaRecuperada() throws RemoteException;
@@ -92,5 +95,4 @@ public interface IModelo extends IObservableRemoto {
     boolean getSeEstabaCantandoFlor() throws RemoteException;
     int getUltimoJugadorCanto() throws RemoteException;
     int getNumeroMano() throws RemoteException;
-
 }

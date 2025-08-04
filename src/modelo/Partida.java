@@ -177,9 +177,13 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
 
     // este metodo recibe el jugador que tiro la carta y que carta tiro, con los IDs alcanza para identificar ambas.
     @Override
-    public void tirarCarta(int idJugador, int idCarta) throws RemoteException{
+    public void tirarCarta(int idJugador, int numeroCarta) throws RemoteException{
         Carta carta = null;
+        int idCarta = -1;
         int turno = mesa.getTurno();
+
+        if(idJugador == getIdJ1()) idCarta = getCartasJ1().get(numeroCarta-1).getIdCarta();
+        else if(idJugador == getIdJ2()) idCarta = getCartasJ2().get(numeroCarta-1).getIdCarta();
 
 
         if(idJugador == j1.getIDJugador() && turno == idJugador){
@@ -540,6 +544,28 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
         return jugadores;
     }
 
+    @Override
+    public boolean verificarCartaTirada(int idJugador, int nroCarta) throws RemoteException {
+        ArrayList<Carta> cartasTiradas = new ArrayList<>();
+        ArrayList<Carta> cartasJugador = new ArrayList<>();
+
+        if(idJugador == getIdJ1()) {
+            cartasTiradas = getCartasTiradasJ1();    // si es igual es porque es mi jugador
+            cartasJugador = getCartasJ1();
+        }
+        else if(idJugador == getIdJ2()){
+            cartasTiradas = getCartasTiradasJ2();
+            cartasJugador = getCartasJ2();
+        }
+
+        for(Carta c : cartasTiradas){
+            // verifico que la carta que quiere tirar el jugador no esté en las cartas que ya tiro, solamente para la vista consola esto
+            if(c.getIdCarta() == cartasJugador.get(nroCarta-1).getIdCarta()) return false;
+        }
+
+        return false;
+    }
+
     // cuando quieren reanudar la partida, recien cuando se unan los dos notifico que puedan empezar, sino inician y les salta la advertencia
     @Override
     public void reanudoPartida(int idJugador) throws RemoteException {
@@ -878,6 +904,35 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
     @Override
     public ArrayList<Carta> getCartasTiradasJ2() throws RemoteException {
         return mesa.getCartasTiradasJ2();
+    }
+
+    @Override
+    public ArrayList<String> getCartasTiradasStr(int idJugador) throws RemoteException {
+        ArrayList<String> lista = new ArrayList<>();
+        ArrayList<Carta> cartas = new ArrayList<>();
+
+        if(idJugador == getIdJ1()) cartas = getCartasTiradasJ1();
+        else if(idJugador == getIdJ2()) cartas = getCartasTiradasJ2();
+
+        for(Carta carta : cartas){
+            lista.add(carta.toString());
+        }
+
+        return lista;
+    }
+
+    @Override
+    public ArrayList<String> getFotoCartas(int idJugador) throws RemoteException {
+        ArrayList<Carta> cartasJugador = obtenerCartas(idJugador);
+        ArrayList<String> cartasStr = new ArrayList<>();
+
+        if(cartasJugador == null) return null;
+
+        for(Carta c : cartasJugador){
+            cartasStr.add(c.fotoCarta());
+        }
+
+        return cartasStr;
     }
 
     @Override

@@ -26,6 +26,7 @@ public class FlujoTirarCarta extends  Flujo implements Serializable {
             vista.mostrarAviso("Ingrese un número dentro del rango. ");
             return this;
         }
+        // esto es si ya tiro la carta 1 y vuelve a apretar 1
         if(!controlador.verificarCartaTirada(nroCarta)){
             vista.mostrarAviso("Ingrese un numero dentro del rango. ");
             return this;
@@ -37,6 +38,6 @@ public class FlujoTirarCarta extends  Flujo implements Serializable {
     @Override
     public void mostrarSiguienteTexto() throws RemoteException {
         vista.mostrarCartasDisponibles();
-        vista.println("\n\nIngrese la carta a tirar: ");
+        vista.println("\nIngrese la carta a tirar: ");
     }
 }
