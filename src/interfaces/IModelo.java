@@ -76,6 +76,7 @@ public interface IModelo extends IObservableRemoto {
     ArrayList<Carta> getCartasTiradasJ2() throws RemoteException;
     ArrayList<String> getCartasTiradasStr(int idJugador) throws RemoteException;
     ArrayList<String> getFotoCartas(int idJugador) throws RemoteException;
+    ArrayList<String> getCartasDisponibles(int idJugador) throws RemoteException;
     ArrayList<Carta> getCartasTiradasRival(int idNoRival) throws RemoteException;
     int getIdPartida() throws RemoteException;
     Partida getObjeto() throws RemoteException;

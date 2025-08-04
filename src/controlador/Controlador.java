@@ -64,21 +64,9 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
     // cambiar
     @Override
     public ArrayList<String> obtenerCartasDisponibles() throws RemoteException { // este es para las cartas de la vista consola
-        ArrayList<Carta> cartas = modelo.obtenerCartas(idJugador);
-        ArrayList<String> cartasStr = new ArrayList<>();
-
-        if(cartas != null && !cartas.isEmpty()){
-            cartasStr = new ArrayList<>();
-            for(Carta carta : cartas){
-                if (!carta.isFueTirada()) cartasStr.add(carta.toString()); // le agrego solo las cartas disponibles a tirar
-                else cartasStr.add(" "); // esto para no verificar que la posicion es vacia en la vista y que me tire una excepcion null
-            }
-        }
-
-       return cartasStr;
+       return modelo.getCartasDisponibles(idJugador);
     }
 
-    //cambiar
     @Override
     public ArrayList<String> obtenerFotoCartas() throws RemoteException { // este es para la vista grafica
         return modelo.getFotoCartas(idJugador);

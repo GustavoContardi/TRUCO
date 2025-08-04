@@ -936,6 +936,21 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
     }
 
     @Override
+    public ArrayList<String> getCartasDisponibles(int idJugador) throws RemoteException {
+        ArrayList<Carta> cartas = obtenerCartas(idJugador);
+        ArrayList<String> cartasStr = new ArrayList<>();
+
+        if(cartas != null && !cartas.isEmpty()){
+            cartasStr = new ArrayList<>();
+            for(Carta carta : cartas){
+                if (!carta.isFueTirada()) cartasStr.add(carta.toString()); // le agrego solo las cartas disponibles a tirar
+                else cartasStr.add(" "); // esto para no verificar que la posicion es vacia en la vista y que me tire una excepcion null
+            }
+        }
+        return cartasStr;
+    }
+
+    @Override
     public ArrayList<Carta> getCartasTiradasRival(int idNoRival) throws RemoteException {
         if(idNoRival != j1.getIDJugador()) return getCartasTiradasJ1();
         else return getCartasTiradasJ2();
