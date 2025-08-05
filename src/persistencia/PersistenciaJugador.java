@@ -35,7 +35,7 @@ public class PersistenciaJugador implements Comparable<Jugador>, Serializable{
         guardarJugadorHistorico(j);
 
         try {
-            FileOutputStream fos = new FileOutputStream("jugadoresActivos.bin");
+            FileOutputStream fos = new FileOutputStream("src/recursos/archivo/jugadoresActivos.bin");
             var oos = new ObjectOutputStream(fos);
             oos.writeObject(listaJugadoresActivos);
             fos.close();
@@ -48,7 +48,7 @@ public class PersistenciaJugador implements Comparable<Jugador>, Serializable{
 
     public static ArrayList<Jugador> getJugadoresGuardados(boolean ordenado){
         try {
-            FileInputStream fos = new FileInputStream("jugadoresActivos.bin");
+            FileInputStream fos = new FileInputStream("src/recursos/archivo/jugadoresActivos.bin");
             var oos = new ObjectInputStream(fos);
             listaJugadoresActivos = (ArrayList<Jugador>) oos.readObject();
             fos.close();
@@ -72,7 +72,7 @@ public class PersistenciaJugador implements Comparable<Jugador>, Serializable{
         if(listaJugadoresActivos != null) listaJugadoresActivos.removeIf(j -> j.getIDJugador() == idJugador);
 
         try {
-            FileOutputStream fos = new FileOutputStream("jugadoresActivos.bin");
+            FileOutputStream fos = new FileOutputStream("src/recursos/archivo/jugadoresActivos.bin");
             var oos = new ObjectOutputStream(fos);
             oos.writeObject(listaJugadoresActivos);
             fos.close();
@@ -98,7 +98,7 @@ public class PersistenciaJugador implements Comparable<Jugador>, Serializable{
         listaJugadoresActivos.add(jugEliminado);
 
         try {
-            FileOutputStream fos = new FileOutputStream("jugadoresActivos.bin");
+            FileOutputStream fos = new FileOutputStream("src/recursos/archivo/jugadoresActivos.bin");
             var oos = new ObjectOutputStream(fos);
             oos.writeObject(listaJugadoresActivos);
             fos.close();
@@ -118,7 +118,7 @@ public class PersistenciaJugador implements Comparable<Jugador>, Serializable{
 
         // modifico la lista y la sobreescribo con el atributo electo modificado
         try {
-            FileOutputStream fos = new FileOutputStream("jugadoresActivos.bin");
+            FileOutputStream fos = new FileOutputStream("src/recursos/archivo/jugadoresActivos.bin");
             var oos = new ObjectOutputStream(fos);
             oos.writeObject(listaJugadoresActivos);
             fos.close();
@@ -143,7 +143,7 @@ public class PersistenciaJugador implements Comparable<Jugador>, Serializable{
 
         // modifico la lista y la sobreescribo con el atributo partidasGanadas modificado (1 +)
         try {
-            FileOutputStream fos = new FileOutputStream("jugadoresActivos.bin");
+            FileOutputStream fos = new FileOutputStream("src/recursos/archivo/jugadoresActivos.bin");
             var oos = new ObjectOutputStream(fos);
             oos.writeObject(listaJugadoresActivos);
             fos.close();
@@ -154,7 +154,7 @@ public class PersistenciaJugador implements Comparable<Jugador>, Serializable{
         }
 
         try {
-            FileOutputStream fos = new FileOutputStream("jugadoresHistoricos.bin");
+            FileOutputStream fos = new FileOutputStream("src/recursos/archivo/jugadoresHistoricos.bin");
             var oos = new ObjectOutputStream(fos);
             oos.writeObject(listaJugadoresHistoricos);
             fos.close();
@@ -185,7 +185,7 @@ public class PersistenciaJugador implements Comparable<Jugador>, Serializable{
         // modifico la lista y la sobreescribo con el atributo electo modificado
 
         try {
-            FileOutputStream fos = new FileOutputStream("jugadoresActivos.bin");
+            FileOutputStream fos = new FileOutputStream("src/recursos/archivo/jugadoresActivos.bin");
             var oos = new ObjectOutputStream(fos);
             oos.writeObject(listaJugadoresActivos);
             fos.close();
@@ -196,7 +196,7 @@ public class PersistenciaJugador implements Comparable<Jugador>, Serializable{
         }
 
         try {
-            FileInputStream fos = new FileInputStream("jugadoresHistoricos.bin");
+            FileInputStream fos = new FileInputStream("src/recursos/archivo/jugadoresHistoricos.bin");
             var oos = new ObjectInputStream(fos);
             listaJugadoresHistoricos = (ArrayList<Jugador>) oos.readObject();
             fos.close();
@@ -222,7 +222,7 @@ public class PersistenciaJugador implements Comparable<Jugador>, Serializable{
         listaJugadoresHistoricos.add(jugador);
 
         try {
-            FileOutputStream fos = new FileOutputStream("jugadoresHistoricos.bin");
+            FileOutputStream fos = new FileOutputStream("src/recursos/archivo/jugadoresHistoricos.bin");
             var oos = new ObjectOutputStream(fos);
             oos.writeObject(listaJugadoresHistoricos);
             fos.close();
@@ -236,7 +236,7 @@ public class PersistenciaJugador implements Comparable<Jugador>, Serializable{
 
     public static ArrayList<Jugador> getJugadoresHistoricos(){
         try {
-            FileInputStream fos = new FileInputStream("jugadoresHistoricos.bin");
+            FileInputStream fos = new FileInputStream("src/recursos/archivo/jugadoresHistoricos.bin");
             var oos = new ObjectInputStream(fos);
             listaJugadoresHistoricos = (ArrayList<Jugador>) oos.readObject();
             fos.close();
@@ -270,7 +270,7 @@ public class PersistenciaJugador implements Comparable<Jugador>, Serializable{
         }
 
         try {
-            FileOutputStream fos = new FileOutputStream("jugadoresHistoricos.bin");
+            FileOutputStream fos = new FileOutputStream("src/recursos/archivo/jugadoresHistoricos.bin");
             var oos = new ObjectOutputStream(fos);
             oos.writeObject(listaJugadoresHistoricos);
             fos.close();

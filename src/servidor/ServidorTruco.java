@@ -215,7 +215,7 @@ public class ServidorTruco {
     //
 
     private void iniciarIcono(){
-        ImageIcon iconoOriginal = new ImageIcon("icono.jpeg");
+        ImageIcon iconoOriginal = new ImageIcon("src/recursos/imagen/icono.jpeg");
         Image imagenRedimensionada = iconoOriginal.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
         icono = new ImageIcon(imagenRedimensionada); // inicio el icono
     }

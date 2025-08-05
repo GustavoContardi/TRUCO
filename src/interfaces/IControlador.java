@@ -41,6 +41,8 @@ public interface IControlador {
     void tantoQuerido() throws RemoteException;
     void tantoNoQuerido() throws RemoteException ;
     void salirDeLaPartida() throws RemoteException ;
+    boolean seUnioJugador(int idJugador) throws RemoteException;
+    boolean reanudoJugador(int idJugador) throws RemoteException;
     ArrayList<Jugador> listaJugadoresMasGanadores();
     boolean puedoCantarTruco() throws RemoteException;
     boolean puedoCantarEnvido(EstadoEnvido estado);
@@ -53,8 +55,6 @@ public interface IControlador {
     ArrayList<Partida> getListaPartidasPendientes() throws RemoteException;
     ArrayList<Jugador> getJugadoresRecuperados() throws RemoteException;
     void restablecerPartida() throws RemoteException;
-    boolean getReanudarPartida() throws RemoteException;
-    void setReanudarPartida(boolean reanudarPartida) throws RemoteException;
     void actualizarJugador(int idJugador, String nombreNuevo);
     void eliminarJugador(int idJugador);
     boolean tengoFlor() throws RemoteException;

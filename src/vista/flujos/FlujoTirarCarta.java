@@ -37,7 +37,7 @@ public class FlujoTirarCarta extends  Flujo implements Serializable {
 
     @Override
     public void mostrarSiguienteTexto() throws RemoteException {
-        vista.mostrarCartasDisponibles();
+        vista.mostrarCartasParaTirar();
         vista.println("\nIngrese la carta a tirar: ");
     }
 }

@@ -29,11 +29,18 @@ public class Envido implements Serializable {
 
     // este metodo se ejecuta cuando hay una mano nueva y reseteo los valores
     public void resetValores(){
-        estadoEnvido = EstadoEnvido.NADA;
-        cantoEnvido             = false;
-        cantoEnvidoDoble        = false;
-        cantoRealEnvido         = false;
-        cantoFaltaEnvido        = false;
+        estadoEnvido            =   EstadoEnvido.NADA;
+        estadoDeLaFlor          =   EstadoFlor.FLOR;
+        cantoEnvido             =   false;
+        cantoEnvidoDoble        =   false;
+        cantoRealEnvido         =   false;
+        cantoFaltaEnvido        =   false;
+        quienCantoFlor          =   0;
+        quienCantoEnvido        =   0;
+        quienCantoEnvidoDoble   =   0;
+        quienCantoRealEnvido    =   0;
+        quienCantoFaltaEnvido   =   0;
+        puntosEnvido            =   0;
     }
 
     // calcula los puntos del envido segun que cartas iguales tiene el jugador
@@ -116,6 +123,7 @@ public class Envido implements Serializable {
                     puntos += 2;
                     if(cantoFaltaEnvido) puntos += 3;
                 }
+                else if(cantoFaltaEnvido) puntos += 2;
             }
             else if (cantoRealEnvido){
                 puntos += 1;
@@ -335,7 +343,7 @@ public class Envido implements Serializable {
 
     private void recuperarListaJerarquia() {
         try {
-            FileInputStream fos = new FileInputStream("listaJerarquiaEnvido.bin");
+            FileInputStream fos = new FileInputStream("src/recursos/archivo/listaJerarquiaEnvido.bin");
             var oos = new ObjectInputStream(fos);
             jerarquiaCartas = (ArrayList<Integer>) oos.readObject();
             fos.close();

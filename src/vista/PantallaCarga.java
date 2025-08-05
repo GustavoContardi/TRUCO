@@ -22,7 +22,7 @@ public class PantallaCarga extends JWindow {
         etiquetaImagen.setVerticalAlignment(JLabel.CENTER);
 
 
-        ImageIcon iconoOriginal = new ImageIcon("icono.jpeg");
+        ImageIcon iconoOriginal = new ImageIcon("src/recursos/imagen/icono.jpeg");
         Image imagenEscalada = iconoOriginal.getImage().getScaledInstance(
                 this.getWidth(), this.getHeight() - 50, // Tamaño ajustado al JWindow
                 Image.SCALE_SMOOTH // Escalado suave para mejor calidad

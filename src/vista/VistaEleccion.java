@@ -92,7 +92,7 @@ public class VistaEleccion implements IVistaEleccion {
                 try {
                     Jugador jugador = (Jugador) cbEleccion.getSelectedItem();
 
-                    if(jugador != null){
+                    if(jugador != null && !controlador.seUnioJugador(jugador.getIDJugador())){
                         controlador.setJugador(jugador.getIDJugador());
                         frame.dispose();
                     }
@@ -144,7 +144,7 @@ public class VistaEleccion implements IVistaEleccion {
     }
 
     @Override
-    public void actualizarListaJugadores(ArrayList<Jugador> lista) {
+    public void actualizarListaJugadores(ArrayList<Jugador> lista) throws RemoteException {
 
         if(lista == null || lista.isEmpty()) listModel.addElement("¡No hay Jugadores creados aún!");
 
@@ -157,7 +157,7 @@ public class VistaEleccion implements IVistaEleccion {
 
             cbEleccion.removeAllItems();
             for (Jugador jugador: lista) {
-                if (!jugador.getElecto()) {
+                if (!controlador.seUnioJugador(jugador.getIDJugador())) {
                     cbEleccion.addItem(jugador);
                 }
             }
@@ -171,19 +171,20 @@ public class VistaEleccion implements IVistaEleccion {
     }
 
     @Override
-    public void mostrarMenuPrincipal() {
+    public void mostrarMenuPrincipal() throws RemoteException {
         actualizarListaJugadores(controlador.listaJugadoresMasGanadores());
         iniciar();
     }
 
     // pantalla para reanudar
     @Override
-    public void reanudarPartida(ArrayList<Jugador> lista) {
+    public void reanudarPartida(ArrayList<Jugador> lista) throws RemoteException {
         frame.setVisible(true);
         btnActualizarJugador.setEnabled(false);
         btnEliminarJugador.setEnabled(false);   // desabilito los botones porque no los necesito cuando reanudo
         btnCrearJugador.setEnabled(false);
 
+        removeAllActionListeners(btnElegir);
         procesarEleccionJugadorReanudar(); // le actualizo el action listener al boton para que reanude
 
         if(lista.isEmpty()) listModel.addElement("¡Ya se eligieron todos los jugadores y la partida esta en curso! Tal vez se equivocó de partida...;)");
@@ -191,11 +192,11 @@ public class VistaEleccion implements IVistaEleccion {
         else{
             listModel.clear();
             for (Jugador jugador: lista) {
-                listModel.addElement(jugador.toString());
+                if(!controlador.reanudoJugador(jugador.getIDJugador())) listModel.addElement(jugador.toString());
             }
             cbEleccion.removeAllItems();
             for (Jugador jugador: lista) {
-                if (!jugador.getElecto()) {
+                if(!controlador.reanudoJugador(jugador.getIDJugador())) {
                     cbEleccion.addItem(jugador);
                 }
             }
@@ -386,7 +387,7 @@ public class VistaEleccion implements IVistaEleccion {
     }
 
     private void initIcono() {
-        icono = new ImageIcon("icono.jpeg").getImage();
+        icono = new ImageIcon("src/recursos/imagen/icono.jpeg").getImage();
         Image originalImage = icono;
         Image scaledImage = originalImage.getScaledInstance(50, 50, Image.SCALE_SMOOTH);
         icono = new ImageIcon(scaledImage).getImage();

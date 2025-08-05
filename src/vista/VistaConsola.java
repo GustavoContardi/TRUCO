@@ -380,7 +380,7 @@ public class VistaConsola implements IVistaJuego, IVistaInicio, Serializable {
 
 
 
-
+    // estas cartas son las que se muestran para que el jugador vea que cartas tiene
     public void mostrarCartasDisponibles() throws RemoteException {
         ArrayList<String> cartas = controlador.obtenerCartasDisponibles();
         println("\n");
@@ -388,6 +388,16 @@ public class VistaConsola implements IVistaJuego, IVistaInicio, Serializable {
             println("- " + cartas.get(i));
         }
     }
+
+    // estas cartas son las que se muestran para tirar con INDICE
+    public void mostrarCartasParaTirar() throws RemoteException {
+        ArrayList<String> cartas = controlador.obtenerCartasDisponibles();
+        println("\n");
+        for(int i=0; i<cartas.size(); i++){
+            println(i+1 + "- " + cartas.get(i));
+        }
+    }
+
 
     public boolean getBloquearBotones(){
         return bloqBotones;
@@ -407,7 +417,7 @@ public class VistaConsola implements IVistaJuego, IVistaInicio, Serializable {
     }
 
     private void initIcono() {
-        icono = new ImageIcon("icono.jpeg").getImage();
+        icono = new ImageIcon("src/recursos/imagen/icono.jpeg").getImage();
         Image originalImage = icono;
         Image scaledImage = originalImage.getScaledInstance(50, 50, Image.SCALE_SMOOTH);
         icono = new ImageIcon(scaledImage).getImage();

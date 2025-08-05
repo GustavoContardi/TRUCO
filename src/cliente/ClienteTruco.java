@@ -29,7 +29,7 @@ public class ClienteTruco {
 
     // reanuda = true -> es que va a reanudar una partida por terminar
     public ClienteTruco(boolean reanuda) throws RemoteException {
-        ImageIcon iconoOriginal = new ImageIcon("/icono.jpeg");
+        ImageIcon iconoOriginal = new ImageIcon("src/recursos/imagen/icono.jpeg");
         Image imagenRedimensionada = iconoOriginal.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
         ImageIcon icono = new ImageIcon(imagenRedimensionada);
 

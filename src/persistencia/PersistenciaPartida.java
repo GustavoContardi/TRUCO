@@ -34,7 +34,7 @@ public class PersistenciaPartida implements Serializable{
         listaPartidas.add(partida);
 
         try {
-            FileOutputStream fos = new FileOutputStream("partidas.bin");
+            FileOutputStream fos = new FileOutputStream("src/recursos/archivo/partidas.bin");
             var oos = new ObjectOutputStream(fos);
             oos.writeObject(listaPartidas);
             fos.close();
@@ -62,7 +62,7 @@ public class PersistenciaPartida implements Serializable{
         // modifique la lista y la guardo de nuevo, sobreescribo el archivo;
 
         try {
-            FileOutputStream fos = new FileOutputStream("partidas.bin");
+            FileOutputStream fos = new FileOutputStream("src/recursos/archivo/partidas.bin");
             var oos = new ObjectOutputStream(fos);
             oos.writeObject(listaPartidas);
             fos.close();
@@ -86,7 +86,7 @@ public class PersistenciaPartida implements Serializable{
 
     public static ArrayList<Partida> listaPartidasGuardadas(){
         try {
-            FileInputStream fos = new FileInputStream("partidas.bin");
+            FileInputStream fos = new FileInputStream("src/recursos/archivo/partidas.bin");
             var oos = new ObjectInputStream(fos);
             listaPartidas = (ArrayList<Partida>) oos.readObject();
             fos.close();

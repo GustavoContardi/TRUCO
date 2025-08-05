@@ -4,6 +4,7 @@ import enums.EstadoEnvido;
 import enums.EstadoTruco;
 
 import java.io.*;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -14,11 +15,10 @@ public class PersistenciaCantos implements Serializable {
     public PersistenciaCantos() {
     }
 
-    public static String mensajeCantoTruco(EstadoTruco estado){
-        Random random = new Random();
+    public static ArrayList<String> mensajeCantoTruco(){
 
         try {
-            FileInputStream fos = new FileInputStream("Cantos.bin");
+            FileInputStream fos = new FileInputStream("src/recursos/archivo/Cantos.bin");
             var oos = new ObjectInputStream(fos);
             listaCantosGeneral = (ArrayList<ArrayList<String>>) oos.readObject();
             fos.close();
@@ -30,21 +30,13 @@ public class PersistenciaCantos implements Serializable {
             throw new RuntimeException(e);
         }
 
-        switch (estado){
-            case TRUCO -> listaCantos = listaCantosGeneral.get(2);
-            case RE_TRUCO -> listaCantos = listaCantosGeneral.get(3);
-            case VALE_CUATRO ->  listaCantos = listaCantosGeneral.get(4);
-        }
-
-        return listaCantos.get(random.nextInt(listaCantos.size()));
+        return listaCantosGeneral.get(2);
     }
 
-    public static String mensajeCantoTanto(EstadoEnvido estado){
-        Random random = new Random();
-
+    public static ArrayList<String> mensajeCantoReTruco(){
 
         try {
-            FileInputStream fos = new FileInputStream("Cantos.bin");
+            FileInputStream fos = new FileInputStream("src/recursos/archivo/Cantos.bin");
             var oos = new ObjectInputStream(fos);
             listaCantosGeneral = (ArrayList<ArrayList<String>>) oos.readObject();
             fos.close();
@@ -56,23 +48,13 @@ public class PersistenciaCantos implements Serializable {
             throw new RuntimeException(e);
         }
 
-        switch (estado){
-            case ENVIDO -> listaCantos = listaCantosGeneral.get(5);
-            case ENVIDO_DOBLE -> listaCantos = listaCantosGeneral.get(5);
-            case REAL_ENVIDO ->  listaCantos = listaCantosGeneral.get(6);
-            case FALTA_ENVIDO ->  listaCantos = listaCantosGeneral.get(7);
-
-        }
-
-        return listaCantos.get(random.nextInt(listaCantos.size()));
+        return listaCantosGeneral.get(3);
     }
 
-    public static String mensajeCantoQuiero(){
-        Random random = new Random();
-
+    public static ArrayList<String> mensajeCantoValeCuatro(){
 
         try {
-            FileInputStream fos = new FileInputStream("Cantos.bin");
+            FileInputStream fos = new FileInputStream("src/recursos/archivo/Cantos.bin");
             var oos = new ObjectInputStream(fos);
             listaCantosGeneral = (ArrayList<ArrayList<String>>) oos.readObject();
             fos.close();
@@ -84,18 +66,12 @@ public class PersistenciaCantos implements Serializable {
             throw new RuntimeException(e);
         }
 
-        listaCantos = listaCantosGeneral.get(0);
-
-        return listaCantos.get(random.nextInt(listaCantos.size()));
+        return listaCantosGeneral.get(4);
     }
 
-    public static String mensajeCantoNoQuiero(){
-        int numeroALeatorio = 0;
-        Random random = new Random();
-
-
+    public static ArrayList<String> mensajeCantoEnvido(){
         try {
-            FileInputStream fos = new FileInputStream("Cantos.bin");
+            FileInputStream fos = new FileInputStream("src/recursos/archivo/Cantos.bin");
             var oos = new ObjectInputStream(fos);
             listaCantosGeneral = (ArrayList<ArrayList<String>>) oos.readObject();
             fos.close();
@@ -107,16 +83,13 @@ public class PersistenciaCantos implements Serializable {
             throw new RuntimeException(e);
         }
 
-        listaCantos = listaCantosGeneral.get(1);
-
-        return listaCantos.get(random.nextInt(listaCantos.size()));
+        return listaCantosGeneral.get(5);
     }
 
-    public static String mensajeCantoFlor(){
-        Random random = new Random();
+    public static ArrayList<String> mensajeCantoRealEnvido(){
 
         try {
-            FileInputStream fos = new FileInputStream("Cantos.bin");
+            FileInputStream fos = new FileInputStream("src/recursos/archivo/Cantos.bin");
             var oos = new ObjectInputStream(fos);
             listaCantosGeneral = (ArrayList<ArrayList<String>>) oos.readObject();
             fos.close();
@@ -128,16 +101,13 @@ public class PersistenciaCantos implements Serializable {
             throw new RuntimeException(e);
         }
 
-        listaCantos = listaCantosGeneral.get(8);
-
-        return listaCantos.get(random.nextInt(listaCantos.size()));
+        return listaCantosGeneral.get(6);
     }
 
-    public static String mensajeCantoContraFlor(){
-        Random random = new Random();
+    public static ArrayList<String> mensajeCantoFaltaEnvido(){
 
         try {
-            FileInputStream fos = new FileInputStream("Cantos.bin");
+            FileInputStream fos = new FileInputStream("src/recursos/archivo/Cantos.bin");
             var oos = new ObjectInputStream(fos);
             listaCantosGeneral = (ArrayList<ArrayList<String>>) oos.readObject();
             fos.close();
@@ -149,16 +119,14 @@ public class PersistenciaCantos implements Serializable {
             throw new RuntimeException(e);
         }
 
-        listaCantos = listaCantosGeneral.get(9);
-
-        return listaCantos.get(random.nextInt(listaCantos.size()));
+        return listaCantosGeneral.get(7);
     }
 
-    public static String mensajeCantoContraFlorResto(){
-        Random random = new Random();
 
+
+    public static ArrayList<String> mensajeCantoQuiero(){
         try {
-            FileInputStream fos = new FileInputStream("Cantos.bin");
+            FileInputStream fos = new FileInputStream("src/recursos/archivo/Cantos.bin");
             var oos = new ObjectInputStream(fos);
             listaCantosGeneral = (ArrayList<ArrayList<String>>) oos.readObject();
             fos.close();
@@ -170,8 +138,77 @@ public class PersistenciaCantos implements Serializable {
             throw new RuntimeException(e);
         }
 
-        listaCantos = listaCantosGeneral.get(10);
+        return listaCantosGeneral.get(0);
+   }
 
-        return listaCantos.get(random.nextInt(listaCantos.size()));
+    public static ArrayList<String> mensajeCantoNoQuiero(){
+        try {
+            FileInputStream fos = new FileInputStream("src/recursos/archivo/Cantos.bin");
+            var oos = new ObjectInputStream(fos);
+            listaCantosGeneral = (ArrayList<ArrayList<String>>) oos.readObject();
+            fos.close();
+        } catch (FileNotFoundException e) {
+            return null;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
+        return listaCantosGeneral.get(1);
+    }
+
+    public static ArrayList<String> mensajeCantoFlor(){;
+
+        try {
+            FileInputStream fos = new FileInputStream("src/recursos/archivo/Cantos.bin");
+            var oos = new ObjectInputStream(fos);
+            listaCantosGeneral = (ArrayList<ArrayList<String>>) oos.readObject();
+            fos.close();
+        } catch (FileNotFoundException e) {
+            return null;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
+        return listaCantosGeneral.get(8);
+    }
+
+    public static ArrayList<String> mensajeCantoContraFlor(){
+
+        try {
+            FileInputStream fos = new FileInputStream("src/recursos/archivo/Cantos.bin");
+            var oos = new ObjectInputStream(fos);
+            listaCantosGeneral = (ArrayList<ArrayList<String>>) oos.readObject();
+            fos.close();
+        } catch (FileNotFoundException e) {
+            return null;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
+        return listaCantosGeneral.get(9);
+    }
+
+    public static ArrayList<String> mensajeCantoContraFlorResto(){
+
+        try {
+            FileInputStream fos = new FileInputStream("src/recursos/archivo/Cantos.bin");
+            var oos = new ObjectInputStream(fos);
+            listaCantosGeneral = (ArrayList<ArrayList<String>>) oos.readObject();
+            fos.close();
+        } catch (FileNotFoundException e) {
+            return null;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
+        return listaCantosGeneral.get(10);
     }
 }

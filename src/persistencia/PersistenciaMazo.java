@@ -14,7 +14,7 @@ public class PersistenciaMazo implements Serializable {
 
     public static Mazo recuperarMazo(){
         try {
-            FileInputStream fos = new FileInputStream("mazoDeCartas.bin");
+            FileInputStream fos = new FileInputStream("src/recursos/archivo/mazoDeCartas.bin");
             var oos = new ObjectInputStream(fos);
             mazo = (Mazo) oos.readObject();
             fos.close();

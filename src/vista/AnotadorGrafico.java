@@ -106,7 +106,7 @@ public class AnotadorGrafico implements Serializable {
     }
 
     private void initIcono() {
-        icono = new ImageIcon("icono.jpeg").getImage();
+        icono = new ImageIcon("src/recursos/imagen/icono.jpeg").getImage();
         Image originalImage = icono;
         Image scaledImage = originalImage.getScaledInstance(50, 50, Image.SCALE_SMOOTH);
         icono = new ImageIcon(scaledImage).getImage();

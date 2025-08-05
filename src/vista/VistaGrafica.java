@@ -129,7 +129,11 @@ public class VistaGrafica implements IVistaJuego, Serializable {
 
     @Override
     public void mostrarMensaje(String msj) {
-        accionesJ2.setText(msj);
+        try {
+            accionesJ2.setText(controlador.getNombreRival() + ": " + msj);
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
@@ -505,7 +509,7 @@ public class VistaGrafica implements IVistaJuego, Serializable {
 
     @Override
     public void actualizar() throws RemoteException {
-        String basePath = "fotocartas/";
+        String basePath = "src/recursos/imagen/fotocartas/";
         int ronda = controlador.nroDeRonda();
         btnCarta1.removeAll();
         btnCarta2.removeAll();
@@ -544,7 +548,7 @@ public class VistaGrafica implements IVistaJuego, Serializable {
     public void meTiraronCarta(String carta) throws RemoteException {
 
         int ronda = controlador.nroDeRonda();
-        String basePath = "fotocartas/";
+        String basePath = "src/recursos/imagen/fotocartas/";
         String carta1 = carta.replace(" ", "").toLowerCase();
         String img = basePath + carta1 + ".jpeg";
         ImageIcon imageIcon = createResizedImageIcon(img, 160, 170);
@@ -625,7 +629,7 @@ public class VistaGrafica implements IVistaJuego, Serializable {
         frameEspera.setIconImage(icono);
         frameEspera.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-        ImageIcon esperando = new ImageIcon("esperandoContrincante.jpeg");
+        ImageIcon esperando = new ImageIcon("src/recursos/imagen/esperandoContrincante.jpeg");
         //accionesJ2.setText("Esperando contrincante...");
         Image img = esperando.getImage().getScaledInstance(520, 380, Image.SCALE_SMOOTH);
 
@@ -998,7 +1002,7 @@ public class VistaGrafica implements IVistaJuego, Serializable {
     private void mostrarCartasTiradas() throws RemoteException {
         // aca tengo que mostrar las cartas que se tiraron cuando reanudo la partida (si es que se tiraron)
 
-        String basePath                 = "fotocartas/";
+        String basePath                 = "src/recursos/imagen/fotocartas/";
         String cartaAux                 = " ";
         ArrayList<String> cartasYo      = controlador.getCartasTiradasYo();
         ArrayList<String> cartasRival   = controlador.getCartasTiradasRival();
@@ -1166,7 +1170,7 @@ public class VistaGrafica implements IVistaJuego, Serializable {
     }
 
     private void initIcono() {
-        icono = new ImageIcon("icono.jpeg").getImage();
+        icono = new ImageIcon("src/recursos/imagen/icono.jpeg").getImage();
         Image originalImage = icono;
         Image scaledImage = originalImage.getScaledInstance(50, 50, Image.SCALE_SMOOTH);
         icono = new ImageIcon(scaledImage).getImage();

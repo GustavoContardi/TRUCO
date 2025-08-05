@@ -42,6 +42,8 @@ public interface IModelo extends IObservableRemoto {
     boolean cantaronFaltaEnvido() throws RemoteException;
     String getCantoTanto() throws RemoteException;
     String getCantoTruco() throws RemoteException;
+    String getCantoQuiero() throws RemoteException;
+    String getCantoNoQuiero() throws RemoteException;
     String getCantoFlor() throws RemoteException;
     int getQuienCantoTruco() throws RemoteException;
     int getQuienCantoReTruco() throws RemoteException;
@@ -88,9 +90,11 @@ public interface IModelo extends IObservableRemoto {
     boolean setPartidaRecuperada() throws RemoteException;
     void actualizarListaJugadores() throws RemoteException;
     ArrayList<Jugador> getJugadores() throws RemoteException;
+    boolean seUnioJugador(int idJugador)throws RemoteException;
     boolean getSeJuegaConFlor() throws RemoteException;
     boolean getReanudoJ1() throws RemoteException;
     boolean getReanudoJ2() throws RemoteException;
+    boolean reanudoJugador(int idJugador) throws RemoteException;
     String getNombreJugador(int idJugador) throws RemoteException;
     boolean getSeEstabaCantandoTruco() throws RemoteException;
     boolean getSeEstabaCantandoTanto() throws RemoteException;
