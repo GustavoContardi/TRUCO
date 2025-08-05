@@ -1,11 +1,20 @@
 package modelo;
 
+import enums.EstadoEnvido;
+import enums.EstadoFlor;
+
 import java.io.*;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 
 public class Envido implements Serializable {
     // atributos
-    private         int                 puntosEnvido    ;
+    private         int                 puntosEnvido;
+    private         int                 quienCantoEnvido, quienCantoEnvidoDoble, quienCantoRealEnvido, quienCantoFaltaEnvido;
+    private         int                 quienCantoFlor;
+    private         boolean             cantoEnvido, cantoEnvidoDoble,cantoRealEnvido, cantoFaltaEnvido;
+    private         EstadoEnvido        estadoEnvido;
+    private         EstadoFlor          estadoDeLaFlor;
     private static  ArrayList<Integer>  jerarquiaCartas  = new ArrayList<>();
 
     // constructor
@@ -14,7 +23,18 @@ public class Envido implements Serializable {
         recuperarListaJerarquia();
     }
 
+    //
     // metodos publicos
+    //
+
+    // este metodo se ejecuta cuando hay una mano nueva y reseteo los valores
+    public void resetValores(){
+        estadoEnvido = EstadoEnvido.NADA;
+        cantoEnvido             = false;
+        cantoEnvidoDoble        = false;
+        cantoRealEnvido         = false;
+        cantoFaltaEnvido        = false;
+    }
 
     // calcula los puntos del envido segun que cartas iguales tiene el jugador
     public int calcularPuntosEnvido(ArrayList<Carta> cartasJugador) {
@@ -55,7 +75,179 @@ public class Envido implements Serializable {
         return puntos;
     }
 
+    public int calcularPuntajeEnvidoQuerido(int puntosMaximos, int puntosJ1, int puntosJ2) throws RemoteException {
+        int puntos = 0;
+
+        // si algun jugador esta en las "malas" (< 15 puntos) el falta envido es por el partido, sino es por los puntos que le faltan al que mas cerca este de ganar
+        if(cantoFaltaEnvido){
+            if(puntosJ1 < 15 && puntosJ2 < 15) puntos = 30;
+            else puntos = puntosMaximos;
+
+            return puntos;
+        }
+
+        if(cantoEnvido){
+            puntos += 2;
+            if(cantoEnvidoDoble){
+                puntos += 2;
+                if(cantoRealEnvido){
+                    puntos += 3;
+                }
+            }
+            else if(cantoRealEnvido){
+                puntos += 3;
+            }
+        }
+        else if(cantoRealEnvido){
+            puntos += 3;
+        }
+
+        return puntos;
+    }
+
+    public int calcularEnvidoNoQuerido() throws RemoteException{
+        int puntos = 0;
+
+        if(cantoEnvido){
+            puntos += 1;
+            if(cantoEnvidoDoble){
+                puntos += 1;
+                if(cantoRealEnvido){
+                    puntos += 2;
+                    if(cantoFaltaEnvido) puntos += 3;
+                }
+            }
+            else if (cantoRealEnvido){
+                puntos += 1;
+                if(cantoFaltaEnvido) puntos += 3;
+            }
+            else if(cantoFaltaEnvido) puntos += 1;
+        }
+        else if(cantoRealEnvido){
+            puntos += 1;
+            if(cantoFaltaEnvido) puntos += 2;
+        }
+        else puntos = 1;
+
+        return puntos;
+    }
+
+    public int calcularPuntajeFlorQuerida(int puntosParaGanar){
+        int puntos = 0;
+
+        switch (estadoDeLaFlor){
+            case FLOR -> puntos = 3;
+            case CONTRA_FLOR -> puntos = 6;
+            case CONTRA_FLOR_AL_RESTO  -> puntos = puntosParaGanar;
+        }
+
+        return puntos;
+    }
+
+    public int calcularPuntajeFlorNoQuerida(){
+        int puntos = 0;
+
+        switch (estadoDeLaFlor){
+            case FLOR -> puntos = 3;
+            case CONTRA_FLOR -> puntos = 4;
+            case CONTRA_FLOR_AL_RESTO  -> puntos = 6;
+        }
+
+        return puntos;
+    }
+
+    public void seCantoEnvido(){
+        cantoEnvido = true;
+    }
+
+    public void seCantoEnvidoDoble(){
+        cantoEnvidoDoble = true;
+    }
+
+    public void seCantoRealEnvido(){
+        cantoRealEnvido = true;
+    }
+
+    public void seCantoFaltaEnvido(){
+        cantoFaltaEnvido = true;
+    }
+
     //
+    // sets y gets
+    //
+
+    public int getQuienCantoEnvido() {
+        return quienCantoEnvido;
+    }
+
+    public int getQuienCantoEnvidoDoble() {
+        return quienCantoEnvidoDoble;
+    }
+
+    public int getQuienCantoRealEnvido() {
+        return quienCantoRealEnvido;
+    }
+
+    public int getQuienCantoFaltaEnvido() {
+        return quienCantoFaltaEnvido;
+    }
+
+    public boolean getCantoEnvido() {
+        return cantoEnvido;
+    }
+
+    public boolean getCantoEnvidoDoble() {
+        return cantoEnvidoDoble;
+    }
+
+    public boolean getCantoRealEnvido() {
+        return cantoRealEnvido;
+    }
+
+    public boolean getCantoFaltaEnvido() {
+        return cantoFaltaEnvido;
+    }
+
+    public EstadoEnvido getEstadoEnvido() {
+        return estadoEnvido;
+    }
+
+    public int getQuienCantoFlor(){
+        return quienCantoFlor;
+    }
+
+    public EstadoFlor getEstadoDeLaFlor(){
+        return estadoDeLaFlor;
+    }
+
+    public void setQuienCantoEnvido(int quienCantoEnvido) {
+        this.quienCantoEnvido = quienCantoEnvido;
+    }
+
+    public void setQuienCantoEnvidoDoble(int quienCantoEnvidoDoble) {
+        this.quienCantoEnvidoDoble = quienCantoEnvidoDoble;
+    }
+
+    public void setQuienCantoRealEnvido(int quienCantoRealEnvido) {
+        this.quienCantoRealEnvido = quienCantoRealEnvido;
+    }
+
+    public void setQuienCantoFaltaEnvido(int quienCantoFaltaEnvido) {
+        this.quienCantoFaltaEnvido = quienCantoFaltaEnvido;
+    }
+
+    public void setEstadoEnvido(EstadoEnvido estadoEnvido) {
+        this.estadoEnvido = estadoEnvido;
+    }
+
+    public void setQuienCantoFlor(int quienCantoFlor){
+        this.quienCantoFlor = quienCantoFlor;
+    }
+
+    public void setEstadoDeLaFlor(EstadoFlor estado){
+        estadoDeLaFlor = estado;
+    }
+
     // metodos privados
     //
 

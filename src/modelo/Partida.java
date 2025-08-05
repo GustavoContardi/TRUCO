@@ -38,19 +38,9 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
     private     int                 idPartida;
     private     Anotador            anotador;
     private     ArrayList<Carta>    cartasJ1, cartasJ2;
-    private     int                 quienCantoTruco;
-    private     int                 quienCantoReTruco;
-    private     int                 quienCantoEnvido;
+    private     int                 quienCantoTruco, quienCantoReTruco,quienCantoValeCuatro;
     private     int                 puntosRabon;
-    private     int                 quienCantoEnvidoDoble;
-    private     int                 quienCantoRealEnvido;
-    private     int                 quienCantoFaltaEnvido;
-    private     int                 quienCantoValeCuatro;
-    private     int                 quienCantoFlor;
     private     EstadoTruco         estadoDelTruco;
-    private     EstadoEnvido        estadoDelEnvido;
-    private     EstadoFlor          estadoDeLaFlor;
-    private     boolean             cantoEnvido, cantoEnvidoDoble,cantoRealEnvido, cantoFaltaEnvido;
     private     int                 puntajeRondaJ1, puntajeRondaJ2;
     private     int                 idJugadorNoQuizoCanto, idJugadorQuiereCantar;
     private     String              resultadoTanto;
@@ -60,6 +50,7 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
     private     int                 idJugadorSalio, idUltimoJugCanto;
     private     boolean             seEstabaCantandoEnvido, seEstabaCantandoTruco, seEstabaCantandoFlor; // banderas para saber si se estaba cantando algo antes de que se posponga la partida
     private     Mesa                mesa;
+    private     Envido              envido;
 
 
     //               \\
@@ -76,6 +67,7 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
         reanudoJ1        =  false;
         reanudoJ2        =  false;
         primeraMano      =  true;
+        envido           =  new Envido();
         mesa             =  new Mesa(); // esto es para que no pinche, despues se crea bien con el otro constructor.
     }
 
@@ -102,19 +94,12 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
 
         if (mesa.esFinDeMano()){
             if(!esFinDePartida()){
-                estadoDelTruco          = EstadoTruco.NADA;
-                estadoDelEnvido         = EstadoEnvido.NADA;
                 puntajeRondaJ1          = 0;
                 puntajeRondaJ2          = 0;
                 quienCantoTruco         = 0;
                 quienCantoReTruco       = 0;
+                quienCantoValeCuatro    = 0;
                 puntosRabon             = 0;
-                cantoEnvido             = false;
-                cantoEnvidoDoble        = false;
-                cantoRealEnvido         = false;
-                cantoFaltaEnvido        = false;
-                cartasJ1                = new ArrayList<>();
-                cartasJ2                = new ArrayList<>();
                 idJugadorNoQuizoCanto   = 0;
                 idJugadorQuiereCantar   = 0;
                 idJugadorSalio          = 0;
@@ -122,6 +107,10 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
                 seEstabaCantandoEnvido  = false;
                 seEstabaCantandoTruco   = false;
                 seEstabaCantandoFlor    = false;
+                cartasJ1                = new ArrayList<>();
+                cartasJ2                = new ArrayList<>();
+                estadoDelTruco          = EstadoTruco.NADA;
+                envido.resetValores();
 
                 mesa.setFinDeMano(false);
                 j1.devolverCartas();
@@ -245,7 +234,7 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
 
         switch(estado){ // el estado es el que se tiene que cantar no el actual
             case TRUCO ->{
-                cantoEnvido = true;
+                envido.seCantoEnvido();
                 quienCantoTruco = idJugadorCanto;
                 evento = CANTO_TRUCO;
                 estadoDelTruco = TRUCO;
@@ -273,27 +262,27 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
 
         switch (estado){
             case ENVIDO -> {
-                quienCantoEnvido = idJugadorCanto;
-                estadoDelEnvido = ENVIDO;
-                cantoEnvido = true;
+                envido.setQuienCantoEnvido(idJugadorCanto);
+                envido.setEstadoEnvido(ENVIDO);
+                envido.seCantoEnvido();
                 evento = CANTO_ENVIDO;
             }
             case ENVIDO_DOBLE -> {
-                quienCantoEnvidoDoble = idJugadorCanto;
-                estadoDelEnvido = ENVIDO_DOBLE;
-                cantoEnvidoDoble = true;
+                envido.setQuienCantoEnvidoDoble(idJugadorCanto);
+                envido.setEstadoEnvido(ENVIDO_DOBLE);
+                envido.seCantoEnvidoDoble();
                 evento = CANTO_ENVIDO_DOBLE;
             }
             case REAL_ENVIDO -> {
-                quienCantoRealEnvido = idJugadorCanto;
-                estadoDelEnvido = REAL_ENVIDO;
-                cantoRealEnvido = true;
+                envido.setQuienCantoRealEnvido(idJugadorCanto);
+                envido.setEstadoEnvido(REAL_ENVIDO);
+                envido.seCantoRealEnvido();
                 evento = CANTO_REAL_ENVIDO;
             }
             case FALTA_ENVIDO -> {
-                quienCantoFaltaEnvido = idJugadorCanto;
-                estadoDelEnvido = FALTA_ENVIDO;
-                cantoFaltaEnvido = true;
+                envido.setQuienCantoFaltaEnvido(idJugadorCanto);
+                envido.setEstadoEnvido(ENVIDO);
+                envido.seCantoEnvido();
                 evento = CANTO_FALTA_ENVIDO;
             }
         }
@@ -305,21 +294,21 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
     @Override
     public void cantarFlor(int id, EstadoFlor estado) throws RemoteException {
         Eventos evento = NADA;
-        cantoEnvido = true; // la FLOR anula el envido por REGLA
-        quienCantoFlor = id;
+        envido.seCantoEnvido(); // la FLOR anula el envido por REGLA
+        envido.setQuienCantoFlor(id);
 
         switch (estado){
             case FLOR -> {
                 evento = CANTO_FLOR;
-                estadoDeLaFlor = FLOR;
+                envido.setEstadoDeLaFlor(FLOR);
             }
             case CONTRA_FLOR -> {
                 evento = CANTO_CONTRAFLOR;
-                estadoDeLaFlor = CONTRA_FLOR;
+                envido.setEstadoDeLaFlor(CONTRA_FLOR);
             }
             case CONTRA_FLOR_AL_RESTO -> {
                 evento = CANTO_CONTRAFLOR_ALRESTO;
-                estadoDeLaFlor = CONTRA_FLOR_AL_RESTO;
+                envido.setEstadoDeLaFlor(CONTRA_FLOR_AL_RESTO);
             }
         }
 
@@ -442,7 +431,7 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
 
     @Override
     public void tantoNoQuerido(int idjugNoQuizo) throws RemoteException {
-        int puntos = calcularEnvidoNoQuerido();
+        int puntos = envido.calcularEnvidoNoQuerido();
 
         if(idjugNoQuizo == j1.getIDJugador()) anotador.sumarPuntosJ2(puntos);
         else if(idjugNoQuizo == j2.getIDJugador()) anotador.sumarPuntosJ1(puntos);
@@ -480,7 +469,7 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
 
     @Override
     public void florQuerida(int idjugQuizo) throws RemoteException {
-        int puntos = calcularPuntajeFlorQuerida();
+        int puntos = envido.calcularPuntajeFlorQuerida(puntosParaGanar);
 
         if(j1.puntosFlor() > j2.puntosFlor()) {
             anotador.sumarPuntosJ1(puntos);
@@ -512,7 +501,7 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
     @Override
     public void florNoQuerida(int idjugNoQuizo) throws RemoteException {
 
-        int puntos = calcularPuntajeFlorNoQuerida();
+        int puntos = envido.calcularPuntajeFlorNoQuerida();
 
         if(idjugNoQuizo == j1.getIDJugador()) anotador.sumarPuntosJ2(puntos);
         else if(idjugNoQuizo == j2.getIDJugador()) anotador.sumarPuntosJ1(puntos);
@@ -618,12 +607,12 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
 
     @Override
     public EstadoEnvido estadoTanto() throws RemoteException {
-        return estadoDelEnvido;
+        return envido.getEstadoEnvido();
     }
 
     @Override
     public EstadoFlor estadoFlor() throws RemoteException {
-        return estadoDeLaFlor;
+        return envido.getEstadoDeLaFlor();
     }
 
     @Override
@@ -660,30 +649,30 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
 
     @Override
     public boolean cantaronEnvido() throws RemoteException {
-        return cantoEnvido;
+        return envido.getCantoEnvido();
     }
 
     @Override
     public boolean cantaronEnvidoDoble() throws RemoteException {
-        return cantoRealEnvido;
+        return envido.getCantoEnvidoDoble();
     }
 
     @Override
     public boolean cantaronRealEnvido() throws RemoteException {
-        return cantoRealEnvido;
+        return envido.getCantoRealEnvido();
     }
 
     @Override
     public boolean cantaronFaltaEnvido() throws RemoteException {
-        return cantoFaltaEnvido;
+        return envido.getCantoFaltaEnvido();
     }
 
     @Override
     public String getCantoTanto() throws RemoteException {
-        if(estadoDelEnvido == ENVIDO) return PersistenciaCantos.mensajeCantoTanto(ENVIDO);
-        else if(estadoDelEnvido == ENVIDO_DOBLE) return PersistenciaCantos.mensajeCantoTanto(ENVIDO_DOBLE);
-        else if(estadoDelEnvido == REAL_ENVIDO) return PersistenciaCantos.mensajeCantoTanto(REAL_ENVIDO);
-        else if(estadoDelEnvido == FALTA_ENVIDO) return PersistenciaCantos.mensajeCantoTanto(FALTA_ENVIDO);
+        if(envido.getEstadoEnvido() == ENVIDO) return PersistenciaCantos.mensajeCantoTanto(ENVIDO);
+        else if(envido.getEstadoEnvido() == ENVIDO_DOBLE) return PersistenciaCantos.mensajeCantoTanto(ENVIDO_DOBLE);
+        else if(envido.getEstadoEnvido() == REAL_ENVIDO) return PersistenciaCantos.mensajeCantoTanto(REAL_ENVIDO);
+        else if(envido.getEstadoEnvido() == FALTA_ENVIDO) return PersistenciaCantos.mensajeCantoTanto(FALTA_ENVIDO);
         return "null";
     }
 
@@ -697,8 +686,8 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
 
     @Override
     public String getCantoFlor() throws RemoteException {
-        if(estadoDeLaFlor == CONTRA_FLOR) return PersistenciaCantos.mensajeCantoContraFlor();
-        else if(estadoDeLaFlor == CONTRA_FLOR_AL_RESTO) return PersistenciaCantos.mensajeCantoContraFlorResto();
+        if(envido.getEstadoDeLaFlor() == CONTRA_FLOR) return PersistenciaCantos.mensajeCantoContraFlor();
+        else if(envido.getEstadoDeLaFlor() == CONTRA_FLOR_AL_RESTO) return PersistenciaCantos.mensajeCantoContraFlorResto();
         return "null";
     }
 
@@ -737,27 +726,27 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
 
     @Override
     public int getQuienCantoEnvido() throws RemoteException{
-        return quienCantoEnvido;
+        return envido.getQuienCantoEnvido();
     }
 
     @Override
     public int getQuienCantoEnvidoDoble() throws RemoteException{
-        return quienCantoEnvidoDoble;
+        return  envido.getQuienCantoEnvidoDoble();
     }
 
     @Override
     public int getQuienCantoRealEnvido() throws RemoteException{
-        return quienCantoRealEnvido;
+        return envido.getQuienCantoRealEnvido();
     }
 
     @Override
     public int getQuienCantoFaltaEnvido() throws RemoteException{
-        return quienCantoFaltaEnvido;
+        return envido.getQuienCantoFaltaEnvido();
     }
 
     @Override
     public int getQuienCantoFlor() throws RemoteException {
-        return quienCantoFlor;
+        return envido.getQuienCantoFlor();
     }
 
     @Override
@@ -998,95 +987,20 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
 
     // me calcula cuantos puntos gana el que ganó el envido según que se cantó
     private int calcularPuntajeEnvidoQuerido() throws RemoteException{
-        int puntos = 0;
         int maximoPuntos = 1;
 
         if(anotador.getPuntosJ2() > anotador.getPuntosJ1()) maximoPuntos = 30 - anotador.getPuntosJ2();
         else maximoPuntos = 30 - anotador.getPuntosJ1();
 
-        if(cantoFaltaEnvido){
-            if(anotador.getPuntosJ2() < 15 && anotador.getPuntosJ1() < 15) puntos = 30;
-            else puntos = maximoPuntos;
-
-            return puntos;
-        }
-
-        if(cantoEnvido){
-            puntos += 2;
-            if(cantoEnvidoDoble){
-                puntos += 2;
-                if(cantoRealEnvido){
-                    puntos += 3;
-                }
-            }
-            else if(cantoRealEnvido){
-                puntos += 3;
-            }
-        }
-        else if(cantoRealEnvido){
-            puntos += 3;
-        }
-
-        return puntos;
+        return envido.calcularPuntajeEnvidoQuerido(maximoPuntos, anotador.getPuntosJ1(), anotador.getPuntosJ2());
     }
 
-    // Se canto el envido y se dijo que no, calcula cuantos puntos son para el que canto (contrario al que dijo que no)
-    private int calcularEnvidoNoQuerido() throws RemoteException{
-        int puntos = 0;
-
-        if(cantoEnvido){
-            puntos += 1;
-            if(cantoEnvidoDoble){
-                puntos += 1;
-                if(cantoRealEnvido){
-                    puntos += 2;
-                    if(cantoFaltaEnvido) puntos += 3;
-                }
-            }
-            else if (cantoRealEnvido){
-                puntos += 1;
-                if(cantoFaltaEnvido) puntos += 3;
-            }
-            else if(cantoFaltaEnvido) puntos += 1;
-        }
-        else if(cantoRealEnvido){
-            puntos += 1;
-            if(cantoFaltaEnvido) puntos += 2;
-        }
-        else puntos = 1;
-
-        return puntos;
-    }
-
-    private int calcularPuntajeFlorQuerida(){
-        int puntos = 0;
-
-        switch (estadoDeLaFlor){
-            case FLOR -> puntos = 3;
-            case CONTRA_FLOR -> puntos = 6;
-            case CONTRA_FLOR_AL_RESTO  -> puntos = puntosParaGanar;
-        }
-
-        return puntos;
-    }
-
-    private int calcularPuntajeFlorNoQuerida(){
-        int puntos = 0;
-
-        switch (estadoDeLaFlor){
-            case FLOR -> puntos = 3;
-            case CONTRA_FLOR -> puntos = 4;
-            case CONTRA_FLOR_AL_RESTO  -> puntos = 6;
-        }
-
-        return puntos;
-    }
 
     private int calcularPuntosTruco(){
         int puntos = 0;
 
         // por reglas si se va al mazo en la primer mano sin cantar nada son 2 puntos para el contrario
-        if(mesa.getNroRonda() == 1 && !cantoEnvido) puntos = 2;
+        if(mesa.getNroRonda() == 1 && !envido.getCantoEnvido()) puntos = 2;
         //si no es primera ronda o si se canto envido entra en el de abajo
         else if(estadoDelTruco == EstadoTruco.NADA) puntos = 1;
         else if(estadoDelTruco == TRUCO) puntos = 2;

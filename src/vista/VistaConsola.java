@@ -344,8 +344,6 @@ public class VistaConsola implements IVistaJuego, IVistaInicio, Serializable {
         if (controlador != null) {
             ArrayList<String> cartasYo = controlador.getCartasTiradasYo();
             ArrayList<String> cartasRival = controlador.getCartasTiradasRival();
-            System.out.println("cartas tiradas yo: " + cartasYo);
-            System.out.println("cartas tiradas rival: " + cartasRival);
 
             println(controlador.puntajeActual());
 
