@@ -88,8 +88,8 @@ public class Jugador implements Comparable<Jugador>, Serializable{
     // muestra los atributos del jugador, mas que nada para el 'TOP MAS GANADORES' y para mostrarlo cuando lo eligen en una partida
     @Override
     public String toString(){
-        if (electo) return nombre + " | " + "ID: " + IDJugador + " | WINS: " + partidasGanadas + " | NO DISPONIBLE (ELEGIDO)";
-        return nombre + " | " + "ID: " + IDJugador + " | WINS: " + partidasGanadas;
+        if (electo) return nombre + " | " + "ID: " + IDJugador + " | VICTORIAS: " + partidasGanadas + " | NO DISPONIBLE (ELEGIDO)";
+        return nombre + " | " + "ID: " + IDJugador + " | VICTORIAS: " + partidasGanadas;
     }
 
     //

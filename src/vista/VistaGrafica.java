@@ -82,7 +82,7 @@ public class VistaGrafica implements IVistaJuego, Serializable {
                     // Cierra la ventana si el usuario confirma
                     try {
                         controlador.salirDeLaPartida();
-                        frame.dispose();
+                        System.exit(0);
                     } catch (RemoteException ex) {
                         ex.printStackTrace();
                     }

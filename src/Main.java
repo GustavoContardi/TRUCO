@@ -26,14 +26,11 @@ public class Main {
     public static void main(String[] args) throws RemoteException {
         // MAIN \\
 
-        //PersistenciaJugador.delvolverTodosJugadores();
+        PersistenciaJugador.delvolverTodosJugadores();
         VistaInicio inicio = new VistaInicio();
-        VistaInicio inicio2 = new VistaInicio();
 
         // ACORDARSE A LO ULTIMO PONER LAS PANTALLAS DE CARGA
-        inicio.iniciar();
-        //inicio2.iniciar();
-
+        inicio.iniciarConPantallaCarga();
 
     }
 }

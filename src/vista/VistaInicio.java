@@ -95,6 +95,19 @@ public class VistaInicio extends JFrame {
         JList<String> list = new JList<>();
         DefaultListModel<String> listModel = new DefaultListModel<>();
         list.setModel(listModel);
+
+        // Agregar espaciado vertical entre ítems
+        list.setCellRenderer(new DefaultListCellRenderer() {
+            @Override
+            public Component getListCellRendererComponent(JList<?> list, Object value, int index,
+                                                          boolean isSelected, boolean cellHasFocus) {
+                JLabel label = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+                label.setFont(new Font("Monospaced", Font.PLAIN, 13));
+                label.setBorder(BorderFactory.createEmptyBorder(7, 5, 7, 5)); // espacio vertical
+                return label;
+            }
+        });
+
         JScrollPane scroll = new JScrollPane(list); // Agregar el JList al JScrollPane
 
         frame2.setContentPane(ventana);
