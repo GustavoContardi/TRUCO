@@ -1019,7 +1019,7 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
     private void notificarEvento(Eventos e) throws RemoteException {
         notificarObservadores(e);
         // sino me guarda la partida innecesariamente cuando se une un jugador
-        if(primeraMano) guardarPartida(); // guardo la partida aca porque actualizan cosas que necesito persistir en cada actualizacion
+        if(!primeraMano) guardarPartida(); // guardo la partida aca porque actualizan cosas que necesito persistir en cada actualizacion
     }
 
 
