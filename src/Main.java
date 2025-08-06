@@ -15,7 +15,7 @@ public class Main {
 
         // ACORDARSE A LO ULTIMO PONER LAS PANTALLAS DE CARGA
         inicio.iniciar();
-        inicio2.iniciar();
+        //inicio2.iniciar();
 
     }
 }

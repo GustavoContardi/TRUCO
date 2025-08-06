@@ -36,8 +36,8 @@ public class VistaEleccion implements IVistaEleccion {
 
     public VistaEleccion() throws RemoteException {
         this.frame = new JFrame("App Truco");
-        frame.setLocationRelativeTo(null);
         frame.setContentPane(ventana);
+        frame.setLocationRelativeTo(null);
         frame.setSize(600, 450);
         frame.setResizable(false);
 

@@ -30,8 +30,8 @@ public class VistaInicio extends JFrame {
     private ImageIcon icono2; // este es para los seleccionar
 
     public VistaInicio() {
-        setLocationRelativeTo(null);
         setContentPane(panel1);
+        setLocationRelativeTo(null);
         setSize(450, 460);
         setTitle("Menú principal - Truco");
         setResizable(false);

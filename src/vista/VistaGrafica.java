@@ -55,8 +55,8 @@ public class VistaGrafica implements IVistaJuego, Serializable {
 
     public VistaGrafica() throws RemoteException {
         this.frame = new JFrame("TRUCO");
-        frame.setLocationRelativeTo(null);
         frame.setContentPane(ventana);
+        frame.setLocationRelativeTo(null);
         frame.pack();
         frame.setSize(765, 815);
         frame.setResizable(false);
@@ -614,6 +614,7 @@ public class VistaGrafica implements IVistaJuego, Serializable {
         bloquearBotones();
 
         frameEspera.setSize(520, 380);
+        frameEspera.setResizable(false);
         JPanel panelPrincipal = (JPanel) frameEspera.getContentPane();
         panelPrincipal.setLayout(new FlowLayout());
         frameEspera.setIconImage(icono);
