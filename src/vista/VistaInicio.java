@@ -142,6 +142,7 @@ public class VistaInicio extends JFrame {
 
         // EVENTOS
 
+        btnCrearNuevo.setText("  JUGAR AL TRUCO  ");
         btnCrearNuevo.addActionListener(e -> {
             setBotonesJugar();
         });
@@ -178,7 +179,7 @@ public class VistaInicio extends JFrame {
             }
         });
 
-        btnTop.setText("REANUDAR UNA PARTIDA");
+        btnTop.setText("CARGAR UNA PARTIDA");
         btnTop.addActionListener(e -> {
             reanudarPartida();
         });
