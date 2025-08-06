@@ -125,7 +125,7 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
             }
             else finDePartida();
         }
-        if(!primeraMano) guardarPartida(); // sino me guarda la partida cuando solo se une 1 solo jugador totalmente innecesario
+        guardarPartida(); // sino me guarda la partida cuando solo se une 1 solo jugador totalmente innecesario
         PersistenciaJugador.delvolverTodosJugadores(); // devuelvo por si quieren jugar otra partida, ya quedan guardados porque se guarda la partida.
         notificarEvento(NUEVA_RONDA);
         primeraMano = false;
