@@ -191,6 +191,8 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
             notificarEvento(CARTA_TIRADAJ2);
             mesa.tirarCarta(idJugador, carta);
         }
+        if(mesa.getTurno() == j1.getIDJugador()) System.out.println("turno de: " + j1.getNombre());
+        else if(mesa.getTurno() == j2.getIDJugador()) System.out.println("turno de: " + j2.getNombre());
 
         if(mesa.esFinDeMano()) finDeLaMano();
 

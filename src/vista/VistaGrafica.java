@@ -55,13 +55,13 @@ public class VistaGrafica implements IVistaJuego, Serializable {
 
     public VistaGrafica() throws RemoteException {
         this.frame = new JFrame("TRUCO");
+        frame.setLocationRelativeTo(null);
         frame.setContentPane(ventana);
         frame.pack();
-        frame.setResizable(false);
-        frame.setLocationRelativeTo(null);
         frame.setSize(765, 815);
-        frame.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+        frame.setResizable(false);
         toolBtn.setFloatable(false);
+        frame.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 
         frameEspera = new JFrame("Esperando rival - App Truco");
 
@@ -114,6 +114,7 @@ public class VistaGrafica implements IVistaJuego, Serializable {
         if (cartas != null && (controlador.numeroDeMano() > -1 || controlador.seReanudoPartida())) {
             frame.setVisible(true);
             cerrarEsperaRival();
+            desbloquearBotones();
             actualizar();
             accionesJ2.setText("");
         }
@@ -157,17 +158,6 @@ public class VistaGrafica implements IVistaJuego, Serializable {
         bloquearBotones();
         avisoFinPartida(nombreGanador);
 
-        /*removeBtnActionListener();
-        eliminarTodosAL();
-        removerCartas();
-
-        accionesJ2.setText("Presione cualquier boton para volver al menu..");
-        btnEnvido.setEnabled(false);
-        btnAuxiliar.setEnabled(false);
-        TRUCOButton.setEnabled(false);
-        btnEnvido.setText("");
-        TRUCOButton.setText("");
-        btnAuxiliar.setText("");*/
     }
 
     @Override
@@ -657,93 +647,92 @@ public class VistaGrafica implements IVistaJuego, Serializable {
         if(controlador.seCantoEnvido() || controlador.nroDeRonda() > 1) btnEnvido.setEnabled(false);
         else btnEnvido.setEnabled(true);
 
-        if(controlador.esMiTurno()) {
 
-            btnEnvido.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    try {
-                        if (!controlador.seCantoEnvido()) setBotonesEnvido();
-                    } catch (RemoteException ex) {
-                        ex.printStackTrace();
-                    }
-                }
-            });
-
-            TRUCOButton.setEnabled(true);
-            switch (controlador.estadoDelRabon()) {
-                case NADA -> {
-                    TRUCOButton.setEnabled(true);
-                    TRUCOButton.setText("  TRUCO  ");
-                }
-                case TRUCO -> {
-                    TRUCOButton.setEnabled(true);
-                    TRUCOButton.setText(" RE TRUCO  ");
-                }                                               // activo todos los botones
-                case RE_TRUCO -> {
-                    TRUCOButton.setEnabled(true);
-                    TRUCOButton.setText(" VALE CUATRO ");
-                }
-                case VALE_CUATRO -> {
-                    TRUCOButton.setText(" -- ");
-                    TRUCOButton.setEnabled(false);
+        btnEnvido.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    if (!controlador.seCantoEnvido() && (controlador.esMiTurno())) setBotonesEnvido();
+                } catch (RemoteException ex) {
+                    ex.printStackTrace();
                 }
             }
-            TRUCOButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    try {
-                        switch (controlador.estadoDelRabon()) {
-                            case NADA -> {
-                                if (controlador.esMiTurno() && controlador.puedoCantarTruco()) {
-                                    TRUCOButton.setText("  RE TRUCO  ");
-                                    TRUCOButton.setEnabled(false);
-                                    controlador.cantarRabon(TRUCO);
-                                    setBotones();
-                                    bloquearBotones();
-                                }
-                            }
-                            case TRUCO -> {
-                                if (controlador.esMiTurno() && controlador.puedoCantarTruco()) {
+        });
 
-                                    TRUCOButton.setText("  VALE CUATRO  ");
-                                    TRUCOButton.setEnabled(false);
-                                    controlador.cantarRabon(RE_TRUCO);
-                                    setBotones();
-                                    bloquearBotones();
-                                }
-                            }
-                            case RE_TRUCO -> {
-                                if (controlador.esMiTurno() && controlador.puedoCantarTruco()) {
-
-                                    TRUCOButton.setText("  ---  ");
-                                    TRUCOButton.setEnabled(false);
-                                    controlador.cantarRabon(VALE_CUATRO);
-                                    setBotones();
-                                    bloquearBotones();
-                                }
+        TRUCOButton.setEnabled(true);
+        switch (controlador.estadoDelRabon()) {
+            case NADA -> {
+                TRUCOButton.setEnabled(true);
+                TRUCOButton.setText("  TRUCO  ");
+            }
+            case TRUCO -> {
+                TRUCOButton.setEnabled(true);
+                TRUCOButton.setText(" RE TRUCO  ");
+            }                                               // activo todos los botones
+            case RE_TRUCO -> {
+                TRUCOButton.setEnabled(true);
+                TRUCOButton.setText(" VALE CUATRO ");
+            }
+            case VALE_CUATRO -> {
+                TRUCOButton.setText(" -- ");
+                TRUCOButton.setEnabled(false);
+            }
+        }
+        TRUCOButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    switch (controlador.estadoDelRabon()) {
+                        case NADA -> {
+                            if (controlador.esMiTurno() && controlador.puedoCantarTruco()) {
+                                TRUCOButton.setText("  RE TRUCO  ");
+                                TRUCOButton.setEnabled(false);
+                                controlador.cantarRabon(TRUCO);
+                                setBotones();
+                                bloquearBotones();
                             }
                         }
-                    } catch (RemoteException ex) {
-                        ex.printStackTrace();
-                    }
-                    ;
-                }
-            });
+                        case TRUCO -> {
+                            if (controlador.esMiTurno() && controlador.puedoCantarTruco()) {
 
-            IRALMAZOButton.setText(" IR AL MAZO ");
-            IRALMAZOButton.setEnabled(true);
-            IRALMAZOButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    try {
-                        controlador.meVoyAlMazo();
-                    } catch (RemoteException ex) {
-                        ex.printStackTrace();
+                                TRUCOButton.setText("  VALE CUATRO  ");
+                                TRUCOButton.setEnabled(false);
+                                controlador.cantarRabon(RE_TRUCO);
+                                setBotones();
+                                bloquearBotones();
+                            }
+                        }
+                        case RE_TRUCO -> {
+                            if (controlador.esMiTurno() && controlador.puedoCantarTruco()) {
+
+                                TRUCOButton.setText("  ---  ");
+                                TRUCOButton.setEnabled(false);
+                                controlador.cantarRabon(VALE_CUATRO);
+                                setBotones();
+                                bloquearBotones();
+                            }
+                        }
                     }
+                } catch (RemoteException ex) {
+                    ex.printStackTrace();
                 }
-            });
-        }
+                ;
+            }
+        });
+
+        IRALMAZOButton.setText(" IR AL MAZO ");
+        IRALMAZOButton.setEnabled(true);
+        IRALMAZOButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    if(controlador.esMiTurno()) controlador.meVoyAlMazo();
+                } catch (RemoteException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+
 
         if(controlador.tengoFlor() && controlador.seJuegaConFlor() && controlador.nroDeRonda() == 1){
             btnAuxiliar.setText("  FLOR  ");

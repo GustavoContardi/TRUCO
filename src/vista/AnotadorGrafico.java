@@ -28,10 +28,10 @@ public class AnotadorGrafico implements Serializable {
 
     public AnotadorGrafico(VistaInicio inicio) {
         this.frame = new JFrame("App Truco");
+        frame.setLocationRelativeTo(null);
         frame.setContentPane(ventana);
         frame.pack();
         frame.setResizable(false);
-        frame.setLocationRelativeTo(null);
         frame.setSize(470, 500);
 
         this.inicio = inicio;

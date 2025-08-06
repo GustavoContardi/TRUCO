@@ -9,8 +9,8 @@ public class PantallaCarga extends JWindow {
 
     public PantallaCarga() {
         // Configuración del JWindow
-        setSize(500, 450);
         setLocationRelativeTo(null); // Centrar en la pantalla
+        setSize(500, 450);
 
         // Crear un panel para la pantalla de carga
         JPanel panel = new JPanel();

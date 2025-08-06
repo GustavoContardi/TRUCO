@@ -39,10 +39,10 @@ public class VistaConsola implements IVistaJuego, IVistaInicio, Serializable {
 
     public VistaConsola() throws RemoteException {
         this.frame = new JFrame("App Truco");
-        frame.setContentPane(ventana);
-        frame.pack();
         frame.setResizable(false);
         frame.setLocationRelativeTo(null);
+        frame.setContentPane(ventana);
+        frame.pack();
         frame.setSize(670, 450);
         frame.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         txtVista.setFont(new Font("Monospaced", Font.PLAIN, 12));
