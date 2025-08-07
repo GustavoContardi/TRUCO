@@ -49,8 +49,6 @@ public class PersistenciaPartida implements Serializable{
     public static void eliminarPartida(int idPartida) throws RemoteException {
         listaPartidas = listaPartidasGuardadas();
 
-        if(listaPartidas == null) return;
-
         listaPartidas.removeIf(p -> {
             try {
                 return p.getIdPartida() == idPartida;

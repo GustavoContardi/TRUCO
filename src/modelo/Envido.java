@@ -87,7 +87,10 @@ public class Envido implements Serializable {
 
         // si algun jugador esta en las "malas" (< 15 puntos) el falta envido es por el partido, sino es por los puntos que le faltan al que mas cerca este de ganar
         if(cantoFaltaEnvido){
-            if(puntosJ1 < 15 && puntosJ2 < 15) puntos = 30;
+            if(puntosJ1 < 15 && puntosJ2 < 15) {
+                if(puntosMaximos == 30) puntos = 30;
+                else puntos = 15;
+            }
             else puntos = puntosMaximos;
 
             return puntos;

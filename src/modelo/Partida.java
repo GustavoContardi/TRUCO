@@ -121,10 +121,9 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
             }
             else finDePartida();
         }
-        guardarPartida(); // sino me guarda la partida cuando solo se une 1 solo jugador totalmente innecesario
         PersistenciaJugador.delvolverTodosJugadores(); // devuelvo por si quieren jugar otra partida, ya quedan guardados porque se guarda la partida.
-        notificarEvento(NUEVA_RONDA);
         primeraMano = false;
+        notificarEvento(NUEVA_RONDA);
     }
 
     // se llama a este metodo cuando finalizo la ronda
@@ -189,7 +188,6 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
         }
 
         if(mesa.esFinDeMano()) finDeLaMano();
-
         guardarPartida();
     }
 
@@ -251,7 +249,6 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
         }
         idUltimoJugCanto = idJugadorCanto;
         seEstabaCantandoTruco = true;
-        guardarPartida();
         notificarEvento(evento);
     }
 
@@ -288,7 +285,6 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
         }
         idUltimoJugCanto = idJugadorCanto;
         seEstabaCantandoEnvido = true;
-        guardarPartida();
         notificarEvento(evento);
     }
 
@@ -315,7 +311,6 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
 
         idUltimoJugCanto = id;
         seEstabaCantandoFlor = true;
-        guardarPartida();
         notificarEvento(evento);
     }
 
@@ -437,7 +432,6 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
         seEstabaCantandoEnvido = false;
         notificarEvento(TANTO_QUERIDO);
         notificarEvento(PUNTAJES);
-        guardarPartida();
 
         if(esFinDePartida()) { // si con los puntos sumados alguno alcanzo los 30 puntos,
             finDePartida();
@@ -451,7 +445,6 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
         if(idjugNoQuizo == j1.getIDJugador()) anotador.sumarPuntosJ2(puntos);
         else if(idjugNoQuizo == j2.getIDJugador()) anotador.sumarPuntosJ1(puntos);
 
-        guardarPartida();
         if(esFinDePartida()) { // si con los puntos sumados alguno alcanzo los 30 puntos,
             finDePartida();
         }
@@ -479,7 +472,6 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
 
         idJugadorNoQuizoCanto = idjugNoQuizo;
         notificarEvento(CANTO_NO_QUERIDO);
-        guardarPartida();
 
         meVoyAlMazo(idjugNoQuizo);
     }
@@ -508,7 +500,6 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
         }
         seEstabaCantandoFlor = false;
         notificarEvento(PUNTAJES);
-        guardarPartida();
 
         if(esFinDePartida()) { // si con los puntos sumados alguno alcanzo los 30 puntos,
             finDePartida();
@@ -1027,7 +1018,7 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
     private void notificarEvento(Eventos e) throws RemoteException {
         notificarObservadores(e);
         // sino me guarda la partida innecesariamente cuando se une un jugador
-        if(!primeraMano) guardarPartida(); // guardo la partida aca porque actualizan cosas que necesito persistir en cada actualizacion
+        if(!primeraMano && !esFinDePartida()) guardarPartida(); // guardo la partida aca porque actualizan cosas que necesito persistir en cada actualizacion
     }
 
 
