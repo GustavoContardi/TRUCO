@@ -6,7 +6,6 @@ import enums.EstadoFlor;
 import enums.EstadoTruco;
 import enums.Eventos;
 import interfaces.IModelo;
-import persistencia.PersistenciaCantos;
 import persistencia.PersistenciaJugador;
 import persistencia.PersistenciaPartida;
 
@@ -38,10 +37,8 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
     private     int                 idPartida;
     private     Anotador            anotador;
     private     ArrayList<Carta>    cartasJ1, cartasJ2;
-    private     int                 quienCantoTruco, quienCantoReTruco,quienCantoValeCuatro;
     private     int                 puntosRabon;
-    private     EstadoTruco         estadoDelTruco;
-    private     int                 puntajeRondaJ1, puntajeRondaJ2;
+    private     int                 puntajeManoJ1, puntajeManoJ2;
     private     int                 idJugadorNoQuizoCanto, idJugadorQuiereCantar;
     private     String              resultadoTanto;
     private     boolean             reanudoJ1, reanudoJ2, primeraMano;
@@ -50,8 +47,9 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
     private     int                 idJugadorSalio, idUltimoJugCanto;
     private     boolean             seEstabaCantandoEnvido, seEstabaCantandoTruco, seEstabaCantandoFlor; // banderas para saber si se estaba cantando algo antes de que se posponga la partida
     private     Mesa                mesa;
-    private     Envido              envido;
-    private     Canto               cantos;
+    private     Envido              envido; // gestiona el envido de la partida en cada mano
+    private     Canto               cantos; // gestiona los cantos
+    private     Rabon               rabon; // gestiona el rabon de la partida en cada mano
 
 
     //               \\
@@ -71,6 +69,7 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
         envido           =  new Envido();
         mesa             =  new Mesa(); // esto es para que no pinche, despues se crea bien con el otro constructor.
         cantos           =  new Canto();
+        rabon            =  new Rabon();
     }
 
 
@@ -96,11 +95,8 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
 
         if (mesa.esFinDeMano()){
             if(!esFinDePartida()){
-                puntajeRondaJ1          =   0;
-                puntajeRondaJ2          =   0;
-                quienCantoTruco         =   0;
-                quienCantoReTruco       =   0;
-                quienCantoValeCuatro    =   0;
+                puntajeManoJ1 =   0;
+                puntajeManoJ2 =   0;
                 puntosRabon             =   0;
                 idJugadorNoQuizoCanto   =   0;
                 idJugadorQuiereCantar   =   0;
@@ -111,9 +107,9 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
                 seEstabaCantandoFlor    =   false;
                 cartasJ1                =   new ArrayList<>();
                 cartasJ2                =   new ArrayList<>();
-                estadoDelTruco          =   EstadoTruco.NADA;
                 cantos                  =   new Canto();
 
+                rabon.resetValores();
                 envido.resetValores();
                 mesa.setFinDeMano(false);
                 j1.devolverCartas();
@@ -141,8 +137,8 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
         int nroRondasGanadasJ1 = mesa.getRondasGanadasJ1();
         int nroRondasGanadasJ2 = mesa.getRondasGanadasJ2();
 
-        if(nroRondasGanadasJ1 > nroRondasGanadasJ2) puntajeRondaJ1 += puntosRabon;
-        else if (nroRondasGanadasJ2 > nroRondasGanadasJ1) puntajeRondaJ2 += puntosRabon;
+        if(nroRondasGanadasJ1 > nroRondasGanadasJ2) puntajeManoJ1 += puntosRabon;
+        else if (nroRondasGanadasJ2 > nroRondasGanadasJ1) puntajeManoJ2 += puntosRabon;
 
         Timer timer = new Timer(2000, new ActionListener() {
             @Override
@@ -238,19 +234,19 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
         switch(estado){ // el estado es el que se tiene que cantar no el actual
             case TRUCO ->{
                 envido.seCantoEnvido();
-                quienCantoTruco = idJugadorCanto;
+                rabon.setEstadoDelTruco(TRUCO);
+                rabon.setQuienCantoTruco(idJugadorCanto);
                 evento = CANTO_TRUCO;
-                estadoDelTruco = TRUCO;
             }
             case RE_TRUCO -> {
-                quienCantoReTruco = idJugadorCanto;
+                rabon.setQuienCantoReTruco(idJugadorCanto);
+                rabon.setEstadoDelTruco(RE_TRUCO);
                 evento = CANTO_RETRUCO;
-                estadoDelTruco = RE_TRUCO;
             }
             case VALE_CUATRO -> {
-                quienCantoValeCuatro = idJugadorCanto; // tengo que identificar quien canto que cosa porque no podes cantar dos veces seguidas (por regla)
+                rabon.setQuienCantoValeCuatro(idJugadorCanto);
+                rabon.setEstadoDelTruco(VALE_CUATRO);; // tengo que identificar quien canto que cosa porque no podes cantar dos veces seguidas (por regla)
                 evento = CANTO_VALE_CUATRO;
-                estadoDelTruco = VALE_CUATRO;
             }
         }
         idUltimoJugCanto = idJugadorCanto;
@@ -476,8 +472,8 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
     @Override
     public void rabonNoQuerido(int idjugNoQuizo) throws RemoteException {
 
-        if(idjugNoQuizo != j1.getIDJugador()) puntajeRondaJ1 -= 1; // le resto uno al que canto y no le quisieron para despues en el metodo de calcular me de bien
-        else if(idjugNoQuizo != j2.getIDJugador()) puntajeRondaJ2 -= 1;
+        if(idjugNoQuizo != j1.getIDJugador()) puntajeManoJ1 -= 1; // le resto uno al que canto y no le quisieron para despues en el metodo de calcular me de bien
+        else if(idjugNoQuizo != j2.getIDJugador()) puntajeManoJ2 -= 1;
 
         seEstabaCantandoTruco = false;
 
@@ -605,8 +601,8 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
 
     @Override
     public void actualizarPuntos() throws RemoteException {
-        anotador.sumarPuntosJ1(puntajeRondaJ1);
-        anotador.sumarPuntosJ2(puntajeRondaJ2);
+        anotador.sumarPuntosJ1(puntajeManoJ1);
+        anotador.sumarPuntosJ2(puntajeManoJ2);
         notificarEvento(PUNTAJES);
     }
 
@@ -623,7 +619,7 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
 
     @Override
     public EstadoTruco estadoRabon() throws RemoteException {
-        return estadoDelTruco;
+        return rabon.getEstadoDelTruco();
     }
 
     @Override
@@ -648,15 +644,15 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
 
     @Override
     public boolean puedeCantarTruco(int idJugador) throws RemoteException {
-        switch (estadoDelTruco){
+        switch (rabon.getEstadoDelTruco()){
             case NADA -> {
                 return true;
             }
             case TRUCO -> {
-                if(quienCantoTruco != idJugador) return true;
+                if(rabon.getQuienCantoTruco() != idJugador) return true;
             }
             case RE_TRUCO -> {
-                if(quienCantoReTruco != idJugador) return true;
+                if(rabon.getQuienCantoReTruco() != idJugador) return true;
             }
             case VALE_CUATRO -> {
                 return false; // si estamos en VALE CUATRO ya no se puede cantar nada
@@ -699,9 +695,9 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
 
     @Override
     public String getCantoTruco() throws RemoteException {
-        if(estadoDelTruco == TRUCO) return cantos.getCantoTruco();
-        else if(estadoDelTruco == RE_TRUCO)return cantos.getCantoReTruco();
-        else if(estadoDelTruco == VALE_CUATRO) return cantos.getCantoValeCuatro();
+        if(rabon.getEstadoDelTruco() == TRUCO) return cantos.getCantoTruco();
+        else if(rabon.getEstadoDelTruco() == RE_TRUCO)return cantos.getCantoReTruco();
+        else if(rabon.getEstadoDelTruco() == VALE_CUATRO) return cantos.getCantoValeCuatro();
         return "null";
     }
 
@@ -744,16 +740,16 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
     }
 
     public int getQuienCantoTruco() throws RemoteException{
-        return quienCantoTruco;
+        return rabon.getQuienCantoTruco();
     }
 
     public int getQuienCantoReTruco() throws RemoteException{
-        return quienCantoReTruco;
+        return rabon.getQuienCantoReTruco();
     }
 
     @Override
     public int getQuienCantoValeCuatro() throws RemoteException {
-        return quienCantoValeCuatro;
+        return rabon.getQuienCantoValeCuatro();
     }
 
     @Override
@@ -1052,10 +1048,7 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
         // por reglas si se va al mazo en la primer mano sin cantar nada son 2 puntos para el contrario
         if(mesa.getNroRonda() == 1 && !envido.getCantoEnvido()) puntos = 2;
         //si no es primera ronda o si se canto envido entra en el de abajo
-        else if(estadoDelTruco == EstadoTruco.NADA) puntos = 1;
-        else if(estadoDelTruco == TRUCO) puntos = 2;
-        else if(estadoDelTruco == RE_TRUCO) puntos = 3;
-        else if(estadoDelTruco == VALE_CUATRO) puntos = 4;
+        else puntos = rabon.calcularPuntosRabon();
 
         return puntos;
     }
