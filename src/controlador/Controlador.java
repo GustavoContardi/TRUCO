@@ -7,7 +7,7 @@ import enums.EstadoFlor;
 import enums.EstadoTruco;
 import enums.Eventos;
 import interfaces.*;
-import modelo.Carta;
+
 import modelo.Jugador;
 import modelo.Partida;
 import persistencia.*;
@@ -299,8 +299,7 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
     @Override
     public void actualizarJugador(int idJugador, String nuevoNombre) {
         try {
-            PersistenciaJugador.actualizarNombre(idJugador, nuevoNombre);
-            modelo.actualizarListaJugadores();
+            modelo.actualizarJugador(idJugador, nuevoNombre);
         } catch (RemoteException e) {
             e.printStackTrace();
         }
@@ -309,11 +308,11 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
     @Override
     public void eliminarJugador(int idJugador) {
         try {
-            PersistenciaJugador.eliminarJugador(idJugador);
-            modelo.actualizarListaJugadores();
+            modelo.eliminarJugador(idJugador);
         } catch (RemoteException e) {
             e.printStackTrace();
         }
+
     }
 
     @Override
@@ -405,7 +404,6 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
 
     @Override
     public void setJugador(int idJugador) throws RemoteException {
-        System.out.println("no vaya a ser cosa que setee aca porque se pudre");
         this.idJugador = idJugador;
         modelo.agregarJugador(idJugador);
         vistaJuego.mostrarMenuPrincipal();
@@ -413,7 +411,6 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
 
     @Override
     public void setJugadorReanudar(int idJugador) throws RemoteException {
-        System.out.println("controlador reanudo: " + idJugador);
         this.idJugador = idJugador;
         modelo.reanudoPartida(idJugador);
     }
@@ -442,7 +439,7 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
 
         switch (evento){
             case LISTA_JUGADORES_DISPONIBLES -> {
-                vistaEleccion.actualizarListaJugadores(PersistenciaJugador.getJugadoresGuardados(false));
+                vistaEleccion.actualizarListaJugadores(modelo.getJugadoresGuardados());
             }
             case CANTO_TRUCO -> {
                 if(modelo.getQuienCantoTruco() != idJugador) vistaJuego.cantaronRabon(modelo.getCantoTruco(), TRUCO);
@@ -508,7 +505,7 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
             case LISTA_JUGADORES_TOTALES -> {
                 // aca hay que pasarle la lista no ordenada
                 System.out.println("");
-                vistaEleccion.actualizarListaJugadores(PersistenciaJugador.getJugadoresGuardados(false));
+                vistaEleccion.actualizarListaJugadores(modelo.getJugadoresGuardados());
             }
             case CANTO_QUERIDO -> {
                 if(modelo.getIdJugadorQuiereCantar() != idJugador) vistaJuego.mostrarMensaje(modelo.getCantoQuiero());       //
@@ -566,21 +563,6 @@ public class Controlador implements IControladorRemoto, IControlador, Serializab
     //
     // metodos privados
     //
-
-    private boolean quedanCartasJugador() throws RemoteException { // en este metodo verifico si el jugador tiene cartas para tirar, para no tener errores futuros
-        ArrayList<Carta> cartas;
-        int contador = 0;
-
-        if(idJugador != modelo.getIdJ1()) cartas = modelo.getCartasJ1();
-        else cartas = modelo.getCartasJ2();
-
-        for(Carta c : cartas){
-            if(!c.isFueTirada()) contador += 1;
-        }
-
-        if(contador >= 1) return true;
-        else return false;
-    }
 
 }
 

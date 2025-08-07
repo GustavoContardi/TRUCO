@@ -191,8 +191,6 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
             notificarEvento(CARTA_TIRADAJ2);
             mesa.tirarCarta(idJugador, carta);
         }
-        if(mesa.getTurno() == j1.getIDJugador()) System.out.println("turno de: " + j1.getNombre());
-        else if(mesa.getTurno() == j2.getIDJugador()) System.out.println("turno de: " + j2.getNombre());
 
         if(mesa.esFinDeMano()) finDeLaMano();
 
@@ -405,6 +403,18 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
         notificarEvento(LISTA_JUGADORES_DISPONIBLES);// es lo mismo notificar con este pq actualiza la lista en eleccion
     }
 
+    @Override
+    public void eliminarJugador(int idJugador) throws RemoteException {
+        PersistenciaJugador.eliminarJugador(idJugador);
+        notificarEvento(LISTA_JUGADORES_DISPONIBLES);
+    }
+
+    @Override
+    public void actualizarJugador(int idJugador, String nombre) throws RemoteException {
+        PersistenciaJugador.actualizarNombre(idJugador, nombre);
+        notificarEvento(LISTA_JUGADORES_DISPONIBLES);
+    }
+
     // se cantó el tanto y dijieron que si (quiero), entonces notifico quién ganó
     @Override
     public void tantoQuerido(int idJugador) throws RemoteException {
@@ -573,12 +583,10 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
         if(idJugador == j1.getIDJugador()) {
             reanudoJ1 = true;
             notificarEvento(RESTABLECIO_J1);
-            System.out.println("restablecio j1");
         }
         else if(idJugador == j2.getIDJugador()) {
             reanudoJ2 = true;
             notificarEvento(RESTABLECIO_J2);
-            System.out.println("restablecio j2");
         }
 
         if(reanudoJ1 && reanudoJ2) {
@@ -586,7 +594,6 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
             reanudoJ2 = false;  // reanudo la partida y despues seteo de vuelta que no reanudaron, por si se salen de vuelta y quieren reanudar.
             idJugadorSalio = 0;
             notificarEvento(RESTABLECER_PARTIDA);
-            System.out.println("mando restablecer aca");
         }
     }
 
@@ -896,6 +903,11 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
     }
 
     @Override
+    public ArrayList<Jugador> getJugadoresGuardados() throws RemoteException {
+        return PersistenciaJugador.getJugadoresGuardados(true);
+    }
+
+    @Override
     public String getResultadoTanto() throws RemoteException {
         return resultadoTanto;
     }
@@ -1043,7 +1055,7 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
         else if(estadoDelTruco == EstadoTruco.NADA) puntos = 1;
         else if(estadoDelTruco == TRUCO) puntos = 2;
         else if(estadoDelTruco == RE_TRUCO) puntos = 3;
-        else if(estadoDelTruco == VALE_CUATRO) puntos = 2;
+        else if(estadoDelTruco == VALE_CUATRO) puntos = 4;
 
         return puntos;
     }

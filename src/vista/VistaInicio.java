@@ -86,7 +86,7 @@ public class VistaInicio extends JFrame {
     private void pantallaTopJugadores(){
         JFrame frame2 = new JFrame("Top jugadores - App Truco");
         frame2.setResizable(false);
-        frame2.setSize(500, 600);
+        frame2.setSize(600, 250);
         frame2.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame2.setIconImage(icono);
         JPanel ventana = new JPanel();
@@ -114,7 +114,7 @@ public class VistaInicio extends JFrame {
 
         int indice = 1;
         for (Jugador j : PersistenciaJugador.getJugadoresHistoricos()) {
-            if(j != null) listModel.addElement(indice + "- " + j);
+            if(indice <= 5) if(j != null) listModel.addElement(indice + "- " + j);
             indice++;
         }
 

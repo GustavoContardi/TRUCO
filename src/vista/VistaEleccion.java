@@ -145,17 +145,16 @@ public class VistaEleccion implements IVistaEleccion {
 
     @Override
     public void actualizarListaJugadores(ArrayList<Jugador> lista) throws RemoteException {
+        cbEleccion.removeAllItems();
+        listModel.clear();
 
         if(lista == null || lista.isEmpty()) listModel.addElement("¡No hay Jugadores creados aún!");
 
         else{
-
-            listModel.clear();
             for (Jugador jugador: lista) {
                 listModel.addElement(jugador.toString());
             }
 
-            cbEleccion.removeAllItems();
             for (Jugador jugador: lista) {
                 if (!controlador.seUnioJugador(jugador.getIDJugador())) {
                     cbEleccion.addItem(jugador);
@@ -262,7 +261,7 @@ public class VistaEleccion implements IVistaEleccion {
 
     private void ventanaActualizarJugador(){
         JFrame frame2 = new JFrame("ACTUALIZAR JUGADOR");
-        frame2.setSize(445, 300);
+        frame2.setSize(445, 250);
         frame2.setLayout(new BorderLayout());
         frame2.setResizable(false);
         JComboBox<Jugador> comboBox = new JComboBox<>();
