@@ -296,51 +296,6 @@ public class VistaConsola implements IVistaJuego, IVistaInicio, Serializable {
         }
     }
 
-    // este metodo muestra todo: puntos, cartas tiradas y acciones
-    /*public void mostrarMesa() throws RemoteException {
-
-        if(controlador != null){
-
-            ArrayList<String> cartasYo = controlador.getCartasTiradasYo();
-            ArrayList<String> cartasRival = controlador.getCartasTiradasRival();
-
-            println("---------------------------------------------------\n");
-            println(controlador.puntajeActual());
-            println("\n----------------- MESA -----------------");
-            println("|  " + controlador.getNombreJugador() + "        |        " + controlador.getNombreRival() + "  |");
-            switch (controlador.nroDeRonda()){
-                case 1 -> {
-                    if(cartasYo.isEmpty() && cartasRival.isEmpty()) println("|                   |                   |");
-                    else if(cartasYo.size() > 0 && cartasRival.isEmpty()) println("| " + cartasYo.get(0) + " |               |");
-                    else if(cartasRival.size() > 0 && cartasYo.isEmpty()) println("|               " + " | " + cartasRival.get(0));
-                    else  println("| " + cartasYo.get(0) + " | " + cartasRival.get(0) + " | ");
-                }
-                case 2 -> {
-                    println("| " + cartasYo.get(0) + " | " + cartasRival.get(0) + " | ");
-
-                    if(cartasYo.size() <= 1 && cartasRival.size() <= 1) println("|                   |                   |");
-                    else if(cartasYo.size() > 1 && cartasRival.size() <= 1) println("| " + cartasYo.get(1) + " |                   |");
-                    else if(cartasYo.size() < 2 && cartasRival.size() > 1) println("|               " + " | " + cartasRival.get(1) + " |");
-                    else  println("| " + cartasYo.get(1) + " | " + cartasRival.get(1) + " | ");
-                }
-                case 3 -> {
-                    println("| " + cartasYo.get(0) + " | " + cartasRival.get(0) + " | ");
-                    println("| " + cartasYo.get(1) + " | " + cartasRival.get(1) + " | ");
-
-                    if(cartasYo.size() <= 2 && cartasRival.size() <= 2) println("|                   |                   |");
-                    else if(cartasYo.size() > 2 && cartasRival.size() < 3) println("| " + cartasYo.get(2) + " |                   |");
-                    else if(cartasYo.size() < 3 && cartasRival.size() > 2) println("|               " + " | " + cartasRival.get(2)+ " |");
-                    else  println("| " + cartasYo.get(2) + " | " + cartasRival.get(2) + " | ");
-                }
-            }
-
-
-        }
-    }
-
-    tranquilo gordo programador, solo es un poco de chat gpt
-     */
-
     public void mostrarMesa() throws RemoteException {
         if (controlador != null) {
             ArrayList<String> cartasYo = controlador.getCartasTiradasYo();
