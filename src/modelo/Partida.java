@@ -1037,7 +1037,7 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
         int puntos = 0;
 
         // por reglas si se va al mazo en la primer mano sin cantar nada son 2 puntos para el contrario
-        if(mesa.getNroRonda() == 1 && !envido.getCantoEnvido()) puntos = 2;
+        if(mesa.getNroRonda() == 1 && (!envido.getCantoEnvido()) || envido.getCantoRealEnvido() || envido.getCantoFaltaEnvido()) puntos = 2;
         //si no es primera ronda o si se canto envido entra en el de abajo
         else puntos = rabon.calcularPuntosRabon();
 
