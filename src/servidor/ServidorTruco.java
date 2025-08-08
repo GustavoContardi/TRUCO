@@ -121,7 +121,7 @@ public class ServidorTruco {
         else flor = false;
 
         if(puntos.equals("15 PUNTOS - PARTIDA RÁPIDA")) puntosParaGanar = 15;
-        else puntosParaGanar = 30;
+        else if(puntos.equals("30 PUNTOS - PARTIDA LARGA")) puntosParaGanar = 30;
 
         Partida modelo = new Partida(puntosParaGanar, flor);
         Servidor servidor = new Servidor(ip, port);

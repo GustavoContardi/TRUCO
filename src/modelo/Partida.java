@@ -1026,8 +1026,8 @@ public class Partida extends ObservableRemoto implements Serializable, IModelo {
     private int calcularPuntajeEnvidoQuerido() throws RemoteException{
         int maximoPuntos = 1;
 
-        if(anotador.getPuntosJ2() > anotador.getPuntosJ1()) maximoPuntos = 30 - anotador.getPuntosJ2();
-        else maximoPuntos = 30 - anotador.getPuntosJ1();
+        if(anotador.getPuntosJ2() > anotador.getPuntosJ1()) maximoPuntos = puntosParaGanar - anotador.getPuntosJ2();
+        else maximoPuntos = puntosParaGanar - anotador.getPuntosJ1();
 
         return envido.calcularPuntajeEnvidoQuerido(maximoPuntos, anotador.getPuntosJ1(), anotador.getPuntosJ2());
     }
